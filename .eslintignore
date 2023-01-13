@@ -1,0 +1,10 @@
+dist
+public
+
+# ignore generate imports
+auto-imports.d.ts
+components.d.ts
+
+dist
+.output
+node_modules

@@ -1,0 +1,13 @@
+{
+    "extends": ["@nuxtjs/eslint-config-typescript"],
+    "overrides": [
+        {
+            "files": [
+                "./server/**/*.ts"
+            ],
+            "rules": {
+                "no-console": ["error", { "allow": ["info", "warn", "trace", "error"]}]
+            }
+        }
+    ]
+}
