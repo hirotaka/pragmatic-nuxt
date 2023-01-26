@@ -5,30 +5,30 @@ import {
   DialogTitle,
   DialogOverlay,
   TransitionRoot,
-  TransitionChild,
-} from "@headlessui/vue";
+  TransitionChild
+} from '@headlessui/vue'
 
-export const BaseDialogTitle = DialogTitle;
-export const BaseDialogDescription = DialogDescription;
+export const BaseDialogTitle = DialogTitle
+export const BaseDialogDescription = DialogDescription
 </script>
 
 <script setup lang="ts">
 // TODO: Make `initialFocus` works properly.
 interface BaseDialogProps {
-  isOpen: boolean;
-  initialFocus?: HTMLElement<null>;
+  isOpen: boolean
+  initialFocus?: HTMLElement
 }
 
 interface Emits {
-  (e: "close"): void;
+  (e: 'close'): void
 }
 
-defineProps<BaseDialogProps>();
-const emit = defineEmits<Emits>();
+defineProps<BaseDialogProps>()
+const emit = defineEmits<Emits>()
 
 const close = () => {
-  emit("close");
-};
+  emit('close')
+}
 </script>
 
 <template>
@@ -41,7 +41,18 @@ const close = () => {
       @close="close"
     >
       <div
-        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        class="
+          flex
+          items-end
+          justify-center
+          min-h-screen
+          pt-4
+          px-4
+          pb-20
+          text-center
+          sm:block
+          sm:p-0
+        "
       >
         <TransitionChild
           as="template"

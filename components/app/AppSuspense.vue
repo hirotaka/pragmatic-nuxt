@@ -1,9 +1,9 @@
 <script setup lang="ts">
 type AppSuspenseProps = {
-  isLoading: boolean;
-};
+  isLoading: boolean
+}
 
-defineProps<AppSuspenseProps>();
+defineProps<AppSuspenseProps>()
 </script>
 
 <template>

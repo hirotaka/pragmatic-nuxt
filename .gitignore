@@ -81,3 +81,7 @@ sw.*
 # Auto generate on postinstall step
 auto-imports.d.ts
 components.d.ts
+
+# Cypress
+cypress/videos/
+cypress/screenshots/

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { Head } from "@vueuse/head";
+import { Head } from '@vueuse/head'
 
 type AppHeadProps = {
-  title?: string;
-  description?: string;
-};
+  title?: string
+  description?: string
+}
 
-defineProps<AppHeadProps>();
+defineProps<AppHeadProps>()
 
-const defaultTitle = "Bulletproof Nuxt";
+const defaultTitle = 'Pragmatic Nuxt'
 </script>
 
 <template>

@@ -7,7 +7,7 @@ const router = useRouter()
 
 <template>
   <div class="bg-white h-[100vh] flex items-center">
-    <AppHead description="Welcome to bulletproof nuxt" />
+    <AppHead description="Welcome to Pragmatic Nuxt" />
     <div
       class="max-w-7xl mx-auto text-center py-12 px-4 sm:px-6 lg:py-16 lg:px-8"
     >
@@ -15,8 +15,8 @@ const router = useRouter()
         class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl"
       >
         <span class="block">
-          Bulletproof Nuxt
-          <br>
+          Pragmatic Nuxt
+          <br />
           with Sidebase
         </span>
       </h2>

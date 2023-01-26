@@ -1,60 +1,66 @@
-# bulletproof-nuxt-sideba-app
+# 🛡️ The Pragmatic Nuxt
 
-This is a [sidebase cheviot](https://sidebase.io/) app created by running `npm create sidebase@latest`. This project uses the following technologies for a great developer- and user-experience:
-- [TypeScript](https://www.typescriptlang.org/)
-- [Nuxt 3](https://nuxt.com)
-- Database models, migrations, queries and easy DB-switching via Prisma
-- Deep Prisma integration: Use the client in your endpoints via nuxt-prisma, Prisma client is auto-generated for npm run dev and other commands and more
-- Frontend- and Backend data-transformation via nuxt-parse and zod
-- In-memory development SQL-database via sqlite3
-- Linting via eslint
-- Test management, Test UI, component snapshotting via vitest
-- Component tests via test-library/vue
-- Nuxt 3 native API testing via @nuxt/test-utils
-- Code coverage via c8
-- CSS utilities via TailwindCSS
-- CSS components via Naive UI
-- Type checking in script and template via Volar / vue-tsc
-- Code editor configuration via .editorconfig files and a portable .settings/ folder whith best-practice VS Code settings and extensions for Vue 3 / Nuxt 3 development
+A simple, scalable, and powerful architecture for building production-ready Nuxt full-stack applications.
 
-## How to get going?
+> **Warning**
+>
+> The purpose of this repository is to help me learn how to build practical Nuxt3 applications for myself.
+>
+> I am building a full-stack Nuxt application using a variety of technology stacks with Bulletproof React as a reference.
+>
+> This repository is still in the process of development. Please note that it is **not yet** production-ready.
 
-This is a straight-forward setup with minimal templating and scaffolding. The options you selected during the sidebase CLI setup are all here though. Good places to continue reading are:
-- [the First Steps documentation](https://sidebase.io/sidebase/usage)
-- [our discord](https://discord.gg/auc8eCeGzx)
+## Introduction
 
-Some tasks you should probably do in the beginning are:
-- [ ] replace this generic README with a more specific one
-- [ ] install the Vue Volar extension
-- [ ] enable [Volar takeover mode](https://nuxt.com/docs/getting-started/installation#prerequisites) to ensure a smooth editor setup
+Nuxt is an excellent tool for building full-stack applications based on Vue. It has a diverse ecosystem with hundreds of great libraries for anything you need. However, being forced to make so many choices can be overwhelming.
 
+Vue is very flexible, you can write Vue applications in any way you like, but that flexibility comes with a cost. Since no pre-defined architecture developers can follow, it often leads to messy, inconsistent, or over-complicated codebases. 
 
-### Setup
+Nuxt calls itself an intuitive framework. Nuxt provides a framework for building a full-stack application with a front-end built in Vue and a different back-end. It offers a lot, but developers still need to make many decisions, such as authentication or testing mechanisms.
 
-Make sure to install the dependencies:
+This repository presents a way of creating Nuxt applications using the best tools in the ecosystem with a good project structure that scales very well. It is based on the experience of working with many different codebases, and this architecture is the most effective one.
 
-```bash
-npm install
-```
+This repo aims to serve as a collection of resources and sound practices when developing Nuxt applications. It is supposed to showcase solving most of the real-world problems of an application practically and help developers write better applications.
 
-### Development Server
+Feel free to explore the codebase to get the most value from the repo.
 
-Start the development server on http://localhost:3000
+#### Disclaimer:
 
-```bash
-npm run dev
-```
+This repository should not be a template, boilerplate, or framework, it is an opinionated guide that shows how to do some things in a certain way. You are free to do everything exactly as it is shown here. Decide what works best for you and your team, and stay consistent with your style.
 
-### Production
+## Table Of Contents:
 
-Build the application for production:
+- [💻 Application Overview](docs/application-overview.md)
 
-```bash
-npm run build
-```
+The followings are works in progress. Coming soon...
 
-Locally preview production build:
+- ⚙️  Project Configuration
+- 👁️ Style Guide
+- 🗄️ Project Structure
+- 🧱 Components And Styling
+- 📡 API Layer
+- 🗃️ State Management
+- 🧪 Testing
+- ⚠️  Error Handling
+- 🔐 Security
+- 🚄 Performance
+- 🌐 Deployment
+- 📚 Additional Resources
 
-```bash
-npm run preview
-```
+## Contributing
+
+Contributions are always welcome! Feel free to contribute if you have any ideas, suggestions, or fixes. You can do that by going through the following steps:
+
+1. Clone this repo
+2. Create a branch: `git checkout -b your-feature`
+3. Make some changes
+4. Test your changes
+5. Push your branch and open a Pull Request
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Reference
+
+This repository is heavily inspired by [bulletproof-react](https://github.com/alan2207/bulletproof-react). It also cites much of the documentation. I appreciate for making excellent content available on OSS!

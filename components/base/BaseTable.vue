@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import type { VNode } from "vue";
-import { ArchiveBoxIcon } from "@heroicons/vue/24/outline";
+import type { VNode } from 'vue'
+import { ArchiveBoxIcon } from '@heroicons/vue/24/outline'
 
-type TableColumn<Entry> = {
-  title: string;
-  field: keyof Entry;
-  Cell?({ entry }: { entry: Entry }): VNode;
-};
+type TableColumn = {
+  title: string
+  field: string
+  Cell?({ entry }: { entry: any }): VNode | null
+}
 
-type TableProps<Entry> = {
-  data: Entry[];
-  columns: TableColumn<Entry>[];
-};
+// TODO: Allow parents to give it as generic form.
+type TableProps = {
+  data: any[]
+  columns: TableColumn[]
+}
 
-defineProps<TableProps>();
+defineProps<TableProps>()
 </script>
 
 <template>
   <div
     v-if="!data.length"
-    class="bg-white text-gray-500 h-80 flex justify-center items-center flex-col"
+    class="
+      bg-white
+      text-gray-500
+      h-80
+      flex
+      justify-center
+      items-center
+      flex-col
+    "
   >
     <ArchiveBoxIcon class="h-16 w-16" />
     <h4>No Entries Found</h4>
@@ -37,7 +46,15 @@ defineProps<TableProps>();
                   v-for="(column, index) in columns"
                   :key="column.title + index"
                   scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    text-left text-xs
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   {{ column.title }}
                 </th>
@@ -52,7 +69,14 @@ defineProps<TableProps>();
                 <td
                   v-for="({ field, title, Cell }, columnIndex) in columns"
                   :key="title + columnIndex"
-                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                  class="
+                    px-6
+                    py-4
+                    whitespace-nowrap
+                    text-sm
+                    font-medium
+                    text-gray-900
+                  "
                 >
                   <template v-if="Cell">
                     <component :is="Cell" :entry="entry" />

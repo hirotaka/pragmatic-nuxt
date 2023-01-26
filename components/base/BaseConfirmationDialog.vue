@@ -1,52 +1,81 @@
 <script setup lang="ts">
-import { useSlots, cloneVNode, watchEffect } from "vue";
+import { useSlots, cloneVNode, watchEffect } from 'vue'
 import {
   ExclamationTriangleIcon,
-  InformationCircleIcon,
-} from "@heroicons/vue/24/outline";
+  InformationCircleIcon
+} from '@heroicons/vue/24/outline'
 
-import { BaseDialogTitle } from "./BaseDialog.vue";
+import { BaseDialogTitle } from './BaseDialog.vue'
 
 interface ConfirmationDialogProps {
-  icon?: "danger" | "info";
-  title: string;
-  body?: string;
-  cancelButtonText?: string;
-  isDone?: boolean;
+  icon?: 'danger' | 'info'
+  title: string
+  body?: string
+  cancelButtonText?: string
+  isDone?: boolean
 }
 
-const { isOpen, open, close } = useDisclosure();
-const slots = useSlots();
+const { isOpen, open, close } = useDisclosure()
+const slots = useSlots()
 
 const props = withDefaults(defineProps<ConfirmationDialogProps>(), {
-  icon: "danger",
-  cancelButtonText: "Cancel",
-  isDone: false,
-});
+  icon: 'danger',
+  cancelButtonText: 'Cancel',
+  isDone: false
+})
+
+const button = (slots?.triggerButton && slots.triggerButton()) || []
+const deleteButton = cloneVNode(button[0], {
+  onClick: () => open()
+})
 
 watchEffect(() => {
   if (props.isDone) {
-    close();
+    close()
   }
-});
+})
 </script>
 
 <template>
-  <component
-    :is="
-      cloneVNode(slots.triggerButton()[0], {
-        onClick: () => open(),
-      })
-    "
-  />
+  <component :is="deleteButton" />
   <BaseDialog :is-open="isOpen" @close="close">
     <div
-      class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+      class="
+        inline-block
+        align-bottom
+        bg-white
+        rounded-lg
+        px-4
+        pt-5
+        pb-4
+        text-left
+        overflow-hidden
+        shadow-xl
+        transform
+        transition-all
+        sm:my-8
+        sm:align-middle
+        sm:max-w-lg
+        sm:w-full
+        sm:p-6
+      "
     >
       <div class="sm:flex sm:items-start">
         <div
           v-if="icon === 'danger'"
-          class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+          class="
+            mx-auto
+            flex-shrink-0 flex
+            items-center
+            justify-center
+            h-12
+            w-12
+            rounded-full
+            bg-red-100
+            sm:mx-0
+            sm:h-10
+            sm:w-10
+          "
         >
           <ExclamationTriangleIcon
             class="h-6 w-6 text-red-600"
@@ -55,7 +84,19 @@ watchEffect(() => {
         </div>
         <div
           v-if="icon === 'info'"
-          class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+          class="
+            mx-auto
+            flex-shrink-0 flex
+            items-center
+            justify-center
+            h-12
+            w-12
+            rounded-full
+            bg-blue-100
+            sm:mx-0
+            sm:h-10
+            sm:w-10
+          "
         >
           <InformationCircleIcon
             class="h-6 w-6 text-blue-600"
@@ -78,7 +119,17 @@ watchEffect(() => {
         <BaseButton
           type="button"
           variant="inverse"
-          class="w-full inline-flex justify-center rounded-md border focus:ring-1 focus:ring-offset-1 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+          class="
+            w-full
+            inline-flex
+            justify-center
+            rounded-md
+            border
+            focus:ring-1 focus:ring-offset-1 focus:ring-indigo-500
+            sm:mt-0
+            sm:w-auto
+            sm:text-sm
+          "
           @click="close"
         >
           {{ cancelButtonText }}

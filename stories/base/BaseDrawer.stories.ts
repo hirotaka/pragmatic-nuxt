@@ -1,25 +1,25 @@
-import type { Meta, StoryFn } from "@storybook/vue3";
+import type { Meta, StoryFn } from '@storybook/vue3'
 
-import BaseDrawer from "@/components/base/BaseDrawer.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
+import BaseButton from '~/components/base/BaseButton.vue'
+import BaseDrawer from '~/components/base/BaseDrawer.vue'
 
-import { useDisclosure } from "@/composables/useDisclosure";
+import { useDisclosure } from '~/composables/useDisclosure'
 
 export default {
-  title: "Components/Base/BaseDrawer",
+  title: 'Components/Base/BaseDrawer',
   component: BaseDrawer,
   parameters: {
-    controls: { expanded: true },
+    controls: { expanded: true }
   },
-  argTypes: {},
-} as Meta<typeof BaseDrawer>;
+  argTypes: {}
+} as Meta<typeof BaseDrawer>
 
 const Template: StoryFn<typeof BaseDrawer> = (args) => ({
   components: { BaseDrawer, BaseButton },
   setup() {
-    const { close, open, isOpen } = useDisclosure();
+    const { close, open, isOpen } = useDisclosure()
 
-    return { close, open, isOpen, args };
+    return { close, open, isOpen, args }
   },
   template: `
     <BaseButton @click="open">Open Drawer</BaseButton>
@@ -36,7 +36,7 @@ const Template: StoryFn<typeof BaseDrawer> = (args) => ({
         </BaseButton>
       </template>
     </BaseDrawer>
-  `,
-});
+  `
+})
 
-export const Demo = Template.bind({});
+export const Demo = Template.bind({})

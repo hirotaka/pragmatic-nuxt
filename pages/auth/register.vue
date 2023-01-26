@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { useRouter, RouterLink } from "vue-router";
+import { useRouter, RouterLink } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
+const { status } = useSession()
+
+if (status.value === 'authenticated') {
+  router.push({ path: '/app' })
+}
 
 const onSuccess = () => {
-  router.push({ path: "/main" });
-};
+  router.push({ path: '/app' })
+}
 
 definePageMeta({
-  layout: "auth",
-  title: "Register your account",
-});
+  auth: false,
+  layout: 'auth',
+  title: 'Register your account'
+})
 </script>
 
 <template>

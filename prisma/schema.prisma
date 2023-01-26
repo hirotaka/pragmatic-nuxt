@@ -3,14 +3,64 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   // NOTE: You probably want to change this to another database later on
   provider = "sqlite"
   // This value is read from the .env file.
   url      = env("DATABASE_URL")
 }
-model Example {
-  id          String @id @default(uuid())
-  description String
-  details     String
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  firstName String
+  lastName  String
+  role      String
+  bio       String    @default("")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  password  Password?
+  teamId    String
+  Comment   Comment[]
+  Team      Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model Password {
+  hash   String
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id         String       @id @default(cuid())
+  name       String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Discussion Discussion[]
+  User       User[]
+}
+
+model Discussion {
+  id        String    @id @default(cuid())
+  title     String
+  body      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  teamId    String
+  Comment   Comment[]
+  Team      Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([id, teamId])
+}
+
+model Comment {
+  id           String     @id @default(cuid())
+  body         String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  authorId     String
+  discussionId String
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  author       User       @relation(fields: [authorId], references: [id])
 }

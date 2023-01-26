@@ -1,43 +1,45 @@
+import type { Meta, StoryFn } from '@storybook/vue3'
+
 import BaseToastNotification, {
-  icons,
-} from "@/components/base/BaseToastNotification.vue";
+  icons
+} from '~/components/base/BaseToastNotification.vue'
 
 export default {
-  title: "Components/Base/BaseToastNotification",
+  title: 'Components/Base/BaseToastNotification',
   component: BaseToastNotification,
   parameters: {
-    controls: { expanded: true },
+    controls: { expanded: true }
   },
   argTypes: {
     id: {
-      control: { type: "text" },
+      control: { type: 'text' }
     },
     type: {
-      control: { type: "radio" },
-      options: Object.keys(icons),
+      control: { type: 'radio' },
+      options: Object.keys(icons)
     },
     title: {
-      control: { type: "string" },
+      control: { type: 'string' }
     },
     message: {
-      control: { type: "string" },
+      control: { type: 'string' }
     },
-    onConfirmed: {},
-  },
-};
+    onConfirmed: {}
+  }
+} as Meta<typeof BaseToastNotification>
 
-const Template = (args) => ({
+const Template: StoryFn<typeof BaseToastNotification> = (args) => ({
   components: { BaseToastNotification },
   setup() {
-    return { args };
+    return { args }
   },
-  template: '<BaseToastNotification v-bind="{ notification: args }" />',
-});
+  template: '<BaseToastNotification v-bind="{ notification: args }" />'
+})
 
-export const Info = Template.bind({});
+export const Info = Template.bind({})
 Info.args = {
-  id: "1",
-  type: "info",
-  title: "Hello Info",
-  message: "This is info notification",
-};
+  id: '1',
+  type: 'info',
+  title: 'Hello Info',
+  message: 'This is info notification'
+}

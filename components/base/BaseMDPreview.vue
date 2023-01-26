@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { marked } from "marked";
+import { computed } from 'vue'
+import { marked } from 'marked'
 
 export interface MDPreviewProps {
-  value: string;
+  value: string
 }
 
-const props = defineProps<MDPreviewProps>();
+const props = defineProps<MDPreviewProps>()
 
 const html = computed(() => {
-  return marked.parse(props.value);
-});
+  return marked.parse(props.value)
+})
 </script>
 
 <template>

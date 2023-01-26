@@ -1,32 +1,24 @@
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery } from '@tanstack/vue-query'
 
-import { axios } from "@/utils/axios";
-import type { ExtractFnReturnType, QueryConfig } from "@/lib/vue-query";
+import { axios } from '@/utils/axios'
 
-import type { Discussion } from "@/types";
+import type { Discussion } from '@/types'
 
 export const getDiscussion = ({
-  discussionId,
+  discussionId
 }: {
-  discussionId: string;
+  discussionId: string
 }): Promise<Discussion> => {
-  return axios.get(`/discussions/${discussionId}`);
-};
-
-type QueryFnType = typeof getDiscussion;
+  return axios.get(`/api/discussions/${discussionId}`)
+}
 
 type UseDiscussionOptions = {
-  discussionId: string;
-  config?: QueryConfig<QueryFnType>;
-};
+  discussionId: string
+}
 
-export const useDiscussion = ({
-  discussionId,
-  config,
-}: UseDiscussionOptions) => {
-  return useQuery<ExtractFnReturnType<QueryFnType>>({
-    ...config,
-    queryKey: ["discussion", discussionId],
-    queryFn: () => getDiscussion({ discussionId }),
-  });
-};
+export const useDiscussion = ({ discussionId }: UseDiscussionOptions) => {
+  return useQuery({
+    queryKey: ['discussion', discussionId],
+    queryFn: () => getDiscussion({ discussionId })
+  })
+}

@@ -1,33 +1,33 @@
-import type { Meta, StoryFn } from "@storybook/vue3";
+import type { Meta, StoryFn } from '@storybook/vue3'
 
-import MyForm from "./MyForm.vue";
-import FormDrawer from "@/components/form/FormDrawer.vue";
-import BaseButton from "@/components/Base/BaseButton.vue";
+import MyForm from './MyForm.vue'
+import FormDrawer from '~/components/form/FormDrawer.vue'
+import BaseButton from '~/components/Base/BaseButton.vue'
 
 export default {
-  title: "Components/Form",
+  title: 'Components/Form',
   component: MyForm,
   parameters: {
-    controls: { expanded: true },
+    controls: { expanded: true }
   },
-  argTypes: {},
-} as Meta<typeof MyForm>;
+  argTypes: {}
+} as Meta<typeof MyForm>
 
 const Template: StoryFn<typeof MyForm> = (args) => ({
   components: { MyForm },
   setup() {
-    return { args };
+    return { args }
   },
-  template: '<MyForm v-bind="args" />',
-});
+  template: '<MyForm v-bind="args" />'
+})
 
-export const Default = Template.bind({});
-Default.args = {};
+export const Default = Template.bind({})
+Default.args = {}
 
 const AsFormDrawerTemplate: StoryFn<typeof MyForm> = (args) => ({
   components: { FormDrawer, MyForm, BaseButton },
   setup() {
-    return { args };
+    return { args }
   },
   template: `
     <FormDrawer
@@ -47,8 +47,8 @@ const AsFormDrawerTemplate: StoryFn<typeof MyForm> = (args) => ({
         </BaseButton>
       </template>
     </FormDrawer>
-  `,
-});
+  `
+})
 
-export const AsFormDrawer = AsFormDrawerTemplate.bind({});
-AsFormDrawer.args = {};
+export const AsFormDrawer = AsFormDrawerTemplate.bind({})
+AsFormDrawer.args = {}

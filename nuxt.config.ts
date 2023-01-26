@@ -3,21 +3,28 @@ import { setAbsoluteSqliteDatabaseUrlForPrisma } from './prisma/utils'
 setAbsoluteSqliteDatabaseUrlForPrisma()
 
 export default defineNuxtConfig({
-  runtimeConfig: {
-    version: '0.0.1'
-  },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    'nuxt-svgo',
-    '@huntersofbook/naive-ui-nuxt',
-    '@pinia/nuxt'
-  ],
-  extends: ['@sidebase/core'],
-  typescript: {
-    shim: false
-  },
-  ssr: false,
   imports: {
     dirs: ['composables/**', 'utils/**']
-  }
+  },
+  modules: [
+    '@huntersofbook/naive-ui-nuxt',
+    '@nuxtjs/tailwindcss',
+    'nuxt-svgo',
+    '@pinia/nuxt',
+    '@sidebase/nuxt-auth'
+  ],
+  extends: ['@sidebase/core'],
+  auth: {
+    enableGlobalAppMiddleware: true,
+    origin: 'http://localhost:3000'
+  },
+  typescript: {
+    shim: false,
+    // Exclude nuxt.config.ts for a while
+    // https://github.com/nuxt/nuxt/issues/13897#issuecomment-1429669152
+    tsConfig: {
+      exclude: ['../cypress', '../nuxt.config.ts']
+    }
+  },
+  ssr: false
 })

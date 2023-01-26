@@ -1,33 +1,28 @@
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery } from '@tanstack/vue-query'
 
-import { axios } from "@/utils/axios";
-import type { ExtractFnReturnType, QueryConfig } from "@/lib/vue-query";
+import { axios } from '@/utils/axios'
 
-import type { Comment } from "@/types";
+import type { Comment } from '@/types'
 
 export const getComments = ({
-  discussionId,
+  discussionId
 }: {
-  discussionId: string;
+  discussionId: string
 }): Promise<Comment[]> => {
-  return axios.get(`/comments`, {
+  return axios.get('/api/comments', {
     params: {
-      discussionId,
-    },
-  });
-};
-
-type QueryFnType = typeof getComments;
+      discussionId
+    }
+  })
+}
 
 type UseCommentsOptions = {
-  discussionId: string;
-  config?: QueryConfig<QueryFnType>;
-};
+  discussionId: string
+}
 
-export const useComments = ({ discussionId, config }: UseCommentsOptions) => {
-  return useQuery<ExtractFnReturnType<QueryFnType>>({
-    queryKey: ["comments", discussionId],
-    queryFn: () => getComments({ discussionId }),
-    ...config,
-  });
-};
+export const useComments = ({ discussionId }: UseCommentsOptions) => {
+  return useQuery({
+    queryKey: ['comments', discussionId],
+    queryFn: () => getComments({ discussionId })
+  })
+}

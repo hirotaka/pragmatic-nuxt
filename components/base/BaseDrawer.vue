@@ -4,38 +4,38 @@ import {
   DialogOverlay,
   DialogTitle,
   TransitionRoot,
-  TransitionChild,
-} from "@headlessui/vue";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
+  TransitionChild
+} from '@headlessui/vue'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 const sizes = {
-  sm: "max-w-md",
-  md: "max-w-xl",
-  lg: "max-w-3xl",
-  xl: "max-w-7xl",
-  full: "max-w-full",
-};
+  sm: 'max-w-md',
+  md: 'max-w-xl',
+  lg: 'max-w-3xl',
+  xl: 'max-w-7xl',
+  full: 'max-w-full'
+}
 
 export interface BaseDrawerProps {
-  isOpen: boolean;
-  title: string;
-  size?: keyof typeof sizes;
+  isOpen: boolean
+  title: string
+  size?: keyof typeof sizes
 }
 </script>
 
 <script setup lang="ts">
 interface Emits {
-  (e: "close"): void;
+  (e: 'close'): void
 }
 
 withDefaults(defineProps<BaseDrawerProps>(), {
-  size: "md",
-});
-const emit = defineEmits<Emits>();
+  size: 'md'
+})
+const emit = defineEmits<Emits>()
 
 const close = () => {
-  emit("close");
-};
+  emit('close')
+}
 </script>
 
 <template>
@@ -61,7 +61,13 @@ const close = () => {
           >
             <div class="w-screen" :class="sizes[size]">
               <div
-                class="h-full divide-y divide-gray-200 flex flex-col bg-white shadow-xl"
+                class="
+                  h-full
+                  divide-y divide-gray-200
+                  flex flex-col
+                  bg-white
+                  shadow-xl
+                "
               >
                 <div
                   class="min-h-0 flex-1 flex flex-col py-6 overflow-y-scroll"
@@ -73,7 +79,14 @@ const close = () => {
                       </DialogTitle>
                       <div class="ml-3 h-7 flex items-center">
                         <button
-                          class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          class="
+                            bg-white
+                            rounded-md
+                            text-gray-400
+                            hover:text-gray-500
+                            focus:outline-none
+                            focus:ring-2 focus:ring-indigo-500
+                          "
                           @click="close"
                         >
                           <span class="sr-only">Close panel</span>

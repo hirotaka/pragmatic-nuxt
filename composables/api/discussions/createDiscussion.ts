@@ -1,62 +1,54 @@
-import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
-import { axios } from "@/utils/axios";
-import { useNotificationStore } from "@/stores/notifications";
-import type { MutationConfig } from "@/lib/vue-query";
+import { axios } from '@/utils/axios'
+import { useNotificationStore } from '@/stores/notifications'
 
-import type { Discussion } from "@/types";
+import type { Discussion } from '@/types'
 
 export type CreateDiscussionDTO = {
   data: {
-    title: string;
-    body: string;
-  };
-};
+    title: string
+    body: string
+  }
+}
 
 export const createDiscussion = ({
-  data,
+  data
 }: CreateDiscussionDTO): Promise<Discussion> => {
-  return axios.post(`/discussions`, data);
-};
+  return axios.post('/api/discussions', data)
+}
 
-type UseCreateDiscussionOptions = {
-  config?: MutationConfig<typeof createDiscussion>;
-};
-
-export const useCreateDiscussion = ({
-  config,
-}: UseCreateDiscussionOptions = {}) => {
-  const queryClient = useQueryClient();
-  const store = useNotificationStore();
+export const useCreateDiscussion = () => {
+  const queryClient = useQueryClient()
+  const store = useNotificationStore()
 
   return useMutation({
+    mutationFn: createDiscussion,
     onMutate: async (newDiscussion) => {
-      await queryClient.cancelQueries(["discussions"]);
+      await queryClient.cancelQueries(['discussions'])
 
       const previousDiscussions = queryClient.getQueryData<Discussion[]>([
-        "discussions",
-      ]);
+        'discussions'
+      ])
 
       queryClient.setQueryData(
-        ["discussions"],
+        ['discussions'],
         [...(previousDiscussions || []), newDiscussion.data]
-      );
+      )
 
-      return { previousDiscussions };
+      return { previousDiscussions }
     },
-    onError: (_, __, context: any) => {
+    onError: (_error, _variables, context) => {
       if (context?.previousDiscussions) {
-        queryClient.setQueryData("discussions", context.previousDiscussions);
+        queryClient.setQueryData(['discussions'], context.previousDiscussions)
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries("discussions");
+      queryClient.invalidateQueries(['discussions'])
       store.add({
-        type: "success",
-        title: "Discussion Created",
-      });
-    },
-    ...config,
-    mutationFn: createDiscussion,
-  });
-};
+        type: 'success',
+        title: 'Discussion Created'
+      })
+    }
+  })
+}

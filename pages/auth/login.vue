@@ -2,12 +2,18 @@
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const { status } = useSession()
+
+if (status.value === 'authenticated') {
+  router.push({ path: '/app' })
+}
 
 const onSuccess = () => {
-  router.push({ path: '/main' })
+  router.push({ path: '/app' })
 }
 
 definePageMeta({
+  auth: false,
   layout: 'auth',
   title: 'Log in to your account'
 })

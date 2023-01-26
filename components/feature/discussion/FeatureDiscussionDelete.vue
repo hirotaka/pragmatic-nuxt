@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { TrashIcon } from "@heroicons/vue/24/outline";
+import { TrashIcon } from '@heroicons/vue/24/outline'
 
 type DeleteDiscussionProps = {
-  id: string;
-};
+  id: string
+}
 
-const props = defineProps<DeleteDiscussionProps>();
+const props = defineProps<DeleteDiscussionProps>()
 
-const { isLoading, isSuccess, mutateAsync } = useDeleteDiscussion();
+const { isLoading, isSuccess, mutateAsync } = useDeleteDiscussion()
 
-async function onClick() {
-  await mutateAsync({ discussionId: props.id });
+const onClick = async () => {
+  await mutateAsync({ discussionId: props.id })
 }
 </script>
 

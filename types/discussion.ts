@@ -1,7 +1,7 @@
-import type { BaseEntity } from "./base";
+import type { BaseEntity } from './base'
 
 export type Discussion = {
-  title: string;
-  body: string;
-  teamId: string;
-} & BaseEntity;
+  title: string
+  body: string
+  teamId: string
+} & BaseEntity

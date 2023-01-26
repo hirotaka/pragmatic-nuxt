@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
+import { RouterLink } from 'vue-router'
 
 type BaseLinkProps = {
-  to: string;
-};
+  to: string
+}
 
-defineProps<BaseLinkProps>();
+defineProps<BaseLinkProps>()
 </script>
 
 <template>

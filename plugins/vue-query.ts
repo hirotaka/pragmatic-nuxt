@@ -1,6 +1,5 @@
-import { defineNuxtPlugin } from "nuxt/app";
-import { VueQueryPlugin } from "@tanstack/vue-query";
-import type { VueQueryPluginOptions } from "@tanstack/vue-query";
+import { VueQueryPlugin } from '@tanstack/vue-query'
+import type { VueQueryPluginOptions } from '@tanstack/vue-query'
 
 const vueQueryPluginOptions: VueQueryPluginOptions = {
   queryClientConfig: {
@@ -8,12 +7,12 @@ const vueQueryPluginOptions: VueQueryPluginOptions = {
       queries: {
         useErrorBoundary: true,
         refetchOnWindowFocus: false,
-        retry: false,
-      },
-    },
-  },
-};
+        retry: false
+      }
+    }
+  }
+}
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(VueQueryPlugin, vueQueryPluginOptions);
-});
+  nuxtApp.vueApp.use(VueQueryPlugin, vueQueryPluginOptions)
+})

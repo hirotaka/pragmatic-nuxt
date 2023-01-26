@@ -1,7 +1,7 @@
-import { BaseEntity } from "./base";
+import { BaseEntity } from './base'
 
 export type Comment = {
-  body: string;
-  authorId: string;
-  discussionId: string;
-} & BaseEntity;
+  body: string
+  authorId: string
+  discussionId: string
+} & BaseEntity

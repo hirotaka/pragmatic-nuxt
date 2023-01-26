@@ -1,24 +1,24 @@
-import type { Meta, StoryFn } from "@storybook/vue3";
+import type { Meta, StoryFn } from '@storybook/vue3'
 
-import BaseDialog, { BaseDialogTitle } from "@/components/base/BaseDialog.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
+import BaseDialog, { BaseDialogTitle } from '~/components/base/BaseDialog.vue'
+import BaseButton from '~/components/base/BaseButton.vue'
 
-import { useDisclosure } from "@/composables/useDisclosure";
+import { useDisclosure } from '~/composables/useDisclosure'
 
 export default {
-  title: "Components/Base/BaseDialog",
+  title: 'Components/Base/BaseDialog',
   component: BaseDialog,
   parameters: {
-    controls: { expanded: true },
-  },
-} as Meta<typeof BaseDialog>;
+    controls: { expanded: true }
+  }
+} as Meta<typeof BaseDialog>
 
 const Template: StoryFn<typeof BaseDialog> = (args) => ({
   components: { BaseDialog, BaseDialogTitle, BaseButton },
   setup() {
-    const { open, close, isOpen } = useDisclosure();
+    const { open, close, isOpen } = useDisclosure()
 
-    return { open, close, isOpen, args };
+    return { open, close, isOpen, args }
   },
   template: `
     <BaseButton @click="open">
@@ -47,7 +47,7 @@ const Template: StoryFn<typeof BaseDialog> = (args) => ({
         </div>
       </div>
     </BaseDialog>
-  `,
-});
+  `
+})
 
-export const Default = Template.bind({});
+export const Default = Template.bind({})

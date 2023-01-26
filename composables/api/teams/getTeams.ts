@@ -1,24 +1,15 @@
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery } from '@tanstack/vue-query'
 
-import { axios } from "@/utils/axios";
-import type { ExtractFnReturnType, QueryConfig } from "@/lib/vue-query";
-
-import type { Team } from "@/types";
+import { axios } from '@/utils/axios'
+import type { Team } from '@/types'
 
 export const getTeams = (): Promise<Team[]> => {
-  return axios.get("/teams");
-};
+  return axios.get('/api/teams')
+}
 
-type QueryFnType = typeof getTeams;
-
-type UseTeamsOptions = {
-  config?: QueryConfig<QueryFnType>;
-};
-
-export const useTeams = ({ config = {} }: UseTeamsOptions = {}) => {
-  return useQuery<ExtractFnReturnType<QueryFnType>>({
-    ...config,
-    queryKey: ["teams"],
-    queryFn: () => getTeams(),
-  });
-};
+export const useTeams = () => {
+  return useQuery({
+    queryKey: ['teams'],
+    queryFn: () => getTeams()
+  })
+}

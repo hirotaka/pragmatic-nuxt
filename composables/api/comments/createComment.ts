@@ -1,66 +1,59 @@
-import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
-import { axios } from "@/utils/axios";
-import { useNotificationStore } from "@/stores/notifications";
-import type { MutationConfig } from "@/lib/vue-query";
+import { axios } from '@/utils/axios'
+import { useNotificationStore } from '@/stores/notifications'
 
-import type { Comment } from "@/types";
+import type { Comment } from '@/types'
 
 export type CreateCommentDTO = {
   data: {
-    body: string;
-    discussionId: string;
-  };
-};
+    body: string
+    discussionId: string
+  }
+}
 
 export const createComment = ({ data }: CreateCommentDTO): Promise<Comment> => {
-  return axios.post("/comments", data);
-};
+  return axios.post('/api/comments', data)
+}
 
-type UseCreateCommentOptions = {
-  discussionId: string;
-  config?: MutationConfig<typeof createComment>;
-};
-
-export const useCreateComment = ({
-  config,
-  discussionId,
-}: UseCreateCommentOptions) => {
-  const queryClient = useQueryClient();
-  const store = useNotificationStore();
+export const useCreateComment = () => {
+  const queryClient = useQueryClient()
+  const store = useNotificationStore()
 
   return useMutation({
     onMutate: async (newComment) => {
-      await queryClient.cancelQueries(["comments", discussionId]);
+      const { discussionId } = newComment.data
+      await queryClient.cancelQueries(['comments', discussionId])
 
       const previousComments = queryClient.getQueryData<Comment[]>([
-        "comments",
-        discussionId,
-      ]);
+        'comments',
+        discussionId
+      ])
 
       queryClient.setQueryData(
-        ["comments", discussionId],
+        ['comments', discussionId],
         [...(previousComments || []), newComment.data]
-      );
+      )
 
-      return { previousComments };
+      return { previousComments }
     },
-    onError: (_, __, context: any) => {
+    onError: (_error, varibales, context: any) => {
       if (context?.previousComments) {
+        const { discussionId } = varibales.data
         queryClient.setQueryData(
-          ["comments", discussionId],
+          ['comments', discussionId],
           context.previousComments
-        );
+        )
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["comments", discussionId]);
+    onSuccess: (data) => {
+      const { discussionId } = data
+      queryClient.invalidateQueries(['comments', discussionId])
       store.add({
-        type: "success",
-        title: "Comment Created",
-      });
+        type: 'success',
+        title: 'Comment Created'
+      })
     },
-    ...config,
-    mutationFn: createComment,
-  });
-};
+    mutationFn: createComment
+  })
+}

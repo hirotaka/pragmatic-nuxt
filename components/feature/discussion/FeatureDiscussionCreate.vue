@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { toFormValidator } from "@vee-validate/zod";
-import { z } from "zod";
+import { toFormValidator } from '@vee-validate/zod'
+import { z } from 'zod'
 
-import { PlusIcon } from "@heroicons/vue/24/outline";
+import { PlusIcon } from '@heroicons/vue/24/outline'
+import { CreateDiscussionDTO } from '~/composables/api/discussions/createDiscussion'
 
 const validationSchema = toFormValidator(
   z.object({
-    title: z.string().min(1, "Required"),
-    body: z.string().min(1, "Required"),
+    title: z.string().min(1, 'Required'),
+    body: z.string().min(1, 'Required')
   })
-);
+)
 
-const { isLoading, isSuccess, mutateAsync } = useCreateDiscussion();
+const { isLoading, isSuccess, mutateAsync } = useCreateDiscussion()
 
-async function onSubmit(values) {
-  await mutateAsync({ data: values });
+const onSubmit = async (values: CreateDiscussionDTO['data']) => {
+  await mutateAsync({ data: values })
 }
 </script>
 

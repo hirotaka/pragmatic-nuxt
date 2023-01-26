@@ -3,20 +3,20 @@ import {
   Dialog,
   DialogOverlay,
   TransitionRoot,
-  TransitionChild,
-} from "@headlessui/vue";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
+  TransitionChild
+} from '@headlessui/vue'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 type MobileSidebarProps = {
-  sidebarOpen: boolean;
-  setSidebarOpen: () => void;
-};
+  sidebarOpen: boolean
+  setSidebarOpen: (isOpen: boolean) => void
+}
 
-const props = defineProps<MobileSidebarProps>();
+const props = defineProps<MobileSidebarProps>()
 
 const handleClick = () => {
-  props.setSidebarOpen(false);
-};
+  props.setSidebarOpen(false)
+}
 </script>
 
 <template>
@@ -49,7 +49,15 @@ const handleClick = () => {
         leave-to="-translate-x-full"
       >
         <div
-          class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800"
+          class="
+            relative
+            flex-1 flex flex-col
+            max-w-xs
+            w-full
+            pt-5
+            pb-4
+            bg-gray-800
+          "
         >
           <TransitionChild
             as="template"
@@ -62,7 +70,17 @@ const handleClick = () => {
           >
             <div class="absolute top-0 right-0 -mr-12 pt-2">
               <button
-                class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                class="
+                  ml-1
+                  flex
+                  items-center
+                  justify-center
+                  h-10
+                  w-10
+                  rounded-full
+                  focus:outline-none
+                  focus:ring-2 focus:ring-inset focus:ring-white
+                "
                 @click="setSidebarOpen(false)"
               >
                 <span class="sr-only">Close sidebar</span>

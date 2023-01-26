@@ -1,75 +1,67 @@
-import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
-import { axios } from "@/utils/axios";
-import { useNotificationStore } from "@/stores/notifications";
-import type { MutationConfig } from "@/lib/vue-query";
+import { axios } from '@/utils/axios'
+import { useNotificationStore } from '@/stores/notifications'
 
-import type { Discussion } from "@/types";
+import type { Discussion } from '@/types'
 
 export type UpdateDiscussionDTO = {
   data: {
-    title: string;
-    body: string;
-  };
-  discussionId: string;
-};
+    title: string
+    body: string
+  }
+  discussionId: string
+}
 
 export const updateDiscussion = ({
   data,
-  discussionId,
+  discussionId
 }: UpdateDiscussionDTO): Promise<Discussion> => {
-  return axios.patch(`/discussions/${discussionId}`, data);
-};
+  return axios.patch(`/api/discussions/${discussionId}`, data)
+}
 
-type UseUpdateDiscussionOptions = {
-  config?: MutationConfig<typeof updateDiscussion>;
-};
-
-export const useUpdateDiscussion = ({
-  config,
-}: UseUpdateDiscussionOptions = {}) => {
-  const queryClient = useQueryClient();
-  const store = useNotificationStore();
+export const useUpdateDiscussion = () => {
+  const queryClient = useQueryClient()
+  const store = useNotificationStore()
 
   return useMutation({
-    onMutate: async (updatingDiscussion: any) => {
+    onMutate: async (updatingDiscussion) => {
       await queryClient.cancelQueries([
-        "discussion",
-        updatingDiscussion?.discussionId,
-      ]);
+        'discussion',
+        updatingDiscussion?.discussionId
+      ])
 
       const previousDiscussion = queryClient.getQueryData<Discussion>([
-        "discussion",
-        updatingDiscussion?.discussionId,
-      ]);
+        'discussion',
+        updatingDiscussion?.discussionId
+      ])
 
       queryClient.setQueryData(
-        ["discussion", updatingDiscussion?.discussionId],
+        ['discussion', updatingDiscussion?.discussionId],
         {
           ...previousDiscussion,
           ...updatingDiscussion.data,
-          id: updatingDiscussion.discussionId,
+          id: updatingDiscussion.discussionId
         }
-      );
+      )
 
-      return { previousDiscussion };
+      return { previousDiscussion }
     },
-    onError: (_, __, context: any) => {
+    onError: (_error, _variables, context: any) => {
       if (context?.previousDiscussion) {
         queryClient.setQueryData(
-          ["discussion", context.previousDiscussion.id],
+          ['discussion', context.previousDiscussion.id],
           context.previousDiscussion
-        );
+        )
       }
     },
     onSuccess: (data) => {
-      queryClient.refetchQueries(["discussion", data.id]);
+      queryClient.refetchQueries(['discussion', data.id])
       store.add({
-        type: "success",
-        title: "Discussion Updated",
-      });
+        type: 'success',
+        title: 'Discussion Updated'
+      })
     },
-    ...config,
-    mutationFn: updateDiscussion,
-  });
-};
+    mutationFn: updateDiscussion
+  })
+}

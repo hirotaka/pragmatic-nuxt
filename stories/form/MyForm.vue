@@ -1,24 +1,30 @@
 <script setup lang="ts">
-import FormWrapper from "@/components/form/FormWrapper.vue";
-import FormInputField from "@/components/form/FormInputField.vue";
-import FormTextareaField from "@/components/form/FormTextareaField.vue";
-import FormSelectField from "@/components/form/FormSelectField.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
+import FormWrapper from '~/components/form/FormWrapper.vue'
+import FormInputField from '~/components/form/FormInputField.vue'
+import FormTextareaField from '~/components/form/FormTextareaField.vue'
+import FormSelectField from '~/components/form/FormSelectField.vue'
+import BaseButton from '~/components/base/BaseButton.vue'
 
-const options = ["A", "B", "C"].map((option) => ({
+const options = ['A', 'B', 'C'].map((option) => ({
   label: option,
-  value: option,
-}));
+  value: option
+}))
 
-const submit = (values) => {
-  alert(JSON.stringify(values, null, 2));
-};
-
-interface FormProps {
-  hiddenSubmit?: boolean;
+type FormValues = {
+  title: string
+  description: string
+  team: string
 }
 
-defineProps<FormProps>();
+const submit = (values: FormValues) => {
+  alert(JSON.stringify(values, null, 2))
+}
+
+interface FormProps {
+  hiddenSubmit?: boolean
+}
+
+defineProps<FormProps>()
 </script>
 
 <template>

@@ -1,36 +1,36 @@
 <script setup lang="tsx">
-import FeatureDiscussionDelete from "./FeatureDiscussionDelete.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
+import FeatureDiscussionDelete from './FeatureDiscussionDelete.vue'
+import BaseLink from '@/components/base/BaseLink.vue'
 
-const { data, isLoading } = useDiscussions();
+const { data, isLoading } = useDiscussions()
 
 const columns = [
   {
-    title: "Title",
-    field: "title",
+    title: 'Title',
+    field: 'title'
   },
   {
-    title: "Created At",
-    field: "createdAt",
-    Cell({ entry: { createdAt } }) {
-      return <span>{formatDate(createdAt)}</span>;
-    },
+    title: 'Created At',
+    field: 'createdAt',
+    Cell({ entry: { createdAt } }: { entry: { createdAt: number } }) {
+      return <span>{formatDate(createdAt)}</span>
+    }
   },
   {
-    title: "",
-    field: "id",
-    Cell({ entry: { id } }) {
-      return <BaseLink to={`/main/discussions/${id}`}>View</BaseLink>;
-    },
+    title: '',
+    field: 'id',
+    Cell({ entry: { id } }: { entry: { id: string } }) {
+      return <BaseLink to={`/app/discussions/${id}`}>View</BaseLink>
+    }
   },
   {
-    title: "",
-    field: "id",
-    Cell({ entry: { id } }) {
-      return id ? <FeatureDiscussionDelete id={id} /> : null;
-    },
-  },
-];
+    title: '',
+    field: 'id',
+    Cell({ entry: { id } }: { entry: { id: string } }) {
+      return id ? <FeatureDiscussionDelete id={id} /> : null
+    }
+  }
+]
 </script>
 
 <template>
@@ -40,6 +40,6 @@ const columns = [
         <BaseSpinner size="lg" />
       </div>
     </template>
-    <BaseTable :data="data" :columns="columns" />
+    <BaseTable v-if="data" :data="data" :columns="columns" />
   </AppSuspense>
 </template>

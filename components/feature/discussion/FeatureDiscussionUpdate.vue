@@ -1,35 +1,40 @@
 <script setup lang="ts">
-import { toFormValidator } from "@vee-validate/zod";
-import { z } from "zod";
+import { toFormValidator } from '@vee-validate/zod'
+import { z } from 'zod'
 
-import { PencilIcon } from "@heroicons/vue/24/solid";
+import { PencilIcon } from '@heroicons/vue/24/solid'
+import { UpdateDiscussionDTO } from '~/composables/api/discussions/updateDiscussion'
 
 type UpdateDiscussionProps = {
-  discussionId: string;
-};
+  discussionId: string
+}
 
 const validationSchema = toFormValidator(
   z.object({
-    title: z.string().min(1, "Required"),
-    body: z.string().min(1, "Required"),
+    title: z.string().min(1, 'Required'),
+    body: z.string().min(1, 'Required')
   })
-);
+)
 
-const props = defineProps<UpdateDiscussionProps>();
+const props = defineProps<UpdateDiscussionProps>()
 
 const { data: discussion } = useDiscussion({
-  discussionId: props.discussionId,
-});
-const { isLoading, isSuccess, mutateAsync } = useUpdateDiscussion();
+  discussionId: props.discussionId
+})
+const { isLoading, isSuccess, mutateAsync } = useUpdateDiscussion()
 
-async function onSubmit(values) {
-  await mutateAsync({ data: values, discussionId: props.discussionId });
+async function onSubmit(values: UpdateDiscussionDTO['data']) {
+  await mutateAsync({ data: values, discussionId: props.discussionId })
 }
 </script>
 
 <template>
   <AppAuthorizationProvider :allowed-roles="[ROLES.ADMIN]">
-    <FormDrawer title="Update Discussion" :is-done="isSuccess">
+    <FormDrawer
+      v-if="discussion"
+      title="Update Discussion"
+      :is-done="isSuccess"
+    >
       <template #triggerButton>
         <BaseButton size="sm">
           <template #startIcon>

@@ -33,13 +33,13 @@ self.addEventListener('message', async function (event) {
   }
 
   const allClients = await self.clients.matchAll({
-    type: 'window',
+    type: 'window'
   })
 
   switch (event.data) {
     case 'KEEPALIVE_REQUEST': {
       sendToClient(client, {
-        type: 'KEEPALIVE_RESPONSE',
+        type: 'KEEPALIVE_RESPONSE'
       })
       break
     }
@@ -47,7 +47,7 @@ self.addEventListener('message', async function (event) {
     case 'INTEGRITY_CHECK_REQUEST': {
       sendToClient(client, {
         type: 'INTEGRITY_CHECK_RESPONSE',
-        payload: INTEGRITY_CHECKSUM,
+        payload: INTEGRITY_CHECKSUM
       })
       break
     }
@@ -57,7 +57,7 @@ self.addEventListener('message', async function (event) {
 
       sendToClient(client, {
         type: 'MOCKING_ENABLED',
-        payload: true,
+        payload: true
       })
       break
     }
@@ -120,7 +120,7 @@ self.addEventListener('fetch', function (event) {
         console.warn(
           '[MSW] Successfully emulated a network error for the "%s %s" request.',
           request.method,
-          request.url,
+          request.url
         )
         return
       }
@@ -131,9 +131,9 @@ self.addEventListener('fetch', function (event) {
 [MSW] Caught an exception from the "%s %s" request (%s). This is probably not a problem with Mock Service Worker. There is likely an additional logging output above.`,
         request.method,
         request.url,
-        `${error.name}: ${error.message}`,
+        `${error.name}: ${error.message}`
       )
-    }),
+    })
   )
 })
 
@@ -158,8 +158,8 @@ async function handleRequest(event, requestId) {
           body:
             clonedResponse.body === null ? null : await clonedResponse.text(),
           headers: Object.fromEntries(clonedResponse.headers.entries()),
-          redirected: clonedResponse.redirected,
-        },
+          redirected: clonedResponse.redirected
+        }
       })
     })()
   }
@@ -179,7 +179,7 @@ async function resolveMainClient(event) {
   }
 
   const allClients = await self.clients.matchAll({
-    type: 'window',
+    type: 'window'
   })
 
   return allClients
@@ -249,8 +249,8 @@ async function getResponse(event, client, requestId) {
       referrerPolicy: request.referrerPolicy,
       body: await request.text(),
       bodyUsed: request.bodyUsed,
-      keepalive: request.keepalive,
-    },
+      keepalive: request.keepalive
+    }
   })
 
   switch (clientMessage.type) {

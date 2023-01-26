@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Form } from "vee-validate";
-import type { ZodType } from "zod";
+import { Form } from 'vee-validate'
+import type { ZodType } from 'zod'
 
 type FormProps = {
-  id?: string;
-  validationScheme?: ZodType;
-};
+  id?: string
+  validationScheme?: ZodType
+}
 
-defineProps<FormProps>();
+defineProps<FormProps>()
 </script>
 
 <template>

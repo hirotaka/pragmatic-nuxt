@@ -1,14 +1,14 @@
 <script setup lang="ts">
 type FeaturesDiscussionDetailProps = {
-  discussionId: string;
-};
+  discussionId: string
+}
 
-const props = defineProps<FeaturesDiscussionDetailProps>();
-const { data, isLoading } = useDiscussion({ discussionId: props.discussionId });
+const props = defineProps<FeaturesDiscussionDetailProps>()
+const { data, isLoading } = useDiscussion({ discussionId: props.discussionId })
 </script>
 
 <template>
-  <AppSuspense :is-loading="isLoading">
+  <AppSuspense v-if="data" :is-loading="isLoading">
     <template #fallback>
       <div class="w-full h-48 flex justify-center items-center">
         <BaseSpinner size="lg" />

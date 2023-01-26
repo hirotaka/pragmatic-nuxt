@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { useAuth } from "@/composables/useAuth";
-import { useDeleteUser } from "@/composables/api/users/deleteUser";
+import { useDeleteUser } from '@/composables/api/users/deleteUser'
 
 type DeleteUserProps = {
-  id: string;
-};
+  id: string
+}
 
-const props = defineProps<DeleteUserProps>();
+const props = defineProps<DeleteUserProps>()
 
-const { user } = useAuth();
-const { isLoading, isSuccess, mutateAsync } = useDeleteUser();
+const { data } = useSession()
+const { user } = data.value as any
+
+const { isLoading, isSuccess, mutateAsync } = useDeleteUser()
 
 async function onClick() {
-  await mutateAsync({ userId: props.id });
+  await mutateAsync({ userId: props.id })
 }
 </script>
 

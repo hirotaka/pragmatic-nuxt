@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { ArchiveBoxIcon } from "@heroicons/vue/24/outline";
+import { ArchiveBoxIcon } from '@heroicons/vue/24/outline'
+import type { User } from '@/types/user'
 
 type CommentsListProps = {
-  discussionId: string;
-};
+  discussionId: string
+}
 
-const props = defineProps<CommentsListProps>();
+const props = defineProps<CommentsListProps>()
+const { discussionId } = props
 
-const { user } = useAuth();
-const { data, isLoading } = useComments({ discussionId: props.discussionId });
+const { data } = useSession()
+const { user } = data.value as any
+
+const { data: comments, isLoading } = useComments({
+  discussionId
+})
 </script>
 
 <template>
@@ -19,17 +25,25 @@ const { data, isLoading } = useComments({ discussionId: props.discussionId });
       </div>
     </template>
     <div
-      v-if="!data.length"
+      v-if="!comments?.length"
       role="list"
       aria-label="comments"
-      class="bg-white text-gray-500 h-40 flex justify-center items-center flex-col"
+      class="
+        bg-white
+        text-gray-500
+        h-40
+        flex
+        justify-center
+        items-center
+        flex-col
+      "
     >
       <ArchiveBoxIcon class="h-10 w-10" />
       <h4>No Comments Found</h4>
     </div>
     <ul v-else aria-label="comments" class="flex flex-col space-y-3">
       <li
-        v-for="(comment, index) in data"
+        v-for="(comment, index) in comments"
         :key="comment.id"
         class="w-full bg-white shadow-sm p-4"
         :aria-label="`comment-${comment.body}-${index}`"

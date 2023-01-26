@@ -3,10 +3,10 @@ import {
   InformationCircleIcon,
   CheckCircleIcon,
   ExclamationCircleIcon,
-  XCircleIcon,
-} from "@heroicons/vue/24/outline";
-import { XMarkIcon } from "@heroicons/vue/24/solid";
-import { TransitionRoot } from "@headlessui/vue";
+  XCircleIcon
+} from '@heroicons/vue/24/outline'
+import { XMarkIcon } from '@heroicons/vue/24/solid'
+import { TransitionRoot } from '@headlessui/vue'
 
 export const icons = {
   info: (
@@ -18,32 +18,32 @@ export const icons = {
   warning: (
     <ExclamationCircleIcon class="h-6 w-6 text-yellow-500" aria-hidden="true" />
   ),
-  error: <XCircleIcon class="h-6 w-6 text-red-500" aria-hidden="true" />,
-};
+  error: <XCircleIcon class="h-6 w-6 text-red-500" aria-hidden="true" />
+}
 </script>
 
 <script setup lang="tsx">
 type NotificationProps = {
   notification: {
-    id: string;
-    type: keyof typeof icons;
-    title: string;
-    message?: string;
-  };
-};
-
-interface Emits {
-  (e: "dismiss"): void;
+    id: string
+    type: keyof typeof icons
+    title: string
+    message?: string
+  }
 }
 
-const props = defineProps<NotificationProps>();
-const emit = defineEmits<Emits>();
+interface Emits {
+  (e: 'dismiss'): void
+}
 
-const icon = icons[props.notification.type];
+const props = defineProps<NotificationProps>()
+const emit = defineEmits<Emits>()
+
+const icon = icons[props.notification.type]
 
 const onDismiss = () => {
-  emit("dismiss");
-};
+  emit('dismiss')
+}
 </script>
 
 <template>
@@ -59,7 +59,16 @@ const onDismiss = () => {
       leave-to="opacity-0"
     >
       <div
-        class="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden"
+        class="
+          max-w-sm
+          w-full
+          bg-white
+          shadow-lg
+          rounded-lg
+          pointer-events-auto
+          ring-1 ring-black ring-opacity-5
+          overflow-hidden
+        "
       >
         <div class="p-4" role="alert" :aria-label="notification.title">
           <div class="flex items-start">
@@ -76,7 +85,15 @@ const onDismiss = () => {
             </div>
             <div class="ml-4 flex-shrink-0 flex">
               <button
-                class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="
+                  bg-white
+                  rounded-md
+                  inline-flex
+                  text-gray-400
+                  hover:text-gray-500
+                  focus:outline-none
+                  focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                "
                 @click="onDismiss"
               >
                 <span class="sr-only">Close</span>

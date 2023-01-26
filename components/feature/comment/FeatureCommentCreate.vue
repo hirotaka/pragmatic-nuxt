@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { toFormValidator } from "@vee-validate/zod";
-import { z } from "zod";
+import { toFormValidator } from '@vee-validate/zod'
+import { z } from 'zod'
 
-import { PlusIcon } from "@heroicons/vue/24/outline";
+import { PlusIcon } from '@heroicons/vue/24/outline'
+
+import { CreateCommentDTO } from '~~/composables/api/comments/createComment'
 
 type CreateCommentProps = {
-  discussionId: string;
-};
+  discussionId: string
+}
 
 const validationSchema = toFormValidator(
   z.object({
-    body: z.string().min(1, "Required"),
+    body: z.string().min(1, 'Required')
   })
-);
+)
 
-const props = defineProps<CreateCommentProps>();
+const props = defineProps<CreateCommentProps>()
 
-const { isLoading, isSuccess, mutateAsync } = useCreateComment({
-  discussionId: props.discussionId,
-});
+const { isLoading, isSuccess, mutateAsync } = useCreateComment()
 
-async function onSubmit(values) {
+async function onSubmit(values: CreateCommentDTO['data']) {
   const data = {
     ...values,
-    discussionId: props.discussionId,
-  };
-  await mutateAsync({ data });
+    discussionId: props.discussionId
+  }
+  await mutateAsync({ data })
 }
 </script>
 
