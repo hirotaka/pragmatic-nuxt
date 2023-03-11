@@ -2,7 +2,7 @@
 import { toFormValidator } from '@vee-validate/zod'
 import { z } from 'zod'
 
-import type { LoginCredentialsDTO } from '@/composables/api/auth/login'
+import type { LoginCredentialsDTO } from '~/composables/api/auth/login'
 
 const validationSchema = toFormValidator(
   z.object({

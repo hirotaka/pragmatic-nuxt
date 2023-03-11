@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/vue-query'
 
-import { axios } from '@/utils/axios'
+import { axios } from '~/utils/axios'
 
-import type { UserResponse } from '@/types'
+import type { UserResponse } from '~/types'
 
 export type RegisterCredentialsDTO = {
   email: string

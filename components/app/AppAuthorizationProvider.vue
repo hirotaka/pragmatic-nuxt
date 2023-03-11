@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import {
   useAuthorization,
   type RoleTypes
-} from '@/composables/useAuthorization'
+} from '~/composables/useAuthorization'
 
 // TODO: Improve type
 type AuthorizationProps = {

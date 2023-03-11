@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ArchiveBoxIcon } from '@heroicons/vue/24/outline'
-import type { User } from '@/types/user'
+import type { User } from '~/types/user'
 
 type CommentsListProps = {
   discussionId: string

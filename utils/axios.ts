@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-import { useNotificationStore } from '@/stores/notifications'
+import { useNotificationStore } from '~/stores/notifications'
 
 export const axios = Axios.create()
 

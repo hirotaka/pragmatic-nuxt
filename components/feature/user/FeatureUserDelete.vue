@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDeleteUser } from '@/composables/api/users/deleteUser'
+import { useDeleteUser } from '~/composables/api/users/deleteUser'
 
 type DeleteUserProps = {
   id: string

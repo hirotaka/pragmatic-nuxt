@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
-import { axios } from '@/utils/axios'
-import { useNotificationStore } from '@/stores/notifications'
+import { axios } from '~/utils/axios'
+import { useNotificationStore } from '~/stores/notifications'
 
-import type { User } from '@/types'
+import type { User } from '~/types'
 
 export type DeleteUserDTO = {
   userId: string

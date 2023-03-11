@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
-import { axios } from '@/utils/axios'
-import { useNotificationStore } from '@/stores/notifications'
+import { axios } from '~/utils/axios'
+import { useNotificationStore } from '~/stores/notifications'
 
-import type { Discussion } from '@/types'
+import type { Discussion } from '~/types'
 
 export type CreateDiscussionDTO = {
   data: {

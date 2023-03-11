@@ -1,6 +1,6 @@
 <script setup lang="tsx">
-import { useUsers } from '@/composables/api/users/getUsers'
-import { formatDate } from '@/utils/format'
+import { useUsers } from '~/composables/api/users/getUsers'
+import { formatDate } from '~/utils/format'
 import FeatureUserDelete from './FeatureUserDelete.vue'
 
 const { data, isLoading } = useUsers()

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/vue-query'
 
-import type { UserResponse } from '@/types'
-import { useNotificationStore } from '@/stores/notifications'
+import type { UserResponse } from '~/types'
+import { useNotificationStore } from '~/stores/notifications'
 
 export type LoginCredentialsDTO = {
   email: string

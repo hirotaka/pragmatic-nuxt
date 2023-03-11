@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cloneVNode, useSlots, watchEffect } from 'vue'
 
-import type { BaseDrawerProps } from '@/components/base/BaseDrawer.vue'
+import type { BaseDrawerProps } from '~/components/base/BaseDrawer.vue'
 
 interface FormDrawerProps {
   title: string

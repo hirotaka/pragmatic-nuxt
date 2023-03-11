@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import FeatureDiscussionDelete from './FeatureDiscussionDelete.vue'
-import BaseLink from '@/components/base/BaseLink.vue'
+import BaseLink from '~/components/base/BaseLink.vue'
 
 const { data, isLoading } = useDiscussions()
 

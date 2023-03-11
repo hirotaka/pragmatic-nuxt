@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "prisma generate && nuxt build",
-    "dev": "prisma generate && nuxt dev -p 8080",
+    "dev": "prisma generate && nuxt dev -p 3000",
     "format": "prettier --write .",
     "start": "NODE_ENV=production node .output/server/index.mjs",
     "lint": "eslint .",

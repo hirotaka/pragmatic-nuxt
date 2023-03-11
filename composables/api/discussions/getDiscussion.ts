@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/vue-query'
 
-import { axios } from '@/utils/axios'
+import { axios } from '~/utils/axios'
 
-import type { Discussion } from '@/types'
+import type { Discussion } from '~/types'
 
 export const getDiscussion = ({
   discussionId
