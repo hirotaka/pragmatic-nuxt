@@ -4,9 +4,7 @@ The application is pretty simple. Users can create teams where other users can j
 
 A team is created during the registration if the user didn't choose to join an existing team and the user becomes the admin of it.
 
-<!--
-[Demo](https://bulletproof-vue.vercel.app)
--->
+[Demo](https://pragmatic-nuxt.fly.dev)
 
 ## Data model
 
@@ -45,12 +43,12 @@ npm install
 npx prisma db push
 ```
 
-##### `npm run dev`
+#### `npm run dev`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-##### `npm run build`
+#### `npm run build`
 
 Builds the app for production to the `.output` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -59,3 +57,5 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
