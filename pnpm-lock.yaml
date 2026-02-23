@@ -985,7 +985,7 @@ importers:
         version: 4.16.1(@typescript-eslint/utils@8.56.0(eslint@10.0.1(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@10.0.1(jiti@2.6.1))
       eslint-plugin-playwright:
         specifier: ^2.2.0
-        version: 2.7.0(eslint@10.0.1(jiti@2.6.1))
+        version: 2.7.1(eslint@10.0.1(jiti@2.6.1))
       eslint-plugin-storybook:
         specifier: ^0.12.0
         version: 0.12.0(eslint@10.0.1(jiti@2.6.1))(typescript@5.9.3)
@@ -5529,8 +5529,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  eslint-plugin-playwright@2.7.0:
-    resolution: {integrity: sha512-kUgwDZL3knnuJF53WSf5xNnB1aLPnX8furoh0PSrmmFIfMfIMmY3sNd4gtZ2MUUnaIX1/A9ndYtD7bhV1dj+1g==}
+  eslint-plugin-playwright@2.7.1:
+    resolution: {integrity: sha512-IGwSjYN6N5E0I+xbRpmLXXRKQfiRaEEGEasMWKmIoiLFe+izb81EKBMGSjD/NzlXrWGx/Ys7zDOkgYEHQT2g6Q==}
     engines: {node: '>=16.9.0'}
     peerDependencies:
       eslint: '>=8.40.0'
@@ -13979,7 +13979,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-playwright@2.7.0(eslint@10.0.1(jiti@2.6.1)):
+  eslint-plugin-playwright@2.7.1(eslint@10.0.1(jiti@2.6.1)):
     dependencies:
       eslint: 10.0.1(jiti@2.6.1)
       globals: 17.3.0
