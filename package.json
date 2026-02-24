@@ -11,7 +11,7 @@
   "license": "MIT",
   "pnpm": {
     "overrides": {
-      "vue": "3.5.28",
+      "vue": "3.5.29",
       "vite": "^7.0.0",
       "jiti": "2.6.1",
       "prisma": "npm:empty-npm-package@1.0.0",
