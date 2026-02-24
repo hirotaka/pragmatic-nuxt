@@ -12,7 +12,7 @@
     {
       "description": "Keep zod v3 for bulletproof-nuxt (VeeValidate compatibility)",
       "matchPackageNames": ["zod"],
-      "matchFileNames": ["apps/bulletproof-nuxt/**", "apps/bulletproof-vue-vite/**"],
+      "matchFileNames": ["apps/bulletproof-nuxt/**", "apps/bulletproof-nuxt-pinia-colada/**", "apps/bulletproof-vue-vite/**"],
       "allowedVersions": "<4.0.0"
     }
   ]
