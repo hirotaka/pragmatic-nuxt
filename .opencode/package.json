@@ -4,6 +4,6 @@
   "type": "module",
   "devDependencies": {
     "jsonc-parser": "3.3.1",
-    "zod": "4.3.5"
+    "zod": "4.3.6"
   }
 }

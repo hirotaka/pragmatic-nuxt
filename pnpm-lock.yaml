@@ -357,7 +357,7 @@ importers:
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))
       '@vee-validate/zod':
         specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.28(typescript@5.9.3))(zod@3.25.76)
+        version: 4.15.1(vue@3.5.28(typescript@5.9.3))(zod@4.3.6)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -413,8 +413,8 @@ importers:
         specifier: ^4.6.3
         version: 4.6.4(vue@3.5.28(typescript@5.9.3))
       zod:
-        specifier: ^3.24.0
-        version: 3.25.76
+        specifier: ^4.0.0
+        version: 4.3.6
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20260124.0
@@ -12336,6 +12336,14 @@ snapshots:
       type-fest: 4.41.0
       vee-validate: 4.15.1(vue@3.5.28(typescript@5.9.3))
       zod: 3.25.76
+    transitivePeerDependencies:
+      - vue
+
+  '@vee-validate/zod@4.15.1(vue@3.5.28(typescript@5.9.3))(zod@4.3.6)':
+    dependencies:
+      type-fest: 4.41.0
+      vee-validate: 4.15.1(vue@3.5.28(typescript@5.9.3))
+      zod: 4.3.6
     transitivePeerDependencies:
       - vue
 
