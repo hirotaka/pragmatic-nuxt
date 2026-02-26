@@ -523,7 +523,7 @@ importers:
         version: 1.19.8(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
       '@regle/schemas':
         specifier: ^1.13.0
-        version: 1.19.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)
+        version: 1.19.11(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -2976,8 +2976,8 @@ packages:
     resolution: {integrity: sha512-da+MMyeXhBaKtxQiWPfy7+056wk3lVIhioJnXHXkJ2/OHDaZfFcyKHNl1R06sdYO8lIRXcXdoZ6LO2ARmkAREA==}
     engines: {node: '>=18.16.0'}
 
-  '@regle/core@1.19.7':
-    resolution: {integrity: sha512-oB9UeLTj5jqvbGDxnIA1UKPvQXBCPI/KLXka84LEtwWBa0Ao4wXJtelxprbXeJhj0hwpD9UCQ3e/uO7H7kjqCA==}
+  '@regle/core@1.19.11':
+    resolution: {integrity: sha512-WPIOk1ZPmjDOsut4rQaIInV7tDkVWSp5KNdsPHlWiRKibYRuaTAU1BPaMGFaJ1c29VdeqbjCIjf6iIIm45CwIg==}
     peerDependencies:
       pinia: '>=2.2.5'
       vue: 3.5.29
@@ -2998,14 +2998,14 @@ packages:
     resolution: {integrity: sha512-hVeF6fjiywETCc7i19k3k3SGnztdNGw7AdZDMgCXKibSN4b4PKUxnZD9wcYuvxWHN6lKNSO3WPYAn87c7TBt7w==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@regle/rules@1.19.7':
-    resolution: {integrity: sha512-g1F6wEC5YuGyF8FpRXDo9uy+Elb8gqB76RhfRn/3SbNeRmYqYZ4yKWwhRdTjNuwcCsPBAXTKIAbdqwCAf4/gaQ==}
+  '@regle/rules@1.19.11':
+    resolution: {integrity: sha512-NzgjWFyP3G1ei8n54P2zEZeFmMEV5gOEQGtbJZFK18f9h7JUhfpB09P9MRuh/S+UAClypGlnibULZE1Nm+FtsA==}
 
   '@regle/rules@1.19.8':
     resolution: {integrity: sha512-a6Uejvjy3cTTdKpWVLMnNwSsD5/gma4Z4ArqbPkaeEZRi/S3qaUxmLTAkrh4Cbd1l8MPqBUzBE15mRP24DEHLA==}
 
-  '@regle/schemas@1.19.7':
-    resolution: {integrity: sha512-MYAvLPNJ6SvSE8LhOn9ydnERKVdQh+otIMtipdcrrLtdCnT0t1BWsTuhB2Te+uYKo1pq8uLdD/DdbCNnjmtv9g==}
+  '@regle/schemas@1.19.11':
+    resolution: {integrity: sha512-xYNFyd/wTTDmZLZv7ov7ZcDxvu2NERZIiH/AfgAQk/riNddVD9n3pb2kJ48zTwmBbIVO86k6/jCaVPhKbaGWEQ==}
     peerDependencies:
       arktype: ^2.1.0
       valibot: ^1.0.0
@@ -11463,7 +11463,7 @@ snapshots:
       safe-stable-stringify: 2.5.0
       secure-json-parse: 4.1.0
 
-  '@regle/core@1.19.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
+  '@regle/core@1.19.11(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@vue/devtools-api': 7.7.9
@@ -11497,9 +11497,9 @@ snapshots:
       - vue
       - zod
 
-  '@regle/rules@1.19.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
+  '@regle/rules@1.19.11(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
     dependencies:
-      '@regle/core': 1.19.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
+      '@regle/core': 1.19.11(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
       type-fest: 5.4.4
     transitivePeerDependencies:
       - pinia
@@ -11513,10 +11513,10 @@ snapshots:
       - pinia
       - vue
 
-  '@regle/schemas@1.19.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)':
+  '@regle/schemas@1.19.11(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)':
     dependencies:
-      '@regle/core': 1.19.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
-      '@regle/rules': 1.19.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
+      '@regle/core': 1.19.11(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
+      '@regle/rules': 1.19.11(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
       '@standard-schema/spec': 1.1.0
       type-fest: 5.4.4
     optionalDependencies:
