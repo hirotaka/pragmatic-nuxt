@@ -182,7 +182,7 @@ importers:
         version: 3.2.5(typescript@5.9.3)
       wrangler:
         specifier: ^4.60.0
-        version: 4.68.0(@cloudflare/workers-types@4.20260305.0)
+        version: 4.68.1(@cloudflare/workers-types@4.20260305.0)
 
   apps/bulletproof-nuxt-formwerk:
     dependencies:
@@ -339,7 +339,7 @@ importers:
         version: 3.2.5(typescript@5.9.3)
       wrangler:
         specifier: ^4.60.0
-        version: 4.68.0(@cloudflare/workers-types@4.20260305.0)
+        version: 4.68.1(@cloudflare/workers-types@4.20260305.0)
 
   apps/bulletproof-nuxt-pinia-colada:
     dependencies:
@@ -502,7 +502,7 @@ importers:
         version: 3.2.5(typescript@5.9.3)
       wrangler:
         specifier: ^4.60.0
-        version: 4.68.0(@cloudflare/workers-types@4.20260305.0)
+        version: 4.68.1(@cloudflare/workers-types@4.20260305.0)
 
   apps/bulletproof-nuxt-regle:
     dependencies:
@@ -665,7 +665,7 @@ importers:
         version: 3.2.5(typescript@5.9.3)
       wrangler:
         specifier: ^4.60.0
-        version: 4.68.0(@cloudflare/workers-types@4.20260305.0)
+        version: 4.68.1(@cloudflare/workers-types@4.20260305.0)
 
   apps/bulletproof-nuxt-tanstack-form:
     dependencies:
@@ -819,7 +819,7 @@ importers:
         version: 3.2.5(typescript@5.9.3)
       wrangler:
         specifier: ^4.60.0
-        version: 4.68.0(@cloudflare/workers-types@4.20260305.0)
+        version: 4.68.1(@cloudflare/workers-types@4.20260305.0)
 
   apps/bulletproof-vue-vite:
     dependencies:
@@ -2961,6 +2961,9 @@ packages:
 
   '@poppinss/dumper@0.6.5':
     resolution: {integrity: sha512-NBdYIb90J7LfOI32dOewKI1r7wnkiH6m920puQ3qHUeZkxNkQiFnXVWoE6YtFSv6QOiPPf7ys6i+HWWecDz7sw==}
+
+  '@poppinss/dumper@0.7.0':
+    resolution: {integrity: sha512-0UTYalzk2t6S4rA2uHOz5bSSW2CHdv4vggJI6Alg90yvl0UgXs6XSXpH96OH+bRkX4J/06djv29pqXJ0lq5Kag==}
 
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
@@ -9375,8 +9378,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@4.68.0:
-    resolution: {integrity: sha512-DCjl2ZfjwWV10iH4Zn+97isitPkb7BYxpbt4E/Okd/QKLFTp9xdwoa999UN9lugToqPm5Zz/UsRu6hpKZuT8BA==}
+  wrangler@4.68.1:
+    resolution: {integrity: sha512-G+TI3k/olEGBAVkPtUlhAX/DIbL/190fv3aK+r+45/wPclNEymjxCc35T8QGTDhc2fEMXiw51L5bH9aNsBg+yQ==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -9496,6 +9499,9 @@ packages:
 
   youch-core@0.3.3:
     resolution: {integrity: sha512-ho7XuGjLaJ2hWHoK8yFnsUGy2Y5uDpqSTq1FkHLK4/oqKtyUU1AFbOOxY4IpC9f0fTLjwYbslUz0Po5BpD1wrA==}
+
+  youch@4.1.0:
+    resolution: {integrity: sha512-cYekNh2tUoU+voS11X0D0UQntVCSO6LQ1h10VriQGmfbpf0mnGTruwZICts23UUNiZCXm8H8hQBtRrdsbhuNNg==}
 
   youch@4.1.0-beta.10:
     resolution: {integrity: sha512-rLfVLB4FgQneDr0dv1oddCVZmKjcJ6yX6mS4pU82Mq/Dt9a3cLZQ62pDBL4AUO+uVrCvtWz3ZFUL2HFAFJ/BXQ==}
@@ -11438,6 +11444,12 @@ snapshots:
       kleur: 4.1.5
 
   '@poppinss/dumper@0.6.5':
+    dependencies:
+      '@poppinss/colors': 4.1.6
+      '@sindresorhus/is': 7.2.0
+      supports-color: 10.2.2
+
+  '@poppinss/dumper@0.7.0':
     dependencies:
       '@poppinss/colors': 4.1.6
       '@sindresorhus/is': 7.2.0
@@ -15947,7 +15959,7 @@ snapshots:
       unstorage: 1.17.4(db0@0.3.4(@libsql/client@0.17.0)(drizzle-orm@0.45.1(@cloudflare/workers-types@4.20260305.0)(@libsql/client@0.17.0)))(ioredis@5.9.2)
       untyped: 2.0.0
       unwasm: 0.5.3
-      youch: 4.1.0-beta.14
+      youch: 4.1.0
       youch-core: 0.3.3
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18501,7 +18513,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260302.0
       '@cloudflare/workerd-windows-64': 1.20260302.0
 
-  wrangler@4.68.0(@cloudflare/workers-types@4.20260305.0):
+  wrangler@4.68.1(@cloudflare/workers-types@4.20260305.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
       '@cloudflare/unenv-preset': 2.14.0(unenv@2.0.0-rc.24)(workerd@1.20260302.0)
@@ -18592,6 +18604,14 @@ snapshots:
     dependencies:
       '@poppinss/exception': 1.2.3
       error-stack-parser-es: 1.0.5
+
+  youch@4.1.0:
+    dependencies:
+      '@poppinss/colors': 4.1.6
+      '@poppinss/dumper': 0.7.0
+      '@speed-highlight/core': 1.2.14
+      cookie-es: 2.0.0
+      youch-core: 0.3.3
 
   youch@4.1.0-beta.10:
     dependencies:
