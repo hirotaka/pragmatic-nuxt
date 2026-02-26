@@ -514,7 +514,7 @@ importers:
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))
       '@regle/core':
         specifier: ^1.0.0
-        version: 1.19.13(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
+        version: 1.19.14(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
       '@regle/nuxt':
         specifier: ^1.0.0
         version: 1.19.13(magicast@0.5.2)(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)
@@ -2988,6 +2988,15 @@ packages:
       pinia:
         optional: true
 
+  '@regle/core@1.19.14':
+    resolution: {integrity: sha512-4ub8of/1lfw3H5jDd2anP6DiXrS11ghZOWHoXq0qv2KkNsd+/Ex+Mg8IFAfTCkEGUydjAHBWghYKWuRF9cDTxg==}
+    peerDependencies:
+      pinia: '>=2.2.5'
+      vue: 3.5.29
+    peerDependenciesMeta:
+      pinia:
+        optional: true
+
   '@regle/nuxt@1.19.13':
     resolution: {integrity: sha512-MTUTshIxSUejnZ3EPL/sYbBU0nJCIHYNEvpTatSkmA9SfPEFpc+tpUH/oxKfeJneegw5BI36hu/0wYqfPHa0HQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -4572,6 +4581,7 @@ packages:
   basic-ftp@5.1.0:
     resolution: {integrity: sha512-RkaJzeJKDbaDWTIPiJwubyljaEPwpVWkm9Rt5h9Nd6h7tEXTJ3VB4qxdZBioV7JO5yLUaOKwz7vDOzlncUsegw==}
     engines: {node: '>=10.0.0'}
+    deprecated: Security vulnerability fixed in 5.2.0, please upgrade
 
   bcryptjs@3.0.3:
     resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
@@ -11453,6 +11463,15 @@ snapshots:
       secure-json-parse: 4.1.0
 
   '@regle/core@1.19.13(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      '@vue/devtools-api': 7.7.9
+      type-fest: 5.4.4
+      vue: 3.5.29(typescript@5.9.3)
+    optionalDependencies:
+      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
+
+  '@regle/core@1.19.14(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@vue/devtools-api': 7.7.9
