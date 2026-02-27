@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "A simple, scalable, and powerful architecture for building production ready Vue applications.",
-  "packageManager": "pnpm@10.30.2",
+  "packageManager": "pnpm@10.30.3",
   "scripts": {
     "prepare": "husky"
   },
