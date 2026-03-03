@@ -57,8 +57,8 @@ importers:
         specifier: ^0.45.0
         version: 0.45.1(@cloudflare/workers-types@4.20260305.0)(@libsql/client@0.17.0)
       lucide-vue-next:
-        specifier: ^0.575.0
-        version: 0.575.0(vue@3.5.29(typescript@5.9.3))
+        specifier: ^0.576.0
+        version: 0.576.0(vue@3.5.29(typescript@5.9.3))
       marked:
         specifier: ^17.0.0
         version: 17.0.3
@@ -214,8 +214,8 @@ importers:
         specifier: ^0.45.0
         version: 0.45.1(@cloudflare/workers-types@4.20260305.0)(@libsql/client@0.17.0)
       lucide-vue-next:
-        specifier: ^0.575.0
-        version: 0.575.0(vue@3.5.29(typescript@5.9.3))
+        specifier: ^0.576.0
+        version: 0.576.0(vue@3.5.29(typescript@5.9.3))
       marked:
         specifier: ^17.0.0
         version: 17.0.3
@@ -377,8 +377,8 @@ importers:
         specifier: ^0.45.0
         version: 0.45.1(@cloudflare/workers-types@4.20260305.0)(@libsql/client@0.17.0)
       lucide-vue-next:
-        specifier: ^0.575.0
-        version: 0.575.0(vue@3.5.29(typescript@5.9.3))
+        specifier: ^0.576.0
+        version: 0.576.0(vue@3.5.29(typescript@5.9.3))
       marked:
         specifier: ^17.0.0
         version: 17.0.3
@@ -543,8 +543,8 @@ importers:
         specifier: ^0.45.0
         version: 0.45.1(@cloudflare/workers-types@4.20260305.0)(@libsql/client@0.17.0)
       lucide-vue-next:
-        specifier: ^0.575.0
-        version: 0.575.0(vue@3.5.29(typescript@5.9.3))
+        specifier: ^0.576.0
+        version: 0.576.0(vue@3.5.29(typescript@5.9.3))
       marked:
         specifier: ^17.0.0
         version: 17.0.3
@@ -697,8 +697,8 @@ importers:
         specifier: ^0.45.0
         version: 0.45.1(@cloudflare/workers-types@4.20260305.0)(@libsql/client@0.17.0)
       lucide-vue-next:
-        specifier: ^0.575.0
-        version: 0.575.0(vue@3.5.29(typescript@5.9.3))
+        specifier: ^0.576.0
+        version: 0.576.0(vue@3.5.29(typescript@5.9.3))
       marked:
         specifier: ^17.0.0
         version: 17.0.3
@@ -848,8 +848,8 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5
       lucide-vue-next:
-        specifier: ^0.575.0
-        version: 0.575.0(vue@3.5.29(typescript@5.9.3))
+        specifier: ^0.576.0
+        version: 0.576.0(vue@3.5.29(typescript@5.9.3))
       marked:
         specifier: ^17.0.0
         version: 17.0.3
@@ -6892,8 +6892,8 @@ packages:
     resolution: {integrity: sha512-MhWWlVnuab1RG5/zMRRcVGXZLCXrZTgfwMikgzCegsPnG62yDQo5JnqKkrK4jO5iKqDAZGItAqN5CtKBCBWRUA==}
     engines: {node: '>=16.14'}
 
-  lucide-vue-next@0.575.0:
-    resolution: {integrity: sha512-UHzA3cYMCgBLyGay5R9IQaidwV0NLocx7cIBnFt8vJ9Xhl6IM/oKD0fUhoCUuouFta15SX1rLXVoko9s3TzWMA==}
+  lucide-vue-next@0.576.0:
+    resolution: {integrity: sha512-qX3m7wWjOcDk89LkbwYc+KdQt8+kX3VhKObYs8SfycHBcDjSTXmQKKHFKvt/+x90z3S7KhAnuS+51cK7bJcI8A==}
     peerDependencies:
       vue: 3.5.29
 
@@ -15591,7 +15591,7 @@ snapshots:
 
   lru-cache@8.0.5: {}
 
-  lucide-vue-next@0.575.0(vue@3.5.29(typescript@5.9.3)):
+  lucide-vue-next@0.576.0(vue@3.5.29(typescript@5.9.3)):
     dependencies:
       vue: 3.5.29(typescript@5.9.3)
 
