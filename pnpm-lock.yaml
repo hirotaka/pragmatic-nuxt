@@ -348,10 +348,10 @@ importers:
         version: 0.17.0
       '@pinia/colada':
         specifier: ^0.21.4
-        version: 0.21.6(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
+        version: 0.21.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
       '@pinia/colada-nuxt':
         specifier: ^0.3.1
-        version: 0.3.2(@pinia/colada@0.21.6(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3)))(magicast@0.5.2)
+        version: 0.3.2(@pinia/colada@0.21.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3)))(magicast@0.5.2)
       '@pinia/nuxt':
         specifier: ^0.11.3
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))
@@ -2907,8 +2907,8 @@ packages:
     peerDependencies:
       '@pinia/colada': '>=0.21.6'
 
-  '@pinia/colada@0.21.6':
-    resolution: {integrity: sha512-DppfAYky3Uavlpdx2iZHgd/+ZVPyBGTR+x+kFfAUz8h9l1DIQgf2cw/QZg0RZ4GAUNnKf6Ue6FzfWttwqhZXUQ==}
+  '@pinia/colada@0.21.7':
+    resolution: {integrity: sha512-b8dJgRSjh7o6NnPXuvMbqv6JhoD/m/CwdadKl5SQvygsbUveYCBoqtnWzPch8AEW/UK0I3rFoATE8WrfI2cgKA==}
     peerDependencies:
       pinia: ^2.2.6 || ^3.0.0
       vue: 3.5.29
@@ -11338,14 +11338,14 @@ snapshots:
 
   '@phc/format@1.0.0': {}
 
-  '@pinia/colada-nuxt@0.3.2(@pinia/colada@0.21.6(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3)))(magicast@0.5.2)':
+  '@pinia/colada-nuxt@0.3.2(@pinia/colada@0.21.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3)))(magicast@0.5.2)':
     dependencies:
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
-      '@pinia/colada': 0.21.6(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
+      '@pinia/colada': 0.21.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
     transitivePeerDependencies:
       - magicast
 
-  '@pinia/colada@0.21.6(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
+  '@pinia/colada@0.21.7(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
     dependencies:
       pinia: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
       vue: 3.5.29(typescript@5.9.3)
