@@ -523,7 +523,7 @@ importers:
         version: 1.20.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
       '@regle/schemas':
         specifier: ^1.13.0
-        version: 1.19.16(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)
+        version: 1.20.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -2979,15 +2979,6 @@ packages:
     resolution: {integrity: sha512-da+MMyeXhBaKtxQiWPfy7+056wk3lVIhioJnXHXkJ2/OHDaZfFcyKHNl1R06sdYO8lIRXcXdoZ6LO2ARmkAREA==}
     engines: {node: '>=18.16.0'}
 
-  '@regle/core@1.19.16':
-    resolution: {integrity: sha512-eg7KZLjOvcSZTh7bCw7gdqpgAI8q33oOfsDBdEq6UxNGbuSSl+sHn9UfPo1AHnC7IkB09psP8bwozQk/oo5GmA==}
-    peerDependencies:
-      pinia: '>=2.2.5'
-      vue: 3.5.29
-    peerDependenciesMeta:
-      pinia:
-        optional: true
-
   '@regle/core@1.20.1':
     resolution: {integrity: sha512-BdybQ3mnEH76NvyAnt82Nexw/9an3bX+J16aUhVbkF0Ykuw+BhOmgRpo0dLJo43c4eTTZLz745d7NBoDH32ybg==}
     peerDependencies:
@@ -3001,25 +2992,8 @@ packages:
     resolution: {integrity: sha512-KT5LINp1pPycZucvztX0GofpeDlYlX6z8pqbc9p4x2N5b+m4n11x1Y9kmSu87zidu/reSsapCgHo3bUjrlL/zA==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@regle/rules@1.19.16':
-    resolution: {integrity: sha512-epoxNvJAD92rC3USWQJ7mjALg1ozE0olxvRUfTmS9Il3Kq4l4rHH96LOPukCAEXuB7PFEhJiat28XX2nk6xQnA==}
-
   '@regle/rules@1.20.1':
     resolution: {integrity: sha512-2Pn/2dbpMjgYxT+SOOQTapnWgwy0R1xFWCcaI9DS7IzgwwLh5COVViZhBxucQOrmAYCUAry9MEdcpfDEOIby8w==}
-
-  '@regle/schemas@1.19.16':
-    resolution: {integrity: sha512-6Wdv5dLEwAFgA4QZdy6e/4n41WR1sQ5NqLNYNnUxOeFti3aHLp9dJNBHSedahPFD05GaeIQg6BwLM7in0PiNeg==}
-    peerDependencies:
-      arktype: ^2.1.0
-      valibot: ^1.0.0
-      zod: ^3.24.0 || ^4.0.0
-    peerDependenciesMeta:
-      arktype:
-        optional: true
-      valibot:
-        optional: true
-      zod:
-        optional: true
 
   '@regle/schemas@1.20.1':
     resolution: {integrity: sha512-4LMUXoD4pu4TMgSfOp4C5XIjjjWUWkpi8srVu0x93rgBTToVUbgLgSzq/7+rSsi3QOfUKThNlK+o8QSKuzkkbA==}
@@ -11491,15 +11465,6 @@ snapshots:
       safe-stable-stringify: 2.5.0
       secure-json-parse: 4.1.0
 
-  '@regle/core@1.19.16(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
-    dependencies:
-      '@standard-schema/spec': 1.1.0
-      '@vue/devtools-api': 7.7.9
-      type-fest: 5.4.4
-      vue: 3.5.29(typescript@5.9.3)
-    optionalDependencies:
-      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
-
   '@regle/core@1.20.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
     dependencies:
       '@standard-schema/spec': 1.1.0
@@ -11526,30 +11491,10 @@ snapshots:
       - vue
       - zod
 
-  '@regle/rules@1.19.16(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
-    dependencies:
-      '@regle/core': 1.19.16(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
-      type-fest: 5.4.4
-    transitivePeerDependencies:
-      - pinia
-      - vue
-
   '@regle/rules@1.20.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))':
     dependencies:
       '@regle/core': 1.20.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
       type-fest: 5.4.4
-    transitivePeerDependencies:
-      - pinia
-      - vue
-
-  '@regle/schemas@1.19.16(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))(zod@4.3.6)':
-    dependencies:
-      '@regle/core': 1.19.16(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
-      '@regle/rules': 1.19.16(pinia@3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3)))(vue@3.5.29(typescript@5.9.3))
-      '@standard-schema/spec': 1.1.0
-      type-fest: 5.4.4
-    optionalDependencies:
-      zod: 4.3.6
     transitivePeerDependencies:
       - pinia
       - vue
@@ -11565,7 +11510,6 @@ snapshots:
     transitivePeerDependencies:
       - pinia
       - vue
-    optional: true
 
   '@rolldown/pluginutils@1.0.0-rc.2': {}
 
