@@ -828,7 +828,7 @@ importers:
         version: 5.92.9(vue@3.5.30(typescript@5.9.3))
       '@unhead/vue':
         specifier: ^2.0.19
-        version: 2.1.10(vue@3.5.30(typescript@5.9.3))
+        version: 2.1.12(vue@3.5.30(typescript@5.9.3))
       '@vee-validate/zod':
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.30(typescript@5.9.3))(zod@3.25.76)
@@ -867,7 +867,7 @@ importers:
         version: 3.5.0
       unhead:
         specifier: ^2.0.19
-        version: 2.1.10
+        version: 2.1.12
       vee-validate:
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.30(typescript@5.9.3))
@@ -3891,8 +3891,8 @@ packages:
     resolution: {integrity: sha512-KiROIzYdEV85YygXw6BI/Dx4fnBlFQu6Mq4QE4MOH9fFnhohw6wX/OAvDY2/C+ut0I3RSPKenvZJIVYqJNkhEw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@unhead/vue@2.1.10':
-    resolution: {integrity: sha512-VP78Onh2HNezLPfhYjfHqn4dxlcQsE6PJgTTs61NksO/thvilNswtgBq0N0MWCLtn43N5akEPGW2y2zxM3PWgQ==}
+  '@unhead/vue@2.1.12':
+    resolution: {integrity: sha512-zEWqg0nZM8acpuTZE40wkeUl8AhIe0tU0OkilVi1D4fmVjACrwoh5HP6aNqJ8kUnKsoy6D+R3Vi/O+fmdNGO7g==}
     peerDependencies:
       vue: 3.5.30
 
@@ -8822,8 +8822,8 @@ packages:
   unenv@2.0.0-rc.24:
     resolution: {integrity: sha512-i7qRCmY42zmCwnYlh9H2SvLEypEFGye5iRmEMKjcGi7zk9UquigRjFtTLz0TYqr0ZGLZhaMHl/foy1bZR+Cwlw==}
 
-  unhead@2.1.10:
-    resolution: {integrity: sha512-We8l9uNF8zz6U8lfQaVG70+R/QBfQx1oPIgXin4BtZnK2IQpz6yazQ0qjMNVBDw2ADgF2ea58BtvSK+XX5AS7g==}
+  unhead@2.1.12:
+    resolution: {integrity: sha512-iTHdWD9ztTunOErtfUFk6Wr11BxvzumcYJ0CzaSCBUOEtg+DUZ9+gnE99i8QkLFT2q1rZD48BYYGXpOZVDLYkA==}
 
   unhead@2.1.4:
     resolution: {integrity: sha512-+5091sJqtNNmgfQ07zJOgUnMIMKzVKAWjeMlSrTdSGPB6JSozhpjUKuMfWEoLxlMAfhIvgOU8Me0XJvmMA/0fA==}
@@ -12414,10 +12414,10 @@ snapshots:
       '@typescript-eslint/types': 8.56.1
       eslint-visitor-keys: 5.0.1
 
-  '@unhead/vue@2.1.10(vue@3.5.30(typescript@5.9.3))':
+  '@unhead/vue@2.1.12(vue@3.5.30(typescript@5.9.3))':
     dependencies:
       hookable: 6.0.1
-      unhead: 2.1.10
+      unhead: 2.1.12
       vue: 3.5.30(typescript@5.9.3)
 
   '@unhead/vue@2.1.4(vue@3.5.30(typescript@5.9.3))':
@@ -17834,7 +17834,7 @@ snapshots:
     dependencies:
       pathe: 2.0.3
 
-  unhead@2.1.10:
+  unhead@2.1.12:
     dependencies:
       hookable: 6.0.1
 
