@@ -49,7 +49,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.19
+        version: 1.11.20
       dotenv:
         specifier: ^17.2.3
         version: 17.3.1
@@ -206,7 +206,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.19
+        version: 1.11.20
       dotenv:
         specifier: ^17.2.3
         version: 17.3.1
@@ -369,7 +369,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.19
+        version: 1.11.20
       dotenv:
         specifier: ^17.2.3
         version: 17.3.1
@@ -535,7 +535,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.19
+        version: 1.11.20
       dotenv:
         specifier: ^17.2.3
         version: 17.3.1
@@ -689,7 +689,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.19
+        version: 1.11.20
       dotenv:
         specifier: ^17.2.3
         version: 17.3.1
@@ -843,7 +843,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.19
+        version: 1.11.20
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -5094,8 +5094,8 @@ packages:
   dayjs@1.11.15:
     resolution: {integrity: sha512-MC+DfnSWiM9APs7fpiurHGCoeIx0Gdl6QZBy+5lu8MbYKN5FZEXqOgrundfibdfhGZ15o9hzmZ2xJjZnbvgKXQ==}
 
-  dayjs@1.11.19:
-    resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
+  dayjs@1.11.20:
+    resolution: {integrity: sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==}
 
   dayjs@1.8.36:
     resolution: {integrity: sha512-3VmRXEtw7RZKAf+4Tv1Ym9AGeo8r8+CjDi26x+7SYQil1UqtqdaokhzoEJohqlzt0m5kacJSDhJQkG/LWhpRBw==}
@@ -13740,7 +13740,7 @@ snapshots:
 
   dayjs@1.11.15: {}
 
-  dayjs@1.11.19: {}
+  dayjs@1.11.20: {}
 
   dayjs@1.8.36: {}
 
