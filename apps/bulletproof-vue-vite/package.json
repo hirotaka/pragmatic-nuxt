@@ -96,7 +96,7 @@
     "storybook-vue3-router": "^7.0.0",
     "tailwindcss": "4.2.1",
     "typescript": "~5.9.0",
-    "vite": "^7.0.0",
+    "vite": "^8.0.0",
     "vite-node": "^5.0.0",
     "vite-plugin-vue-devtools": "^8.0.0",
     "vitest": "^4.0.0",
