@@ -31,17 +31,20 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         output: {
-          manualChunks: {
-            // Vendor chunks - separate large dependencies
-            'vue-vendor': ['vue', 'vue-router', 'pinia'],
-            'query-vendor': ['@tanstack/vue-query'],
-            'ui-vendor': ['reka-ui', 'lucide-vue-next'],
-            // Utility chunks
-            utils: ['axios', 'zod', 'clsx', 'tailwind-merge'],
-            // Form validation chunk
-            form: ['vee-validate', '@vee-validate/zod'],
-            // Content processing
-            content: ['marked', 'vue-dompurify-html', 'dayjs'],
+          manualChunks(id) {
+            const chunks: Record<string, string[]> = {
+              'vue-vendor': ['vue', 'vue-router', 'pinia'],
+              'query-vendor': ['@tanstack/vue-query'],
+              'ui-vendor': ['reka-ui', 'lucide-vue-next'],
+              utils: ['axios', 'zod', 'clsx', 'tailwind-merge'],
+              form: ['vee-validate', '@vee-validate/zod'],
+              content: ['marked', 'vue-dompurify-html', 'dayjs'],
+            };
+            for (const [chunkName, deps] of Object.entries(chunks)) {
+              if (deps.some((dep) => id.includes(`node_modules/${dep}/`))) {
+                return chunkName;
+              }
+            }
           },
         },
       },
