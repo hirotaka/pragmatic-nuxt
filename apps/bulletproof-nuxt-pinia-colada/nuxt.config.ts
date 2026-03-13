@@ -37,6 +37,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-07-15",
   vite: {
+    // @ts-expect-error vite 8 Plugin type is incompatible with @nuxt/schema inlined vite types
     plugins: [tailwindcss()],
   },
   typescript: {
