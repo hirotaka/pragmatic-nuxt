@@ -520,7 +520,7 @@ importers:
         version: 1.21.1(magicast@0.5.2)(typescript@5.9.3)(vue@3.5.31(typescript@5.9.3))(zod@4.3.6)
       '@regle/rules':
         specifier: ^1.0.0
-        version: 1.21.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.31(typescript@5.9.3)))(vue@3.5.31(typescript@5.9.3))
+        version: 1.21.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.31(typescript@5.9.3)))(vue@3.5.31(typescript@5.9.3))
       '@regle/schemas':
         specifier: ^1.13.0
         version: 1.21.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.31(typescript@5.9.3)))(vue@3.5.31(typescript@5.9.3))(zod@4.3.6)
