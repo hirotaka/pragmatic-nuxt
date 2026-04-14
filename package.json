@@ -17,6 +17,7 @@
       "prisma": "npm:empty-npm-package@1.0.0",
       "@prisma/client": "npm:empty-npm-package@1.0.0",
       "basic-ftp": "^5.2.1",
+      "editorconfig": "^1.0.7",
       "systeminformation": "^5.30.8",
       "esbuild": ">=0.25.0",
       "@types/node": "^24.10.3"
