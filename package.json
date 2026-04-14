@@ -16,6 +16,7 @@
       "jiti": "2.6.1",
       "prisma": "npm:empty-npm-package@1.0.0",
       "@prisma/client": "npm:empty-npm-package@1.0.0",
+      "basic-ftp": "^5.2.1",
       "esbuild": ">=0.25.0",
       "@types/node": "^24.10.3"
     }

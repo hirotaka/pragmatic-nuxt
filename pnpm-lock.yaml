@@ -10,6 +10,7 @@ overrides:
   jiti: 2.6.1
   prisma: npm:empty-npm-package@1.0.0
   '@prisma/client': npm:empty-npm-package@1.0.0
+  basic-ftp: ^5.2.1
   esbuild: '>=0.25.0'
   '@types/node': ^24.10.3
 
@@ -4887,10 +4888,9 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  basic-ftp@5.1.0:
-    resolution: {integrity: sha512-RkaJzeJKDbaDWTIPiJwubyljaEPwpVWkm9Rt5h9Nd6h7tEXTJ3VB4qxdZBioV7JO5yLUaOKwz7vDOzlncUsegw==}
+  basic-ftp@5.2.2:
+    resolution: {integrity: sha512-1tDrzKsdCg70WGvbFss/ulVAxupNauGnOlgpyjKzeQxzyllBLS0CGLV7tjIXTK3ZQA9/FBEm9qyFFN1bciA6pw==}
     engines: {node: '>=10.0.0'}
-    deprecated: Security vulnerability fixed in 5.2.1, please upgrade
 
   bcryptjs@3.0.3:
     resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
@@ -13888,7 +13888,7 @@ snapshots:
 
   baseline-browser-mapping@2.10.7: {}
 
-  basic-ftp@5.1.0: {}
+  basic-ftp@5.2.2: {}
 
   bcryptjs@3.0.3: {}
 
@@ -15454,7 +15454,7 @@ snapshots:
 
   get-uri@6.0.5:
     dependencies:
-      basic-ftp: 5.1.0
+      basic-ftp: 5.2.2
       data-uri-to-buffer: 6.0.2
       debug: 4.4.3
     transitivePeerDependencies:
