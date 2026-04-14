@@ -21,7 +21,7 @@ const handleStart = () => {
           <span class="block">Bulletproof Nuxt</span>
         </h2>
         <img
-          src="/logo.svg"
+          :src="'/logo.svg'"
           alt="nuxt"
           class="mx-auto h-64 p-8"
         >
