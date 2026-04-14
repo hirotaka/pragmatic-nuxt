@@ -88,7 +88,6 @@
     "pino-http": "^11.0.0",
     "pino-pretty": "^13.1.2",
     "plop": "^4.0.5",
-    "pm2": "^6.0.13",
     "postcss": "^8.5.6",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
