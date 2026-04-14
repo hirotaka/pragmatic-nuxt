@@ -66,7 +66,7 @@
     "@cloudflare/workers-types": "^4.20260124.0",
     "@ngneat/falso": "^8.0.2",
     "@nuxt/eslint": "^1.10.0",
-    "@nuxt/test-utils": "^4.0.0",
+    "@nuxt/test-utils": "^4.0.2",
     "@playwright/test": "^1.50.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.17",
