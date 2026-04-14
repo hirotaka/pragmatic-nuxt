@@ -34,7 +34,7 @@
     "pinia": "^3.0.0",
     "reka-ui": "^2.6.0",
     "tailwind-merge": "^3.0.0",
-    "unhead": "^2.0.19",
+    "unhead": "^2.1.13",
     "vee-validate": "^4.15.1",
     "vue": "3.5.31",
     "vue-dompurify-html": "^5.2.0",
