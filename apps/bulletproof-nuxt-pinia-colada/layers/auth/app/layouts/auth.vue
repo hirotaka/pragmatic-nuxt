@@ -13,7 +13,7 @@ const title = computed(() => (route.meta.title as string) || "Log in to your acc
         >
           <img
             class="h-24 w-auto p-3"
-            src="/logo.svg"
+            :src="'/logo.svg'"
             alt="Bulletproof Nuxt"
           >
         </NuxtLink>

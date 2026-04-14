@@ -91,7 +91,7 @@ const mobileMenuOpen = ref(false);
           >
             <img
               class="h-8 w-auto p-1.5"
-              src="/logo.svg"
+              :src="'/logo.svg'"
               alt="Workflow"
             >
             <span class="text-sm font-semibold text-white">Bulletproof Nuxt</span>
@@ -160,7 +160,7 @@ const mobileMenuOpen = ref(false);
                   >
                     <img
                       class="h-8 w-auto"
-                      src="/logo.svg"
+                      :src="'/logo.svg'"
                       alt="Workflow"
                     >
                     <span class="text-sm font-semibold text-white">Bulletproof Nuxt</span>
