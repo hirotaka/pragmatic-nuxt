@@ -11,6 +11,7 @@ overrides:
   prisma: npm:empty-npm-package@1.0.0
   '@prisma/client': npm:empty-npm-package@1.0.0
   basic-ftp: ^5.2.1
+  systeminformation: ^5.30.8
   esbuild: '>=0.25.0'
   '@types/node': ^24.10.3
 
@@ -8950,8 +8951,8 @@ packages:
     resolution: {integrity: sha512-ulAk51I9UVUyJgxlv9M6lFot2WP3e7t8Kz9+IS6D4rVba1tR9kON+Ey69f+1R4Q8cd45Lod6a4IcJIxnzGc/zA==}
     engines: {node: '>=18'}
 
-  systeminformation@5.30.7:
-    resolution: {integrity: sha512-33B/cftpaWdpvH+Ho9U1b08ss8GQuLxrWHelbJT1yw4M48Taj8W3ezcPuaLoIHZz5V6tVHuQPr5BprEfnBLBMw==}
+  systeminformation@5.31.5:
+    resolution: {integrity: sha512-5SyLdip4/3alxD4Kh+63bUQTJmu7YMfYQTC+koZy7X73HgNqZSD2P4wOZQWtUncvPvcEmnfIjCoygN4MRoEejQ==}
     engines: {node: '>=8.0.0'}
     os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos, android]
     hasBin: true
@@ -17330,7 +17331,7 @@ snapshots:
       async: 3.2.6
       debug: 4.4.3
       pidusage: 2.0.21
-      systeminformation: 5.30.7
+      systeminformation: 5.31.5
       tx2: 1.0.5
     transitivePeerDependencies:
       - supports-color
@@ -18413,7 +18414,7 @@ snapshots:
 
   system-architecture@0.1.0: {}
 
-  systeminformation@5.30.7:
+  systeminformation@5.31.5:
     optional: true
 
   tagged-tag@1.0.0: {}
