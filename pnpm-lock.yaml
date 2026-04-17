@@ -71,7 +71,7 @@ importers:
         version: 1.11.20
       dotenv:
         specifier: ^17.2.3
-        version: 17.4.0
+        version: 17.4.2
       drizzle-orm:
         specifier: ^0.45.0
         version: 0.45.2(@cloudflare/workers-types@4.20260402.1)(@libsql/client@0.17.2)
@@ -228,7 +228,7 @@ importers:
         version: 1.11.20
       dotenv:
         specifier: ^17.2.3
-        version: 17.4.0
+        version: 17.4.2
       drizzle-orm:
         specifier: ^0.45.0
         version: 0.45.2(@cloudflare/workers-types@4.20260402.1)(@libsql/client@0.17.2)
@@ -391,7 +391,7 @@ importers:
         version: 1.11.20
       dotenv:
         specifier: ^17.2.3
-        version: 17.4.0
+        version: 17.4.2
       drizzle-orm:
         specifier: ^0.45.0
         version: 0.45.2(@cloudflare/workers-types@4.20260402.1)(@libsql/client@0.17.2)
@@ -557,7 +557,7 @@ importers:
         version: 1.11.20
       dotenv:
         specifier: ^17.2.3
-        version: 17.4.0
+        version: 17.4.2
       drizzle-orm:
         specifier: ^0.45.0
         version: 0.45.2(@cloudflare/workers-types@4.20260402.1)(@libsql/client@0.17.2)
@@ -711,7 +711,7 @@ importers:
         version: 1.11.20
       dotenv:
         specifier: ^17.2.3
-        version: 17.4.0
+        version: 17.4.2
       drizzle-orm:
         specifier: ^0.45.0
         version: 0.45.2(@cloudflare/workers-types@4.20260402.1)(@libsql/client@0.17.2)
@@ -5558,8 +5558,8 @@ packages:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
 
-  dotenv@17.4.0:
-    resolution: {integrity: sha512-kCKF62fwtzwYm0IGBNjRUjtJgMfGapII+FslMHIjMR5KTnwEmBmWLDRSnc3XSNP8bNy34tekgQyDT0hr7pERRQ==}
+  dotenv@17.4.2:
+    resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
 
   drizzle-kit@0.31.10:
@@ -13626,7 +13626,7 @@ snapshots:
       chokidar: 5.0.0
       confbox: 0.2.4
       defu: 6.1.7
-      dotenv: 17.4.0
+      dotenv: 17.4.2
       exsolve: 1.0.8
       giget: 2.0.0
       jiti: 2.6.1
@@ -13643,7 +13643,7 @@ snapshots:
       chokidar: 5.0.0
       confbox: 0.2.4
       defu: 6.1.7
-      dotenv: 17.4.0
+      dotenv: 17.4.2
       exsolve: 1.0.8
       giget: 3.2.0
       jiti: 2.6.1
@@ -14174,7 +14174,7 @@ snapshots:
   dotenv-cli@11.0.0:
     dependencies:
       cross-spawn: 7.0.6
-      dotenv: 17.4.0
+      dotenv: 17.4.2
       dotenv-expand: 12.0.3
       minimist: 1.2.8
 
@@ -14184,7 +14184,7 @@ snapshots:
 
   dotenv@16.6.1: {}
 
-  dotenv@17.4.0: {}
+  dotenv@17.4.2: {}
 
   drizzle-kit@0.31.10:
     dependencies:
