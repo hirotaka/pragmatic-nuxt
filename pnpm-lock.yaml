@@ -17,7 +17,7 @@ overrides:
   defu: 6.1.7
   brace-expansion: 5.0.5
   h3: 1.15.11
-  lodash: 4.18.0
+  lodash: 4.18.1
   node-forge: 1.4.0
   picomatch: 4.0.4
   qs: 6.14.2
@@ -7064,9 +7064,8 @@ packages:
   lodash.upperfirst@4.3.1:
     resolution: {integrity: sha512-sReKOYJIJf74dhJONhU4e0/shzi1trVbSWDOhKYE5XV2O+H7Sb2Dihwuc7xWxVl+DgFPyTqIN3zMfT9cq5iWDg==}
 
-  lodash@4.18.0:
-    resolution: {integrity: sha512-l1mfj2atMqndAHI3ls7XqPxEjV2J9ZkcNyHpoZA3r2T1LLwDB69jgkMWh71YKwhBbK0G2f4WSn05ahmQXVxupA==}
-    deprecated: Bad release. Please use lodash@4.17.21 instead.
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
@@ -10736,7 +10735,7 @@ snapshots:
       date-fns: 2.30.0
       debug: 4.4.3
       graphql: 16.12.0
-      lodash: 4.18.0
+      lodash: 4.18.1
       md5: 2.3.0
       outvariant: 1.4.3
       pluralize: 8.0.0
@@ -12285,7 +12284,7 @@ snapshots:
       chalk: 3.0.0
       css.escape: 1.5.1
       dom-accessibility-api: 0.6.3
-      lodash: 4.18.0
+      lodash: 4.18.1
       redent: 3.0.0
 
   '@testing-library/jest-dom@6.9.1':
@@ -13370,7 +13369,7 @@ snapshots:
       graceful-fs: 4.2.11
       is-stream: 2.0.1
       lazystream: 1.0.1
-      lodash: 4.18.0
+      lodash: 4.18.1
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
@@ -15786,7 +15785,7 @@ snapshots:
 
   lodash.upperfirst@4.3.1: {}
 
-  lodash@4.18.0: {}
+  lodash@4.18.1: {}
 
   log-symbols@4.1.0:
     dependencies:
@@ -18451,7 +18450,7 @@ snapshots:
     dependencies:
       axios: 1.15.0(debug@4.4.3)
       joi: 18.0.2
-      lodash: 4.18.0
+      lodash: 4.18.1
       minimist: 1.2.8
       rxjs: 7.8.2
     transitivePeerDependencies:
