@@ -21,7 +21,7 @@ overrides:
   node-forge: 1.4.0
   picomatch: 4.0.4
   qs: 6.14.2
-  srvx: 0.11.13
+  srvx: 0.11.15
   yaml: 2.8.3
   '@eslint/config-inspector@1.4.2>h3': 1.15.11
   nuxt-auth-utils@0.5.29>h3: 1.15.11
@@ -8517,8 +8517,8 @@ packages:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
     engines: {node: '>= 10.x'}
 
-  srvx@0.11.13:
-    resolution: {integrity: sha512-oknN6qduuMPafxKtHucUeG32Q963pjriA5g3/Bl05cwEsUe5VVbIU4qR9LrALHbipSCyBe+VmfDGGydqazDRkw==}
+  srvx@0.11.15:
+    resolution: {integrity: sha512-iXsux0UcOjdvs0LCMa2Ws3WwcDUozA3JN3BquNXkaFPP7TpRqgunKdEgoZ/uwb1J6xaYHfxtz9Twlh6yzwM6Tg==}
     engines: {node: '>=20.16.0'}
     hasBin: true
 
@@ -10824,7 +10824,7 @@ snapshots:
       pkg-types: 2.3.0
       scule: 1.3.0
       semver: 7.7.4
-      srvx: 0.11.13
+      srvx: 0.11.15
       std-env: 3.10.0
       tinyclip: 0.1.12
       tinyexec: 1.0.4
@@ -15111,7 +15111,7 @@ snapshots:
   h3@2.0.1-rc.20:
     dependencies:
       rou3: 0.8.1
-      srvx: 0.11.13
+      srvx: 0.11.15
 
   handlebars@4.7.9:
     dependencies:
@@ -17560,7 +17560,7 @@ snapshots:
 
   split2@4.2.0: {}
 
-  srvx@0.11.13: {}
+  srvx@0.11.15: {}
 
   stable-hash-x@0.2.0: {}
 
