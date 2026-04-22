@@ -26,7 +26,7 @@
       "lodash": "4.18.1",
       "node-forge": "1.4.0",
       "picomatch": "4.0.4",
-      "qs": "6.14.2",
+      "qs": "6.15.1",
       "srvx": "0.11.15",
       "yaml": "2.8.3",
       "@eslint/config-inspector@1.4.2>h3": "1.15.11",
