@@ -696,7 +696,7 @@ importers:
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.32(typescript@6.0.3)))
       '@tanstack/vue-form':
         specifier: ^1.0.0
-        version: 1.29.0(vue@3.5.32(typescript@6.0.3))
+        version: 1.29.1(vue@3.5.32(typescript@6.0.3))
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -3757,8 +3757,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@tanstack/form-core@1.29.0':
-    resolution: {integrity: sha512-uyeKEdJBfbj0bkBSwvSYVRtWLOaXvfNX3CeVw1HqGOXVLxpBBGAqWdYLc+UoX/9xcoFwFXrjR9QqMPzvwm2yyQ==}
+  '@tanstack/form-core@1.29.1':
+    resolution: {integrity: sha512-NIYPO36eEu7nSWvMpbFDQaBWyVtnH/C8fsZ3/XpJUT4uOWgmxsiUvHGbTbDNIQTXAKIkhwEl0sUrqBNn2SfUnw==}
 
   '@tanstack/match-sorter-utils@8.19.4':
     resolution: {integrity: sha512-Wo1iKt2b9OT7d+YGhvEPD3DXvPv2etTusIMhMUoG7fbhmxcXCtIjJDEygy91Y2JFlwGyjqiBPRozme7UD8hoqg==}
@@ -3780,8 +3780,8 @@ packages:
   '@tanstack/virtual-core@3.14.0':
     resolution: {integrity: sha512-JLANqGy/D6k4Ujmh8Tr25lGimuOXNiaVyXaCAZS0W+1390sADdGnyUdSWNIfd49gebtIxGMij4IktRVzrdr12Q==}
 
-  '@tanstack/vue-form@1.29.0':
-    resolution: {integrity: sha512-BBZFPQ0vlBHE3vBAHt8XdyVSVOLzZ1tgyjb7InJ4tAz+Sb/ePtwwIGvSUv6duuA9Nuusu+BX2O7lu5g4cvfLvg==}
+  '@tanstack/vue-form@1.29.1':
+    resolution: {integrity: sha512-r21z+jmX1aqoEk2yCRH5smS6jtEUsCIYegRxt1JoW8Ecywl9M8+U522qaDoXpo+nqHXhPwyi2CCHfpNppzzcgg==}
     peerDependencies:
       vue: 3.5.32
 
@@ -12163,7 +12163,7 @@ snapshots:
 
   '@tanstack/devtools-event-client@0.4.3': {}
 
-  '@tanstack/form-core@1.29.0':
+  '@tanstack/form-core@1.29.1':
     dependencies:
       '@tanstack/devtools-event-client': 0.4.3
       '@tanstack/pacer-lite': 0.1.1
@@ -12183,9 +12183,9 @@ snapshots:
 
   '@tanstack/virtual-core@3.14.0': {}
 
-  '@tanstack/vue-form@1.29.0(vue@3.5.32(typescript@6.0.3))':
+  '@tanstack/vue-form@1.29.1(vue@3.5.32(typescript@6.0.3))':
     dependencies:
-      '@tanstack/form-core': 1.29.0
+      '@tanstack/form-core': 1.29.1
       '@tanstack/vue-store': 0.9.3(vue@3.5.32(typescript@6.0.3))
       vue: 3.5.32(typescript@6.0.3)
     transitivePeerDependencies:
