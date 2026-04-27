@@ -31,7 +31,7 @@ Good Server Cache Solutions for Nuxt:
 - [useFetch](https://nuxt.com/docs/api/composables/use-fetch) - Built-in data fetching with caching (used in this project)
 - [$fetch](https://nuxt.com/docs/api/utils/dollarfetch) - For mutations and non-cached requests
 - [useAsyncData](https://nuxt.com/docs/api/composables/use-async-data) - For custom async operations
-- [Pinia Colada](https://pinia-colada.esm.dev/) - See [apps/bulletproof-nuxt-pinia-colada](../../bulletproof-nuxt-pinia-colada/README.md)
+- [Pinia Colada](https://pinia-colada.esm.dev/) - See [apps/reference/bulletproof-nuxt-pinia-colada](../../reference/bulletproof-nuxt-pinia-colada/README.md)
 
 [Server Cache State Example Code](../layers/discussions/app/composables/useDiscussions.ts)
 
@@ -42,9 +42,9 @@ Forms are a crucial part of any application, and managing form state effectively
 Good Form Libraries for Vue:
 
 - [VeeValidate](https://vee-validate.logaretm.com/v4/) - Used in this project
-- [Regle](https://reglejs.dev/) - See [apps/bulletproof-nuxt-regle](../../bulletproof-nuxt-regle/README.md)
-- [TanStack Form](https://tanstack.com/form/) - See [apps/bulletproof-nuxt-tanstack-form](../../bulletproof-nuxt-tanstack-form/README.md)
-- [Formwerk](https://formwerk.dev/) - See [apps/bulletproof-nuxt-formwerk](../../bulletproof-nuxt-formwerk/README.md)
+- [Regle](https://reglejs.dev/) - See [apps/reference/bulletproof-nuxt-regle](../../reference/bulletproof-nuxt-regle/README.md)
+- [TanStack Form](https://tanstack.com/form/) - See [apps/reference/bulletproof-nuxt-tanstack-form](../../reference/bulletproof-nuxt-tanstack-form/README.md)
+- [Formwerk](https://formwerk.dev/) - See [apps/reference/bulletproof-nuxt-formwerk](../../reference/bulletproof-nuxt-formwerk/README.md)
 - [FormKit](https://formkit.com/)
 - [vuelidate](https://vuelidate-next.netlify.app/)
 

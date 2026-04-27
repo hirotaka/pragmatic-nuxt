@@ -3,13 +3,13 @@ on:
   push:
     branches: [main]
     paths:
-      - "apps/bulletproof-vue-vite/**"
+      - "apps/reference/bulletproof-vue-vite/**"
       - "pnpm-lock.yaml"
       - ".github/workflows/vue-vite-ci.yml"
   pull_request:
     branches: [main]
     paths:
-      - "apps/bulletproof-vue-vite/**"
+      - "apps/reference/bulletproof-vue-vite/**"
       - "pnpm-lock.yaml"
       - ".github/workflows/vue-vite-ci.yml"
 concurrency:
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./apps/bulletproof-vue-vite
+        working-directory: ./apps/reference/bulletproof-vue-vite
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v5
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./apps/bulletproof-vue-vite
+        working-directory: ./apps/reference/bulletproof-vue-vite
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v5
@@ -66,6 +66,6 @@ jobs:
         with:
           name: playwright-report
           path: |
-            apps/bulletproof-vue-vite/playwright-report/
-            apps/bulletproof-vue-vite/mocked-db.json
+            apps/reference/bulletproof-vue-vite/playwright-report/
+            apps/reference/bulletproof-vue-vite/mocked-db.json
           retention-days: 30

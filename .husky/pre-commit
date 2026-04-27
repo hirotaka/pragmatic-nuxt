@@ -1,3 +1,10 @@
-for app in bulletproof-vue-vite bulletproof-nuxt bulletproof-nuxt-regle bulletproof-nuxt-tanstack-form bulletproof-nuxt-formwerk; do
-  (cd apps/$app && pnpm lint-staged)
+for app in \
+  bulletproof-nuxt \
+  reference/bulletproof-vue-vite \
+  reference/bulletproof-nuxt-regle \
+  reference/bulletproof-nuxt-tanstack-form \
+  reference/bulletproof-nuxt-formwerk \
+  reference/bulletproof-nuxt-pinia-colada
+do
+  (cd "apps/$app" && pnpm lint-staged)
 done

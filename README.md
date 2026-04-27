@@ -16,17 +16,35 @@ What you'll find here:
 
 ## 📦 Showcases
 
-### 🛡️ Bulletproof Series
+### Start Here
 
-Production-ready application architectures inspired by [Bulletproof React](https://github.com/alan2207/bulletproof-react).
+If you want the current recommended Nuxt setup, start with:
+
+- [apps/bulletproof-nuxt](apps/bulletproof-nuxt)
+
+Technical decisions for actively maintained apps are documented in the [Technical Radar](docs/technical-radar.md).
+
+### Canonical Apps
+
+Canonical Apps are actively maintained and follow current Adopt decisions from the Technical Radar.
 
 | Showcase | Description | Key Libraries | Demo |
 |----------|-------------|---------------|------|
-| [bulletproof-vue-vite](apps/bulletproof-vue-vite) | Vue SPA (direct port from React) | Vue Router, TanStack Query, Pinia | [Live](https://bulletproof-vue.pages.dev) |
-| [bulletproof-nuxt](apps/bulletproof-nuxt) | Nuxt full-stack with VeeValidate | Nuxt Layers, Drizzle ORM, Zod v3 | [Live](https://bulletproof-nuxt.pages.dev) |
-| [bulletproof-nuxt-regle](apps/bulletproof-nuxt-regle) | Nuxt full-stack with Regle | Data-driven validation, Zod v4 | - |
-| [bulletproof-nuxt-tanstack-form](apps/bulletproof-nuxt-tanstack-form) | Nuxt full-stack with TanStack Form | Headless form state, Zod v4 | - |
-| [bulletproof-nuxt-formwerk](apps/bulletproof-nuxt-formwerk) | Nuxt full-stack with Formwerk | Accessible form primitives, Zod v4 | - |
+| [bulletproof-nuxt](apps/bulletproof-nuxt) | Canonical Nuxt full-stack business app | Nuxt Layers, Regle, Zod v4, Drizzle ORM | [Live](https://bulletproof-nuxt.pages.dev) |
+| `apps/chat` | Canonical AI chat app reference | Nuxt, AI SDK, shadcn-vue/reka-ui | Planned |
+| `apps/dashboard` | Canonical dashboard app reference | Nuxt, Regle, Pinia Colada | Planned |
+
+### Reference Apps
+
+Reference Apps preserve alternative implementations and past experiments for comparison and learning.
+
+| Showcase | Description | Key Libraries | Demo |
+|----------|-------------|---------------|------|
+| [reference/bulletproof-vue-vite](apps/reference/bulletproof-vue-vite) | Vue SPA (direct port from React) | Vue Router, TanStack Query, Pinia | [Live](https://bulletproof-vue.pages.dev) |
+| [reference/bulletproof-nuxt-regle](apps/reference/bulletproof-nuxt-regle) | Nuxt full-stack Regle comparison | Regle, Zod v4 | - |
+| [reference/bulletproof-nuxt-tanstack-form](apps/reference/bulletproof-nuxt-tanstack-form) | Nuxt full-stack TanStack Form comparison | TanStack Form, Zod v4 | - |
+| [reference/bulletproof-nuxt-formwerk](apps/reference/bulletproof-nuxt-formwerk) | Nuxt full-stack Formwerk comparison | Formwerk, Zod v4 | - |
+| [reference/bulletproof-nuxt-pinia-colada](apps/reference/bulletproof-nuxt-pinia-colada) | Nuxt full-stack Pinia Colada comparison | Pinia Colada, Nuxt | - |
 
 ## 🗺️ Roadmap
 

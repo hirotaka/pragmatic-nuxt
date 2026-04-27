@@ -22,7 +22,7 @@ To set up the app execute the following commands.
 ```bash
 git clone https://github.com/hirotaka/pragmatic-nuxt.git
 cd pragmatic-nuxt
-cd apps/bulletproof-vue-vite
+cd apps/reference/bulletproof-vue-vite
 cp .env.example .env
 pnpm install
 ```
