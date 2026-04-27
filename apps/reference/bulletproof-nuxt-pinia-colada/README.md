@@ -1,18 +1,19 @@
-# 🛡️ Bulletproof Nuxt TanStack Form
+# 🛡️ Bulletproof Nuxt Pinia Colada
 
 A full-stack application using Nuxt with SSR capabilities,
-Nuxt Layers architecture, and [TanStack Form](https://tanstack.com/form/)
-for form handling.
+Nuxt Layers architecture, and [Pinia Colada](https://pinia-colada.esm.dev/)
+for data fetching and caching.
 
-This app is based on [bulletproof-nuxt](../bulletproof-nuxt/README.md).
-The main difference is that this app uses TanStack Form for form handling
-instead of VeeValidate.
+This app is based on [bulletproof-nuxt](../../bulletproof-nuxt/README.md).
+The main difference is that this app uses Pinia Colada (useQuery/useMutation)
+for data fetching instead of Nuxt's useFetch and a custom useMutation composable.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Nuxt 4
 - **Architecture**: Nuxt Layers for modular features
-- **Form Handling**: TanStack Form + Zod v4
+- **Data Fetching**: Pinia Colada (useQuery, useMutation, useInfiniteQuery)
+- **Form Validation**: VeeValidate + Zod v3
 - **Database**: SQLite (libsql) + Drizzle ORM
 - **Auth**: nuxt-auth-utils
 - **Styling**: Tailwind CSS + Reka UI
@@ -30,7 +31,7 @@ To set up the app execute the following commands.
 ```bash
 git clone https://github.com/hirotaka/pragmatic-nuxt.git
 cd pragmatic-nuxt
-cd apps/bulletproof-nuxt-tanstack-form
+cd apps/reference/bulletproof-nuxt-pinia-colada
 cp .env.example .env
 pnpm install
 ```
@@ -73,4 +74,4 @@ for more information.
 
 ## 📚 Documentation
 
-See [bulletproof-nuxt documentation](../bulletproof-nuxt/README.md#-documentation) for the base documentation.
+See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#-documentation) for the base documentation.

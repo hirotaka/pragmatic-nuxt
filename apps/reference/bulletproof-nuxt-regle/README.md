@@ -1,18 +1,18 @@
-# 🛡️ Bulletproof Nuxt Formwerk
+# 🛡️ Bulletproof Nuxt Regle
 
 A full-stack application using Nuxt with SSR capabilities,
-Nuxt Layers architecture, and [Formwerk](https://formwerk.dev/)
-for form handling.
+Nuxt Layers architecture, and [Regle](https://reglejs.dev/)
+for form validation.
 
-This app is based on [bulletproof-nuxt](../bulletproof-nuxt/README.md).
-The main difference is that this app uses Formwerk for form handling
+This app is based on [bulletproof-nuxt](../../bulletproof-nuxt/README.md).
+The main difference is that this app uses Regle for form validation
 instead of VeeValidate.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Nuxt 4
 - **Architecture**: Nuxt Layers for modular features
-- **Form Handling**: Formwerk + Zod v4
+- **Form Validation**: Regle + Zod v4
 - **Database**: SQLite (libsql) + Drizzle ORM
 - **Auth**: nuxt-auth-utils
 - **Styling**: Tailwind CSS + Reka UI
@@ -30,7 +30,7 @@ To set up the app execute the following commands.
 ```bash
 git clone https://github.com/hirotaka/pragmatic-nuxt.git
 cd pragmatic-nuxt
-cd apps/bulletproof-nuxt-formwerk
+cd apps/reference/bulletproof-nuxt-regle
 cp .env.example .env
 pnpm install
 ```
@@ -73,4 +73,4 @@ for more information.
 
 ## 📚 Documentation
 
-See [bulletproof-nuxt documentation](../bulletproof-nuxt/README.md#-documentation) for the base documentation.
+See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#-documentation) for the base documentation.

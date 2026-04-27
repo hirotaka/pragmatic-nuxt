@@ -5,20 +5,20 @@ on:
     branches: [main]
     paths:
       - "apps/bulletproof-nuxt/**"
-      - "apps/bulletproof-nuxt-regle/**"
-      - "apps/bulletproof-nuxt-tanstack-form/**"
-      - "apps/bulletproof-nuxt-formwerk/**"
-      - "apps/bulletproof-nuxt-pinia-colada/**"
+      - "apps/reference/bulletproof-nuxt-regle/**"
+      - "apps/reference/bulletproof-nuxt-tanstack-form/**"
+      - "apps/reference/bulletproof-nuxt-formwerk/**"
+      - "apps/reference/bulletproof-nuxt-pinia-colada/**"
       - "pnpm-lock.yaml"
       - ".github/workflows/nuxt-ci.yml"
   pull_request:
     branches: [main]
     paths:
       - "apps/bulletproof-nuxt/**"
-      - "apps/bulletproof-nuxt-regle/**"
-      - "apps/bulletproof-nuxt-tanstack-form/**"
-      - "apps/bulletproof-nuxt-formwerk/**"
-      - "apps/bulletproof-nuxt-pinia-colada/**"
+      - "apps/reference/bulletproof-nuxt-regle/**"
+      - "apps/reference/bulletproof-nuxt-tanstack-form/**"
+      - "apps/reference/bulletproof-nuxt-formwerk/**"
+      - "apps/reference/bulletproof-nuxt-pinia-colada/**"
       - "pnpm-lock.yaml"
       - ".github/workflows/nuxt-ci.yml"
 concurrency:
@@ -29,7 +29,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [bulletproof-nuxt, bulletproof-nuxt-regle, bulletproof-nuxt-tanstack-form, bulletproof-nuxt-formwerk, bulletproof-nuxt-pinia-colada]
+        include:
+          - app: bulletproof-nuxt
+            app_slug: bulletproof-nuxt
+          - app: reference/bulletproof-nuxt-regle
+            app_slug: bulletproof-nuxt-regle
+          - app: reference/bulletproof-nuxt-tanstack-form
+            app_slug: bulletproof-nuxt-tanstack-form
+          - app: reference/bulletproof-nuxt-formwerk
+            app_slug: bulletproof-nuxt-formwerk
+          - app: reference/bulletproof-nuxt-pinia-colada
+            app_slug: bulletproof-nuxt-pinia-colada
     defaults:
       run:
         working-directory: ./apps/${{ matrix.app }}
@@ -58,7 +68,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [bulletproof-nuxt, bulletproof-nuxt-regle, bulletproof-nuxt-tanstack-form, bulletproof-nuxt-formwerk, bulletproof-nuxt-pinia-colada]
+        include:
+          - app: bulletproof-nuxt
+            app_slug: bulletproof-nuxt
+          - app: reference/bulletproof-nuxt-regle
+            app_slug: bulletproof-nuxt-regle
+          - app: reference/bulletproof-nuxt-tanstack-form
+            app_slug: bulletproof-nuxt-tanstack-form
+          - app: reference/bulletproof-nuxt-formwerk
+            app_slug: bulletproof-nuxt-formwerk
+          - app: reference/bulletproof-nuxt-pinia-colada
+            app_slug: bulletproof-nuxt-pinia-colada
     defaults:
       run:
         working-directory: ./apps/${{ matrix.app }}
@@ -82,7 +102,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-${{ matrix.app }}
+          name: playwright-report-${{ matrix.app_slug }}
           path: apps/${{ matrix.app }}/playwright/playwright-report/
           retention-days: 30
           if-no-files-found: ignore

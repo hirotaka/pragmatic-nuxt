@@ -1,7 +1,3 @@
 packages:
-  - 'apps/bulletproof-vue-vite'
-  - 'apps/bulletproof-nuxt'
-  - 'apps/bulletproof-nuxt-regle'
-  - 'apps/bulletproof-nuxt-tanstack-form'
-  - 'apps/bulletproof-nuxt-formwerk'
-  - 'apps/bulletproof-nuxt-pinia-colada'
+  - "apps/*"
+  - "apps/reference/*"
