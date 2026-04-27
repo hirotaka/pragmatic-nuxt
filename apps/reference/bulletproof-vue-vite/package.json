@@ -29,7 +29,7 @@
     "dayjs": "^1.11.18",
     "js-cookie": "^3.0.5",
     "lucide-vue-next": "^1.0.0",
-    "marked": "^17.0.0",
+    "marked": "^18.0.0",
     "nanoid": "^5.1.6",
     "pinia": "^3.0.0",
     "reka-ui": "^2.6.0",
