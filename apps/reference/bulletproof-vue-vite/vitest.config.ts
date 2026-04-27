@@ -21,6 +21,7 @@ export default defineConfig({
     setupFiles: ['./src/testing/setup-tests.ts'],
     env: {
       VITE_APP_API_URL: '',
+      VTL_SKIP_AUTO_CLEANUP: 'true',
     },
   },
 });

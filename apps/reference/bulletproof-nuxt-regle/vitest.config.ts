@@ -5,6 +5,9 @@ export default defineVitestConfig({
     environment: "nuxt",
     globals: true,
     setupFiles: ["./vitest.setup.ts"],
+    env: {
+      VTL_SKIP_AUTO_CLEANUP: "true",
+    },
     exclude: [
       "**/node_modules/**",
       "**/dist/**",

@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest';
-
+import { cleanup } from '@testing-library/vue';
 import { config } from '@vue/test-utils';
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 
 import { initializeDb, resetDb } from '@/testing/mocks/db';
 import { server } from '@/testing/mocks/server';
@@ -66,6 +67,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  cleanup();
   server.resetHandlers();
   resetDb();
 });
