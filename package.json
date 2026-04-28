@@ -36,7 +36,8 @@
       "serialize-javascript": "^7.0.5",
       "systeminformation": "^5.30.8",
       "esbuild": ">=0.25.0",
-      "@types/node": "^24.10.3"
+      "@types/node": "^24.10.3",
+      "uuid": "14.0.0"
     }
   },
   "devDependencies": {
