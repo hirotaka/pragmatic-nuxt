@@ -8,13 +8,13 @@ The efficacy of testing lies in the comprehensive coverage provided by integrati
 
 Unit tests are the smallest tests you can write. They test individual parts of your application in isolation. They are useful for testing shared components, composables, and utility functions that are used throughout the entire application. They are also useful for testing complex logic in a single component. They are fast to run and easy to write.
 
-[Unit Test Example Code](../layers/auth/app/components/LoginForm.spec.ts)
+[Unit Test Example Code](../layers/auth/app/components/__tests__/LoginForm.test.ts)
 
 ### Integration Tests
 
 Integration testing checks how different parts of your application work together. It's crucial to focus on integration tests for most of your testing, as they provide significant benefits and boost confidence in your application's reliability. While unit tests are helpful for individual parts, passing them doesn't guarantee your app will function correctly if the connections between parts are flawed. Testing various features with integration tests is vital to ensure that your application works smoothly and consistently.
 
-[Integration Test Example Code](../layers/discussions/app/components/CreateDiscussionForm.spec.ts)
+[Integration Test Example Code](../layers/discussions/app/pages/app/discussions/__tests__/discussion.test.ts)
 
 ### E2E Tests
 

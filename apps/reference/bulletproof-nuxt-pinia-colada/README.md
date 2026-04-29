@@ -74,4 +74,4 @@ for more information.
 
 ## 📚 Documentation
 
-See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#-documentation) for the base documentation.
+See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#documentation) for the base documentation.

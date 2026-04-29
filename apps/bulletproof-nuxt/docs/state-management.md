@@ -62,4 +62,4 @@ URL state refers to the data stored and manipulated within the address bar of th
 - [useRoute](https://nuxt.com/docs/api/composables/use-route) - Access current route params and query
 - [useRouter](https://nuxt.com/docs/api/composables/use-router) - Navigate and manipulate URL
 
-[URL State Example Code](../layers/discussions/app/pages/app/discussions/[discussionId].vue)
+[URL State Example Code](../layers/discussions/app/pages/app/discussions/[id].vue)

@@ -31,20 +31,20 @@ Good Server Cache Solutions for Nuxt:
 - [useFetch](https://nuxt.com/docs/api/composables/use-fetch) - Built-in data fetching with caching (used in this project)
 - [$fetch](https://nuxt.com/docs/api/utils/dollarfetch) - For mutations and non-cached requests
 - [useAsyncData](https://nuxt.com/docs/api/composables/use-async-data) - For custom async operations
-- [Pinia Colada](https://pinia-colada.esm.dev/) - See [apps/reference/bulletproof-nuxt-pinia-colada](../../reference/bulletproof-nuxt-pinia-colada/README.md)
+- [Pinia Colada](https://pinia-colada.esm.dev/) - See [apps/reference/bulletproof-nuxt-pinia-colada](../../bulletproof-nuxt-pinia-colada/README.md)
 
 [Server Cache State Example Code](../layers/discussions/app/composables/useDiscussions.ts)
 
 ## Form State
 
-Forms are a crucial part of any application, and managing form state effectively is essential for a seamless user experience. This project uses VeeValidate with Zod for type-safe form validation.
+Forms are a crucial part of any application, and managing form state effectively is essential for a seamless user experience. This project uses VeeValidate with Zod v3 for type-safe form validation.
 
 Good Form Libraries for Vue:
 
 - [VeeValidate](https://vee-validate.logaretm.com/v4/) - Used in this project
-- [Regle](https://reglejs.dev/) - See [apps/bulletproof-nuxt](../../bulletproof-nuxt/README.md)
-- [TanStack Form](https://tanstack.com/form/) - See [apps/reference/bulletproof-nuxt-tanstack-form](../../reference/bulletproof-nuxt-tanstack-form/README.md)
-- [Formwerk](https://formwerk.dev/) - See [apps/reference/bulletproof-nuxt-formwerk](../../reference/bulletproof-nuxt-formwerk/README.md)
+- [Regle](https://reglejs.dev/) - See [apps/bulletproof-nuxt](../../../bulletproof-nuxt/README.md)
+- [TanStack Form](https://tanstack.com/form/) - See [apps/reference/bulletproof-nuxt-tanstack-form](../../bulletproof-nuxt-tanstack-form/README.md)
+- [Formwerk](https://formwerk.dev/) - See [apps/reference/bulletproof-nuxt-formwerk](../../bulletproof-nuxt-formwerk/README.md)
 - [FormKit](https://formkit.com/)
 - [vuelidate](https://vuelidate-next.netlify.app/)
 
@@ -62,4 +62,4 @@ URL state refers to the data stored and manipulated within the address bar of th
 - [useRoute](https://nuxt.com/docs/api/composables/use-route) - Access current route params and query
 - [useRouter](https://nuxt.com/docs/api/composables/use-router) - Navigate and manipulate URL
 
-[URL State Example Code](../layers/discussions/app/pages/app/discussions/[discussionId].vue)
+[URL State Example Code](../layers/discussions/app/pages/app/discussions/[id].vue)

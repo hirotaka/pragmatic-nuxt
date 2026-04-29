@@ -36,12 +36,12 @@ Good Server Cache Solutions for Nuxt:
 
 ## Form State
 
-Forms are a crucial part of any application, and managing form state effectively is essential for a seamless user experience. This project uses VeeValidate with Zod for type-safe form validation.
+Forms are a crucial part of any application, and managing form state effectively is essential for a seamless user experience. This project uses Formwerk with Zod v4 for type-safe form validation.
 
 Good Form Libraries for Vue:
 
-- [VeeValidate](https://vee-validate.logaretm.com/v4/) - Used in this project
-- [Regle](https://reglejs.dev/) - See [apps/bulletproof-nuxt](../../bulletproof-nuxt/README.md)
+- [Formwerk](https://formwerk.dev/) - Used in this project
+- [Regle](https://reglejs.dev/) - See [apps/bulletproof-nuxt](../../../bulletproof-nuxt/README.md)
 - [FormKit](https://formkit.com/)
 - [vuelidate](https://vuelidate-next.netlify.app/)
 
@@ -59,4 +59,4 @@ URL state refers to the data stored and manipulated within the address bar of th
 - [useRoute](https://nuxt.com/docs/api/composables/use-route) - Access current route params and query
 - [useRouter](https://nuxt.com/docs/api/composables/use-router) - Navigate and manipulate URL
 
-[URL State Example Code](../layers/discussions/app/pages/app/discussions/[discussionId].vue)
+[URL State Example Code](../layers/discussions/app/pages/app/discussions/[id].vue)
