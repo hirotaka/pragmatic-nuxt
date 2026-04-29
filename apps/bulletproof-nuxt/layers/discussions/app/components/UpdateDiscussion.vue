@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Pen } from "lucide-vue-next";
-import { computed, ref, toRef, watch } from "vue";
+import { computed, ref, watch, toRef } from "vue";
 import { useUpdateDiscussion } from "~discussions/app/composables/useUpdateDiscussion";
 import { useDiscussion } from "~discussions/app/composables/useDiscussion";
 import { updateDiscussionInputSchema } from "~discussions/shared/schemas";

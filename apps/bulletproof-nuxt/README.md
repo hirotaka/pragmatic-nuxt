@@ -1,14 +1,14 @@
 # 🛡️ Bulletproof Nuxt
 
 A full-stack application using Nuxt with SSR capabilities,
-Nuxt Layers architecture, and [VeeValidate](https://vee-validate.logaretm.com/v4/)
+Nuxt Layers architecture, and [Regle](https://reglejs.dev/)
 for form validation.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Nuxt 4
 - **Architecture**: Nuxt Layers for modular features
-- **Form Validation**: VeeValidate + Zod
+- **Form Validation**: Regle + Zod v4
 - **Database**: SQLite (libsql) + Drizzle ORM
 - **Auth**: nuxt-auth-utils
 - **Styling**: Tailwind CSS + Reka UI

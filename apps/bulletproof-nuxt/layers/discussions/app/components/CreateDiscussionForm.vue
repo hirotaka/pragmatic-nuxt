@@ -5,7 +5,6 @@ import {
   createDiscussionInputSchema,
   type CreateDiscussionInput,
 } from "~discussions/shared/schemas";
-import { useFieldError } from "vee-validate";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
 const emit = defineEmits<{
@@ -25,13 +24,6 @@ const createDiscussion = useCreateDiscussion({
     router.push(`/app/discussions/${discussion.id}`);
   },
 });
-
-const titleError = useFieldError("title");
-const bodyError = useFieldError("body");
-
-const handleCancel = () => {
-  router.push("/app/discussions");
-};
 
 const handleSubmit = async (values: Record<string, unknown>) => {
   try {
@@ -61,29 +53,19 @@ const handleSubmit = async (values: Record<string, unknown>) => {
         {{ createDiscussion.error.value.message }}
       </div>
 
-      <UFieldWrapper
+      <UInput
+        name="title"
         label="Title"
-        html-for="title"
-        :error="titleError"
-      >
-        <UInput
-          name="title"
-          type="text"
-          placeholder="Enter discussion title (3-200 characters)"
-        />
-      </UFieldWrapper>
+        type="text"
+        placeholder="Enter discussion title (3-200 characters)"
+      />
 
-      <UFieldWrapper
+      <UTextarea
+        name="body"
         label="Body"
-        html-for="body"
-        :error="bodyError"
-      >
-        <UTextarea
-          name="body"
-          placeholder="Enter discussion body (minimum 10 characters)"
-          :rows="8"
-        />
-      </UFieldWrapper>
+        placeholder="Enter discussion body (minimum 10 characters)"
+        :rows="8"
+      />
 
       <div class="flex gap-2">
         <UButton
@@ -96,7 +78,7 @@ const handleSubmit = async (values: Record<string, unknown>) => {
         <UButton
           variant="outline"
           type="button"
-          @click="handleCancel"
+          @click="router.push('/app/discussions')"
         >
           Cancel
         </UButton>

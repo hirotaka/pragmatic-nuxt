@@ -1,8 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { type HTMLAttributes, computed, watch } from "vue";
-import { useForm, type GenericObject } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
+import { type HTMLAttributes, computed, watch, provide, reactive } from "vue";
+import { useRegleSchema } from "@regle/schemas";
 import type { ZodSchema } from "zod";
 import { cn } from "~base/app/lib/utils";
 
@@ -10,7 +9,7 @@ interface Props {
   schema: ZodSchema;
   class?: HTMLAttributes["class"];
   id?: string;
-  initialValues?: GenericObject;
+  initialValues?: Record<string, unknown>;
   keepValuesOnUnmount?: boolean;
 }
 
@@ -22,34 +21,62 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  submit: [values: GenericObject];
+  submit: [values: Record<string, unknown>];
 }>();
 
-const { handleSubmit, errors, isSubmitting, resetForm, setValues, setFieldValue } = useForm({
-  validationSchema: toTypedSchema(props.schema),
-  initialValues: props.initialValues,
-  keepValuesOnUnmount: props.keepValuesOnUnmount,
-});
+// Create reactive state from initialValues or empty object
+const state = reactive<Record<string, unknown>>(
+  props.initialValues ? { ...props.initialValues } : {},
+);
+
+// Use Regle with Zod schema
+const { r$ } = useRegleSchema(state, props.schema);
+
+// Provide regle instance to child components
+provide("regle", r$);
 
 // Watch for changes in initialValues and reset form
 watch(
   () => props.initialValues,
   (newValues) => {
     if (newValues) {
-      resetForm({ values: newValues });
+      r$.$reset({ toState: newValues });
     }
   },
   { deep: true },
 );
 
 const formState = computed(() => ({
-  errors: errors.value,
-  isSubmitting: isSubmitting.value,
+  errors: r$.$errors,
+  isSubmitting: r$.$pending,
 }));
 
-const onFormSubmit = handleSubmit(async (values) => {
-  emit("submit", values);
-});
+const onFormSubmit = async (e: Event) => {
+  e.preventDefault();
+  const result = await r$.$validate();
+  if (result.valid) {
+    emit("submit", result.data as Record<string, unknown>);
+  }
+};
+
+const resetForm = (options?: { values?: Record<string, unknown> }) => {
+  if (options?.values) {
+    r$.$reset({ toState: options.values });
+  }
+  else {
+    r$.$reset({ toInitialState: true });
+  }
+};
+
+const setValues = (values: Record<string, unknown>) => {
+  Object.keys(values).forEach((key) => {
+    state[key] = values[key];
+  });
+};
+
+const setFieldValue = (field: string, value: unknown) => {
+  state[field] = value;
+};
 
 // Expose form methods for parent components and tests
 defineExpose({
@@ -57,6 +84,7 @@ defineExpose({
   formState,
   setValues,
   setFieldValue,
+  r$,
 });
 </script>
 

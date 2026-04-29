@@ -1,7 +1,7 @@
 for app in \
   bulletproof-nuxt \
   reference/bulletproof-vue-vite \
-  reference/bulletproof-nuxt-regle \
+  reference/bulletproof-nuxt-veevalidate \
   reference/bulletproof-nuxt-tanstack-form \
   reference/bulletproof-nuxt-formwerk \
   reference/bulletproof-nuxt-pinia-colada

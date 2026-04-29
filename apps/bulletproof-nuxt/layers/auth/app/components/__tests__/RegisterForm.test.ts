@@ -71,16 +71,16 @@ test("should register new user and call onSuccess cb which should navigate the u
   // Submit the form
   await userEvent.click(screen.getByRole("button", { name: /register/i }));
 
-  // Wait for the onSuccess callback to be called and verify request body
-  await waitFor(() => {
-    expect(onSuccess).toHaveBeenCalledTimes(1);
-    expect(capturedBody).toMatchObject({
-      email: newUser.email,
-      firstName: newUser.firstName,
-      lastName: newUser.lastName,
-      password: newUser.password,
-      teamName: newUser.teamName,
-      teamId: null,
-    });
+  // Wait for the onSuccess callback to be called
+  await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+
+  // Verify the request body
+  expect(capturedBody).toMatchObject({
+    email: newUser.email,
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    password: newUser.password,
+    teamName: newUser.teamName,
+    teamId: null,
   });
 });

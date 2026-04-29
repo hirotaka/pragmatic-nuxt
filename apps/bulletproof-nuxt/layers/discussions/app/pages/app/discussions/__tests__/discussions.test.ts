@@ -176,7 +176,7 @@ describe("Discussions Page", () => {
       global: {
         stubs: {
           UFormDrawer: {
-            template: "<div><slot name=\"trigger-button\" /></div>",
+            template: "<div><slot name=\"triggerButton\" /></div>",
           },
           UButton: {
             template: "<button><slot name=\"icon\" /><slot /></button>",

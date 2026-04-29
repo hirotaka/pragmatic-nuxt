@@ -3,16 +3,15 @@ interface ContentLayoutProps {
   title?: string;
 }
 
-defineProps<ContentLayoutProps>();
+const props = defineProps<ContentLayoutProps>();
+
+const title = computed(() => props.title || "");
 </script>
 
 <template>
   <main class="py-6">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-      <h1
-        v-if="title"
-        class="text-2xl font-semibold text-gray-900"
-      >
+      <h1 class="text-2xl font-semibold text-gray-900">
         {{ title }}
       </h1>
     </div>

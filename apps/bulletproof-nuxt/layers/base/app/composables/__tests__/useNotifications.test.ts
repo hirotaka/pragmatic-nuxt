@@ -1,4 +1,4 @@
-import { expect, test, vi, beforeEach, afterEach } from "vitest";
+import { expect, test, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 import { useNotifications } from "../useNotifications";
 
@@ -11,10 +11,6 @@ vi.mock("#app", async importOriginal => ({
 beforeEach(() => {
   vi.clearAllMocks();
   vi.useFakeTimers();
-});
-
-afterEach(() => {
-  vi.useRealTimers();
 });
 
 test("should add and remove notifications", () => {
@@ -41,4 +37,6 @@ test("should add and remove notifications", () => {
   dismissNotification(id);
 
   expect(notifications.value.length).toBe(0);
+
+  vi.useRealTimers();
 });
