@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "apps/bulletproof-nuxt/**"
-      - "apps/reference/bulletproof-nuxt-regle/**"
+      - "apps/reference/bulletproof-nuxt-veevalidate/**"
       - "apps/reference/bulletproof-nuxt-tanstack-form/**"
       - "apps/reference/bulletproof-nuxt-formwerk/**"
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
@@ -15,7 +15,7 @@ on:
     branches: [main]
     paths:
       - "apps/bulletproof-nuxt/**"
-      - "apps/reference/bulletproof-nuxt-regle/**"
+      - "apps/reference/bulletproof-nuxt-veevalidate/**"
       - "apps/reference/bulletproof-nuxt-tanstack-form/**"
       - "apps/reference/bulletproof-nuxt-formwerk/**"
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
@@ -32,8 +32,8 @@ jobs:
         include:
           - app: bulletproof-nuxt
             app_slug: bulletproof-nuxt
-          - app: reference/bulletproof-nuxt-regle
-            app_slug: bulletproof-nuxt-regle
+          - app: reference/bulletproof-nuxt-veevalidate
+            app_slug: bulletproof-nuxt-veevalidate
           - app: reference/bulletproof-nuxt-tanstack-form
             app_slug: bulletproof-nuxt-tanstack-form
           - app: reference/bulletproof-nuxt-formwerk
@@ -71,8 +71,8 @@ jobs:
         include:
           - app: bulletproof-nuxt
             app_slug: bulletproof-nuxt
-          - app: reference/bulletproof-nuxt-regle
-            app_slug: bulletproof-nuxt-regle
+          - app: reference/bulletproof-nuxt-veevalidate
+            app_slug: bulletproof-nuxt-veevalidate
           - app: reference/bulletproof-nuxt-tanstack-form
             app_slug: bulletproof-nuxt-tanstack-form
           - app: reference/bulletproof-nuxt-formwerk
