@@ -17,7 +17,7 @@ Keep your code style consistent. Vue and Nuxt provide official style guides and 
 
 If your component is accepting too many props you might consider splitting it into multiple components or use the composition technique via children or slots.
 
-[Composition Example Code](../layers/base/app/components/ui/Dialog/Dialog.vue)
+[Composition Example Code](../layers/base/app/components/ui/dialog/DialogContent.vue)
 
 #### Abstract shared components into a component library
 
@@ -27,7 +27,7 @@ For larger projects, it is a good idea to build abstractions around all the shar
 
 It is a good idea to wrap 3rd party components as well in order to adapt them to the application's needs. It might be easier to make the underlying changes in the future without affecting the application's functionality.
 
-[3rd Party Component Example Code](../layers/base/app/components/ui/Link.vue)
+[3rd Party Component Example Code](../layers/base/app/components/ui/link/Link.vue)
 
 ## Component libraries
 

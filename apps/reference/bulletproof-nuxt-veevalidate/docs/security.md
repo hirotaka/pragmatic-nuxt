@@ -22,7 +22,7 @@ User info should be considered a global piece of state which should be available
 
 In addition to securely storing sessions, it's crucial to protect the application from Cross-Site Scripting (XSS) attacks. Sanitize all user inputs before displaying them, especially when rendering user-generated HTML content. Use libraries like DOMPurify to sanitize HTML output.
 
-[HTML Sanitization Example Code](../layers/base/app/components/ui/MarkdownPreview.vue)
+[HTML Sanitization Example Code](../layers/base/app/plugins/dompurify.ts)
 
 For a full list of security risks, check [OWASP](https://owasp.org/www-project-top-10/).
 

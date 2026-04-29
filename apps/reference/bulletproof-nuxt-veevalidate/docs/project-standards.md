@@ -8,11 +8,11 @@ ESLint serves as a valuable linting tool for JavaScript and TypeScript, helping 
 
 [ESLint Configuration Example Code](../eslint.config.mjs)
 
-#### Prettier
+#### Formatting
 
-Prettier is a useful tool for maintaining consistent code formatting in your project. By enabling the "format on save" feature in your IDE, code is automatically formatted according to the rules set in the `.prettierrc` configuration file. This practice ensures a uniform code style across your codebase and provides helpful feedback on code issues. If the auto-formatting fails, it signals potential syntax error. Furthermore, Prettier can be integrated with ESLint to handle code formatting tasks alongside enforcing coding standards effectively throughout the development process.
+This project uses ESLint stylistic rules for formatting consistency. By enabling the "format on save" feature in your IDE, code can be automatically formatted and validated according to the project ESLint configuration.
 
-[Prettier Configuration Example Code](../.prettierrc)
+[Formatting Rules Example Code](../eslint.config.mjs)
 
 #### TypeScript
 

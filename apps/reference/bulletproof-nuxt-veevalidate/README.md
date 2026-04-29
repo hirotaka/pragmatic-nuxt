@@ -10,7 +10,7 @@ This app preserves the previous canonical VeeValidate implementation for referen
 
 - **Framework**: Nuxt 4
 - **Architecture**: Nuxt Layers for modular features
-- **Form Validation**: VeeValidate + Zod
+- **Form Validation**: VeeValidate + Zod v3
 - **Database**: SQLite (libsql) + Drizzle ORM
 - **Auth**: nuxt-auth-utils
 - **Styling**: Tailwind CSS + Reka UI
@@ -71,4 +71,4 @@ for more information.
 
 ## 📚 Documentation
 
-See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#-documentation) for the base documentation.
+See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#documentation) for the base documentation.

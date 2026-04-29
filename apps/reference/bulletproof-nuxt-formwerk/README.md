@@ -6,7 +6,7 @@ for form handling.
 
 This app is based on [bulletproof-nuxt](../../bulletproof-nuxt/README.md).
 The main difference is that this app uses Formwerk for form handling
-instead of VeeValidate.
+instead of Regle.
 
 ## 🛠️ Tech Stack
 
@@ -73,4 +73,4 @@ for more information.
 
 ## 📚 Documentation
 
-See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#-documentation) for the base documentation.
+See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#documentation) for the base documentation.
