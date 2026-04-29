@@ -41,7 +41,7 @@ Forms are a crucial part of any application, and managing form state effectively
 Good Form Libraries for Vue:
 
 - [VeeValidate](https://vee-validate.logaretm.com/v4/) - Used in this project
-- [Regle](https://reglejs.dev/) - See [apps/reference/bulletproof-nuxt-regle](../../bulletproof-nuxt-regle/README.md)
+- [Regle](https://reglejs.dev/) - See [apps/bulletproof-nuxt](../../bulletproof-nuxt/README.md)
 - [FormKit](https://formkit.com/)
 - [vuelidate](https://vuelidate-next.netlify.app/)
 

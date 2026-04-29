@@ -1,13 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
-import { useField } from "vee-validate";
+import { type HTMLAttributes, computed, inject } from "vue";
 import { cn } from "~base/app/lib/utils";
 import FieldWrapper from "./FieldWrapper.vue";
 
 interface Props {
   name: string;
-  type?: "text" | "email" | "password" | "number" | "tel" | "url" | "search" | "date";
+  type?: string;
   placeholder?: string;
   disabled?: boolean;
   readonly?: boolean;
@@ -24,8 +23,13 @@ const props = withDefaults(defineProps<Props>(), {
   class: undefined,
 });
 
-// Integrate with VeeValidate
-const { value, errorMessage } = useField<string>(() => props.name);
+// Inject Regle instance from parent Form
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const r$ = inject<any>("regle");
+
+// Get field from regle instance
+const field = computed(() => r$?.[props.name]);
+const errorMessage = computed(() => field.value?.$errors?.[0]);
 
 const inputClass = computed(() =>
   cn(
@@ -46,7 +50,7 @@ const inputClass = computed(() =>
   >
     <input
       :id="name"
-      v-model="value"
+      v-model="r$.$value[name]"
       :name="name"
       :type="type"
       :placeholder="placeholder"

@@ -12,6 +12,7 @@ export interface SelectOption {
 }
 
 interface Props {
+  modelValue?: string;
   options: SelectOption[];
   placeholder?: string;
   disabled?: boolean;
@@ -22,19 +23,27 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   placeholder: "Select an option",
   disabled: false,
+  modelValue: undefined,
   name: undefined,
   class: undefined,
 });
 
-const model = defineModel<string>();
+const emit = defineEmits<{
+  "update:modelValue": [value: string];
+}>();
+
+const handleUpdate = (value: string) => {
+  emit("update:modelValue", value);
+};
 </script>
 
 <template>
   <Select
     :id="name"
-    v-model="model"
+    :model-value="modelValue"
     :disabled="disabled"
     :name="name"
+    @update:model-value="handleUpdate"
   >
     <SelectTrigger :class="props.class">
       <SelectValue :placeholder="placeholder" />

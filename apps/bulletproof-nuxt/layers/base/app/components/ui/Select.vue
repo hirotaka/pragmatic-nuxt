@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, inject } from "vue";
 import {
   SelectRoot,
   SelectTrigger,
@@ -11,7 +11,6 @@ import {
   SelectItem,
   SelectItemText,
 } from "reka-ui";
-import { useField } from "vee-validate";
 import { ChevronDown } from "lucide-vue-next";
 import FieldWrapper from "./FieldWrapper.vue";
 
@@ -48,32 +47,33 @@ const emit = defineEmits<{
   "update:modelValue": [value: string];
 }>();
 
-// VeeValidate integration - only use if name is provided
-const { value: fieldValue, handleChange, errorMessage } = props.name
-  ? useField(() => props.name!, undefined, {
-      syncVModel: false,
-    })
-  : { value: undefined, handleChange: undefined, errorMessage: undefined };
+// Inject Regle instance from parent Form
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const r$ = inject<any>("regle", null);
+
+// Get field from regle instance if name is provided
+const field = computed(() => props.name && r$ ? r$[props.name] : null);
+const errorMessage = computed(() => field.value?.$errors?.[0]);
 
 const handleUpdate = (value: string) => {
   emit("update:modelValue", value);
 
-  // Update VeeValidate field if name is provided
-  if (handleChange) {
-    handleChange(value);
+  // Update Regle field if name is provided
+  if (props.name && r$) {
+    r$.$value[props.name] = value;
   }
 };
 
-// Use VeeValidate value if available, otherwise use modelValue
+// Use Regle value if available, otherwise use modelValue
 const selectValue = computed(() => {
-  if (props.name && fieldValue !== undefined) {
-    return fieldValue.value as string | undefined;
+  if (props.name && r$) {
+    return r$.$value[props.name] as string | undefined;
   }
   return props.modelValue;
 });
 
 const displayError = computed(() => {
-  return errorMessage?.value || props.error;
+  return errorMessage.value || props.error;
 });
 </script>
 

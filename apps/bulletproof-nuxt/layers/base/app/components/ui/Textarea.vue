@@ -1,7 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { type HTMLAttributes, computed, ref, onMounted, watch, nextTick } from "vue";
-import { useField } from "vee-validate";
+import { type HTMLAttributes, computed, ref, onMounted, watch, nextTick, inject } from "vue";
 import { cn } from "~base/app/lib/utils";
 import FieldWrapper from "./FieldWrapper.vue";
 
@@ -46,12 +45,13 @@ const emit = defineEmits<{
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
-// VeeValidate integration - only use if name is provided
-const { value: fieldValue, handleChange, handleBlur: veeBlur, errorMessage } = props.name
-  ? useField(() => props.name!, undefined, {
-      syncVModel: false,
-    })
-  : { value: undefined, handleChange: undefined, handleBlur: undefined, errorMessage: undefined };
+// Inject Regle instance from parent Form
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const r$ = inject<any>("regle", null);
+
+// Get field from regle instance if name is provided
+const field = computed(() => props.name && r$ ? r$[props.name] : null);
+const errorMessage = computed(() => field.value?.$errors?.[0]);
 
 const adjustHeight = () => {
   if (!props.autoResize || !textareaRef.value) return;
@@ -85,9 +85,9 @@ const handleInput = (event: Event) => {
   emit("update:modelValue", target.value);
   emit("input", event);
 
-  // Update VeeValidate field if name is provided
-  if (handleChange) {
-    handleChange(target.value);
+  // Update Regle field if name is provided
+  if (props.name && r$) {
+    r$.$value[props.name] = target.value;
   }
 
   // Auto-resize if enabled
@@ -102,17 +102,12 @@ const handleFocus = (event: FocusEvent) => {
 
 const handleBlurEvent = (event: FocusEvent) => {
   emit("blur", event);
-
-  // Trigger VeeValidate blur if name is provided
-  if (veeBlur) {
-    veeBlur(event);
-  }
 };
 
-// Use VeeValidate value if available, otherwise use modelValue
+// Use Regle value if available, otherwise use modelValue
 const textareaValue = computed(() => {
-  if (props.name && fieldValue !== undefined) {
-    return fieldValue.value as string | undefined;
+  if (props.name && r$) {
+    return r$.$value[props.name] as string | undefined;
   }
   return props.modelValue;
 });

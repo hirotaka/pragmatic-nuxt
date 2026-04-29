@@ -11,7 +11,7 @@ const testData = {
 };
 
 const schema = z.object({
-  title: z.string().min(1, "Required"),
+  title: z.string({ error: "Required" }).min(1, "Required"),
 });
 
 const TestFormComponent = defineComponent({

@@ -39,7 +39,7 @@ watch(
     @update:open="(value) => value ? open() : close()"
   >
     <DrawerTrigger as-child>
-      <slot name="trigger-button" />
+      <slot name="triggerButton" />
     </DrawerTrigger>
     <DrawerContent class="flex max-w-[800px] flex-col justify-between sm:max-w-[540px]">
       <div class="flex flex-col gap-6">
@@ -62,7 +62,7 @@ watch(
             Close
           </Button>
         </DialogClose>
-        <slot name="submit-button" />
+        <slot name="submitButton" />
       </DrawerFooter>
     </DrawerContent>
   </DrawerRoot>

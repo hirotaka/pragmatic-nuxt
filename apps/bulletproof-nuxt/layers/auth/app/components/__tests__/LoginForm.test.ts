@@ -44,12 +44,12 @@ test("should login new user and call onSuccess cb which should navigate the user
   // Submit the form
   await userEvent.click(screen.getByRole("button", { name: /log in/i }));
 
-  // Wait for the onSuccess callback to be called and verify request body
-  await waitFor(() => {
-    expect(onSuccess).toHaveBeenCalledTimes(1);
-    expect(capturedBody).toMatchObject({
-      email: newUser.email,
-      password: newUser.password,
-    });
+  // Wait for the onSuccess callback to be called
+  await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+
+  // Verify the request body
+  expect(capturedBody).toMatchObject({
+    email: newUser.email,
+    password: newUser.password,
   });
 });

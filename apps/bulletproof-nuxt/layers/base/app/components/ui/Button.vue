@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import type { HTMLAttributes, Component } from "vue";
+import { type HTMLAttributes, type Component, computed } from "vue";
 import type { PrimitiveProps } from "reka-ui";
 import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "~base/app/lib/utils";
@@ -59,8 +59,10 @@ const props = withDefaults(defineProps<Props>(), {
   icon: undefined,
 });
 
-const isDisabled = props.disabled || props.isLoading;
-const spinnerSize = "sm" as const;
+const isDisabled = computed(() => props.disabled || props.isLoading);
+
+// Always use 'sm' spinner size for consistency (as vue-vite does)
+const spinnerSize = computed(() => "sm" as const);
 </script>
 
 <template>

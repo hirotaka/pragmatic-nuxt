@@ -130,7 +130,7 @@ Use Pinia Colada when:
 | `apps/chat` | Canonical App | Planned |
 | `apps/dashboard` | Canonical App | Planned |
 | `apps/reference/bulletproof-vue-vite` | Reference App | Preserves Vue + Vite reference implementation |
-| `apps/reference/bulletproof-nuxt-regle` | Reference App | Regle comparison/reference implementation |
+| `apps/reference/bulletproof-nuxt-veevalidate` | Reference App | Preserves VeeValidate legacy implementation |
 | `apps/reference/bulletproof-nuxt-formwerk` | Reference App | Preserves Formwerk implementation |
 | `apps/reference/bulletproof-nuxt-tanstack-form` | Reference App | Preserves TanStack Form implementation |
 | `apps/reference/bulletproof-nuxt-pinia-colada` | Reference App | Preserves Pinia Colada implementation |

@@ -39,10 +39,10 @@ const handleSubmit = async (values: Record<string, unknown>) => {
 };
 
 const initialValues = computed(() => ({
-  email: user.value?.email ?? "",
-  firstName: user.value?.firstName ?? "",
-  lastName: user.value?.lastName ?? "",
-  bio: user.value?.bio ?? "",
+  email: user.value?.email || "",
+  firstName: user.value?.firstName || "",
+  lastName: user.value?.lastName || "",
+  bio: user.value?.bio || "",
 }));
 </script>
 
@@ -51,7 +51,7 @@ const initialValues = computed(() => ({
     :is-done="updateProfile.isSuccess.value"
     title="Update Profile"
   >
-    <template #trigger-button>
+    <template #triggerButton>
       <UButton size="sm">
         <template #icon>
           <Pen class="size-4" />
@@ -94,7 +94,7 @@ const initialValues = computed(() => ({
       </template>
     </UForm>
 
-    <template #submit-button>
+    <template #submitButton>
       <UButton
         type="submit"
         form="update-profile"

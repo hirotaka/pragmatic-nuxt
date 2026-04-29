@@ -41,7 +41,7 @@ Reference Apps preserve alternative implementations and past experiments for com
 | Showcase | Description | Key Libraries | Demo |
 |----------|-------------|---------------|------|
 | [reference/bulletproof-vue-vite](apps/reference/bulletproof-vue-vite) | Vue SPA (direct port from React) | Vue Router, TanStack Query, Pinia | [Live](https://bulletproof-vue.pages.dev) |
-| [reference/bulletproof-nuxt-regle](apps/reference/bulletproof-nuxt-regle) | Nuxt full-stack Regle comparison | Regle, Zod v4 | - |
+| [reference/bulletproof-nuxt-veevalidate](apps/reference/bulletproof-nuxt-veevalidate) | Nuxt full-stack VeeValidate legacy reference | VeeValidate, Zod v3 | - |
 | [reference/bulletproof-nuxt-tanstack-form](apps/reference/bulletproof-nuxt-tanstack-form) | Nuxt full-stack TanStack Form comparison | TanStack Form, Zod v4 | - |
 | [reference/bulletproof-nuxt-formwerk](apps/reference/bulletproof-nuxt-formwerk) | Nuxt full-stack Formwerk comparison | Formwerk, Zod v4 | - |
 | [reference/bulletproof-nuxt-pinia-colada](apps/reference/bulletproof-nuxt-pinia-colada) | Nuxt full-stack Pinia Colada comparison | Pinia Colada, Nuxt | - |
