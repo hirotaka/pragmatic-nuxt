@@ -90,7 +90,7 @@
     "plop": "^4.0.5",
     "postcss": "^8.5.6",
     "prettier": "^3.4.2",
-    "prettier-plugin-tailwindcss": "^0.7.1",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "storybook": "^8.5.1",
     "storybook-vue3-router": "^7.0.0",
     "tailwindcss": "4.2.4",
