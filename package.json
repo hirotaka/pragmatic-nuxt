@@ -17,7 +17,7 @@
       "prisma": "npm:empty-npm-package@1.0.0",
       "@prisma/client": "npm:empty-npm-package@1.0.0",
       "@unhead/vue": "3.1.0",
-      "basic-ftp": "^5.2.1",
+      "basic-ftp": "^6.0.0",
       "editorconfig": "^3.0.0",
       "dompurify": "3.4.1",
       "defu": "6.1.7",
