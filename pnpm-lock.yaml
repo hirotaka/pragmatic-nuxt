@@ -176,7 +176,7 @@ importers:
         version: 20.9.0
       lint-staged:
         specifier: ^17.0.0
-        version: 17.0.3
+        version: 17.0.4
       playwright:
         specifier: ^1.56.1
         version: 1.59.1
@@ -333,7 +333,7 @@ importers:
         version: 20.9.0
       lint-staged:
         specifier: ^17.0.0
-        version: 17.0.3
+        version: 17.0.4
       playwright:
         specifier: ^1.56.1
         version: 1.59.1
@@ -496,7 +496,7 @@ importers:
         version: 20.9.0
       lint-staged:
         specifier: ^17.0.0
-        version: 17.0.3
+        version: 17.0.4
       playwright:
         specifier: ^1.56.1
         version: 1.59.1
@@ -650,7 +650,7 @@ importers:
         version: 20.9.0
       lint-staged:
         specifier: ^17.0.0
-        version: 17.0.3
+        version: 17.0.4
       playwright:
         specifier: ^1.56.1
         version: 1.59.1
@@ -807,7 +807,7 @@ importers:
         version: 20.9.0
       lint-staged:
         specifier: ^17.0.0
-        version: 17.0.3
+        version: 17.0.4
       playwright:
         specifier: ^1.56.1
         version: 1.59.1
@@ -1024,7 +1024,7 @@ importers:
         version: 29.1.1
       lint-staged:
         specifier: ^17.0.0
-        version: 17.0.3
+        version: 17.0.4
       msw:
         specifier: ^2.11.5
         version: 2.14.5(@types/node@24.12.3)(typescript@6.0.3)
@@ -7372,8 +7372,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  lint-staged@17.0.3:
-    resolution: {integrity: sha512-wnvMRhzC3GNpjixxleiG+pAW09dHTUgBCjMS7XouAg5E7wKUc8YdfogpF7zIgvXKDbH+452O6+XpnKm6V67rPw==}
+  lint-staged@17.0.4:
+    resolution: {integrity: sha512-+rU9lSUyVOZ/hDUmRLVGzyS2v73cDdQjX+XQz1AaOdIE4RysLq0HoPW2HrrgeNCLklkhi904VBU1bmgWLHVnkA==}
     engines: {node: '>=22.22.1'}
     hasBin: true
 
@@ -16411,7 +16411,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  lint-staged@17.0.3:
+  lint-staged@17.0.4:
     dependencies:
       listr2: 10.2.1
       picomatch: 4.0.4
