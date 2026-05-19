@@ -50,7 +50,7 @@
     "drizzle-orm": "^0.45.0",
     "lucide-vue-next": "^1.0.0",
     "marked": "^18.0.0",
-    "nuxt": "^4.2.1",
+    "nuxt": "^4.4.6",
     "nuxt-auth-utils": "^0.5.25",
     "pinia": "^3.0.0",
     "pinia-plugin-persistedstate": "^4.7.1",
