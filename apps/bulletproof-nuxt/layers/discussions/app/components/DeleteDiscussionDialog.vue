@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ConfirmationDialog from "~~/components/app/ConfirmationDialog.vue";
 import { useDeleteDiscussion } from "~discussions/app/composables/useDeleteDiscussion";
 import type { Discussion } from "~discussions/shared/types";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
@@ -45,12 +46,12 @@ const handleOpenChange = (value: boolean) => {
 </script>
 
 <template>
-  <UConfirmationDialog
+  <ConfirmationDialog
     :open="open"
     :is-loading="deleteDiscussion.isPending.value"
     variant="danger"
     title="Delete Discussion"
-    :description="`Are you sure you want to delete &quot;${discussion.title}&quot;? This action cannot be undone.`"
+    :body="`Are you sure you want to delete &quot;${discussion.title}&quot;? This action cannot be undone.`"
     confirm-text="Delete"
     cancel-text="Cancel"
     @confirm="handleConfirm"
@@ -67,5 +68,5 @@ const handleOpenChange = (value: boolean) => {
         {{ deleteDiscussion.error.value.message }}
       </div>
     </template>
-  </UConfirmationDialog>
+  </ConfirmationDialog>
 </template>

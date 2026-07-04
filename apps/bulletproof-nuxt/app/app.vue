@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import NotificationCenter from "@/components/app/NotificationCenter.vue";
+
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk ? `${titleChunk} | Bulletproof Nuxt` : "Bulletproof Nuxt";
@@ -12,6 +14,6 @@ useHead({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <UNotifications />
+    <NotificationCenter />
   </div>
 </template>

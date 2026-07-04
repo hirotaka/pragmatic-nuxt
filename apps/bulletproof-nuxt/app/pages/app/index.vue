@@ -1,5 +1,21 @@
 <script setup lang="ts">
+import { MessageSquare, ShieldCheck, UserRoundCog } from "lucide-vue-next";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 const { user } = useUser();
+
+const capabilities = computed(() => user.value?.role === "ADMIN"
+  ? [
+      "Create and update discussions",
+      "Moderate discussions and comments",
+      "Review registered users",
+    ]
+  : [
+      "Read team discussions",
+      "Create comments",
+      "Delete your own comments",
+    ]);
 
 definePageMeta({
   middleware: "auth",
@@ -12,44 +28,78 @@ useHead({
 </script>
 
 <template>
-  <div class="py-6">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-      <h1 class="text-2xl font-semibold text-gray-900">
-        Dashboard
-      </h1>
+  <LayoutsContentLayout
+    title="Dashboard"
+    description="Workspace overview for discussions, moderation, and team access."
+  >
+    <div
+      v-if="!user"
+      class="rounded-xl border bg-card p-6 text-sm text-muted-foreground shadow-sm"
+    >
+      Loading workspace...
     </div>
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:px-8">
-      <div v-if="!user">
-        Loading...
-      </div>
-      <div v-else>
-        <h1 class="text-xl">
-          Welcome <b>{{ user.firstName }} {{ user.lastName }}</b>
-        </h1>
-        <h4 class="my-3">
-          Your role is : <b>{{ user.role }}</b>
-        </h4>
-      </div>
-      <p class="font-medium">
-        In this application you can:
-      </p>
-      <ul
-        v-if="user?.role === 'USER'"
-        class="my-4 list-inside list-disc"
-      >
-        <li>Create comments in discussions</li>
-        <li>Delete own comments</li>
-      </ul>
-      <ul
-        v-if="user?.role === 'ADMIN'"
-        class="my-4 list-inside list-disc"
-      >
-        <li>Create discussions</li>
-        <li>Edit discussions</li>
-        <li>Delete discussions</li>
-        <li>Comment on discussions</li>
-        <li>Delete all comments</li>
-      </ul>
+    <div
+      v-else
+      class="grid gap-6"
+    >
+      <Card class="overflow-hidden">
+        <CardHeader class="border-b bg-muted/30">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle>Welcome back, {{ user.firstName }} {{ user.lastName }}</CardTitle>
+              <CardDescription>{{ user.email }}</CardDescription>
+            </div>
+            <Badge>{{ user.role }}</Badge>
+          </div>
+        </CardHeader>
+        <CardContent class="grid gap-4 p-6 md:grid-cols-3">
+          <div class="rounded-lg border bg-background p-4">
+            <MessageSquare class="mb-3 size-5 text-primary" />
+            <p class="font-medium">
+              Discussion workflow
+            </p>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Keep team context in one searchable place.
+            </p>
+          </div>
+          <div class="rounded-lg border bg-background p-4">
+            <ShieldCheck class="mb-3 size-5 text-primary" />
+            <p class="font-medium">
+              Role-aware controls
+            </p>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Actions adapt to admin and member permissions.
+            </p>
+          </div>
+          <div class="rounded-lg border bg-background p-4">
+            <UserRoundCog class="mb-3 size-5 text-primary" />
+            <p class="font-medium">
+              Account management
+            </p>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Review profile and team access from the sidebar.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Available actions</CardTitle>
+          <CardDescription>What your current role can do in this workspace.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul class="grid gap-3 md:grid-cols-3">
+            <li
+              v-for="capability in capabilities"
+              :key="capability"
+              class="rounded-lg border bg-muted/30 p-3 text-sm"
+            >
+              {{ capability }}
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
     </div>
-  </div>
+  </LayoutsContentLayout>
 </template>

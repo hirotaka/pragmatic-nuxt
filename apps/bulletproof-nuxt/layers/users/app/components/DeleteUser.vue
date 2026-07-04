@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import ConfirmationDialog from "~~/components/app/ConfirmationDialog.vue";
+import { Button } from "@/components/ui/button";
 import { useDeleteUser } from "~users/app/composables/useDeleteUser";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 import { useUser } from "#layers/auth/app/composables/useUser";
@@ -39,14 +41,14 @@ const handleDelete = () => {
 
 <template>
   <div v-if="user?.id !== id">
-    <UButton
+    <Button
       variant="destructive"
       @click="isOpen = true"
     >
       Delete
-    </UButton>
+    </Button>
 
-    <UConfirmationDialog
+    <ConfirmationDialog
       v-model:open="isOpen"
       variant="danger"
       title="Delete User"

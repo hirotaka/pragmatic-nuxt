@@ -1,6 +1,8 @@
 @import "tailwindcss" source(none);
+@plugin "@tailwindcss/typography";
 
 @source "../../../app/**/*.{vue,js,ts}";
+@source "../../../components/**/*.{vue,js,ts}";
 @source "../../../layers/**/*.{vue,js,ts}";
 
 @theme {
@@ -23,6 +25,14 @@
   --color-border: hsl(214.3 31.8% 91.4%);
   --color-input: hsl(214.3 31.8% 91.4%);
   --color-ring: hsl(222.2 84% 4.9%);
+  --color-sidebar: hsl(0 0% 98%);
+  --color-sidebar-foreground: hsl(240 5.3% 26.1%);
+  --color-sidebar-primary: hsl(240 5.9% 10%);
+  --color-sidebar-primary-foreground: hsl(0 0% 98%);
+  --color-sidebar-accent: hsl(240 4.8% 95.9%);
+  --color-sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --color-sidebar-border: hsl(220 13% 91%);
+  --color-sidebar-ring: hsl(217.2 91.2% 59.8%);
   --radius-lg: 0.5rem;
   --radius-md: calc(0.5rem - 2px);
   --radius-sm: calc(0.5rem - 4px);
@@ -48,6 +58,14 @@
   --color-border: hsl(217.2 32.6% 17.5%);
   --color-input: hsl(217.2 32.6% 17.5%);
   --color-ring: hsl(212.7 26.8% 83.9%);
+  --color-sidebar: hsl(240 5.9% 10%);
+  --color-sidebar-foreground: hsl(240 4.8% 95.9%);
+  --color-sidebar-primary: hsl(224.3 76.3% 48%);
+  --color-sidebar-primary-foreground: hsl(0 0% 100%);
+  --color-sidebar-accent: hsl(240 3.7% 15.9%);
+  --color-sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --color-sidebar-border: hsl(240 3.7% 15.9%);
+  --color-sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 @layer base {

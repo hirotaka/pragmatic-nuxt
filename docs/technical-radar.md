@@ -4,7 +4,7 @@
 
 The Technical Radar defines default technology choices for new and actively maintained applications in this repository.
 
-It distinguishes Canonical Apps from Reference Apps and provides a clear path for promoting experimental decisions into adopted standards.
+It distinguishes Canonical Apps, Sandbox Apps, and Reference Apps so candidate implementations can be evaluated before adoption or preservation decisions are made.
 
 ## Rings
 
@@ -62,6 +62,10 @@ Reference Apps preserve alternative implementations, past experiments, and compa
 
 They are not required to receive every architecture or product update.
 
+For Nuxt reference apps, shared implementation documentation should live in the
+canonical Nuxt app docs. Reference-specific docs should focus on differences,
+maintenance expectations, known constraints, and comparison value.
+
 In this repository, Reference Apps live under `apps/reference/`.
 
 Examples:
@@ -69,6 +73,18 @@ Examples:
 - `apps/reference/bulletproof-nuxt-formwerk`
 - `apps/reference/bulletproof-nuxt-tanstack-form`
 - `apps/reference/bulletproof-nuxt-pinia-colada`
+
+### Sandbox Apps
+
+Sandbox Apps are verifiable implementations awaiting human judgment. They may
+be adopted as canonical, preserved as references, continued as sandboxes, or
+not carried forward after review.
+
+In this repository, Sandbox Apps live under `apps/sandboxes/`.
+
+Examples:
+
+- None currently active
 
 ### Experimental Apps
 
@@ -92,6 +108,18 @@ Archived Apps are kept for historical context only and are not actively maintain
 | Testing | Vitest / Playwright | Adopt | Default | Default unit and E2E testing stack |
 | Data Fetching | `useFetch` | Adopt | Default | Default Nuxt data fetching primitive |
 | Server State | Pinia Colada | Adopt | Contextual | Use for dashboard-like and mutation-heavy flows |
+
+## Forms Policy
+
+Regle remains the adopted validation library for canonical Nuxt applications.
+For shadcn-vue / Reka UI application surfaces, form UI should keep validation
+state app-owned and avoid coupling visual controls directly to Regle.
+
+Stackhacker UI `Form` and `FormField` are the adopted Regle-compatible form
+wrapper for shadcn-vue / Reka UI application surfaces. Feature components own
+Regle state, schemas, submission, notifications, and redirects while the form
+components own validation triggering, submit/error events, field error
+distribution, and accessibility props.
 
 ## Data Fetching Policy
 
@@ -118,7 +146,7 @@ Use Pinia Colada when:
 
 | App | Role | Forms | Data Fetching | Server State | Notes |
 | --- | --- | --- | --- | --- | --- |
-| `apps/bulletproof-nuxt` | Canonical App | Regle | `useFetch` | Pinia Colada when needed | Canonical Nuxt business application reference |
+| `apps/bulletproof-nuxt` | Canonical App | Regle via Stackhacker UI form wrapper | `useFetch` | Pinia Colada when needed | Canonical Nuxt business application with shadcn-vue / Reka UI composition |
 | `apps/chat` | Canonical App | Regle when needed | `useFetch` | Assess | Streaming chat primarily follows AI SDK patterns |
 | `apps/dashboard` | Canonical App | Regle | `useFetch` | Pinia Colada | API-heavy screens, tables, filters, and forms |
 
@@ -134,11 +162,16 @@ Use Pinia Colada when:
 | `apps/reference/bulletproof-nuxt-formwerk` | Reference App | Preserves Formwerk implementation |
 | `apps/reference/bulletproof-nuxt-tanstack-form` | Reference App | Preserves TanStack Form implementation |
 | `apps/reference/bulletproof-nuxt-pinia-colada` | Reference App | Preserves Pinia Colada implementation |
+| `apps/reference/bulletproof-nuxt-original-ui` | Reference App | Preserves the original Bulletproof React UI composition ported to Nuxt |
 
 ## Decision Process
 
-Trial and Assess technologies should be evaluated in Experimental Apps or focused branches first.
+Trial and Assess technologies should be evaluated in Sandbox Apps, Experimental Apps, or focused branches first.
 
 When a technology is promoted to Adopt, Canonical Apps should be updated to reflect that decision.
 
 Reference Apps may preserve non-adopted implementations for comparison and learning.
+
+Sandbox Apps should not be treated as adopted decisions until human review resolves them into canonical, reference, continued sandbox, or not-carried-forward status.
+
+Lifecycle roles in this document describe Pragmatic Nuxt fit and maintenance choices. They are not rankings of external OSS projects; record constraints, lessons, and repo-specific fit with respect for the projects and authors this repository learns from.

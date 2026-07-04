@@ -1,0 +1,9 @@
+export { default as DialogRoot } from "~~/components/ui/dialog/DialogRoot.vue";
+export { default as DialogTrigger } from "~~/components/ui/dialog/DialogTrigger.vue";
+export { default as DialogPortal } from "~~/components/ui/dialog/DialogPortal.vue";
+export { default as DialogOverlay } from "~~/components/ui/dialog/DialogOverlay.vue";
+export { default as DialogContent } from "~~/components/ui/dialog/DialogContent.vue";
+export { default as DialogHeader } from "~~/components/ui/dialog/DialogHeader.vue";
+export { default as DialogTitle } from "~~/components/ui/dialog/DialogTitle.vue";
+export { default as DialogDescription } from "~~/components/ui/dialog/DialogDescription.vue";
+export { default as DialogFooter } from "~~/components/ui/dialog/DialogFooter.vue";

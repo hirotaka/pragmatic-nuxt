@@ -9,6 +9,7 @@ on:
       - "apps/reference/bulletproof-nuxt-tanstack-form/**"
       - "apps/reference/bulletproof-nuxt-formwerk/**"
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
+      - "apps/reference/bulletproof-nuxt-original-ui/**"
       - "pnpm-lock.yaml"
       - ".github/workflows/nuxt-ci.yml"
   pull_request:
@@ -19,6 +20,7 @@ on:
       - "apps/reference/bulletproof-nuxt-tanstack-form/**"
       - "apps/reference/bulletproof-nuxt-formwerk/**"
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
+      - "apps/reference/bulletproof-nuxt-original-ui/**"
       - "pnpm-lock.yaml"
       - ".github/workflows/nuxt-ci.yml"
 concurrency:
@@ -40,6 +42,8 @@ jobs:
             app_slug: bulletproof-nuxt-formwerk
           - app: reference/bulletproof-nuxt-pinia-colada
             app_slug: bulletproof-nuxt-pinia-colada
+          - app: reference/bulletproof-nuxt-original-ui
+            app_slug: bulletproof-nuxt-original-ui
     defaults:
       run:
         working-directory: ./apps/${{ matrix.app }}
@@ -79,6 +83,8 @@ jobs:
             app_slug: bulletproof-nuxt-formwerk
           - app: reference/bulletproof-nuxt-pinia-colada
             app_slug: bulletproof-nuxt-pinia-colada
+          - app: reference/bulletproof-nuxt-original-ui
+            app_slug: bulletproof-nuxt-original-ui
     defaults:
       run:
         working-directory: ./apps/${{ matrix.app }}

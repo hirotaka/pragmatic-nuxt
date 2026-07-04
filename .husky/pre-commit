@@ -4,7 +4,8 @@ for app in \
   reference/bulletproof-nuxt-veevalidate \
   reference/bulletproof-nuxt-tanstack-form \
   reference/bulletproof-nuxt-formwerk \
-  reference/bulletproof-nuxt-pinia-colada
+  reference/bulletproof-nuxt-pinia-colada \
+  reference/bulletproof-nuxt-original-ui
 do
   (cd "apps/$app" && pnpm lint-staged)
 done

@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { Pen } from "lucide-vue-next";
-import { computed, ref, watch, toRef } from "vue";
+import { computed, reactive, watch, toRef } from "vue";
+import { Form, type FormSubmitEvent } from "@/components/form";
+import { FormField } from "@/components/form-field";
+import FormDrawer from "~~/components/app/FormDrawer.vue";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { useUpdateDiscussion } from "~discussions/app/composables/useUpdateDiscussion";
 import { useDiscussion } from "~discussions/app/composables/useDiscussion";
-import { updateDiscussionInputSchema } from "~discussions/shared/schemas";
+import { updateDiscussionInputSchema, type UpdateDiscussionInput } from "~discussions/shared/schemas";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
@@ -15,7 +21,6 @@ const props = defineProps<UpdateDiscussionProps>();
 
 const { addNotification } = useNotifications();
 const { isAdmin } = useUser();
-const isOpen = ref(false);
 
 const discussion = useDiscussion(toRef(props, "discussionId"));
 const discussionData = computed(() => discussion.data.value.discussion);
@@ -35,84 +40,92 @@ const initialValues = computed(() => ({
   body: discussionData.value?.body ?? "",
 }));
 
-const handleSubmit = async (values: Record<string, unknown>) => {
+const state = reactive<UpdateDiscussionInput>({
+  title: "",
+  body: "",
+});
+
+watch(
+  initialValues,
+  (values) => {
+    state.title = values.title;
+    state.body = values.body;
+  },
+  { immediate: true },
+);
+
+const handleSubmit = async (event: FormSubmitEvent<UpdateDiscussionInput | undefined>) => {
+  const values = event.data ?? state;
+
   try {
     await updateDiscussion.mutate({
       id: props.discussionId,
-      data: values as { title: string; body: string },
+      data: values,
     });
   }
   catch {
     // Error is already handled in the composable
   }
 };
-
-// Close drawer when form submission is done
-watch(
-  () => updateDiscussion.isSuccess.value,
-  (newValue) => {
-    if (newValue) {
-      isOpen.value = false;
-    }
-  },
-);
 </script>
 
 <template>
   <div v-if="isAdmin">
-    <UDrawerRoot v-model:open="isOpen">
-      <UDrawerTrigger as-child>
-        <UButton size="sm">
+    <FormDrawer
+      :is-done="updateDiscussion.isSuccess.value"
+      title="Update Discussion"
+    >
+      <template #triggerButton>
+        <Button
+          variant="outline"
+          size="sm"
+        >
           <template #icon>
             <Pen class="size-4" />
           </template>
           Update Discussion
-        </UButton>
-      </UDrawerTrigger>
-      <UDrawerContent class="flex max-w-[800px] flex-col justify-between sm:max-w-[540px]">
-        <div class="flex flex-col">
-          <UDrawerHeader>
-            <UDrawerTitle>Update Discussion</UDrawerTitle>
-          </UDrawerHeader>
-          <div>
-            <UForm
-              id="update-discussion"
-              :schema="updateDiscussionInputSchema"
-              :initial-values="initialValues"
-              @submit="handleSubmit"
-            >
-              <template #default="{ formState }">
-                <UInput
-                  name="title"
-                  label="Title"
-                  :disabled="formState.isSubmitting"
-                />
-                <UTextarea
-                  name="body"
-                  label="Body"
-                  :disabled="formState.isSubmitting"
-                />
-              </template>
-            </UForm>
-          </div>
-        </div>
-        <UDrawerFooter>
-          <UButton
-            variant="outline"
-            type="button"
-            @click="isOpen = false"
-          >
-            Close
-          </UButton>
-          <UButton
-            type="submit"
-            form="update-discussion"
-            :is-loading="updateDiscussion.isPending.value"
-          >
-            Submit
-          </UButton>
-        </UDrawerFooter>
-      </UDrawerContent>
-    </UDrawerRoot>
+        </Button>
+      </template>
+
+      <Form
+        id="update-discussion"
+        :schema="updateDiscussionInputSchema"
+        :state="state"
+        :disabled="updateDiscussion.isPending.value"
+        class="space-y-6"
+        @submit="handleSubmit"
+      >
+        <FormField
+          v-slot="field"
+          name="title"
+          label="Title"
+        >
+          <Input
+            v-model="state.title"
+            v-bind="field"
+          />
+        </FormField>
+        <FormField
+          v-slot="field"
+          name="body"
+          label="Body"
+        >
+          <Textarea
+            v-model="state.body"
+            v-bind="field"
+          />
+        </FormField>
+      </Form>
+      <template #submitButton>
+        <Button
+          type="submit"
+          form="update-discussion"
+          size="sm"
+          :is-loading="updateDiscussion.isPending.value"
+        >
+          Submit
+        </Button>
+      </template>
+    </FormDrawer>
   </div>
 </template>

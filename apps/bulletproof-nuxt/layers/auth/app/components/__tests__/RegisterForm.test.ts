@@ -84,3 +84,106 @@ test("should register new user and call onSuccess cb which should navigate the u
     teamId: null,
   });
 });
+
+test("should register new user with an existing team without leaking team name", async () => {
+  const newUser = createUser({});
+  const onSuccess = vi.fn();
+  const team = { id: "team-1", name: "Existing Team" };
+  let capturedBody: Record<string, unknown> | undefined;
+
+  registerEndpoint("/api/teams", () => [team]);
+  registerEndpoint("/api/auth/register", {
+    method: "POST",
+    handler: async (event) => {
+      capturedBody = await readBody(event);
+      return {
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          teamId: team.id,
+          role: "USER",
+          createdAt: Date.now(),
+        },
+      };
+    },
+  });
+  registerEndpoint("/api/_auth/session", () => ({}));
+
+  await renderComponent(RegisterForm, {
+    url: "/auth/register",
+    path: "/auth/register",
+    props: { onSuccess, teams: [team] },
+  });
+
+  await userEvent.type(screen.getByLabelText(/first name/i), newUser.firstName);
+  await userEvent.type(screen.getByLabelText(/last name/i), newUser.lastName);
+  await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
+  await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
+  await userEvent.type(screen.getByLabelText(/team name/i), "Stale Team Name");
+  await userEvent.click(screen.getByLabelText(/join existing team/i));
+  await userEvent.selectOptions(screen.getByLabelText(/^team$/i), team.id);
+  await userEvent.click(screen.getByRole("button", { name: /register/i }));
+
+  await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+  expect(capturedBody).toMatchObject({
+    email: newUser.email,
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    password: newUser.password,
+    teamName: null,
+    teamId: team.id,
+  });
+});
+
+test("renders register block copy and login cross-link", async () => {
+  await renderComponent(RegisterForm, {
+    url: "/auth/register",
+    path: "/auth/register",
+  });
+
+  expect(screen.getByRole("heading", { name: /create your account/i })).toBeTruthy();
+  expect(screen.getByText(/start a new team or join an existing one/i)).toBeTruthy();
+  expect(screen.getByText(/demo workspace/i)).toBeTruthy();
+  expect(screen.getByText(/log in/i)).toBeTruthy();
+});
+
+test("should disable submit while registration is pending", async () => {
+  const newUser = createUser({});
+  const onSuccess = vi.fn();
+  let resolveRegister: (value: { user: unknown }) => void = () => {};
+  const registerResponse = new Promise<{ user: unknown }>((resolve) => {
+    resolveRegister = resolve;
+  });
+  const registerHandler = vi.fn(async () => registerResponse);
+
+  registerEndpoint("/api/teams", () => []);
+  registerEndpoint("/api/auth/register", {
+    method: "POST",
+    handler: registerHandler,
+  });
+  registerEndpoint("/api/_auth/session", () => ({}));
+
+  await renderComponent(RegisterForm, {
+    url: "/auth/register",
+    path: "/auth/register",
+    props: { onSuccess },
+  });
+
+  await userEvent.type(screen.getByLabelText(/first name/i), newUser.firstName);
+  await userEvent.type(screen.getByLabelText(/last name/i), newUser.lastName);
+  await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
+  await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
+  await userEvent.type(screen.getByLabelText(/team name/i), newUser.teamName);
+
+  const submitButton = screen.getByRole("button", { name: /register/i });
+  await userEvent.click(submitButton);
+
+  await waitFor(() => expect((submitButton as HTMLButtonElement).disabled).toBe(true));
+  await userEvent.click(submitButton);
+  expect(registerHandler).toHaveBeenCalledTimes(1);
+
+  resolveRegister({ user: { id: newUser.id } });
+  await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+});

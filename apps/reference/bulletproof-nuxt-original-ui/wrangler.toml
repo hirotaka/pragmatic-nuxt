@@ -1,0 +1,23 @@
+name = "bulletproof-nuxt"
+pages_build_output_dir = "./dist"
+
+[vars]
+NITRO_PRESET = "cloudflare-pages"
+DATABASE_SQLITE_ADAPTER = "d1"
+
+# Production D1 binding (default)
+[[d1_databases]]
+binding = "DB"
+database_name = "bulletproof-nuxt-db"
+database_id = "2799bdc6-9186-486b-a239-4fb2885e3302"
+
+# Preview environment
+[env.preview]
+[env.preview.vars]
+NITRO_PRESET = "cloudflare-pages"
+DATABASE_SQLITE_ADAPTER = "d1"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "bulletproof-nuxt-preview-db"
+database_id = "bff5d62e-c4bc-4bd0-918a-1d5142b5f63c"

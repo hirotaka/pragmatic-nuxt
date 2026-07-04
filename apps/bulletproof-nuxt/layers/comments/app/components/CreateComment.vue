@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import { reactive, watch } from "vue";
 import { Plus } from "lucide-vue-next";
+import { Form, type FormSubmitEvent } from "@/components/form";
+import { FormField } from "@/components/form-field";
+import FormDrawer from "~~/components/app/FormDrawer.vue";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { useCreateComment } from "~comments/app/composables/useCreateComment";
-import { createCommentInputSchema } from "~comments/shared/schemas";
+import { createCommentInputSchema, type CreateCommentInput } from "~comments/shared/schemas";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
 interface CreateCommentProps {
@@ -25,55 +31,78 @@ const createComment = useCreateComment({
   },
 });
 
-const handleSubmit = (values: Record<string, unknown>) => {
-  createComment.mutate({
-    body: String(values.body),
-    discussionId: props.discussionId,
-  });
+const state = reactive<CreateCommentInput>({
+  body: "",
+  discussionId: props.discussionId,
+});
+
+watch(
+  () => props.discussionId,
+  (discussionId) => {
+    state.discussionId = discussionId;
+  },
+);
+
+const handleSubmit = async (event: FormSubmitEvent<CreateCommentInput | undefined>) => {
+  const values = event.data ?? state;
+
+  try {
+    await createComment.mutate({
+      body: values.body,
+      discussionId: values.discussionId,
+    });
+  }
+  catch {
+    // Error is surfaced through the mutation notification callbacks.
+  }
 };
 </script>
 
 <template>
-  <UFormDrawer
+  <FormDrawer
     :is-done="createComment.isSuccess.value"
     title="Create Comment"
   >
     <template #triggerButton>
-      <UButton size="sm">
+      <Button
+        variant="outline"
+        size="sm"
+      >
         <template #icon>
           <Plus class="size-4" />
         </template>
         Create Comment
-      </UButton>
+      </Button>
     </template>
 
-    <UForm
+    <Form
       id="create-comment"
       :schema="createCommentInputSchema"
-      :initial-values="{
-        body: '',
-        discussionId: props.discussionId,
-      }"
+      :state="state"
+      :disabled="createComment.isPending.value"
+      class="space-y-6"
       @submit="handleSubmit"
     >
-      <template #default="{ formState }">
-        <UTextarea
-          name="body"
-          label="Body"
-          :disabled="formState.isSubmitting"
+      <FormField
+        v-slot="field"
+        name="body"
+        label="Body"
+      >
+        <Textarea
+          v-model="state.body"
+          v-bind="field"
         />
-      </template>
-    </UForm>
-
+      </FormField>
+    </Form>
     <template #submitButton>
-      <UButton
+      <Button
         type="submit"
         form="create-comment"
         size="sm"
         :is-loading="createComment.isPending.value"
       >
         Submit
-      </UButton>
+      </Button>
     </template>
-  </UFormDrawer>
+  </FormDrawer>
 </template>

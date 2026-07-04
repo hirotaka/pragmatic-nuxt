@@ -4,12 +4,15 @@ import { createUser } from "../test/data-generators";
 const authFile = "e2e/.auth/user.json";
 
 setup("authenticate", async ({ page, goto }) => {
-  const user = createUser();
+  const user = createUser({
+    firstName: "E2E",
+    lastName: "Admin",
+    email: `e2e-admin-${Date.now()}@example.com`,
+    password: "Password123!",
+    teamName: `E2E Team ${Date.now()}`,
+  });
 
-  await goto("/", { waitUntil: "hydration" });
-  await page.getByRole("button", { name: "Get started" }).click();
-  await page.waitForURL("/auth/login");
-  await page.getByRole("link", { name: "Register" }).click();
+  await goto("/auth/register", { waitUntil: "hydration" });
 
   // registration:
   await page.getByLabel("First Name").click();

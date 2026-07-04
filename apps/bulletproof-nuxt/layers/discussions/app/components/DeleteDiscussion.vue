@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Trash } from "lucide-vue-next";
+import { MoreHorizontal, Trash } from "lucide-vue-next";
+import ConfirmationDialog from "~~/components/app/ConfirmationDialog.vue";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownContent,
+  DropdownItem,
+  DropdownRoot,
+  DropdownTrigger,
+} from "@/components/ui/dropdown";
 import { useDeleteDiscussion } from "~discussions/app/composables/useDeleteDiscussion";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 interface DeleteDiscussionProps {
   id: string;
+  asMenuItem?: boolean;
+  actionLabel?: string;
 }
 
-const props = defineProps<DeleteDiscussionProps>();
+const props = withDefaults(defineProps<DeleteDiscussionProps>(), {
+  actionLabel: "Open discussion actions",
+});
 const { addNotification } = useNotifications();
 const { isAdmin } = useUser();
 
@@ -38,7 +50,28 @@ const handleDelete = async () => {
 
 <template>
   <div v-if="isAdmin">
-    <UConfirmationDialog
+    <DropdownRoot v-if="asMenuItem">
+      <DropdownTrigger as-child>
+        <Button
+          variant="ghost"
+          size="icon"
+          class="size-8"
+          :aria-label="props.actionLabel"
+        >
+          <MoreHorizontal class="size-4" />
+        </Button>
+      </DropdownTrigger>
+      <DropdownContent align="end">
+        <DropdownItem
+          class="text-destructive focus:text-destructive"
+          @click="isOpen = true"
+        >
+          <Trash class="mr-2 size-4" />
+          Delete Discussion
+        </DropdownItem>
+      </DropdownContent>
+    </DropdownRoot>
+    <ConfirmationDialog
       v-model:open="isOpen"
       variant="danger"
       title="Delete Discussion"
@@ -48,14 +81,17 @@ const handleDelete = async () => {
       :is-loading="deleteDiscussion.isPending.value"
       @confirm="handleDelete"
     >
-      <template #triggerButton>
-        <UButton variant="destructive">
+      <template
+        v-if="!asMenuItem"
+        #triggerButton
+      >
+        <Button variant="destructive">
           <template #icon>
             <Trash class="size-4" />
           </template>
           Delete Discussion
-        </UButton>
+        </Button>
       </template>
-    </UConfirmationDialog>
+    </ConfirmationDialog>
   </div>
 </template>
