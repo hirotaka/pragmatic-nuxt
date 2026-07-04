@@ -10,7 +10,7 @@ import DiscussionView from "~discussions/app/components/DiscussionView.vue";
 import CommentsList from "~comments/app/components/CommentsList.vue";
 
 // Use vi.hoisted to define mock data that can be used in vi.mock factories
-const { mockDiscussionId, mockUser, mockDiscussion, mockPaginatedComments } = vi.hoisted(() => {
+const { mockDiscussionId, mockUser, mockDiscussion, mockPaginatedComments, commentsState, loadMore } = vi.hoisted(() => {
   const mockDiscussionId = "discussion-1";
 
   const mockUser: User = {
@@ -78,7 +78,14 @@ const { mockDiscussionId, mockUser, mockDiscussion, mockPaginatedComments } = vi
     },
   };
 
-  return { mockDiscussionId, mockUser, mockDiscussion, mockPaginatedComments };
+  const commentsState = {
+    comments: mockComments,
+    currentPage: 1,
+    hasMore: false,
+    isLoading: false,
+  };
+
+  return { mockDiscussionId, mockUser, mockDiscussion, mockPaginatedComments, commentsState, loadMore: vi.fn() };
 });
 
 // Mock Nuxt composables
@@ -139,13 +146,13 @@ vi.mock("~comments/app/composables/useComments", async () => {
   const { ref } = await import("vue");
   return {
     useComments: () => ({
-      comments: ref(mockPaginatedComments.data),
-      currentPage: ref(1),
+      comments: ref(commentsState.comments),
+      currentPage: ref(commentsState.currentPage),
       totalPages: ref(1),
-      hasMore: ref(false),
-      isLoading: ref(false),
+      hasMore: ref(commentsState.hasMore),
+      isLoading: ref(commentsState.isLoading),
       loadComments: vi.fn(),
-      loadMore: vi.fn(),
+      loadMore,
     }),
   };
 });
@@ -195,6 +202,10 @@ vi.mock("#layers/base/app/composables/useNotifications", () => ({
 describe("Discussion Page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    commentsState.comments = mockPaginatedComments.data;
+    commentsState.currentPage = 1;
+    commentsState.hasMore = false;
+    commentsState.isLoading = false;
   });
 
   test("should render discussion detail", async () => {
@@ -204,8 +215,10 @@ describe("Discussion Page", () => {
       },
       global: {
         stubs: {
-          UpdateDiscussion: true,
-          UMDPreview: {
+          UpdateDiscussion: {
+            template: "<button>Update Discussion</button>",
+          },
+          MarkdownPreview: {
             template: "<div>{{ value }}</div>",
             props: ["value"],
           },
@@ -216,6 +229,7 @@ describe("Discussion Page", () => {
     await waitFor(() => {
       expect(wrapper.text()).toContain("Test");
       expect(wrapper.text()).toContain("User");
+      expect(wrapper.text()).toContain("Update Discussion");
     });
   });
 
@@ -227,7 +241,7 @@ describe("Discussion Page", () => {
       global: {
         stubs: {
           UpdateDiscussion: true,
-          UMDPreview: {
+          MarkdownPreview: {
             template: "<div data-testid=\"body\">{{ value }}</div>",
             props: ["value"],
           },
@@ -247,11 +261,8 @@ describe("Discussion Page", () => {
       },
       global: {
         stubs: {
-          USpinner: true,
-          UButton: {
-            template: "<button><slot /></button>",
-          },
-          UMDPreview: {
+          Spinner: true,
+          MarkdownPreview: {
             template: "<div>{{ value }}</div>",
             props: ["value"],
           },
@@ -269,5 +280,62 @@ describe("Discussion Page", () => {
       expect(wrapper.text()).toContain("First comment");
       expect(wrapper.text()).toContain("Second comment");
     });
+  });
+
+  test("should render accessible empty comments state", async () => {
+    commentsState.comments = [];
+
+    const wrapper = await mountSuspended(CommentsList, {
+      props: {
+        discussionId: mockDiscussionId,
+      },
+      global: {
+        stubs: {
+          Spinner: true,
+          DeleteComment: true,
+          Authorization: {
+            template: "<div><slot /></div>",
+            props: ["policyCheck"],
+          },
+          ArchiveX: true,
+        },
+      },
+    });
+
+    await waitFor(() => {
+      expect(wrapper.find("[aria-label='comments']").exists()).toBe(true);
+      expect(wrapper.text()).toContain("No Comments Found");
+    });
+  });
+
+  test("should load more comments", async () => {
+    commentsState.hasMore = true;
+
+    const wrapper = await mountSuspended(CommentsList, {
+      props: {
+        discussionId: mockDiscussionId,
+      },
+      global: {
+        stubs: {
+          Spinner: true,
+          MarkdownPreview: {
+            template: "<div>{{ value }}</div>",
+            props: ["value"],
+          },
+          DeleteComment: true,
+          Authorization: {
+            template: "<div><slot /></div>",
+            props: ["policyCheck"],
+          },
+        },
+      },
+    });
+
+    const loadMoreButton = wrapper.findAll("button").find(button => button.text().includes("Load More Comments"));
+
+    expect(loadMoreButton).toBeTruthy();
+    await loadMoreButton!.trigger("click");
+
+    expect(loadMore).toHaveBeenCalledTimes(1);
   });
 });

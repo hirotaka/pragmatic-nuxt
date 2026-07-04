@@ -145,8 +145,8 @@ describe("Discussions Page", () => {
             template: "<a><slot /></a>",
             props: ["to"],
           },
-          USpinner: true,
-          UTable: {
+          Spinner: true,
+          DataTable: {
             template: `
               <div>
                 <table>
@@ -171,20 +171,43 @@ describe("Discussions Page", () => {
     });
   });
 
+  test("should emit discussion prefetch when a discussion link is hovered", async () => {
+    const wrapper = await mountSuspended(DiscussionsList, {
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: "<a><slot /></a>",
+            props: ["to"],
+          },
+          DeleteDiscussion: true,
+        },
+      },
+    });
+
+    await waitFor(() => {
+      expect(wrapper.text()).toContain("First Discussion");
+    });
+
+    await wrapper.find("a").trigger("mouseenter");
+
+    expect(wrapper.emitted("discussionPrefetch")).toEqual([["1"]]);
+  });
+
   test("should render create discussion button", async () => {
     const wrapper = await mountSuspended(CreateDiscussion, {
       global: {
         stubs: {
-          UFormDrawer: {
+          FormDrawer: {
             template: "<div><slot name=\"triggerButton\" /></div>",
           },
-          UButton: {
+          Button: {
             template: "<button><slot name=\"icon\" /><slot /></button>",
             props: ["size", "isLoading"],
           },
-          UForm: true,
-          UInput: true,
-          UTextarea: true,
+          Form: true,
+          FormField: true,
+          Input: true,
+          Textarea: true,
           Plus: true,
         },
       },

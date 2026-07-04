@@ -1,4 +1,17 @@
 <script setup lang="ts">
+import { reactive } from "vue";
+import { useRegleSchema } from "@regle/schemas";
+import { Form, type FormSubmitEvent } from "@/components/form";
+import { FormField } from "@/components/form-field";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useLogin } from "~auth/app/composables/useLogin";
 import { loginInputSchema, type LoginInput } from "~auth/shared/schemas";
 
@@ -12,9 +25,16 @@ const login = useLogin({
   },
 });
 
-const handleSubmit = async (values: Record<string, unknown>) => {
+const state = reactive<LoginInput>({
+  email: "",
+  password: "",
+});
+const { r$ } = useRegleSchema(state, loginInputSchema);
+
+const handleSubmit = async (event: FormSubmitEvent<LoginInput | undefined>) => {
   try {
-    await login.mutate(values as LoginInput);
+    if (!event.data) return;
+    await login.mutate(event.data);
   }
   catch {
     // Error is already handled in the composable via notification
@@ -23,42 +43,61 @@ const handleSubmit = async (values: Record<string, unknown>) => {
 </script>
 
 <template>
-  <div>
-    <UForm
-      :schema="loginInputSchema"
-      @submit="handleSubmit"
-    >
-      <template #default>
-        <UInput
+  <Card>
+    <CardHeader class="text-center">
+      <CardTitle class="text-xl">
+        Welcome back
+      </CardTitle>
+      <CardDescription>
+        Log in to continue managing your team's discussions.
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <Form
+        :schema="r$"
+        :state="r$.$value"
+        class="space-y-6"
+        @submit="handleSubmit"
+      >
+        <FormField
+          v-slot="field"
           name="email"
-          type="email"
           label="Email Address"
-        />
-        <UInput
+        >
+          <Input
+            v-model="r$.$value.email"
+            v-bind="field"
+            type="email"
+          />
+        </FormField>
+        <FormField
+          v-slot="field"
           name="password"
-          type="password"
           label="Password"
-        />
-        <div>
-          <UButton
-            :is-loading="login.isPending.value"
-            type="submit"
-            class="w-full"
-          >
-            Log in
-          </UButton>
-        </div>
-      </template>
-    </UForm>
-    <div class="mt-2 flex items-center justify-end">
-      <div class="text-sm">
+        >
+          <Input
+            v-model="r$.$value.password"
+            v-bind="field"
+            type="password"
+          />
+        </FormField>
+        <Button
+          :is-loading="login.isPending.value"
+          type="submit"
+          class="w-full"
+        >
+          Log in
+        </Button>
+      </Form>
+      <div class="mt-4 text-center text-sm">
+        Don&apos;t have an account?
         <NuxtLink
           to="/auth/register"
-          class="font-medium text-blue-600 hover:text-blue-500"
+          class="font-medium underline underline-offset-4"
         >
           Register
         </NuxtLink>
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 </template>

@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { reactive } from "vue";
 import { Plus } from "lucide-vue-next";
+import { Form, type FormSubmitEvent } from "@/components/form";
+import { FormField } from "@/components/form-field";
+import FormDrawer from "~~/components/app/FormDrawer.vue";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { useCreateDiscussion } from "~discussions/app/composables/useCreateDiscussion";
 import {
   createDiscussionInputSchema,
@@ -19,55 +26,75 @@ const createDiscussion = useCreateDiscussion({
   },
 });
 
-const handleSubmit = async (values: Record<string, unknown>) => {
-  await createDiscussion.mutate(values as CreateDiscussionInput);
+const state = reactive<CreateDiscussionInput>({
+  title: "",
+  body: "",
+});
+
+const handleSubmit = async (event: FormSubmitEvent<CreateDiscussionInput | undefined>) => {
+  const values = event.data ?? state;
+
+  await createDiscussion.mutate(values);
 };
 </script>
 
 <template>
-  <UFormDrawer
+  <FormDrawer
     :is-done="createDiscussion.isSuccess.value"
     title="Create Discussion"
   >
     <template #triggerButton>
-      <UButton size="sm">
+      <Button
+        variant="outline"
+        size="sm"
+      >
         <template #icon>
           <Plus class="size-4" />
         </template>
         Create Discussion
-      </UButton>
+      </Button>
     </template>
 
-    <UForm
+    <Form
       id="create-discussion"
       :schema="createDiscussionInputSchema"
+      :state="state"
+      :disabled="createDiscussion.isPending.value"
+      class="space-y-6"
       @submit="handleSubmit"
     >
-      <template #default="{ formState }">
-        <UInput
-          name="title"
+      <FormField
+        v-slot="field"
+        name="title"
+        label="Title"
+      >
+        <Input
+          v-model="state.title"
+          v-bind="field"
           type="text"
-          label="Title"
-          :disabled="formState.isSubmitting"
         />
-        <UTextarea
-          name="body"
-          label="Body"
+      </FormField>
+      <FormField
+        v-slot="field"
+        name="body"
+        label="Body"
+      >
+        <Textarea
+          v-model="state.body"
+          v-bind="field"
           :rows="5"
-          :disabled="formState.isSubmitting"
         />
-      </template>
-    </UForm>
-
+      </FormField>
+    </Form>
     <template #submitButton>
-      <UButton
+      <Button
         type="submit"
         form="create-discussion"
         size="sm"
         :is-loading="createDiscussion.isPending.value"
       >
         Submit
-      </UButton>
+      </Button>
     </template>
-  </UFormDrawer>
+  </FormDrawer>
 </template>

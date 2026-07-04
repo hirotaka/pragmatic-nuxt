@@ -1,0 +1,19 @@
+<script setup lang="ts">
+import type { HTMLAttributes } from "vue";
+import { DialogTitle as RekaDialogTitle, type DialogTitleProps } from "reka-ui";
+import { cn } from "@/lib/utils";
+
+interface Props extends DialogTitleProps {
+  class?: HTMLAttributes["class"];
+}
+
+const props = defineProps<Props>();
+</script>
+
+<template>
+  <RekaDialogTitle
+    :class="cn('text-lg font-semibold leading-none tracking-tight', props.class)"
+  >
+    <slot />
+  </RekaDialogTitle>
+</template>

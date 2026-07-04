@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { useCreateDiscussion } from "~discussions/app/composables/useCreateDiscussion";
+import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import { Form, type FormSubmitEvent } from "@/components/form";
+import { FormField } from "@/components/form-field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { useCreateDiscussion } from "~discussions/app/composables/useCreateDiscussion";
 import {
   createDiscussionInputSchema,
   type CreateDiscussionInput,
@@ -25,9 +31,16 @@ const createDiscussion = useCreateDiscussion({
   },
 });
 
-const handleSubmit = async (values: Record<string, unknown>) => {
+const state = reactive<CreateDiscussionInput>({
+  title: "",
+  body: "",
+});
+
+const handleSubmit = async (event: FormSubmitEvent<CreateDiscussionInput | undefined>) => {
+  const values = event.data ?? state;
+
   try {
-    await createDiscussion.mutate(values as CreateDiscussionInput);
+    await createDiscussion.mutate(values);
   }
   catch {
     // Error is already handled in the composable
@@ -41,8 +54,11 @@ const handleSubmit = async (values: Record<string, unknown>) => {
       Create New Discussion
     </h2>
 
-    <UForm
+    <Form
       :schema="createDiscussionInputSchema"
+      :state="state"
+      :disabled="createDiscussion.isPending.value"
+      class="space-y-6"
       @submit="handleSubmit"
     >
       <div
@@ -53,36 +69,48 @@ const handleSubmit = async (values: Record<string, unknown>) => {
         {{ createDiscussion.error.value.message }}
       </div>
 
-      <UInput
+      <FormField
+        v-slot="field"
         name="title"
         label="Title"
-        type="text"
-        placeholder="Enter discussion title (3-200 characters)"
-      />
+      >
+        <Input
+          v-model="state.title"
+          v-bind="field"
+          type="text"
+          placeholder="Enter discussion title (3-200 characters)"
+        />
+      </FormField>
 
-      <UTextarea
+      <FormField
+        v-slot="field"
         name="body"
         label="Body"
-        placeholder="Enter discussion body (minimum 10 characters)"
-        :rows="8"
-      />
+      >
+        <Textarea
+          v-model="state.body"
+          v-bind="field"
+          placeholder="Enter discussion body (minimum 10 characters)"
+          :rows="8"
+        />
+      </FormField>
 
       <div class="flex gap-2">
-        <UButton
+        <Button
           :is-loading="createDiscussion.isPending.value"
           type="submit"
           class="flex-1"
         >
           Submit
-        </UButton>
-        <UButton
+        </Button>
+        <Button
           variant="outline"
           type="button"
           @click="router.push('/app/discussions')"
         >
           Cancel
-        </UButton>
+        </Button>
       </div>
-    </UForm>
+    </Form>
   </div>
 </template>

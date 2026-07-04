@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, toRef } from "vue";
+import MarkdownPreview from "~~/components/app/MarkdownPreview.vue";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import UpdateDiscussion from "./UpdateDiscussion.vue";
 import { formatDate } from "#layers/base/app/utils/format";
 import { useDiscussion } from "~discussions/app/composables/useDiscussion";
@@ -15,30 +17,22 @@ const discussionData = computed(() => discussion.data.value.discussion);
 </script>
 
 <template>
-  <div v-if="discussionData">
-    <span class="text-xs font-bold">
-      {{ formatDate(new Date(discussionData.createdAt).getTime()) }}
-    </span>
-    <span
-      v-if="discussionData.author"
-      class="ml-2 text-sm font-bold"
-    >
-      by {{ discussionData.author.firstName }}
-      {{ discussionData.author.lastName }}
-    </span>
-    <div class="mt-6 flex flex-col space-y-16">
-      <div class="flex justify-end">
+  <Card v-if="discussionData">
+    <CardHeader>
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="space-y-1 text-sm text-muted-foreground">
+          <span>{{ formatDate(new Date(discussionData.createdAt).getTime()) }}</span>
+          <span v-if="discussionData.author">
+            by {{ discussionData.author.firstName }} {{ discussionData.author.lastName }}
+          </span>
+        </div>
         <UpdateDiscussion :discussion-id="props.discussionId" />
       </div>
-      <div>
-        <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-          <div class="px-4 py-5 sm:px-6">
-            <div class="mt-1 max-w-2xl text-sm text-gray-500">
-              <UMDPreview :value="discussionData.body" />
-            </div>
-          </div>
-        </div>
+    </CardHeader>
+    <CardContent>
+      <div class="prose prose-neutral max-w-none text-sm dark:prose-invert">
+        <MarkdownPreview :value="discussionData.body" />
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 </template>

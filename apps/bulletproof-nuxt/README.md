@@ -1,17 +1,17 @@
-# 🛡️ Bulletproof Nuxt
+# 🛡️  Bulletproof Nuxt
 
-A full-stack application using Nuxt with SSR capabilities,
-Nuxt Layers architecture, and [Regle](https://reglejs.dev/)
-for form validation.
+This app is the canonical Nuxt full-stack business application. It uses
+shadcn-vue / Reka UI open-code primitives for the UI foundation while keeping
+Regle as the app-owned form validation library.
 
-## 🛠️ Tech Stack
+## 🛠️  Tech Stack
 
 - **Framework**: Nuxt 4
 - **Architecture**: Nuxt Layers for modular features
 - **Form Validation**: Regle + Zod v4
 - **Database**: SQLite (libsql) + Drizzle ORM
 - **Auth**: nuxt-auth-utils
-- **Styling**: Tailwind CSS + Reka UI
+- **Styling**: Tailwind CSS + shadcn-vue / Reka UI primitives
 - **Testing**: Vitest + Playwright
 
 ## 🚀 Get Started
@@ -31,7 +31,7 @@ cp .env.example .env
 pnpm install
 ```
 
-### 🗄️ Database Setup
+### Database Setup
 
 Initialize the database schema:
 

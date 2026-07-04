@@ -2,10 +2,18 @@
 
 ## Scope and boundaries
 
-- pnpm workspace packages are only `apps/*` and `apps/reference/*` (`pnpm-workspace.yaml`).
+- pnpm workspace packages are only `apps/*`, `apps/reference/*`, and `apps/sandboxes/*` (`pnpm-workspace.yaml`).
 - Canonical app (default target for changes): `apps/bulletproof-nuxt`.
+- `apps/sandboxes/*` are verifiable candidate implementations awaiting human canonical/reference/continue/reject judgment; do not treat them as adopted canonical decisions.
 - `apps/reference/*` are comparison/legacy variants; do not assume they follow canonical conventions.
 - `apps/chat` and `apps/dashboard` are listed in docs as planned, but they do not exist in this repo yet.
+
+## OSS respect rule
+
+- Treat external OSS as work to learn from with respect and gratitude to its authors and community; this repo records Pragmatic Nuxt-specific fit, role, and integration decisions, not OSS rankings.
+- Apply this rule to docs, branch names, commit messages, PR titles/bodies, issues, review comments, agent summaries, and lifecycle decision logs.
+- Frame canonical/reference/sandbox/continue/reject as this repo's lifecycle roles. When a direction is not carried forward, describe the repo-specific app shape, constraints, and lessons rather than pairing OSS names with negative shorthand.
+- Short public labels need extra care: prefer wording like `record Nuxt UI fit decision` or `adopt Regle for canonical form flow` over `reject <OSS>` or `<OSS> failed`.
 
 ## Commands agents guess wrong
 
@@ -46,5 +54,7 @@
 
 ## Documentation ownership
 
-- Canonical implementation docs: `apps/bulletproof-nuxt/docs`.
+- Canonical Nuxt implementation docs: `apps/bulletproof-nuxt/docs`.
+- Nuxt reference apps (`apps/reference/bulletproof-nuxt-*`) should link to canonical docs for shared implementation guidance instead of carrying copied base docs; keep only reference-specific deltas when they add reader value.
+- Phase4 canonicalization and Phase5 reference publication work must verify docs ownership when moving apps between canonical/reference/sandbox roles.
 - Repo-level technology decisions: `docs/technical-radar.md`.

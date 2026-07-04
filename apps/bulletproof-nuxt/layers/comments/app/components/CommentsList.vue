@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ArchiveX } from "lucide-vue-next";
 import { onMounted } from "vue";
+import MarkdownPreview from "~~/components/app/MarkdownPreview.vue";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { useComments } from "~comments/app/composables/useComments";
 import { formatDate } from "#layers/base/app/utils/format";
 import { POLICIES } from "#layers/auth/app/composables/useAuthorization";
@@ -40,13 +43,13 @@ watch(
     v-if="isLoading && currentPage === 1"
     class="flex h-48 w-full items-center justify-center"
   >
-    <USpinner size="lg" />
+    <Spinner size="lg" />
   </div>
 
   <div
     v-else-if="!comments.length"
     aria-label="comments"
-    class="flex h-40 flex-col items-center justify-center bg-white text-gray-500"
+    class="flex h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-muted/30 text-muted-foreground"
   >
     <ArchiveX class="size-10" />
     <h4>No Comments Found</h4>
@@ -61,29 +64,31 @@ watch(
         v-for="(comment, index) in comments"
         :key="comment.id"
         :aria-label="`comment-${comment.body}-${index}`"
-        class="w-full bg-white p-4 shadow-sm"
+        class="w-full rounded-lg border bg-background p-4 shadow-sm"
       >
-        <Authorization :policy-check="user ? POLICIES['comment:delete'](user, comment) : false">
-          <div class="flex justify-between">
-            <div>
-              <span class="text-xs font-semibold">
-                {{ formatDate(comment.createdAt) }}
-              </span>
-              <span
-                v-if="comment.author"
-                class="text-xs font-bold"
-              >
-                by {{ comment.author.firstName }} {{ comment.author.lastName }}
-              </span>
-            </div>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <span class="text-xs font-semibold text-muted-foreground">
+              {{ formatDate(comment.createdAt) }}
+            </span>
+            <span
+              v-if="comment.author"
+              class="ml-1 text-xs font-medium text-muted-foreground"
+            >
+              by {{ comment.author.firstName }} {{ comment.author.lastName }}
+            </span>
+          </div>
+          <Authorization :policy-check="user ? POLICIES['comment:delete'](user, comment) : false">
             <DeleteComment
               :comment-id="comment.id"
+              as-menu-item
+              :action-label="`Open comment actions for comment ${index + 1}`"
               @deleted="handleCommentDeleted"
             />
-          </div>
-        </Authorization>
+          </Authorization>
+        </div>
 
-        <UMDPreview :value="comment.body" />
+        <MarkdownPreview :value="comment.body" />
       </li>
     </ul>
 
@@ -91,12 +96,15 @@ watch(
       v-if="hasMore"
       class="flex items-center justify-center py-4"
     >
-      <UButton @click="loadMore">
-        <USpinner v-if="isLoading && currentPage > 1" />
+      <Button
+        variant="outline"
+        @click="loadMore"
+      >
+        <Spinner v-if="isLoading && currentPage > 1" />
         <template v-else>
           Load More Comments
         </template>
-      </UButton>
+      </Button>
     </div>
   </template>
 </template>

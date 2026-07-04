@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref } from "vue";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface CommentsProps {
   discussionId: string;
@@ -15,19 +16,24 @@ const handleCommentCreated = () => {
 </script>
 
 <template>
-  <div>
-    <div class="mb-4 flex items-center justify-between">
-      <h3 class="text-xl font-bold">
-        Comments:
-      </h3>
-      <CreateComment
-        :discussion-id="props.discussionId"
-        @created="handleCommentCreated"
+  <Card>
+    <CardHeader>
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <CardTitle>Comments</CardTitle>
+          <CardDescription>Continue the discussion with your team.</CardDescription>
+        </div>
+        <CreateComment
+          :discussion-id="props.discussionId"
+          @created="handleCommentCreated"
+        />
+      </div>
+    </CardHeader>
+    <CardContent>
+      <CommentsList
+        :discussion-id="discussionId"
+        :refresh-trigger="refreshTrigger"
       />
-    </div>
-    <CommentsList
-      :discussion-id="props.discussionId"
-      :refresh-trigger="refreshTrigger"
-    />
-  </div>
+    </CardContent>
+  </Card>
 </template>

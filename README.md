@@ -30,7 +30,7 @@ Canonical Apps are actively maintained and follow current Adopt decisions from t
 
 | Showcase | Description | Key Libraries | Demo |
 |----------|-------------|---------------|------|
-| [bulletproof-nuxt](apps/bulletproof-nuxt) | Canonical Nuxt full-stack business app | Nuxt Layers, Regle, Zod v4, Drizzle ORM | [Live](https://bulletproof-nuxt.pages.dev) |
+| [bulletproof-nuxt](apps/bulletproof-nuxt) | Canonical Nuxt full-stack business app | Nuxt Layers, shadcn-vue, Regle, Zod v4, Drizzle ORM | [Live](https://bulletproof-nuxt.pages.dev) |
 | `apps/chat` | Canonical AI chat app reference | Nuxt, AI SDK, shadcn-vue/reka-ui | Planned |
 | `apps/dashboard` | Canonical dashboard app reference | Nuxt, Regle, Pinia Colada | Planned |
 
@@ -45,6 +45,7 @@ Reference Apps preserve alternative implementations and past experiments for com
 | [reference/bulletproof-nuxt-tanstack-form](apps/reference/bulletproof-nuxt-tanstack-form) | Nuxt full-stack TanStack Form comparison | TanStack Form, Zod v4 | - |
 | [reference/bulletproof-nuxt-formwerk](apps/reference/bulletproof-nuxt-formwerk) | Nuxt full-stack Formwerk comparison | Formwerk, Zod v4 | - |
 | [reference/bulletproof-nuxt-pinia-colada](apps/reference/bulletproof-nuxt-pinia-colada) | Nuxt full-stack Pinia Colada comparison | Pinia Colada, Nuxt | - |
+| [reference/bulletproof-nuxt-original-ui](apps/reference/bulletproof-nuxt-original-ui) | Nuxt port of the original Bulletproof React UI composition | Nuxt Layers, Regle, Reka UI | - |
 
 ## 🗺️ Roadmap
 

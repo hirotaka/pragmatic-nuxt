@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import UpdateProfile from "~users/app/components/UpdateProfile.vue";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 definePageMeta({
@@ -15,73 +16,67 @@ const { user } = useUser();
 </script>
 
 <template>
-  <div
+  <LayoutsContentLayout
     v-if="user"
-    class="py-6"
+    title="Profile"
+    description="Manage the account details used across this workspace."
   >
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-      <h1 class="text-2xl font-semibold text-gray-900">
-        Profile
-      </h1>
-    </div>
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:px-8">
-      <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
-          <div class="flex justify-between">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">
-              User Information
-            </h3>
-            <UpdateProfile />
+    <template #actions>
+      <UpdateProfile />
+    </template>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          User Information
+        </CardTitle>
+        <CardDescription>
+          Personal details for the current user.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <dl class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-lg border bg-muted/30 p-4">
+            <dt class="text-sm font-medium text-muted-foreground">
+              First Name
+            </dt>
+            <dd class="mt-1 text-sm font-medium">
+              {{ user.firstName }}
+            </dd>
           </div>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500">
-            Personal details of the user.
-          </p>
-        </div>
-        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-          <dl class="sm:divide-y sm:divide-gray-200">
-            <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-              <dt class="text-sm font-medium text-gray-500">
-                First Name
-              </dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                {{ user.firstName }}
-              </dd>
-            </div>
-            <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-              <dt class="text-sm font-medium text-gray-500">
-                Last Name
-              </dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                {{ user.lastName }}
-              </dd>
-            </div>
-            <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-              <dt class="text-sm font-medium text-gray-500">
-                Email Address
-              </dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                {{ user.email }}
-              </dd>
-            </div>
-            <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-              <dt class="text-sm font-medium text-gray-500">
-                Role
-              </dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                {{ user.role }}
-              </dd>
-            </div>
-            <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-              <dt class="text-sm font-medium text-gray-500">
-                Bio
-              </dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                {{ user.bio }}
-              </dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-    </div>
-  </div>
+          <div class="rounded-lg border bg-muted/30 p-4">
+            <dt class="text-sm font-medium text-muted-foreground">
+              Last Name
+            </dt>
+            <dd class="mt-1 text-sm font-medium">
+              {{ user.lastName }}
+            </dd>
+          </div>
+          <div class="rounded-lg border bg-muted/30 p-4">
+            <dt class="text-sm font-medium text-muted-foreground">
+              Email Address
+            </dt>
+            <dd class="mt-1 text-sm font-medium">
+              {{ user.email }}
+            </dd>
+          </div>
+          <div class="rounded-lg border bg-muted/30 p-4">
+            <dt class="text-sm font-medium text-muted-foreground">
+              Role
+            </dt>
+            <dd class="mt-1 text-sm font-medium">
+              {{ user.role }}
+            </dd>
+          </div>
+          <div class="rounded-lg border bg-muted/30 p-4 sm:col-span-2">
+            <dt class="text-sm font-medium text-muted-foreground">
+              Bio
+            </dt>
+            <dd class="mt-1 text-sm font-medium">
+              {{ user.bio || "No bio added yet." }}
+            </dd>
+          </div>
+        </dl>
+      </CardContent>
+    </Card>
+  </LayoutsContentLayout>
 </template>
