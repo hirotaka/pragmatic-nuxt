@@ -36,7 +36,7 @@
     "tailwind-merge": "^3.0.0",
     "unhead": "^3.0.0",
     "vee-validate": "^4.15.1",
-    "vue": "3.5.33",
+    "vue": "3.5.40",
     "vue-dompurify-html": "^5.2.0",
     "vue-router": "^4.5.0",
     "zod": "^3.24.0"
