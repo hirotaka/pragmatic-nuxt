@@ -1163,7 +1163,7 @@ importers:
         version: 4.16.2(@typescript-eslint/utils@8.58.0(eslint@10.3.0(jiti@2.6.1))(typescript@6.0.3))(eslint-import-resolver-node@0.3.9)(eslint@10.3.0(jiti@2.6.1))
       eslint-plugin-playwright:
         specifier: ^2.2.0
-        version: 2.10.2(eslint@10.3.0(jiti@2.6.1))
+        version: 2.10.5(eslint@10.3.0(jiti@2.6.1))
       eslint-plugin-storybook:
         specifier: ^0.12.0
         version: 0.12.0(eslint@10.3.0(jiti@2.6.1))(typescript@6.0.3)
@@ -1175,7 +1175,7 @@ importers:
         version: 10.9.1(@stylistic/eslint-plugin@5.9.0(eslint@10.3.0(jiti@2.6.1)))(@typescript-eslint/parser@8.56.0(eslint@10.3.0(jiti@2.6.1))(typescript@6.0.3))(eslint@10.3.0(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@10.3.0(jiti@2.6.1)))
       eslint-plugin-vuejs-accessibility:
         specifier: ^2.4.1
-        version: 2.5.0(eslint@10.3.0(jiti@2.6.1))(globals@17.5.0)
+        version: 2.5.0(eslint@10.3.0(jiti@2.6.1))(globals@17.8.0)
       express:
         specifier: ^5.1.0
         version: 5.2.1
@@ -6300,8 +6300,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-playwright@2.10.2:
-    resolution: {integrity: sha512-0N+2OWc3NZbOZ0gK8mp2TK6Qu3UWcJTQ9rqU0UM2yRJXgT758pvpY0lsOLIySfbyFrLqn3TcXjixbmcK90VnuQ==}
+  eslint-plugin-playwright@2.10.5:
+    resolution: {integrity: sha512-4k+ml4cEd55kePUIW1WsCiOLDwZkAdPZPKMFulR83XpplCaVOTKHF6yvXLYixLtdVbkMjmKV5F3BaGuI3aH8aQ==}
     engines: {node: '>=16.9.0'}
     peerDependencies:
       eslint: '>=8.40.0'
@@ -6776,8 +6776,8 @@ packages:
     resolution: {integrity: sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==}
     engines: {node: '>=18'}
 
-  globals@17.5.0:
-    resolution: {integrity: sha512-qoV+HK2yFl/366t2/Cb3+xxPUo5BuMynomoDmiaZBIdbs+0pYbjfZU+twLhGKp4uCZ/+NbtpVepH5bGCxRyy2g==}
+  globals@17.8.0:
+    resolution: {integrity: sha512-Zz/LMDZScFmkakeL2cTHzf+PbWKdpU3uclqkZT7TjDG58j5WPt0PpA+n9uPI24fZtlw07q0OtEi84K+umsRzqQ==}
     engines: {node: '>=18'}
 
   globby@16.2.0:
@@ -11544,7 +11544,7 @@ snapshots:
       eslint-plugin-unicorn: 63.0.0(eslint@10.3.0(jiti@2.6.1))
       eslint-plugin-vue: 10.9.1(@stylistic/eslint-plugin@5.9.0(eslint@10.3.0(jiti@2.6.1)))(@typescript-eslint/parser@8.56.1(eslint@10.3.0(jiti@2.6.1))(typescript@6.0.3))(eslint@10.3.0(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@10.3.0(jiti@2.6.1)))
       eslint-processor-vue-blocks: 2.0.0(@vue/compiler-sfc@3.5.40)(eslint@10.3.0(jiti@2.6.1))
-      globals: 17.5.0
+      globals: 17.8.0
       local-pkg: 1.1.2
       pathe: 2.0.3
       vue-eslint-parser: 10.4.0(eslint@10.3.0(jiti@2.6.1))
@@ -15357,10 +15357,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-playwright@2.10.2(eslint@10.3.0(jiti@2.6.1)):
+  eslint-plugin-playwright@2.10.5(eslint@10.3.0(jiti@2.6.1)):
     dependencies:
       eslint: 10.3.0(jiti@2.6.1)
-      globals: 17.5.0
+      globals: 17.8.0
 
   eslint-plugin-prettier@5.5.5(eslint-config-prettier@10.1.8(eslint@10.3.0(jiti@2.6.1)))(eslint@10.3.0(jiti@2.6.1))(prettier@3.8.3):
     dependencies:
@@ -15449,11 +15449,11 @@ snapshots:
       '@stylistic/eslint-plugin': 5.9.0(eslint@10.3.0(jiti@2.6.1))
       '@typescript-eslint/parser': 8.56.1(eslint@10.3.0(jiti@2.6.1))(typescript@6.0.3)
 
-  eslint-plugin-vuejs-accessibility@2.5.0(eslint@10.3.0(jiti@2.6.1))(globals@17.5.0):
+  eslint-plugin-vuejs-accessibility@2.5.0(eslint@10.3.0(jiti@2.6.1))(globals@17.8.0):
     dependencies:
       aria-query: 5.3.2
       eslint: 10.3.0(jiti@2.6.1)
-      globals: 17.5.0
+      globals: 17.8.0
       vue-eslint-parser: 10.4.0(eslint@10.3.0(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
@@ -15951,7 +15951,7 @@ snapshots:
 
   globals@16.5.0: {}
 
-  globals@17.5.0: {}
+  globals@17.8.0: {}
 
   globby@16.2.0:
     dependencies:
