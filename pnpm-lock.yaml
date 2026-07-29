@@ -1157,7 +1157,7 @@ importers:
         version: 10.3.0(jiti@2.6.1)
       eslint-plugin-check-file:
         specifier: ^3.3.0
-        version: 3.3.1(eslint@10.3.0(jiti@2.6.1))
+        version: 3.3.2(eslint@10.3.0(jiti@2.6.1))
       eslint-plugin-import-x:
         specifier: ^4.16.1
         version: 4.16.2(@typescript-eslint/utils@8.58.0(eslint@10.3.0(jiti@2.6.1))(typescript@6.0.3))(eslint-import-resolver-node@0.3.9)(eslint@10.3.0(jiti@2.6.1))
@@ -6269,8 +6269,8 @@ packages:
     peerDependencies:
       eslint: '*'
 
-  eslint-plugin-check-file@3.3.1:
-    resolution: {integrity: sha512-b7fDkp8Y0T9vloTYSrkMnb5Cqpk1bc6+jDQdgKIhzdwb47NmLAvMFYo3SzHOPF8u4SEsOVhmrNSbo6Sp633syg==}
+  eslint-plugin-check-file@3.3.2:
+    resolution: {integrity: sha512-X0yVi4vbV7pSxu00oAJiE8wcwAvIoU2YQKrkvRRLq+88i/cZNooOgAgjk2gOS03lKMsFMVusJLlqHNuAwduX2g==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=9.0.0'
@@ -15308,7 +15308,7 @@ snapshots:
     dependencies:
       eslint: 10.3.0(jiti@2.6.1)
 
-  eslint-plugin-check-file@3.3.1(eslint@10.3.0(jiti@2.6.1)):
+  eslint-plugin-check-file@3.3.2(eslint@10.3.0(jiti@2.6.1)):
     dependencies:
       eslint: 10.3.0(jiti@2.6.1)
       is-glob: 4.0.3
