@@ -1,4 +1,3 @@
-import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -18,7 +17,9 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxt/test-utils/module",
     "@regle/nuxt",
+    "shadcn-nuxt",
   ],
+  components: [],
   devtools: { enabled: true },
   app: {
     head: {
@@ -28,9 +29,6 @@ export default defineNuxtConfig({
     },
   },
   css: ["./app/assets/css/main.css"],
-  alias: {
-    "@": fileURLToPath(new URL("./", import.meta.url)),
-  },
   // Nuxt 4 compatibility
   future: {
     compatibilityVersion: 4,
@@ -54,5 +52,9 @@ export default defineNuxtConfig({
         semi: true,
       },
     },
+  },
+  shadcn: {
+    prefix: "",
+    componentDir: "@/components/ui",
   },
 });

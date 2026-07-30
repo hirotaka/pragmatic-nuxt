@@ -13,6 +13,7 @@
 - [Official Documentation](https://nuxt.com/docs)
 - [Nuxt Layers](https://nuxt.com/docs/getting-started/layers)
 - [Nuxt Data Fetching](https://nuxt.com/docs/getting-started/data-fetching)
+- [Nuxt Data Fetching Practices](../../../docs/practices/use-fetch/index.md)
 - [Nuxt Modules](https://nuxt.com/modules)
 
 ## JavaScript / TypeScript

@@ -1,7 +1,23 @@
 import type { H3Event } from "h3";
-import type { Comment, PaginatedComments } from "~comments/shared/types";
-import { comments, users } from "~~/db/schema";
+import { comments } from "~~/db/schema";
 import { eq, desc, sql } from "drizzle-orm";
+import type { PaginatedResult } from "#layers/base/shared/types/pagination";
+
+export interface CommentRecord {
+  id: string;
+  body: string;
+  discussionId: string;
+  authorId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  author: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export type PaginatedCommentRecords = PaginatedResult<CommentRecord>;
 
 export const createCommentRepository = async (event: H3Event) => {
   const db = await useDb(event);
@@ -10,7 +26,7 @@ export const createCommentRepository = async (event: H3Event) => {
     discussionId: string;
     page: number;
     limit: number;
-  }): Promise<PaginatedComments> => {
+  }): Promise<PaginatedCommentRecords> => {
     const { discussionId, page, limit } = params;
     const offset = (page - 1) * limit;
 
@@ -43,6 +59,7 @@ export const createCommentRepository = async (event: H3Event) => {
       data: results,
       meta: {
         page,
+        limit,
         total,
         totalPages,
         hasMore,
@@ -50,7 +67,7 @@ export const createCommentRepository = async (event: H3Event) => {
     };
   };
 
-  const findById = async (id: string): Promise<Comment | null> => {
+  const findById = async (id: string): Promise<CommentRecord | null> => {
     const result = await db.query.comments.findFirst({
       where: eq(comments.id, id),
       with: {
@@ -71,33 +88,14 @@ export const createCommentRepository = async (event: H3Event) => {
     body: string;
     discussionId: string;
     authorId: string;
-  }): Promise<Comment> => {
-    const [comment] = await db
+  }): Promise<void> => {
+    await db
       .insert(comments)
       .values({
         body: data.body,
         discussionId: data.discussionId,
         authorId: data.authorId,
-      })
-      .returning();
-
-    if (!comment) {
-      throw new Error("Failed to create comment");
-    }
-
-    const author = await db.query.users.findFirst({
-      where: eq(users.id, comment.authorId),
-      columns: {
-        id: true,
-        firstName: true,
-        lastName: true,
-      },
-    });
-
-    return {
-      ...comment,
-      author: author!,
-    };
+      });
   };
 
   const remove = async (id: string): Promise<void> => {

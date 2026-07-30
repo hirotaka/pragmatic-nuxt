@@ -1,21 +1,14 @@
 import { createUserRepository } from "~users/server/repository/userRepository";
+import { serializeUser } from "#layers/auth/server/utils/serializeUser";
+import type { User } from "#layers/auth/shared/types";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = (await requireUserSession(event)).user as User;
 
   if (sessionUser.role !== "ADMIN") {
     throw createError({
       statusCode: 403,
-      statusMessage: "Forbidden - Admin access required",
+      statusMessage: "Admin access required",
     });
   }
 
@@ -23,7 +16,5 @@ export default defineEventHandler(async (event) => {
 
   const users = await userRepository.findAll(sessionUser.teamId as string);
 
-  return {
-    data: users,
-  };
+  return users.map(serializeUser);
 });

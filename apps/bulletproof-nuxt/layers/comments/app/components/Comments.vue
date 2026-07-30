@@ -1,18 +1,25 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref } from "vue";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
+import { useComments } from "~comments/app/composables/useComments";
 
 interface CommentsProps {
   discussionId: string;
 }
 
 const props = defineProps<CommentsProps>();
-const refreshTrigger = ref(0);
+const {
+  comments,
+  currentPage,
+  hasInitialError,
+  hasMore,
+  isInitialReady,
+  isLoading,
+  loadComments,
+  loadMore,
+} = await useComments(() => props.discussionId);
 
-const handleCommentCreated = () => {
-  refreshTrigger.value++;
-};
+const refreshComments = () => loadComments(1);
 </script>
 
 <template>
@@ -24,15 +31,24 @@ const handleCommentCreated = () => {
           <CardDescription>Continue the discussion with your team.</CardDescription>
         </div>
         <CreateComment
+          :key="props.discussionId"
+          :disabled="!isInitialReady"
           :discussion-id="props.discussionId"
-          @created="handleCommentCreated"
+          :refresh="refreshComments"
         />
       </div>
     </CardHeader>
     <CardContent>
       <CommentsList
-        :discussion-id="discussionId"
-        :refresh-trigger="refreshTrigger"
+        :key="props.discussionId"
+        :comments="comments"
+        :current-page="currentPage"
+        :has-initial-error="hasInitialError"
+        :has-more="hasMore"
+        :is-initial-ready="isInitialReady"
+        :is-loading="isLoading"
+        :load-more="loadMore"
+        :refresh="refreshComments"
       />
     </CardContent>
   </Card>

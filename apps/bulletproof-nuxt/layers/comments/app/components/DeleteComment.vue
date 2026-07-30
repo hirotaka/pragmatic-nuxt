@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { MoreHorizontal, Trash } from "lucide-vue-next";
 import { ref } from "vue";
-import ConfirmationDialog from "~~/components/app/ConfirmationDialog.vue";
-import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
+import { Button } from "~~/app/components/ui/button";
 import {
   DropdownContent,
   DropdownItem,
   DropdownRoot,
   DropdownTrigger,
-} from "@/components/ui/dropdown";
+} from "~~/app/components/ui/dropdown";
 import { useDeleteComment } from "~comments/app/composables/useDeleteComment";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
@@ -16,36 +16,39 @@ interface DeleteCommentProps {
   commentId: string;
   asMenuItem?: boolean;
   actionLabel?: string;
+  refresh: () => Promise<void>;
 }
 
 const props = withDefaults(defineProps<DeleteCommentProps>(), {
   actionLabel: "Open comment actions",
 });
-const emit = defineEmits<{
-  deleted: [];
-}>();
-
 const { addNotification } = useNotifications();
 const isOpen = ref(false);
-
-const deleteComment = useDeleteComment({
-  onSuccess: () => {
-    addNotification({
-      type: "success",
-      title: "Comment Deleted",
-    });
-    isOpen.value = false;
-    emit("deleted");
-  },
-});
+const isPending = ref(false);
+const deleteComment = useDeleteComment();
 
 const handleDelete = async () => {
+  if (isPending.value) return;
+
+  isPending.value = true;
+
   try {
-    await deleteComment.mutate(props.commentId);
+    await deleteComment(props.commentId);
   }
   catch {
-    // Error is already handled in the composable
+    // `$api` reports the request failure.
+    isPending.value = false;
+    return;
   }
+
+  addNotification({
+    type: "success",
+    title: "Comment Deleted",
+  });
+  // The read owner reports refresh failures without changing mutation success.
+  await props.refresh().catch(() => undefined);
+  isOpen.value = false;
+  isPending.value = false;
 };
 </script>
 
@@ -77,7 +80,7 @@ const handleDelete = async () => {
     title="Delete Comment"
     body="Are you sure you want to delete this comment?"
     confirm-text="Delete Comment"
-    :is-loading="deleteComment.isPending.value"
+    :is-loading="isPending"
     @confirm="handleDelete"
   >
     <template

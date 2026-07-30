@@ -1,27 +1,37 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { cleanup, waitFor, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import DashboardLayout from "../dashboard.vue";
 
-const mountDashboardLayout = (route: string) => mountSuspended(DashboardLayout, {
-  route,
-  slots: {
-    default: "Dashboard content",
-  },
-  global: {
-    stubs: {
-      NuxtLink: {
-        props: ["to"],
-        template: `<a :href="to"><slot /></a>`,
+const mountDashboardLayout = (route: string) => {
+  mockRoute.path = route;
+  mockRoute.fullPath = route;
+
+  return mountSuspended(DashboardLayout, {
+    route,
+    slots: {
+      default: "Dashboard content",
+    },
+    global: {
+      stubs: {
+        NuxtLink: {
+          props: ["to"],
+          template: `<a :href="to"><slot /></a>`,
+        },
       },
     },
-  },
-});
+  });
+};
 
-const { canAccessAdmin, logoutMutate, mockUser } = vi.hoisted(() => ({
+const { addNotification, canAccessAdmin, clearSession, mockRoute, mockUser, routerPush } = vi.hoisted(() => ({
+  addNotification: vi.fn(),
   canAccessAdmin: { value: true },
-  logoutMutate: vi.fn(),
+  clearSession: vi.fn(),
+  mockRoute: {
+    path: "/app",
+    fullPath: "/app",
+  },
   mockUser: {
     id: "user-1",
     email: "ada@example.com",
@@ -30,8 +40,18 @@ const { canAccessAdmin, logoutMutate, mockUser } = vi.hoisted(() => ({
     role: "ADMIN",
     bio: null,
     teamId: "team-1",
-    createdAt: new Date(),
+    createdAt: "2026-07-10T00:00:00.000Z",
   },
+  routerPush: vi.fn(),
+}));
+
+mockNuxtImport("useRoute", () => () => mockRoute);
+mockNuxtImport("useRouter", () => () => ({
+  afterEach: vi.fn(),
+  beforeEach: vi.fn(),
+  beforeResolve: vi.fn(),
+  push: routerPush,
+  replace: vi.fn(),
 }));
 
 vi.mock("#layers/auth/app/composables/useAuthorization", () => ({
@@ -41,11 +61,7 @@ vi.mock("#layers/auth/app/composables/useAuthorization", () => ({
   }),
 }));
 
-vi.mock("#layers/auth/app/composables/useLogout", () => ({
-  useLogout: () => ({
-    mutate: logoutMutate,
-  }),
-}));
+mockNuxtImport("useUserSession", () => () => ({ clear: clearSession }));
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({
@@ -53,10 +69,27 @@ vi.mock("#layers/auth/app/composables/useUser", () => ({
   }),
 }));
 
+vi.mock("#layers/base/app/composables/useNotifications", () => ({
+  useNotifications: () => ({ addNotification }),
+}));
+
 beforeEach(() => {
   canAccessAdmin.value = true;
-  logoutMutate.mockReset().mockResolvedValue(undefined);
+  addNotification.mockReset();
+  clearSession.mockReset().mockResolvedValue(undefined);
+  routerPush.mockReset().mockResolvedValue(undefined);
+  mockRoute.path = "/app";
+  mockRoute.fullPath = "/app";
 });
+
+function deferred<T = void>() {
+  let resolve!: (value: T | PromiseLike<T>) => void;
+  const promise = new Promise<T>((nextResolve) => {
+    resolve = nextResolve;
+  });
+
+  return { promise, resolve };
+}
 
 afterEach(() => {
   cleanup();
@@ -112,6 +145,87 @@ test("dashboard layout opens account menu with user identity and actions", async
   expect(menuScreen.getByText("ada@example.com")).toBeTruthy();
   expect(menuScreen.getByRole("menuitem", { name: /your profile/i })).toBeTruthy();
   expect(menuScreen.getByRole("menuitem", { name: /sign out/i })).toBeTruthy();
+});
+
+test("dashboard layout logs out before redirecting to login", async () => {
+  const logoutDone = deferred();
+  clearSession.mockReturnValueOnce(logoutDone.promise);
+  const wrapper = await mountDashboardLayout("/app/discussions");
+  const screen = within(wrapper.element as HTMLElement);
+
+  await userEvent.click(screen.getByRole("button", { name: /open user menu/i }));
+  const menu = await screen.findByRole("menu");
+  await userEvent.click(within(menu).getByRole("menuitem", { name: /sign out/i }));
+
+  await waitFor(() => {
+    expect(clearSession).toHaveBeenCalledTimes(1);
+  });
+  expect(routerPush).not.toHaveBeenCalled();
+
+  logoutDone.resolve();
+
+  await waitFor(() => {
+    expect(routerPush).toHaveBeenCalledWith("/auth/login?redirectTo=%2Fapp%2Fdiscussions");
+  });
+  expect(clearSession.mock.invocationCallOrder[0]).toBeLessThan(
+    routerPush.mock.invocationCallOrder[0]!,
+  );
+});
+
+test("dashboard layout ignores duplicate logout events while the action is pending", async () => {
+  const logoutDone = deferred();
+  clearSession.mockReturnValueOnce(logoutDone.promise);
+  const wrapper = await mountDashboardLayout("/app/discussions");
+  const sidebar = wrapper.findComponent({ name: "AppSidebar" });
+
+  sidebar.vm.$emit("logout");
+  sidebar.vm.$emit("logout");
+  await waitFor(() => expect(clearSession).toHaveBeenCalledTimes(1));
+  expect(routerPush).not.toHaveBeenCalled();
+
+  logoutDone.resolve();
+  await waitFor(() => expect(routerPush).toHaveBeenCalledOnce());
+});
+
+test("dashboard layout releases failed logout and allows retry without redirecting early", async () => {
+  clearSession
+    .mockRejectedValueOnce(new Error("Logout failed"))
+    .mockResolvedValueOnce(undefined);
+  const wrapper = await mountDashboardLayout("/app/discussions");
+  const screen = within(wrapper.element as HTMLElement);
+
+  const signOut = async () => {
+    await userEvent.click(screen.getByRole("button", { name: /open user menu/i }));
+    const menu = await screen.findByRole("menu");
+    await userEvent.click(within(menu).getByRole("menuitem", { name: /sign out/i }));
+  };
+
+  await signOut();
+  await waitFor(() => expect(clearSession).toHaveBeenCalledTimes(1));
+  expect(routerPush).not.toHaveBeenCalled();
+
+  await signOut();
+  await waitFor(() => expect(clearSession).toHaveBeenCalledTimes(2));
+  await waitFor(() => {
+    expect(routerPush).toHaveBeenCalledWith("/auth/login?redirectTo=%2Fapp%2Fdiscussions");
+  });
+});
+
+test("dashboard layout reports navigation failure separately after logout", async () => {
+  routerPush.mockRejectedValueOnce(new Error("Navigation failed"));
+  const wrapper = await mountDashboardLayout("/app/discussions");
+  const screen = within(wrapper.element as HTMLElement);
+
+  await userEvent.click(screen.getByRole("button", { name: /open user menu/i }));
+  const menu = await screen.findByRole("menu");
+  await userEvent.click(within(menu).getByRole("menuitem", { name: /sign out/i }));
+
+  await waitFor(() => expect(clearSession).toHaveBeenCalledOnce());
+  await waitFor(() => expect(addNotification).toHaveBeenCalledWith({
+    type: "error",
+    title: "Navigation Failed",
+    message: "You are logged out, but the login page could not be opened.",
+  }));
 });
 
 test("dashboard layout opens mobile navigation and closes it after route click", async () => {

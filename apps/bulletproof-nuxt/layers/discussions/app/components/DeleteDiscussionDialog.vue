@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import ConfirmationDialog from "~~/components/app/ConfirmationDialog.vue";
+import { ref } from "vue";
+import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
 import { useDeleteDiscussion } from "~discussions/app/composables/useDeleteDiscussion";
 import type { Discussion } from "~discussions/shared/types";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
@@ -17,29 +18,30 @@ const emit = defineEmits<{
 }>();
 
 const { addNotification } = useNotifications();
+const deleteDiscussion = useDeleteDiscussion();
+const isPending = ref(false);
 
-const deleteDiscussion = useDeleteDiscussion({
-  onSuccess: () => {
+const handleConfirm = async () => {
+  isPending.value = true;
+  try {
+    await deleteDiscussion(props.discussion.id);
     addNotification({
       type: "success",
       title: "Discussion Deleted",
     });
     emit("update:open", false);
     emit("success");
-  },
-});
-
-const handleConfirm = async () => {
-  try {
-    await deleteDiscussion.mutate(props.discussion.id);
   }
   catch {
-    // Error is already handled in the composable
+    // `$api` reports the request failure; keep the dialog open for another attempt.
+  }
+  finally {
+    isPending.value = false;
   }
 };
 
 const handleOpenChange = (value: boolean) => {
-  if (!deleteDiscussion.isPending.value) {
+  if (!isPending.value) {
     emit("update:open", value);
   }
 };
@@ -48,7 +50,7 @@ const handleOpenChange = (value: boolean) => {
 <template>
   <ConfirmationDialog
     :open="open"
-    :is-loading="deleteDiscussion.isPending.value"
+    :is-loading="isPending"
     variant="danger"
     title="Delete Discussion"
     :body="`Are you sure you want to delete &quot;${discussion.title}&quot;? This action cannot be undone.`"
@@ -56,17 +58,5 @@ const handleOpenChange = (value: boolean) => {
     cancel-text="Cancel"
     @confirm="handleConfirm"
     @update:open="handleOpenChange"
-  >
-    <template
-      v-if="deleteDiscussion.error.value"
-      #error
-    >
-      <div
-        class="text-sm text-destructive"
-        role="alert"
-      >
-        {{ deleteDiscussion.error.value.message }}
-      </div>
-    </template>
-  </ConfirmationDialog>
+  />
 </template>

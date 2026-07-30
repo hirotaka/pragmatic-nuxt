@@ -1,21 +1,13 @@
 import { createUserRepository } from "~users/server/repository/userRepository";
+import type { User } from "#layers/auth/shared/types";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = (await requireUserSession(event)).user as User;
 
   if (sessionUser.role !== "ADMIN") {
     throw createError({
       statusCode: 403,
-      statusMessage: "Forbidden - Admin access required",
+      statusMessage: "Admin access required",
     });
   }
 
@@ -30,16 +22,20 @@ export default defineEventHandler(async (event) => {
 
   if (userId === sessionUser.id) {
     throw createError({
-      statusCode: 400,
+      statusCode: 409,
       statusMessage: "Cannot delete your own account",
     });
   }
 
   const userRepository = await createUserRepository(event);
 
-  await userRepository.delete(userId);
+  const deleted = await userRepository.delete(userId, sessionUser.teamId);
+  if (!deleted) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found",
+    });
+  }
 
-  return {
-    message: "User deleted successfully",
-  };
+  setResponseStatus(event, 204);
 });

@@ -9,6 +9,7 @@ apps/nuxt
 |   +-- assets             # CSS, images, fonts
 |   +-- components         # shared Vue components
 |   +-- composables        # shared composables (hooks)
+|   +-- lib                # shadcn-vue utilities used through explicit imports
 |   +-- pages              # file-based routing
 |   +-- stores             # Pinia stores
 |   +-- utils              # shared utility functions
@@ -24,6 +25,7 @@ apps/nuxt
 |   +-- discussions        # discussions feature
 |   +-- comments           # comments feature
 |   +-- users              # users management feature
+|   +-- teams              # teams feature
 |
 +-- server                 # Nitro server (API routes, middleware)
 |
@@ -81,6 +83,7 @@ export default defineNuxtConfig({
     "./layers/discussions",
     "./layers/comments",
     "./layers/users",
+    "./layers/teams",
   ],
 });
 ```
@@ -148,8 +151,14 @@ Schema is defined in `db/schema.ts` and migrations are managed with Drizzle Kit.
 Nuxt provides convenient import aliases for layers:
 
 ```typescript
+// Import an app-owned shared component
+import { Button } from '@/components/ui/button';
+
 // Import from a layer's shared types
 import type { Discussion } from '~discussions/shared/types';
+
+// Import an app-owned shared component from a feature layer
+import FormDrawer from '~~/app/components/app/FormDrawer.vue';
 
 // Import from root db
 import { discussions } from '~~/db/schema';
@@ -160,7 +169,7 @@ const discussionRepository = await createDiscussionRepository(event);
 
 ## Best Practices
 
-1. **Keep layers independent**: Avoid importing between feature layers. Compose features at the page level.
+1. **Keep feature internals independent**: Avoid importing between feature components or composables. Treat Pages as application composition boundaries that may import public APIs from multiple feature layers.
 
 2. **Use the Repository pattern**: All database access should go through repositories.
 

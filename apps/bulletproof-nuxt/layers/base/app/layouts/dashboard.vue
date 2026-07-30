@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Folder, Home, Users } from "lucide-vue-next";
-import { computed, type Component } from "vue";
-import AppSidebar from "~~/components/app/AppSidebar.vue";
-import SiteHeader from "~~/components/app/SiteHeader.vue";
-import { SidebarInset, SidebarProvider } from "~~/components/ui/sidebar";
-import { useLogout } from "#layers/auth/app/composables/useLogout";
+import { computed, ref, type Component } from "vue";
+import AppSidebar from "~~/app/components/app/AppSidebar.vue";
+import SiteHeader from "~~/app/components/app/SiteHeader.vue";
+import { SidebarInset, SidebarProvider } from "~~/app/components/ui/sidebar";
 import { ROLES } from "#layers/auth/app/composables/useAuthorization";
+import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
 type SideNavigationItem = {
   name: string;
@@ -18,7 +18,9 @@ type SideNavigationItem = {
 const router = useRouter();
 const route = useRoute();
 const { checkAccess } = useAuthorization();
-const logout = useLogout();
+const { addNotification } = useNotifications();
+const { clear: clearSession } = useUserSession();
+const isLoggingOut = ref(false);
 
 const isActive = (item: SideNavigationItem) => {
   const currentPath = route.path;
@@ -47,9 +49,39 @@ const navigation = computed<SideNavigationItem[]>(() => {
 });
 
 const handleLogout = async () => {
+  if (isLoggingOut.value) return;
+  isLoggingOut.value = true;
   const currentPath = route.fullPath;
-  await logout.mutate();
-  await router.push(`/auth/login?redirectTo=${encodeURIComponent(currentPath)}`);
+
+  try {
+    await clearSession();
+    addNotification({
+      type: "success",
+      title: "Logged Out",
+    });
+  }
+  catch {
+    addNotification({
+      type: "error",
+      title: "Logout Failed",
+    });
+    isLoggingOut.value = false;
+    return;
+  }
+
+  try {
+    await router.push(`/auth/login?redirectTo=${encodeURIComponent(currentPath)}`);
+  }
+  catch {
+    addNotification({
+      type: "error",
+      title: "Navigation Failed",
+      message: "You are logged out, but the login page could not be opened.",
+    });
+  }
+  finally {
+    isLoggingOut.value = false;
+  }
 };
 
 const handleProfileClick = () => {
