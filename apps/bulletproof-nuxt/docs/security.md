@@ -12,6 +12,10 @@ This application uses cookie-based session authentication with [nuxt-auth-utils]
 
 [Login API Example Code](../layers/auth/server/api/auth/login.post.ts)
 
+Protected API routes call `requireUserSession` before applying feature-specific authorization. Login, registration, and profile routes call `setUserSession` after changing authenticated user data.
+
+[Protected API Example Code](../layers/discussions/server/api/discussions/index.get.ts)
+
 ### Handling User Data
 
 User info should be considered a global piece of state which should be available from anywhere in the application. With nuxt-auth-utils, you can use the `useUserSession` composable to access user state. The application will assume the user is authenticated if a user object is present.

@@ -2,7 +2,6 @@
 @plugin "@tailwindcss/typography";
 
 @source "../../../app/**/*.{vue,js,ts}";
-@source "../../../components/**/*.{vue,js,ts}";
 @source "../../../layers/**/*.{vue,js,ts}";
 
 @theme {

@@ -1,17 +1,10 @@
 import { createUserRepository } from "~users/server/repository/userRepository";
 import { updateProfileInputSchema } from "~users/shared/schemas";
+import { serializeUser } from "#layers/auth/server/utils/serializeUser";
+import type { User } from "#layers/auth/shared/types";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = (await requireUserSession(event)).user as User;
 
   const body = await readBody(event);
   const validationResult = updateProfileInputSchema.safeParse(body);
@@ -19,12 +12,18 @@ export default defineEventHandler(async (event) => {
   if (!validationResult.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation failed",
-      data: validationResult.error.issues,
+      statusMessage: "Invalid profile",
     });
   }
 
   const userRepository = await createUserRepository(event);
+
+  if (await userRepository.emailExistsForOtherUser(validationResult.data.email, sessionUser.id)) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "Email already in use",
+    });
+  }
 
   const updatedUser = await userRepository.update(sessionUser.id, {
     email: validationResult.data.email,
@@ -33,20 +32,9 @@ export default defineEventHandler(async (event) => {
     bio: validationResult.data.bio,
   });
 
-  await setUserSession(event, {
-    user: {
-      id: updatedUser.id,
-      email: updatedUser.email,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      bio: updatedUser.bio,
-      role: updatedUser.role,
-      teamId: updatedUser.teamId,
-      createdAt: updatedUser.createdAt,
-    },
-  });
+  const serializedUser = serializeUser(updatedUser);
 
-  return {
-    data: updatedUser,
-  };
+  await setUserSession(event, { user: serializedUser });
+
+  setResponseStatus(event, 204);
 });

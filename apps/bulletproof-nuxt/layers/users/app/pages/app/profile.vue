@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UpdateProfile from "~users/app/components/UpdateProfile.vue";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 definePageMeta({

@@ -22,7 +22,7 @@ If you want the current recommended Nuxt setup, start with:
 
 - [apps/bulletproof-nuxt](apps/bulletproof-nuxt)
 
-Technical decisions for actively maintained apps are documented in the [Technical Radar](docs/technical-radar.md).
+Technical decisions for actively maintained apps are documented in the [Technical Radar](docs/technical-radar.md). Confirmed guidance is collected in the [Nuxt Data Fetching Practices](docs/practices/use-fetch/index.md).
 
 ### Canonical Apps
 

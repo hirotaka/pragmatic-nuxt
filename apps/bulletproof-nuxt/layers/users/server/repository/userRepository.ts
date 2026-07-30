@@ -1,6 +1,6 @@
 import type { H3Event } from "h3";
 import { users } from "~~/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { and, desc, eq, ne } from "drizzle-orm";
 
 export interface User {
   id: string;
@@ -57,6 +57,15 @@ export const createUserRepository = async (event: H3Event) => {
       teamId: result.teamId,
       createdAt: result.createdAt,
     };
+  };
+
+  const emailExistsForOtherUser = async (email: string, userId: string): Promise<boolean> => {
+    const result = await db.query.users.findFirst({
+      columns: { id: true },
+      where: and(eq(users.email, email), ne(users.id, userId)),
+    });
+
+    return Boolean(result);
   };
 
   const findAll = async (teamId: string): Promise<User[]> => {
@@ -144,13 +153,19 @@ export const createUserRepository = async (event: H3Event) => {
     };
   };
 
-  const remove = async (id: string): Promise<void> => {
-    await db.delete(users).where(eq(users.id, id));
+  const remove = async (id: string, teamId: string): Promise<boolean> => {
+    const [deleted] = await db
+      .delete(users)
+      .where(and(eq(users.id, id), eq(users.teamId, teamId)))
+      .returning({ id: users.id });
+
+    return Boolean(deleted);
   };
 
   return {
     findByEmail,
     findById,
+    emailExistsForOtherUser,
     findAll,
     create,
     update,

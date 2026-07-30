@@ -31,6 +31,12 @@ Import aliases should always be configured and used because it makes it easier t
 import type { User } from '~auth/shared/types'
 import { useDiscussions } from '~discussions/app/composables/useDiscussions'
 
+// App imports
+import { Button } from '@/components/ui/button'
+
+// App-owned shared components imported from a feature layer
+import FormDrawer from '~~/app/components/app/FormDrawer.vue'
+
 // Root imports
 import { discussions } from '~~/db/schema'
 ```
@@ -39,15 +45,19 @@ Available aliases in this project:
 
 | Alias | Path |
 |-------|------|
+| `@` | `app/` directory |
 | `~` | `app/` directory |
 | `~~` | Root directory |
 | `~auth` | `layers/auth/` |
 | `~discussions` | `layers/discussions/` |
 | `~comments` | `layers/comments/` |
 | `~users` | `layers/users/` |
+| `~teams` | `layers/teams/` |
 | `~base` | `layers/base/` |
 
-These aliases are defined in `nuxt.config.ts` and work seamlessly with TypeScript and IDE autocompletion.
+Nuxt provides the `@`, `~`, and `~~` aliases. Named layer aliases are configured by each layer and work with TypeScript and IDE autocompletion.
+
+App-owned shared components use explicit imports and are not globally scanned by Nuxt. `shadcn-nuxt` owns UI component registration from the generated `app/components/ui/**/index.ts` barrels, while feature layers retain Nuxt's default component auto-registration.
 
 #### File naming conventions
 
@@ -55,7 +65,7 @@ We can also enforce the file naming conventions and folder naming conventions in
 
 | Type | Convention | Example |
 |------|------------|---------|
-| Vue Components | PascalCase | `CreateDiscussionForm.vue` |
+| Vue Components | PascalCase | `CreateDiscussion.vue` |
 | Composables | camelCase with `use` prefix | `useDiscussions.ts` |
 | Types | PascalCase | `Discussion`, `User` |
 | API Routes | kebab-case with method suffix | `index.get.ts`, `[id].delete.ts` |

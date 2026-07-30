@@ -35,6 +35,26 @@ Good Server Cache Solutions for Nuxt:
 
 [Server Cache State Example Code](../layers/discussions/app/composables/useDiscussions.ts)
 
+### Nuxt AsyncData Ownership
+
+Feature composables own page-read URLs and options and return native AsyncData. See [API Layer](./api-layer.md) for app placement and the [Nuxt Data Fetching Practices](../../../docs/practices/use-fetch/index.md) for detailed guidance.
+
+### Accumulated Comments State
+
+Comments keep accumulated rows, pagination, and loading in the comments feature composable because later pages append to the current list.
+
+[Comments State](../layers/comments/app/composables/useComments.ts)
+
+### Mutation Completion Wiring
+
+Comment create/delete and user delete components own local interaction state and coordinate their feature actions with the affected read owner.
+
+### Auth Session Synchronization
+
+Auth actions use `useUserSession().fetch()` after login, registration, and profile updates. Logout uses `useUserSession().clear()`. The module remains the owner of cookie-backed session state.
+
+[Login Session Refresh Example Code](../layers/auth/app/composables/useLogin.ts)
+
 ## Form State
 
 Forms are a crucial part of any application, and managing form state effectively is essential for a seamless user experience. This project uses Regle with Zod v4 for type-safe form validation.
@@ -53,7 +73,7 @@ Validation libraries:
 - [zod](https://github.com/colinhacks/zod) - Used in this project
 - [yup](https://github.com/jquense/yup)
 
-[Form Example Code](../layers/base/app/components/ui/Form.vue)
+[Form Example Code](../app/components/form/Form.vue)
 
 ## URL State
 

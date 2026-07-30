@@ -106,7 +106,7 @@ Archived Apps are kept for historical context only and are not actively maintain
 | Authentication | nuxt-auth-utils | Adopt | Default | Default authentication foundation |
 | Database | Drizzle ORM | Adopt | Default | Default ORM for persistence |
 | Testing | Vitest / Playwright | Adopt | Default | Default unit and E2E testing stack |
-| Data Fetching | `useFetch` | Adopt | Default | Default Nuxt data fetching primitive |
+| Data Fetching | `useFetch` | Adopt | Default | Default Nuxt primitive for page-rendering reads |
 | Server State | Pinia Colada | Adopt | Contextual | Use for dashboard-like and mutation-heavy flows |
 
 ## Forms Policy
@@ -123,24 +123,11 @@ distribution, and accessibility props.
 
 ## Data Fetching Policy
 
-`useFetch` is the default data fetching primitive for Nuxt applications.
+Compatible consumers may share Nuxt AsyncData through the same feature composable when Nuxt's lifecycle and request identity are sufficient. See [Share AsyncData Through Feature Composables](./practices/use-fetch/shared-async-data.md).
 
-Pinia Colada is adopted for applications or features that require richer client-side server-state management, such as dashboards, complex forms, optimistic updates, cache invalidation, or repeated API interactions.
+Pinia Colada is adopted for applications or features that require explicit cache operations, optimistic updates, complex invalidation, or broader cross-view server-state coordination. Component sharing alone does not require Pinia Colada.
 
-Prefer `useFetch` when:
-
-- data is page-scoped;
-- SSR-friendly fetching is sufficient;
-- there is no complex cache invalidation;
-- server state is not shared broadly across components.
-
-Use Pinia Colada when:
-
-- server-state cache is shared across components;
-- explicit cache invalidation is required;
-- there are multiple related mutations;
-- optimistic updates improve UX;
-- dashboard-style filtering, pagination, or refresh flows are present.
+See the [Nuxt Data Fetching Practices](./practices/use-fetch/index.md) for the confirmed `useFetch` and imperative-request boundaries.
 
 ## Application Defaults
 

@@ -1,28 +1,22 @@
 import type { RegisterInput } from "~auth/shared/schemas";
-import type { User } from "~auth/shared/types";
-import { useMutation } from "#layers/base/app/composables/useMutation";
+import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
-interface UseRegisterConfig {
-  onSuccess?: (user: User) => void;
-}
+export const useRegister = () => {
+  const { $api } = useNuxtApp();
+  const { fetch: refreshSession } = useUserSession();
+  const { addNotification } = useNotifications();
 
-export const useRegister = (config?: UseRegisterConfig) => {
-  const { fetch } = useUserSession();
+  return async (input: RegisterInput): Promise<void> => {
+    await $api("/api/auth/register", {
+      method: "POST",
+      body: input,
+    });
 
-  return useMutation<RegisterInput, User>(
-    async (input: RegisterInput) => {
-      const response = await $fetch<{ user: User }>("/api/auth/register", {
-        method: "POST",
-        body: input,
-      });
+    await refreshSession();
 
-      // Refresh the session from the server
-      await fetch();
-
-      return response.user;
-    },
-    {
-      onSuccess: config?.onSuccess,
-    },
-  );
+    addNotification({
+      type: "success",
+      title: "Account Created",
+    });
+  };
 };

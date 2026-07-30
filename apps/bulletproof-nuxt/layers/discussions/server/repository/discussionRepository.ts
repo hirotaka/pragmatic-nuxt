@@ -1,10 +1,18 @@
 import type { H3Event } from "h3";
-import type {
-  Discussion,
-  PaginatedDiscussions,
-} from "~discussions/shared/types";
-import { discussions, users } from "~~/db/schema";
+import { discussions } from "~~/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
+import type { PaginatedResult } from "#layers/base/shared/types/pagination";
+
+export type DiscussionWithAuthor = Pick<
+  typeof discussions.$inferSelect,
+  "id" | "title" | "body" | "authorId" | "teamId" | "createdAt" | "updatedAt"
+> & {
+  author: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+};
 
 export const createDiscussionRepository = async (event: H3Event) => {
   const db = await useDb(event);
@@ -13,7 +21,7 @@ export const createDiscussionRepository = async (event: H3Event) => {
     teamId: string;
     page: number;
     limit: number;
-  }): Promise<PaginatedDiscussions> => {
+  }): Promise<PaginatedResult<DiscussionWithAuthor>> => {
     const { teamId, page, limit } = params;
     const offset = (page - 1) * limit;
 
@@ -40,6 +48,8 @@ export const createDiscussionRepository = async (event: H3Event) => {
 
     const total = totalResult[0]?.count ?? 0;
 
+    const totalPages = Math.ceil(total / limit);
+
     return {
       data: results.map((discussion: typeof results[number]) => ({
         id: discussion.id,
@@ -55,12 +65,13 @@ export const createDiscussionRepository = async (event: H3Event) => {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit),
+        totalPages,
+        hasMore: page < totalPages,
       },
     };
   };
 
-  const findById = async (id: string): Promise<Discussion | null> => {
+  const findById = async (id: string): Promise<DiscussionWithAuthor | null> => {
     const result = await db.query.discussions.findFirst({
       where: eq(discussions.id, id),
       with: {
@@ -91,7 +102,7 @@ export const createDiscussionRepository = async (event: H3Event) => {
   const findByIdAndTeam = async (
     id: string,
     teamId: string,
-  ): Promise<Discussion | null> => {
+  ): Promise<DiscussionWithAuthor | null> => {
     const result = await db.query.discussions.findFirst({
       where: and(eq(discussions.id, id), eq(discussions.teamId, teamId)),
       with: {
@@ -124,32 +135,8 @@ export const createDiscussionRepository = async (event: H3Event) => {
     body: string;
     authorId: string;
     teamId: string;
-  }): Promise<Discussion> => {
-    const [discussion] = await db.insert(discussions).values(data).returning();
-
-    if (!discussion) {
-      throw new Error("Failed to create discussion");
-    }
-
-    const author = await db.query.users.findFirst({
-      where: eq(users.id, discussion.authorId),
-      columns: {
-        id: true,
-        firstName: true,
-        lastName: true,
-      },
-    });
-
-    return {
-      id: discussion.id,
-      title: discussion.title,
-      body: discussion.body,
-      authorId: discussion.authorId,
-      teamId: discussion.teamId,
-      createdAt: discussion.createdAt,
-      updatedAt: discussion.updatedAt,
-      author: author!,
-    };
+  }): Promise<void> => {
+    await db.insert(discussions).values(data);
   };
 
   const update = async (
@@ -158,36 +145,16 @@ export const createDiscussionRepository = async (event: H3Event) => {
       title?: string;
       body?: string;
     },
-  ): Promise<Discussion> => {
+  ): Promise<void> => {
     const [discussion] = await db
       .update(discussions)
       .set(data)
       .where(eq(discussions.id, id))
-      .returning();
+      .returning({ id: discussions.id });
 
     if (!discussion) {
       throw new Error("Failed to update discussion");
     }
-
-    const author = await db.query.users.findFirst({
-      where: eq(users.id, discussion.authorId),
-      columns: {
-        id: true,
-        firstName: true,
-        lastName: true,
-      },
-    });
-
-    return {
-      id: discussion.id,
-      title: discussion.title,
-      body: discussion.body,
-      authorId: discussion.authorId,
-      teamId: discussion.teamId,
-      createdAt: discussion.createdAt,
-      updatedAt: discussion.updatedAt,
-      author: author!,
-    };
   };
 
   const remove = async (id: string): Promise<void> => {

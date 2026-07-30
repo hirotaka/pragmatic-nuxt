@@ -10,7 +10,7 @@ export default defineVitestConfig({
       "**/dist/**",
       "**/.nuxt/**",
       "**/e2e/**",
-      "**/__tests__/integration/**",
+      "**/__evidence__/**",
     ],
     coverage: {
       provider: "v8",

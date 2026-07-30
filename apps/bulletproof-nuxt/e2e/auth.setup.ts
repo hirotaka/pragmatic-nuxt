@@ -1,5 +1,6 @@
 import { test as setup } from "@nuxt/test-utils/playwright";
 import { createUser } from "../test/data-generators";
+import { waitForNuxtHydration } from "./support/nuxt-navigation";
 
 const authFile = "e2e/.auth/user.json";
 
@@ -27,6 +28,7 @@ setup("authenticate", async ({ page, goto }) => {
   await page.getByLabel("Team Name").fill(user.teamName);
   await page.getByRole("button", { name: "Register" }).click();
   await page.waitForURL("/app");
+  await waitForNuxtHydration(page);
 
   // log out:
   await page.getByRole("button", { name: "Open user menu" }).click();
@@ -40,6 +42,7 @@ setup("authenticate", async ({ page, goto }) => {
   await page.getByLabel("Password").fill(user.password);
   await page.getByRole("button", { name: "Log in" }).click();
   await page.waitForURL("/app");
+  await waitForNuxtHydration(page);
 
   await page.context().storageState({ path: authFile });
 });

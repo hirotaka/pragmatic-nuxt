@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { MoreHorizontal, Trash } from "lucide-vue-next";
-import ConfirmationDialog from "~~/components/app/ConfirmationDialog.vue";
-import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
+import { Button } from "~~/app/components/ui/button";
 import {
   DropdownContent,
   DropdownItem,
   DropdownRoot,
   DropdownTrigger,
-} from "@/components/ui/dropdown";
+} from "~~/app/components/ui/dropdown";
 import { useDeleteDiscussion } from "~discussions/app/composables/useDeleteDiscussion";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 import { useUser } from "#layers/auth/app/composables/useUser";
@@ -17,6 +17,7 @@ interface DeleteDiscussionProps {
   id: string;
   asMenuItem?: boolean;
   actionLabel?: string;
+  refresh: () => Promise<void>;
 }
 
 const props = withDefaults(defineProps<DeleteDiscussionProps>(), {
@@ -26,25 +27,29 @@ const { addNotification } = useNotifications();
 const { isAdmin } = useUser();
 
 const isOpen = ref(false);
+const isPending = ref(false);
 
-const deleteDiscussion = useDeleteDiscussion({
-  onSuccess: async () => {
-    addNotification({
-      type: "success",
-      title: "Discussion Deleted",
-    });
-    await refreshNuxtData();
-    isOpen.value = false;
-  },
-});
+const deleteDiscussion = useDeleteDiscussion();
 
 const handleDelete = async () => {
+  isPending.value = true;
   try {
-    await deleteDiscussion.mutate(props.id);
+    await deleteDiscussion(props.id);
   }
   catch {
-    // Error is already handled in the composable
+    // `$api` reports the request failure; keep the dialog open for another attempt.
+    isPending.value = false;
+    return;
   }
+
+  addNotification({
+    type: "success",
+    title: "Discussion Deleted",
+  });
+  // The read owner reports refresh failures without changing mutation success.
+  await props.refresh().catch(() => undefined);
+  isOpen.value = false;
+  isPending.value = false;
 };
 </script>
 
@@ -78,7 +83,7 @@ const handleDelete = async () => {
       body="Are you sure you want to delete this discussion?"
       confirm-text="Delete Discussion"
       cancel-text="Cancel"
-      :is-loading="deleteDiscussion.isPending.value"
+      :is-loading="isPending"
       @confirm="handleDelete"
     >
       <template

@@ -1,6 +1,7 @@
 import { createUserRepository } from "#layers/users/server/repository/userRepository";
 import { loginInputSchema } from "~auth/shared/schemas";
 import { customVerifyPassword } from "~auth/server/utils/password";
+import { serializeUser } from "~auth/server/utils/serializeUser";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -9,8 +10,7 @@ export default defineEventHandler(async (event) => {
   if (!validationResult.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation failed",
-      data: validationResult.error.issues,
+      statusMessage: "Invalid login",
     });
   }
 
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: "Invalid username or password",
+      statusMessage: "Invalid email or password",
     });
   }
 
@@ -30,33 +30,12 @@ export default defineEventHandler(async (event) => {
   if (!isPasswordValid) {
     throw createError({
       statusCode: 401,
-      statusMessage: "Invalid username or password",
+      statusMessage: "Invalid email or password",
     });
   }
 
-  await setUserSession(event, {
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      role: user.role,
-      teamId: user.teamId,
-      createdAt: user.createdAt,
-    },
-  });
+  const serializedUser = serializeUser(user);
 
-  return {
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      role: user.role,
-      teamId: user.teamId,
-      createdAt: user.createdAt,
-    },
-  };
+  await setUserSession(event, { user: serializedUser });
+  setResponseStatus(event, 204);
 });

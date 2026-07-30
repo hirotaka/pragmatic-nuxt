@@ -1,22 +1,14 @@
 import { updateDiscussionInputSchema } from "~discussions/shared/schemas";
 import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
+import type { User } from "#layers/auth/shared/types";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = (await requireUserSession(event)).user as User;
 
   if (!sessionUser.teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "User must belong to a team",
+      statusMessage: "Team membership required",
     });
   }
 
@@ -43,7 +35,7 @@ export default defineEventHandler(async (event) => {
   if (existingDiscussion.authorId !== sessionUser.id) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Forbidden - Only the author can update this discussion",
+      statusMessage: "Discussion update not allowed",
     });
   }
 
@@ -53,12 +45,11 @@ export default defineEventHandler(async (event) => {
   if (!validationResult.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation failed",
-      data: validationResult.error.issues,
+      statusMessage: "Invalid discussion",
     });
   }
 
-  const discussion = await discussionRepository.update(id, validationResult.data);
+  await discussionRepository.update(id, validationResult.data);
 
-  return { discussion };
+  setResponseStatus(event, 204);
 });
