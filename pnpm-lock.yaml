@@ -91,7 +91,7 @@ importers:
         version: 1.0.0(vue@3.5.40(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.3
+        version: 18.0.7
       nuxt:
         specifier: ^4.2.1
         version: 4.4.5(04eace7715c6332e818e7c14c8758f0b)
@@ -242,7 +242,7 @@ importers:
         version: 1.0.0(vue@3.5.40(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.3
+        version: 18.0.7
       nuxt:
         specifier: ^4.2.1
         version: 4.4.5(@babel/core@7.29.7)(@babel/plugin-proposal-decorators@7.29.0(@babel/core@7.29.7))(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@libsql/client@0.17.4)(@parcel/watcher@2.5.6)(@pinia/colada@1.3.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))(@types/node@24.12.3)(@vue/compiler-sfc@3.5.40)(cac@6.7.14)(db0@0.3.4(@libsql/client@0.17.4)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4))(eslint@10.3.0(jiti@2.6.1))(ioredis@5.10.1)(lightningcss@1.32.0)(magicast@0.5.2)(meow@13.2.0)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.60.3))(rollup@4.60.3)(srvx@0.11.15)(terser@5.47.1)(tsx@4.21.0)(typescript@6.0.3)(vite@7.3.3(@types/node@24.12.3)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))(vue-tsc@3.2.8(typescript@6.0.3))(yaml@2.8.4)
@@ -408,7 +408,7 @@ importers:
         version: 1.0.0(vue@3.5.40(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.3
+        version: 18.0.7
       nuxt:
         specifier: ^4.2.1
         version: 4.4.5(@babel/core@7.29.7)(@babel/plugin-proposal-decorators@7.29.0(@babel/core@7.29.7))(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@libsql/client@0.17.4)(@parcel/watcher@2.5.6)(@pinia/colada@1.3.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))(@types/node@24.12.3)(@vue/compiler-sfc@3.5.40)(cac@6.7.14)(db0@0.3.4(@libsql/client@0.17.4)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4))(eslint@10.3.0(jiti@2.6.1))(ioredis@5.10.1)(lightningcss@1.32.0)(magicast@0.5.2)(meow@13.2.0)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.60.3))(rollup@4.60.3)(srvx@0.11.15)(terser@5.47.1)(tsx@4.21.0)(typescript@6.0.3)(vite@7.3.3(@types/node@24.12.3)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))(vue-tsc@3.2.8(typescript@6.0.3))(yaml@2.8.4)
@@ -565,7 +565,7 @@ importers:
         version: 1.0.0(vue@3.5.40(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.3
+        version: 18.0.7
       nuxt:
         specifier: ^4.2.1
         version: 4.4.5(@babel/core@7.29.7)(@babel/plugin-proposal-decorators@7.29.0(@babel/core@7.29.7))(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@libsql/client@0.17.4)(@parcel/watcher@2.5.6)(@pinia/colada@1.3.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))(@types/node@24.12.3)(@vue/compiler-sfc@3.5.40)(cac@6.7.14)(db0@0.3.4(@libsql/client@0.17.4)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4))(eslint@10.3.0(jiti@2.6.1))(ioredis@5.10.1)(lightningcss@1.32.0)(magicast@0.5.2)(meow@13.2.0)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.60.3))(rollup@4.60.3)(srvx@0.11.15)(terser@5.47.1)(tsx@4.21.0)(typescript@6.0.3)(vite@7.3.3(@types/node@24.12.3)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))(vue-tsc@3.2.8(typescript@6.0.3))(yaml@2.8.4)
@@ -722,7 +722,7 @@ importers:
         version: 1.0.0(vue@3.5.40(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.3
+        version: 18.0.7
       nuxt:
         specifier: ^4.2.1
         version: 4.4.5(@babel/core@7.29.7)(@babel/plugin-proposal-decorators@7.29.0(@babel/core@7.29.7))(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@libsql/client@0.17.4)(@parcel/watcher@2.5.6)(@pinia/colada@1.3.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))(@types/node@24.12.3)(@vue/compiler-sfc@3.5.40)(cac@6.7.14)(db0@0.3.4(@libsql/client@0.17.4)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4))(eslint@10.3.0(jiti@2.6.1))(ioredis@5.10.1)(lightningcss@1.32.0)(magicast@0.5.2)(meow@13.2.0)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.60.3))(rollup@4.60.3)(srvx@0.11.15)(terser@5.47.1)(tsx@4.21.0)(typescript@6.0.3)(vite@7.3.3(@types/node@24.12.3)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))(vue-tsc@3.2.8(typescript@6.0.3))(yaml@2.8.4)
@@ -876,7 +876,7 @@ importers:
         version: 1.0.0(vue@3.5.40(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.3
+        version: 18.0.7
       nuxt:
         specifier: ^4.2.1
         version: 4.4.5(@babel/core@7.29.7)(@babel/plugin-proposal-decorators@7.29.0(@babel/core@7.29.7))(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@libsql/client@0.17.4)(@parcel/watcher@2.5.6)(@pinia/colada@1.3.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))(@types/node@24.12.3)(@vue/compiler-sfc@3.5.40)(cac@6.7.14)(db0@0.3.4(@libsql/client@0.17.4)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4))(eslint@10.3.0(jiti@2.6.1))(ioredis@5.10.1)(lightningcss@1.32.0)(magicast@0.5.2)(meow@13.2.0)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.60.3))(rollup@4.60.3)(srvx@0.11.15)(terser@5.47.1)(tsx@4.21.0)(typescript@6.0.3)(vite@7.3.3(@types/node@24.12.3)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))(vue-tsc@3.2.8(typescript@6.0.3))(yaml@2.8.4)
@@ -1030,7 +1030,7 @@ importers:
         version: 1.0.0(vue@3.5.40(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.3
+        version: 18.0.7
       nanoid:
         specifier: ^5.1.6
         version: 5.1.11
@@ -7584,8 +7584,8 @@ packages:
   map-or-similar@1.5.0:
     resolution: {integrity: sha512-0aF7ZmVon1igznGI4VS30yugpduQW3y3GkcgGJOp7d8x8QrizhigUxjI/m2UojsXXto+jLAH3KSz+xOJTiORjg==}
 
-  marked@18.0.3:
-    resolution: {integrity: sha512-7VT90JOkDeaRWpfjOReRGPEKn0ecdARBkDGL+tT1wZY0efPPqkUxLUSmzy/C7TIylQYJC9STISEsCHrqb/7VIA==}
+  marked@18.0.7:
+    resolution: {integrity: sha512-iDVQ5ldaiKXn6b2JroX5kgRfmwgqolW7NpaEzTl1k/2Zh1njIEN9yniyLV/mOvWwtsE8OGgkjsCYvijuPk1dtA==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -16744,7 +16744,7 @@ snapshots:
 
   map-or-similar@1.5.0: {}
 
-  marked@18.0.3: {}
+  marked@18.0.7: {}
 
   math-intrinsics@1.1.0: {}
 
