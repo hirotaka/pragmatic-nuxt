@@ -58,7 +58,7 @@ pnpm db:reset
 
 The seed converges the owned demo teams and users and stops without changing data when an unknown team-name or email collision is found.
 
-Hosted CI, Cloudflare D1, remote reset, and deployment lifecycle evidence are tracked separately and are not established by these local commands.
+Hosted CI validates this same Local SQLite lifecycle on a fresh GitHub runner. Cloudflare D1, remote reset, and deployment lifecycle evidence are tracked separately and are not established by these local commands.
 
 ## Support Files
 
