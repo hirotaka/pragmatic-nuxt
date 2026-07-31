@@ -26,10 +26,39 @@ Temporary evidence is excluded from the default durable unit suite. An empty tem
 | `pnpm test:evidence:exploration` | Run a non-empty Exploration inventory explicitly. |
 | `pnpm test:evidence:characterization` | Run a non-empty Characterization inventory explicitly. |
 
-## Database-Backed E2E and CI
+## Database-Backed E2E
 
-Database-backed E2E and CI instructions are unavailable pending database
-lifecycle verification.
+The canonical local and E2E lifecycle uses NuxtHub's committed migrations. E2E preparation removes only the dedicated `.data/e2e` database, lets NuxtHub apply migrations during the build, then uses `start-server-and-test` to manage preview and Playwright.
+
+Prepare a fresh migration-only database characterization:
+
+```bash
+pnpm test:e2e:prepare
+```
+
+Run the production-like local E2E lifecycle:
+
+```bash
+pnpm test:e2e:ci
+```
+
+The lifecycle does not use the developer's default `.data/db/sqlite.db`, does not create `db/test.db`, and does not use schema push. Do not run overlapping Nuxt generation or E2E lifecycles in the same checkout.
+
+Local demo data is an explicit operation. Run `pnpm db:migrate` first; the seed command uses the generated Local package and is not added to E2E preparation or dev startup:
+
+```bash
+pnpm db:seed
+```
+
+For a disposable Local database cycle, remove only the database storage and rebuild it from committed migrations:
+
+```bash
+pnpm db:reset
+```
+
+The seed converges the owned demo teams and users and stops without changing data when an unknown team-name or email collision is found.
+
+Hosted CI, Cloudflare D1, remote reset, and deployment lifecycle evidence are tracked separately and are not established by these local commands.
 
 ## Support Files
 
