@@ -37,8 +37,8 @@ import { Button } from '@/components/ui/button'
 // App-owned shared components imported from a feature layer
 import FormDrawer from '~~/app/components/app/FormDrawer.vue'
 
-// Root imports
-import { discussions } from '~~/db/schema'
+// NuxtHub-generated database schema
+import { discussions } from '@nuxthub/db/schema'
 ```
 
 Available aliases in this project:
@@ -58,6 +58,18 @@ Available aliases in this project:
 Nuxt provides the `@`, `~`, and `~~` aliases. Named layer aliases are configured by each layer and work with TypeScript and IDE autocompletion.
 
 App-owned shared components use explicit imports and are not globally scanned by Nuxt. `shadcn-nuxt` owns UI component registration from the generated `app/components/ui/**/index.ts` barrels, while feature layers retain Nuxt's default component auto-registration.
+
+#### Database ownership
+
+The root app owns the Drizzle schema source at `server/db/schema.ts` and SQLite
+migration sources at `server/db/migrations/sqlite`. NuxtHub discovers those
+sources and owns the generated database runtime and schema package surfaces:
+`@nuxthub/db` and `@nuxthub/db/schema`.
+
+Feature repositories import those generated packages directly. They remain
+responsible for domain queries, mapping, pagination, and domain errors; API
+routes remain responsible for validation, authorization, and serialization.
+Do not add app-owned connection, binding, or driver-selection wrappers.
 
 #### File naming conventions
 

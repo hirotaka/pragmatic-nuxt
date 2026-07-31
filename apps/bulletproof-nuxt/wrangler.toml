@@ -3,7 +3,6 @@ pages_build_output_dir = "./dist"
 
 [vars]
 NITRO_PRESET = "cloudflare-pages"
-DATABASE_SQLITE_ADAPTER = "d1"
 
 # Production D1 binding (default)
 [[d1_databases]]
@@ -15,7 +14,6 @@ database_id = "2799bdc6-9186-486b-a239-4fb2885e3302"
 [env.preview]
 [env.preview.vars]
 NITRO_PRESET = "cloudflare-pages"
-DATABASE_SQLITE_ADAPTER = "d1"
 
 [[env.preview.d1_databases]]
 binding = "DB"

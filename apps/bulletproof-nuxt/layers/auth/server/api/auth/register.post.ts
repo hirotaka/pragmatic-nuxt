@@ -17,8 +17,8 @@ export default defineEventHandler(async (event) => {
 
   const data = validationResult.data;
 
-  const userRepository = await createUserRepository(event);
-  const teamRepository = await createTeamRepository(event);
+  const userRepository = createUserRepository();
+  const teamRepository = createTeamRepository();
 
   const existingUser = await userRepository.findByEmail(data.email);
   if (existingUser) {

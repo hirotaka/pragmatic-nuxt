@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     "./layers/teams",
   ],
   modules: [
+    "@nuxthub/core",
     "@pinia/nuxt",
     "nuxt-auth-utils",
     "@nuxt/eslint",
@@ -38,6 +39,9 @@ export default defineNuxtConfig({
     sharedPrerenderData: true,
   },
   compatibilityDate: "2025-07-15",
+  hub: {
+    db: "sqlite",
+  },
   vite: {
     plugins: [tailwindcss()],
   },

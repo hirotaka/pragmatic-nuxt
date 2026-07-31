@@ -8,15 +8,22 @@ Nuxt provides a built-in server powered by Nitro with file-based API routing. AP
 
 ### Use the Repository Pattern for Data Access
 
-Rather than putting database queries directly in API routes, it is recommended to use the Repository pattern. Repositories provide a clean abstraction layer between your API routes and data access logic, making the code more testable and maintainable.
+Rather than putting database queries directly in API routes, use the Repository pattern. Repositories keep domain data access separate from request validation, authorization, and response serialization.
 
 Each repository should:
 
-- Accept a database instance (obtained via `useDb`)
-- Expose methods for CRUD operations
-- Return typed data using TypeScript interfaces
+- Import the generated runtime from `@nuxthub/db`
+- Import generated schema exports from `@nuxthub/db/schema`
+- Own its feature's domain queries, mapping, pagination, and domain errors
+- Expose typed methods to API routes without wrapping connection or driver selection
 
 [Repository Example Code](../layers/discussions/server/repository/discussionRepository.ts)
+
+The app-owned schema source is `server/db/schema.ts`, and SQLite migration
+sources live in `server/db/migrations/sqlite`. NuxtHub discovers those sources
+and owns generation of the runtime and schema package surfaces. API routes
+create the relevant feature repository and keep their existing HTTP boundary
+responsibilities.
 
 ### Keep the JSON Wire Boundary Explicit
 

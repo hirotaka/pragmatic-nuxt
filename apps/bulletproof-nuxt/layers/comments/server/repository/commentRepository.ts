@@ -1,5 +1,5 @@
-import type { H3Event } from "h3";
-import { comments } from "~~/db/schema";
+import { db } from "@nuxthub/db";
+import { comments } from "@nuxthub/db/schema";
 import { eq, desc, sql } from "drizzle-orm";
 import type { PaginatedResult } from "#layers/base/shared/types/pagination";
 
@@ -19,9 +19,7 @@ export interface CommentRecord {
 
 export type PaginatedCommentRecords = PaginatedResult<CommentRecord>;
 
-export const createCommentRepository = async (event: H3Event) => {
-  const db = await useDb(event);
-
+export const createCommentRepository = () => {
   const findByDiscussionId = async (params: {
     discussionId: string;
     page: number;

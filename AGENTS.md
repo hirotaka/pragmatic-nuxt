@@ -18,16 +18,14 @@
 ## Commands agents guess wrong
 
 - Root `package.json` has no workspace lint/test/typecheck scripts; run checks inside each app directory.
-- Canonical Nuxt app (`apps/bulletproof-nuxt`) main checks:
-  - `pnpm build`
+- Canonical Nuxt app (`apps/bulletproof-nuxt`) structural checks while the NuxtHub DB lifecycle is unverified:
   - `pnpm test:unit`
   - `pnpm lint`
   - `pnpm type-check`
-- Canonical Nuxt focused E2E loop:
-  - `pnpm test:e2e:prepare`
-  - `pnpm test:e2e:dev`
-  - `NUXT_PORT=3100 pnpm test:e2e`
-- Canonical Nuxt CI-style E2E: `pnpm test:e2e:ci` (prepare DB, build, preview on `:3100`, then Playwright).
+  - `pnpm exec nuxt prepare`
+  - `pnpm db:generate` (must produce no migration delta)
+  - `NITRO_PRESET=cloudflare_module pnpm build`
+- Do not run normal `pnpm build`, dev, preview, migrate, E2E, CI-style E2E, remote reset, or deploy commands until the NuxtHub DB lifecycle is verified. These paths may apply migrations or target an unverified database identity.
 - Vue+Vite reference app (`apps/reference/bulletproof-vue-vite`) uses `pnpm run type-check` and `pnpm run test:e2e`.
 
 ## Environment and test quirks
@@ -40,7 +38,7 @@
 
 ## CI and commit hooks to mirror locally
 
-- Nuxt CI (`.github/workflows/nuxt-ci.yml`) runs, per Nuxt app: `build` -> `test:unit` -> `lint` -> `nuxi typecheck`, plus separate `test:e2e:ci` job.
+- Nuxt CI (`.github/workflows/nuxt-ci.yml`) still runs, per Nuxt app: `build` -> `test:unit` -> `lint` -> `nuxi typecheck`, plus separate `test:e2e:ci` job. The canonical app jobs are preserved but are not valid NuxtHub structural-checkpoint evidence until DB lifecycle verification is complete.
 - Vue+Vite CI (`.github/workflows/vue-vite-ci.yml`) runs: `build` -> `test:unit` -> `lint` -> `type-check`, plus E2E.
 - Pre-commit (`.husky/pre-commit`) runs `pnpm lint-staged` in every listed app, so commits can fail due to another app.
 - Commit messages are enforced by commitlint conventional config (`.husky/commit-msg`, `commitlint.config.js`).
@@ -49,8 +47,8 @@
 
 - Canonical Nuxt app is layer-based; root `nuxt.config.ts` extends `base`, `auth`, `discussions`, `comments`, `users`, `teams`.
 - Cross-feature changes may require edits in both root `nuxt.config.ts` and `layers/*/nuxt.config.ts`.
-- Server data access follows repository + `useDb(event)` pattern under each layer's `server/repository`.
-- DB adapter is runtime-switched by `DATABASE_SQLITE_ADAPTER`: default uses `DATABASE_URL`, `d1` uses Cloudflare D1 binding.
+- Canonical DB runtime and schema are owned by NuxtHub-generated packages; feature repositories retain domain queries.
+- Reference apps may retain historical custom DB adapters; do not assume they follow the canonical DB architecture.
 
 ## Documentation ownership
 

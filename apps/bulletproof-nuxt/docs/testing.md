@@ -5,9 +5,6 @@ Run testing commands from `apps/bulletproof-nuxt`.
 ## Prerequisites
 
 - Install dependencies with pnpm.
-- Copy `.env.example` to `.env` for local Nuxt commands.
-- Keep the committed `.env.test` for the test database and E2E server configuration.
-- Install the Playwright browser when it is not already available.
 
 ## Test Directories
 
@@ -29,37 +26,10 @@ Temporary evidence is excluded from the default durable unit suite. An empty tem
 | `pnpm test:evidence:exploration` | Run a non-empty Exploration inventory explicitly. |
 | `pnpm test:evidence:characterization` | Run a non-empty Characterization inventory explicitly. |
 
-## E2E Commands
+## Database-Backed E2E and CI
 
-Prepare the dedicated test database before a local E2E run:
-
-```bash
-pnpm test:e2e:prepare
-```
-
-This removes and recreates `db/test.db` using `.env.test`. Do not point `.env.test` at a development or production database.
-
-Start the Nuxt test server in one terminal:
-
-```bash
-pnpm test:e2e:dev
-```
-
-Run Playwright against the same port from another terminal:
-
-```bash
-NUXT_PORT=3100 pnpm test:e2e
-```
-
-The Playwright command expects an external Nuxt server. Keep `NUXT_PORT` aligned with the port used by `test:e2e:dev`, and check that the port belongs to the intended process before accepting a result.
-
-Use the CI-style wrapper to prepare the database, build the app, start a production preview on port `3100`, and run Playwright:
-
-```bash
-pnpm test:e2e:ci
-```
-
-Additional Playwright entry points are available as `test:e2e:ui` and `test:e2e:debug`.
+Database-backed E2E and CI instructions are unavailable pending database
+lifecycle verification.
 
 ## Support Files
 

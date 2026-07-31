@@ -1,5 +1,5 @@
-import type { H3Event } from "h3";
-import { users } from "~~/db/schema";
+import { db } from "@nuxthub/db";
+import { users } from "@nuxthub/db/schema";
 import { and, desc, eq, ne } from "drizzle-orm";
 
 export interface User {
@@ -17,9 +17,7 @@ export interface UserWithPassword extends User {
   password: string;
 }
 
-export const createUserRepository = async (event: H3Event) => {
-  const db = await useDb(event);
-
+export const createUserRepository = () => {
   const findByEmail = async (email: string): Promise<UserWithPassword | null> => {
     const result = await db.query.users.findFirst({
       where: eq(users.email, email),

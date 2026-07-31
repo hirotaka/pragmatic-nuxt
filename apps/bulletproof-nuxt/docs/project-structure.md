@@ -14,11 +14,6 @@ apps/nuxt
 |   +-- stores             # Pinia stores
 |   +-- utils              # shared utility functions
 |
-+-- db                     # database layer
-|   +-- migrations         # Drizzle migration files
-|   +-- schema.ts          # Drizzle ORM schema definitions
-|   +-- seed.ts            # database seeding script
-|
 +-- layers                 # feature-based layers
 |   +-- base               # base layer (shared server utilities)
 |   +-- auth               # authentication feature
@@ -27,7 +22,11 @@ apps/nuxt
 |   +-- users              # users management feature
 |   +-- teams              # teams feature
 |
-+-- server                 # Nitro server (API routes, middleware)
++-- server                 # root Nitro and database infrastructure
+|   +-- db
+|       +-- schema.ts      # app-owned Drizzle schema discovered by NuxtHub
+|       +-- migrations
+|           +-- sqlite     # SQLite migration SQL and Drizzle metadata
 |
 +-- e2e                    # Playwright E2E tests
 ```
@@ -100,51 +99,38 @@ export default defineNuxtConfig({
 
 5. **Team Collaboration**: Different team members can work on different layers.
 
-## Server-Side Architecture
-
-This project includes a full server-side implementation:
-
-```sh
-layers/base/server
-|
-+-- utils
-|   +-- db.ts              # D1 database connection (Cloudflare)
-|   +-- db-libsql.ts       # libSQL connection (local development)
-```
-
 ### Repository Pattern
 
-Each feature uses the Repository pattern for data access:
+Each feature uses the Repository pattern for domain data access. NuxtHub owns
+database connection and driver integration through generated packages, while
+feature repositories own queries, result mapping, pagination, and domain
+errors:
 
 ```typescript
-// layers/auth/server/repository/userRepository.ts
-export const createUserRepository = async (event: H3Event) => {
-  const db = await useDb(event);
+// layers/discussions/server/repository/discussionRepository.ts
+import { db } from '@nuxthub/db'
+import { discussions } from '@nuxthub/db/schema'
 
-  const findByEmail = async (email: string) => {
+export const createDiscussionRepository = () => {
+  const findById = async (id: string, teamId: string) => {
     // ...
-  };
-
-  const create = async (data: CreateUserData) => {
-    // ...
-  };
+  }
 
   return {
-    findByEmail,
-    create,
+    findById,
     // ...
-  };
-};
+  }
+}
 ```
 
 ## Database Layer
 
-The project uses Drizzle ORM with SQLite:
-
-- **Production**: Cloudflare D1
-- **Development**: libSQL (local SQLite)
-
-Schema is defined in `db/schema.ts` and migrations are managed with Drizzle Kit.
+The root app defines its Drizzle schema in `server/db/schema.ts` and keeps
+SQLite migration SQL and metadata in `server/db/migrations/sqlite`. NuxtHub
+discovers these sources and generates the database runtime at `@nuxthub/db`
+and schema exports at `@nuxthub/db/schema`. Application code imports those
+generated package surfaces rather than constructing a database connection or
+selecting a driver.
 
 ## Import Aliases
 
@@ -160,11 +146,11 @@ import type { Discussion } from '~discussions/shared/types';
 // Import an app-owned shared component from a feature layer
 import FormDrawer from '~~/app/components/app/FormDrawer.vue';
 
-// Import from root db
-import { discussions } from '~~/db/schema';
+// Import generated database schema
+import { discussions } from '@nuxthub/db/schema';
 
 // Auto-imported from layers
-const discussionRepository = await createDiscussionRepository(event);
+const discussionRepository = createDiscussionRepository();
 ```
 
 ## Best Practices
