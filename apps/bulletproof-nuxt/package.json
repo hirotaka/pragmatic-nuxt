@@ -3,7 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "bash -lc 'if [[ -z \"${WORKERS_CI_BRANCH:-}\" || \"$WORKERS_CI_BRANCH\" == \"main-worker\" ]]; then pnpm run build:production; else pnpm run build:preview; fi'",
+    "build:production": "NODE_OPTIONS=--max-old-space-size=4096 NITRO_PRESET=cloudflare_module nuxt build",
+    "build:preview": "NODE_OPTIONS=--max-old-space-size=4096 NITRO_PRESET=cloudflare_module CLOUDFLARE_ENV=preview nuxt build --envName preview",
     "dev": "nuxt dev",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -24,8 +26,10 @@
     "db:migrate": "nuxt db migrate",
     "db:reset": "rm -rf .data/db && pnpm db:migrate",
     "db:seed": "node --experimental-strip-types server/db/seed.ts",
-    "db:clear:d1": "wrangler d1 execute bulletproof-nuxt-db --remote --yes --file db/clear.sql",
-    "db:clear:d1:preview": "wrangler d1 execute bulletproof-nuxt-preview-db --remote --yes --file db/clear.sql",
+    "db:clear:d1": "wrangler d1 execute bulletproof-nuxt --remote --file db/clear.sql",
+    "db:clear:d1:preview": "wrangler d1 execute bulletproof-nuxt-preview --remote --file db/clear.sql",
+    "deploy:cloudflare": "sh -c 'pnpm exec wrangler --cwd .output/server d1 migrations apply DB --remote && pnpm exec wrangler --cwd .output deploy --keep-vars'",
+    "deploy:cloudflare:preview": "sh -c 'pnpm exec wrangler --cwd .output/server d1 migrations apply DB --remote && pnpm exec wrangler --cwd .output versions upload'",
     "lint": "eslint .",
     "type-check": "nuxt typecheck"
   },

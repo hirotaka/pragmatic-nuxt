@@ -1,5 +1,8 @@
 import tailwindcss from "@tailwindcss/vite";
 
+const isCloudflareBuild = process.env.NITRO_PRESET === "cloudflare_module";
+const isPreviewBuild = process.env.CLOUDFLARE_ENV === "preview";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // Layers configuration
@@ -40,7 +43,18 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-07-15",
   hub: {
-    db: "sqlite",
+    db: isCloudflareBuild
+      ? {
+          dialect: "sqlite",
+          driver: "d1",
+          connection: {
+            databaseId: isPreviewBuild
+              ? "e4519eb7-fe8b-4fa4-8f35-a8f33dc5eda0"
+              : "d51277bf-fa2b-4f23-a140-edafa3260319",
+          },
+          applyMigrationsDuringBuild: false,
+        }
+      : "sqlite",
     dir: process.env.NUXT_HUB_DIR || ".data",
   },
   vite: {
