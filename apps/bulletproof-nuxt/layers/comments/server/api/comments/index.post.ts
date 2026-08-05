@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
   const { body: commentBody, discussionId } = validationResult.data;
 
-  const commentRepository = await createCommentRepository(event);
+  const commentRepository = createCommentRepository();
 
   await commentRepository.create({
     body: commentBody,

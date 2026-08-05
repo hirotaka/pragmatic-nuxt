@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const discussionRepository = await createDiscussionRepository(event);
+  const discussionRepository = createDiscussionRepository();
 
   const discussion = await discussionRepository.findByIdAndTeam(id, sessionUser.teamId);
 

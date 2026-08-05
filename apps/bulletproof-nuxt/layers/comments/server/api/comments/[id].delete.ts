@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const commentRepository = await createCommentRepository(event);
+  const commentRepository = createCommentRepository();
 
   const existingComment = await commentRepository.findById(id);
 

@@ -2,32 +2,49 @@
 
 Nuxt applications can be deployed to various platforms. Since Nuxt is a full-stack framework with server-side capabilities, you'll need a platform that supports server-side rendering or serverless functions.
 
-## This Project: Cloudflare Pages + D1
+## Cloudflare Workers and D1
 
-This application is configured for deployment to [Cloudflare Pages](https://pages.cloudflare.com/) with [Cloudflare D1](https://developers.cloudflare.com/d1/) as the database.
+The app builds for Cloudflare Workers with `NITRO_PRESET=cloudflare_module`.
+Production and Preview builds select different D1 resources in `nuxt.config.ts`.
+The release scripts apply remote D1 migrations before publishing the Worker:
 
-### Why Cloudflare?
+```bash
+pnpm build
+pnpm deploy:cloudflare
+```
 
-- **Edge Computing**: Server code runs close to users globally
-- **D1 Database**: SQLite-compatible database with automatic replication
-- **Zero Cold Starts**: Fast serverless function execution
-- **Generous Free Tier**: Suitable for most projects
+Preview builds use the Preview environment and upload a version:
 
-### Deployment Steps
+```bash
+pnpm build:preview
+pnpm deploy:cloudflare:preview
+```
 
-1. Create a D1 database in Cloudflare Dashboard
-2. Update `wrangler.toml` with your database ID
-3. Connect your repository to Cloudflare Pages
-4. Set environment variables (`NUXT_SESSION_PASSWORD`)
-5. Deploy with build command: `pnpm db:migrate:d1 && NITRO_PRESET=cloudflare-pages pnpm build`
+Migration failure prevents the corresponding release command from publishing.
+Keep resource selection, migration application, and Worker publication as
+separate operational steps. PostgreSQL is an optional dialect path and is not
+the default Cloudflare deployment target.
 
-[Cloudflare Pages Configuration](../wrangler.toml)
+The Canonical D1 resources are a fresh-resource cutover. The application does
+not migrate data from the previous D1 resources, and the previous resources are
+not targets for reset, seed, or migration commands in this publication. Initial
+migration of the new Production and Preview resources must succeed before their
+corresponding release is considered ready. Existing-data continuity, backup,
+restore, and rollback evidence require a separately approved operational scope.
 
-[Nuxt Cloudflare Deployment Guide](https://nuxt.com/deploy/cloudflare)
+This publication keeps `main-worker` as the Cloudflare Production branch.
+Creating a review PR does not activate Production or change that selector.
+
+See the [Nuxt Cloudflare Deployment Guide](https://nuxt.com/deploy/cloudflare)
+and [Cloudflare D1 documentation](https://developers.cloudflare.com/d1/) for
+general platform information.
+
+See the [NuxtHub DB Practices](../../../docs/practices/nuxt-hub-db/index.md) for
+verified scope and limitations around D1, Workers, and PostgreSQL deployment.
 
 ## Alternative Deployment Platforms
 
-While this project is optimized for Cloudflare, Nuxt can be deployed to many platforms:
+Nuxt can be deployed to many platforms:
 
 - [Vercel](https://vercel.com/) - Great DX with automatic deployments
 - [Netlify](https://netlify.com/) - Easy setup with edge functions
