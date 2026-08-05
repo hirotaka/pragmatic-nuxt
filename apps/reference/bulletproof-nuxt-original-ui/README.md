@@ -1,8 +1,7 @@
 # Bulletproof Nuxt Original UI Reference
 
-This reference app preserves the Nuxt port of the original Bulletproof React UI
-composition. It is kept as a comparison surface after the canonical app adopted
-the shadcn-vue / Reka UI open-code composition.
+This app provides a Nuxt port of the original Bulletproof React UI composition
+for comparison with the shadcn-vue / Reka UI open-code composition.
 
 The app still uses Nuxt with SSR capabilities, Nuxt Layers architecture, and
 [Regle](https://reglejs.dev/) for form validation.

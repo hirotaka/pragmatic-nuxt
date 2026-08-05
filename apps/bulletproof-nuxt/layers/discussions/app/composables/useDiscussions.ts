@@ -1,38 +1,58 @@
-import type { PaginatedDiscussions } from "~discussions/shared/types";
+import { useAPI } from "#layers/base/app/composables/useAPI";
+import { usePaginatedData } from "#layers/base/app/composables/usePaginatedData";
+import type { Discussion } from "~discussions/shared/types";
 
-export function useDiscussions(params: {
+export async function useDiscussions(params: {
   page?: MaybeRefOrGetter<number>;
   limit?: MaybeRefOrGetter<number>;
 } = {}) {
-  const { data, status, error, execute, refresh } = useFetch<PaginatedDiscussions>(
+  const writablePage = isRef(params.page) && !isReadonly(params.page)
+    ? params.page as Ref<number>
+    : undefined;
+  const page = writablePage ?? ref(toValue(params.page) ?? 1);
+  const limit = computed(() => toValue(params.limit) ?? 10);
+
+  if (params.page !== undefined && !writablePage) {
+    watch(
+      () => toValue(params.page),
+      (nextPage) => {
+        if (nextPage !== undefined && page.value !== nextPage) {
+          page.value = nextPage;
+        }
+      },
+      { flush: "sync" },
+    );
+  }
+
+  const read = useAPI(
     "/api/discussions",
     {
       query: {
-        page: computed(() => toValue(params.page)),
-        limit: computed(() => toValue(params.limit)),
+        page,
+        limit,
       },
-      default: () => ({
-        data: [],
-        meta: {
-          page: 1,
-          limit: 10,
-          totalPages: 1,
-          total: 0,
-        },
-      }),
-      immediate: false,
+      watch: false,
     },
   );
 
-  const isPending = computed(() => status.value === "pending");
-  const isSuccess = computed(() => status.value === "success");
+  const pagination = usePaginatedData<Discussion>(read, {
+    strategy: "replace",
+    page,
+  });
 
-  return {
-    data,
-    isPending,
-    isSuccess,
-    error,
-    fetch: execute,
-    refresh,
-  };
+  watch(
+    limit,
+    () => {
+      if (page.value === 1) {
+        void pagination.loadPage(1);
+      }
+      else {
+        page.value = 1;
+      }
+    },
+    { flush: "sync" },
+  );
+
+  await read;
+  return pagination;
 }

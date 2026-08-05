@@ -1,40 +1,24 @@
 <script setup lang="ts">
-import { reactive, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 import { Pen } from "lucide-vue-next";
 import { useRegleSchema } from "@regle/schemas";
-import { Form, type FormSubmitEvent } from "@/components/form";
-import { FormField } from "@/components/form-field";
-import FormDrawer from "~~/components/app/FormDrawer.vue";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { FormField } from "~~/app/components/form-field";
+import FormDrawer from "~~/app/components/app/FormDrawer.vue";
+import { Input } from "~~/app/components/ui/input";
+import { Textarea } from "~~/app/components/ui/textarea";
+import { Button } from "~~/app/components/ui/button";
 import { useUpdateProfile } from "~users/app/composables/useUpdateProfile";
 import { updateProfileInputSchema, type UpdateProfileInput } from "~users/shared/schemas";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
 import { useUser } from "#layers/auth/app/composables/useUser";
+import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
-const { addNotification } = useNotifications();
 const { user } = useUser();
-const { fetch: fetchSession } = useUserSession();
+const { addNotification } = useNotifications();
 
-const updateProfile = useUpdateProfile({
-  onSuccess: async () => {
-    // Refresh user session from server
-    await fetchSession();
-
-    addNotification({
-      type: "success",
-      title: "Profile Updated",
-    });
-  },
-  onError: (error) => {
-    addNotification({
-      type: "error",
-      title: "Failed to update profile",
-      message: error.message,
-    });
-  },
-});
+const updateProfile = useUpdateProfile();
+const isPending = ref(false);
+const isSuccess = ref(false);
 
 const state = reactive<UpdateProfileInput>({
   email: "",
@@ -57,25 +41,38 @@ watch(
 );
 
 const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput | undefined>) => {
+  if (isPending.value) return;
+
   const values = event.data ?? r$.$value;
+  isPending.value = true;
+  isSuccess.value = false;
 
   try {
-    await updateProfile.mutate({
+    await updateProfile({
       email: values.email,
       firstName: values.firstName,
       lastName: values.lastName,
       bio: values.bio ?? "",
     });
+    addNotification({
+      type: "success",
+      title: "Profile Updated",
+    });
+    isSuccess.value = true;
   }
   catch {
-    // Error is surfaced through the mutation notification callbacks.
+    // `$api` reports the request failure.
+  }
+  finally {
+    isPending.value = false;
   }
 };
 </script>
 
 <template>
   <FormDrawer
-    :is-done="updateProfile.isSuccess.value"
+    :is-done="isSuccess"
+    :is-pending="isPending"
     title="Update Profile"
   >
     <template #triggerButton>
@@ -94,7 +91,7 @@ const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput | undefine
       id="update-profile"
       :schema="updateProfileInputSchema"
       :state="r$.$value"
-      :disabled="updateProfile.isPending.value"
+      :disabled="isPending"
       class="space-y-6"
       @submit="handleSubmit"
     >
@@ -146,7 +143,7 @@ const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput | undefine
         type="submit"
         form="update-profile"
         size="sm"
-        :is-loading="updateProfile.isPending.value"
+        :is-loading="isPending"
       >
         Submit
       </Button>

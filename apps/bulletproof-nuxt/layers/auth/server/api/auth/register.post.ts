@@ -2,6 +2,7 @@ import { createUserRepository } from "#layers/users/server/repository/userReposi
 import { createTeamRepository } from "#layers/teams/server/repository/teamRepository";
 import { registerInputSchema } from "~auth/shared/schemas";
 import { customHashPassword } from "~auth/server/utils/password";
+import { serializeUser } from "~auth/server/utils/serializeUser";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -10,21 +11,20 @@ export default defineEventHandler(async (event) => {
   if (!validationResult.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation failed",
-      data: validationResult.error.issues,
+      statusMessage: "Invalid registration",
     });
   }
 
   const data = validationResult.data;
 
-  const userRepository = await createUserRepository(event);
-  const teamRepository = await createTeamRepository(event);
+  const userRepository = createUserRepository();
+  const teamRepository = createTeamRepository();
 
   const existingUser = await userRepository.findByEmail(data.email);
   if (existingUser) {
     throw createError({
-      statusCode: 400,
-      statusMessage: "User with this email already exists",
+      statusCode: 409,
+      statusMessage: "Email already registered",
     });
   }
 
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     const team = await teamRepository.findById(data.teamId);
     if (!team) {
       throw createError({
-        statusCode: 400,
+        statusCode: 404,
         statusMessage: "Team not found",
       });
     }
@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
   else {
     throw createError({
       statusCode: 400,
-      statusMessage: "Either teamId or teamName must be provided",
+      statusMessage: "Team selection required",
     });
   }
 
@@ -65,29 +65,8 @@ export default defineEventHandler(async (event) => {
     role,
   });
 
-  await setUserSession(event, {
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      role: user.role,
-      teamId: user.teamId,
-      createdAt: user.createdAt,
-    },
-  });
+  const serializedUser = serializeUser(user);
 
-  return {
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      role: user.role,
-      teamId: user.teamId,
-      createdAt: user.createdAt,
-    },
-  };
+  await setUserSession(event, { user: serializedUser });
+  setResponseStatus(event, 201);
 });

@@ -1,11 +1,13 @@
+import type { PaginatedResult, PaginationMeta as BasePaginationMeta } from "#layers/base/shared/types/pagination";
+
 export interface Discussion {
   id: string;
   title: string;
   body: string;
   authorId: string;
   teamId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   author: {
     id: string;
     firstName: string;
@@ -13,17 +15,8 @@ export interface Discussion {
   };
 }
 
-export interface PaginationMeta {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface PaginatedDiscussions {
-  data: Discussion[];
-  meta: PaginationMeta;
-}
+export type PaginationMeta = BasePaginationMeta;
+export type PaginatedDiscussions = PaginatedResult<Discussion>;
 
 export interface CreateDiscussionInput {
   title: string;

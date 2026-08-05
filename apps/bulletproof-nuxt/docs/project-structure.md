@@ -3,20 +3,16 @@
 This project uses Nuxt 4's **Layers architecture** for feature-based modular organization. Most of the code lives in the `app` and `layers` folders:
 
 ```sh
-apps/nuxt
+apps/bulletproof-nuxt
 |
 +-- app                    # Nuxt 4 application layer
 |   +-- assets             # CSS, images, fonts
 |   +-- components         # shared Vue components
 |   +-- composables        # shared composables (hooks)
+|   +-- lib                # shadcn-vue utilities used through explicit imports
 |   +-- pages              # file-based routing
 |   +-- stores             # Pinia stores
 |   +-- utils              # shared utility functions
-|
-+-- db                     # database layer
-|   +-- migrations         # Drizzle migration files
-|   +-- schema.ts          # Drizzle ORM schema definitions
-|   +-- seed.ts            # database seeding script
 |
 +-- layers                 # feature-based layers
 |   +-- base               # base layer (shared server utilities)
@@ -24,8 +20,18 @@ apps/nuxt
 |   +-- discussions        # discussions feature
 |   +-- comments           # comments feature
 |   +-- users              # users management feature
+|   +-- teams              # teams feature
 |
-+-- server                 # Nitro server (API routes, middleware)
++-- server                 # root Nitro and database infrastructure
+|   +-- db
+|       +-- schema.sqlite.ts      # app-owned SQLite Drizzle schema discovered by NuxtHub
+|       +-- schema.postgresql.ts  # app-owned PostgreSQL Drizzle schema for portability work
+|       +-- seed.ts               # app-owned seed implementation
+|       +-- migrations
+|           +-- sqlite     # SQLite migration SQL and Drizzle metadata
+|           +-- postgresql # PostgreSQL migration SQL and Drizzle metadata
+|   +-- tasks
+|       +-- db/seed.ts             # discoverable `db:seed` Nitro Task entry point
 |
 +-- e2e                    # Playwright E2E tests
 ```
@@ -81,6 +87,7 @@ export default defineNuxtConfig({
     "./layers/discussions",
     "./layers/comments",
     "./layers/users",
+    "./layers/teams",
   ],
 });
 ```
@@ -97,72 +104,66 @@ export default defineNuxtConfig({
 
 5. **Team Collaboration**: Different team members can work on different layers.
 
-## Server-Side Architecture
-
-This project includes a full server-side implementation:
-
-```sh
-layers/base/server
-|
-+-- utils
-|   +-- db.ts              # D1 database connection (Cloudflare)
-|   +-- db-libsql.ts       # libSQL connection (local development)
-```
-
 ### Repository Pattern
 
-Each feature uses the Repository pattern for data access:
+Each feature uses the Repository pattern for domain data access. NuxtHub owns
+database connection and driver integration through generated packages, while
+feature repositories own queries, result mapping, pagination, and domain
+errors:
 
 ```typescript
-// layers/auth/server/repository/userRepository.ts
-export const createUserRepository = async (event: H3Event) => {
-  const db = await useDb(event);
+// layers/discussions/server/repository/discussionRepository.ts
+import { db } from '@nuxthub/db'
+import { discussions } from '@nuxthub/db/schema'
 
-  const findByEmail = async (email: string) => {
+export const createDiscussionRepository = () => {
+  const findById = async (id: string, teamId: string) => {
     // ...
-  };
-
-  const create = async (data: CreateUserData) => {
-    // ...
-  };
+  }
 
   return {
-    findByEmail,
-    create,
+    findById,
     // ...
-  };
-};
+  }
+}
 ```
 
 ## Database Layer
 
-The project uses Drizzle ORM with SQLite:
-
-- **Production**: Cloudflare D1
-- **Development**: libSQL (local SQLite)
-
-Schema is defined in `db/schema.ts` and migrations are managed with Drizzle Kit.
+The root app defines dialect-specific Drizzle schemas and keeps matching
+migration SQL and metadata under `server/db/migrations`. NuxtHub discovers the
+selected sources and generates the database runtime at `@nuxthub/db` and schema
+exports at `@nuxthub/db/schema`. Application code imports those generated
+package surfaces rather than constructing a database connection or selecting a
+driver. The root seed implementation is invoked explicitly through the
+discoverable `server/tasks/db/seed.ts` Nitro Task.
 
 ## Import Aliases
 
 Nuxt provides convenient import aliases for layers:
 
 ```typescript
+// Import an app-owned shared component
+import { Button } from '@/components/ui/button';
+
 // Import from a layer's shared types
 import type { Discussion } from '~discussions/shared/types';
 
-// Import from root db
-import { discussions } from '~~/db/schema';
+// Import an app-owned shared component from a feature layer
+import FormDrawer from '~~/app/components/app/FormDrawer.vue';
+
+// Import generated database schema
+import { discussions } from '@nuxthub/db/schema';
 
 // Auto-imported from layers
-const discussionRepository = await createDiscussionRepository(event);
+const discussionRepository = createDiscussionRepository();
 ```
 
 ## Best Practices
 
-1. **Keep layers independent**: Avoid importing between feature layers. Compose features at the page level.
+1. **Keep feature internals independent**: Avoid importing between feature components or composables. Treat Pages as application composition boundaries that may import public APIs from multiple feature layers.
 
-2. **Use the Repository pattern**: All database access should go through repositories.
+2. **Use the Repository pattern**: Feature domain queries should go through repositories. Root operational code such as the seed task may use the generated NuxtHub runtime directly.
 
 3. **Validate at boundaries**: Use Zod schemas to validate API inputs.
 

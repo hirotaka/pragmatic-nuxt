@@ -1,60 +1,41 @@
-import type { Comment, PaginatedComments } from "~comments/shared/types";
+import type { Comment } from "~comments/shared/types";
+import { useAPI } from "#layers/base/app/composables/useAPI";
+import { usePaginatedData } from "#layers/base/app/composables/usePaginatedData";
 
-export function useComments(discussionId: MaybeRefOrGetter<string>) {
-  const { addNotification } = useNotifications();
+export async function useComments(discussionId: MaybeRefOrGetter<string>) {
+  const page = ref(1);
+  const limit = 10;
+  const resourceKey = computed(() => toValue(discussionId));
+  const read = useAPI("/api/comments", {
+    query: {
+      discussionId: resourceKey,
+      page,
+      limit,
+    },
+    watch: false,
+  });
+  const pagination = usePaginatedData<Comment>(read, {
+    strategy: "append",
+    page,
+    resourceKey,
+  });
 
-  const comments = ref<Comment[]>([]);
-  const currentPage = ref(1);
-  const totalPages = ref(0);
-  const hasMore = ref(false);
-  const isLoading = ref(false);
+  await read;
 
-  const loadComments = async (page = 1) => {
-    isLoading.value = true;
-    try {
-      const id = toValue(discussionId);
-      const queryParams = new URLSearchParams();
-      queryParams.set("discussionId", id);
-      if (page) queryParams.set("page", page.toString());
-
-      const response = await $fetch<PaginatedComments>(
-        `/api/comments?${queryParams.toString()}`,
-        { method: "GET" },
-      );
-
-      if (page === 1) {
-        comments.value = response.data;
-      }
-      else {
-        comments.value = [...comments.value, ...response.data];
-      }
-      currentPage.value = response.meta.page;
-      totalPages.value = response.meta.totalPages;
-      hasMore.value = response.meta.hasMore || false;
-    }
-    catch {
-      addNotification({
-        type: "error",
-        title: "Failed to load comments",
-      });
-    }
-    finally {
-      isLoading.value = false;
-    }
-  };
-
-  const loadMore = async () => {
-    if (!hasMore.value || isLoading.value) return;
-    await loadComments(currentPage.value + 1);
-  };
+  const isInitialReady = computed(() => pagination.data.value !== undefined);
+  const hasInitialError = computed(() => {
+    return !isInitialReady.value && pagination.status.value === "error";
+  });
 
   return {
-    comments,
-    currentPage,
-    totalPages,
-    hasMore,
-    isLoading,
-    loadComments,
-    loadMore,
+    comments: computed(() => pagination.data.value?.data ?? []),
+    currentPage: computed(() => pagination.data.value?.meta.page ?? 1),
+    hasInitialError,
+    totalPages: computed(() => pagination.data.value?.meta.totalPages ?? 0),
+    hasMore: computed(() => pagination.data.value?.meta.hasMore ?? false),
+    isInitialReady,
+    isLoading: pagination.isLoading,
+    loadComments: pagination.loadPage,
+    loadMore: pagination.loadMore,
   };
 }

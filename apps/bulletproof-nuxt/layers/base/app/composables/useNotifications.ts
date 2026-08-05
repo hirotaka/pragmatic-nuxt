@@ -16,11 +16,6 @@ export function useNotifications() {
     };
     notifications.value.push(newNotification);
 
-    // Auto-dismiss after 5 seconds
-    setTimeout(() => {
-      dismissNotification(id);
-    }, 5000);
-
     return id;
   };
 

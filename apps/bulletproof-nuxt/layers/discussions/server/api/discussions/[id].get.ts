@@ -1,21 +1,14 @@
 import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
+import { serializeDiscussion } from "~discussions/server/utils/serializeDiscussion";
+import type { User } from "#layers/auth/shared/types";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = (await requireUserSession(event)).user as User;
 
   if (!sessionUser.teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "User must belong to a team",
+      statusMessage: "Team membership required",
     });
   }
 
@@ -28,7 +21,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const discussionRepository = await createDiscussionRepository(event);
+  const discussionRepository = createDiscussionRepository();
 
   const discussion = await discussionRepository.findByIdAndTeam(id, sessionUser.teamId);
 
@@ -39,5 +32,5 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return { discussion };
+  return serializeDiscussion(discussion);
 });

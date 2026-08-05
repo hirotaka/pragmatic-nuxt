@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from "vue";
 import { useRegleSchema } from "@regle/schemas";
-import { Form, type FormSubmitEvent } from "@/components/form";
-import { FormField } from "@/components/form-field";
-import { Badge } from "@/components/ui/badge";
+import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { FormField } from "~~/app/components/form-field";
+import { Badge } from "~~/app/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { NativeSelect } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+} from "~~/app/components/ui/card";
+import { Input } from "~~/app/components/ui/input";
+import { NativeSelect } from "~~/app/components/ui/select";
+import { Button } from "~~/app/components/ui/button";
 import { useRegister } from "~auth/app/composables/useRegister";
 import { useRoute } from "vue-router";
 import { registerInputSchema, type RegisterInput } from "~auth/shared/schemas";
@@ -47,9 +47,8 @@ const chooseTeam = ref(false);
 const route = useRoute();
 const redirectTo = route.query.redirectTo as string | undefined;
 
-const registering = useRegister({
-  onSuccess: () => emit("success"),
-});
+const register = useRegister();
+const isPending = ref(false);
 
 const state = reactive<RegisterFormState>({
   firstName: "",
@@ -77,6 +76,8 @@ watch(chooseTeam, (nextChooseTeam) => {
 });
 
 const handleSubmit = async (event: FormSubmitEvent<RegisterFormState | undefined>): Promise<void> => {
+  if (isPending.value) return;
+
   const values = event.data ?? state;
   const input = {
     ...values,
@@ -84,7 +85,17 @@ const handleSubmit = async (event: FormSubmitEvent<RegisterFormState | undefined
     teamName: !chooseTeam.value && values.teamName ? values.teamName : null,
   } as RegisterInput;
 
-  await registering.mutate(input);
+  isPending.value = true;
+  try {
+    await register(input);
+    emit("success");
+  }
+  catch {
+    // `$api` reports the request failure.
+  }
+  finally {
+    isPending.value = false;
+  }
 };
 
 const teamOptions = computed(
@@ -212,7 +223,7 @@ const teamOptions = computed(
         </FormField>
 
         <Button
-          :is-loading="registering.isPending.value"
+          :is-loading="isPending"
           type="submit"
           class="w-full"
         >

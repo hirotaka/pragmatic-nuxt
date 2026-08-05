@@ -11,7 +11,7 @@ const { mockUser } = vi.hoisted(() => ({
     role: "USER",
     bio: "Existing bio",
     teamId: "team-1",
-    createdAt: new Date(),
+    createdAt: "2026-07-10T00:00:00.000Z",
   },
 }));
 

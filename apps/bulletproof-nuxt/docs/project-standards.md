@@ -31,23 +31,48 @@ Import aliases should always be configured and used because it makes it easier t
 import type { User } from '~auth/shared/types'
 import { useDiscussions } from '~discussions/app/composables/useDiscussions'
 
-// Root imports
-import { discussions } from '~~/db/schema'
+// App imports
+import { Button } from '@/components/ui/button'
+
+// App-owned shared components imported from a feature layer
+import FormDrawer from '~~/app/components/app/FormDrawer.vue'
+
+// NuxtHub-generated database schema
+import { discussions } from '@nuxthub/db/schema'
 ```
 
 Available aliases in this project:
 
 | Alias | Path |
 |-------|------|
+| `@` | `app/` directory |
 | `~` | `app/` directory |
 | `~~` | Root directory |
 | `~auth` | `layers/auth/` |
 | `~discussions` | `layers/discussions/` |
 | `~comments` | `layers/comments/` |
 | `~users` | `layers/users/` |
+| `~teams` | `layers/teams/` |
 | `~base` | `layers/base/` |
 
-These aliases are defined in `nuxt.config.ts` and work seamlessly with TypeScript and IDE autocompletion.
+Nuxt provides the `@`, `~`, and `~~` aliases. Named layer aliases are configured by each layer and work with TypeScript and IDE autocompletion.
+
+App-owned shared components use explicit imports and are not globally scanned by Nuxt. `shadcn-nuxt` owns UI component registration from the generated `app/components/ui/**/index.ts` barrels, while feature layers retain Nuxt's default component auto-registration.
+
+#### Database ownership
+
+The root app owns the dialect-specific Drizzle schema sources at
+`server/db/schema.sqlite.ts` and `server/db/schema.postgresql.ts`, plus the
+corresponding migration sources under `server/db/migrations`. NuxtHub discovers
+the selected sources and owns the generated database runtime and schema package
+surfaces: `@nuxthub/db` and `@nuxthub/db/schema`.
+
+Feature repositories import those generated packages directly. They remain
+responsible for domain queries, mapping, pagination, and domain errors; API
+routes remain responsible for validation, authorization, and serialization.
+Operational root code, such as the explicit `server/tasks/db/seed.ts` task, may
+use the generated runtime directly.
+Keep connection, binding, and driver-selection setup within NuxtHub's database integration.
 
 #### File naming conventions
 
@@ -55,7 +80,7 @@ We can also enforce the file naming conventions and folder naming conventions in
 
 | Type | Convention | Example |
 |------|------------|---------|
-| Vue Components | PascalCase | `CreateDiscussionForm.vue` |
+| Vue Components | PascalCase | `CreateDiscussion.vue` |
 | Composables | camelCase with `use` prefix | `useDiscussions.ts` |
 | Types | PascalCase | `Discussion`, `User` |
 | API Routes | kebab-case with method suffix | `index.get.ts`, `[id].delete.ts` |
