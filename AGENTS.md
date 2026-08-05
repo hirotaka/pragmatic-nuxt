@@ -5,8 +5,7 @@
 - pnpm workspace packages are only `apps/*`, `apps/reference/*`, and `apps/sandboxes/*` (`pnpm-workspace.yaml`).
 - Default target for changes: `apps/bulletproof-nuxt`.
 - `apps/sandboxes/*` are verifiable candidate implementations awaiting human review; do not treat them as settled decisions.
-- `apps/reference/*` are comparison/legacy variants; do not assume they follow canonical conventions.
-- `apps/chat` and `apps/dashboard` are listed in docs as planned, but they do not exist in this repo yet.
+- `apps/reference/*` are comparison/legacy variants; do not assume they follow the default app's conventions.
 
 ## OSS respect rule
 
