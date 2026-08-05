@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const userRepository = await createUserRepository(event);
+  const userRepository = createUserRepository();
 
   const users = await userRepository.findAll(sessionUser.teamId as string);
 

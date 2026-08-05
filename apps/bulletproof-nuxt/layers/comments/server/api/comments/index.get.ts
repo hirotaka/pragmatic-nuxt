@@ -17,7 +17,7 @@ export default defineEventHandler(async (event): Promise<PaginatedComments> => {
     });
   }
 
-  const commentRepository = await createCommentRepository(event);
+  const commentRepository = createCommentRepository();
 
   const comments = await commentRepository.findByDiscussionId({
     discussionId,

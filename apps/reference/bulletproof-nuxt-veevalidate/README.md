@@ -4,7 +4,7 @@ A full-stack application using Nuxt with SSR capabilities,
 Nuxt Layers architecture, and [VeeValidate](https://vee-validate.logaretm.com/v4/)
 for form validation.
 
-This app preserves the previous canonical VeeValidate implementation for reference.
+This app provides a VeeValidate implementation for comparison.
 
 ## 🛠️ Tech Stack
 

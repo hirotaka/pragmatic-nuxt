@@ -2,7 +2,8 @@ name: Nuxt CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - "apps/bulletproof-nuxt/**"
       - "apps/reference/bulletproof-nuxt-veevalidate/**"
@@ -30,6 +31,7 @@ jobs:
   all-cli-check:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - app: bulletproof-nuxt
@@ -71,6 +73,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - app: bulletproof-nuxt
