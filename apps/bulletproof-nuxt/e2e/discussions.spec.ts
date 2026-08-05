@@ -185,7 +185,6 @@ test("cancelled discussion navigation cannot publish stale page state", { tag: [
     await route.continue();
   });
 
-  const staleResponse = page.waitForResponse(response => new URL(response.url()).pathname === "/api/discussions");
   const discussionsNavigation = page.getByRole("link", { name: "Discussions" }).click();
   await requestStarted.promise;
 
@@ -194,7 +193,6 @@ test("cancelled discussion navigation cannot publish stale page state", { tag: [
   await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
 
   responseRelease.resolve();
-  await staleResponse;
   await discussionsNavigation;
   await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 0)));
 

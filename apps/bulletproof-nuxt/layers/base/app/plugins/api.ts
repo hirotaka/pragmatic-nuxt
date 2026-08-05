@@ -3,7 +3,7 @@ import { resolveApiErrorNotification } from "#layers/base/app/utils/apiNotificat
 
 export default defineNuxtPlugin(() => {
   const { addNotification } = useNotifications();
-  const api = $fetch.create({
+  const api = globalThis.$fetch.create({
     onRequestError({ error, options }) {
       if (!import.meta.client) {
         return;
