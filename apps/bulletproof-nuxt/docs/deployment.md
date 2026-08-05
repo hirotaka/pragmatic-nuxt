@@ -2,7 +2,7 @@
 
 ## Cloudflare Workers and D1
 
-The Canonical app runs on Cloudflare Workers with D1 as its default Cloudflare
+This app runs on Cloudflare Workers with D1 as its default Cloudflare
 database target. Production and Preview use separate resources and have
 separate release responsibilities.
 

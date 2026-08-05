@@ -28,7 +28,7 @@ Temporary evidence is excluded from the default durable unit suite. An empty tem
 
 ## Database-Backed E2E
 
-The canonical local and E2E lifecycle uses NuxtHub's committed migrations. E2E preparation removes only the dedicated `.data/e2e` database, lets NuxtHub apply migrations during the build, then uses `start-server-and-test` to manage preview and Playwright.
+The documented local and E2E lifecycle uses NuxtHub's committed migrations. E2E preparation removes only the dedicated `.data/e2e` database, lets NuxtHub apply migrations during the build, then uses `start-server-and-test` to manage preview and Playwright.
 
 Prepare a fresh migration-only database characterization:
 
