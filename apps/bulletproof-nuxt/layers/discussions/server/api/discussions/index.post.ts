@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
 
   const { title, body: discussionBody } = validationResult.data;
 
-  const discussionRepository = await createDiscussionRepository(event);
+  const discussionRepository = createDiscussionRepository();
 
   await discussionRepository.create({
     title,

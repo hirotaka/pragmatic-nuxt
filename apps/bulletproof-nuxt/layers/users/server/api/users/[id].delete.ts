@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const userRepository = await createUserRepository(event);
+  const userRepository = createUserRepository();
 
   const deleted = await userRepository.delete(userId, sessionUser.teamId);
   if (!deleted) {

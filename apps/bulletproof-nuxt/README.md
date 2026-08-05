@@ -9,7 +9,7 @@ Regle as the app-owned form validation library.
 - **Framework**: Nuxt 4
 - **Architecture**: Nuxt Layers for modular features
 - **Form Validation**: Regle + Zod v4
-- **Database**: SQLite (libsql) + Drizzle ORM
+- **Database**: NuxtHub SQLite + Drizzle ORM, with an optional PostgreSQL path
 - **Auth**: nuxt-auth-utils
 - **Styling**: Tailwind CSS + shadcn-vue / Reka UI primitives
 - **Testing**: Vitest + Playwright
@@ -31,41 +31,25 @@ cp .env.example .env
 pnpm install
 ```
 
-### Database Setup
+### Database Architecture
 
-Initialize the database schema:
+The app-owned Drizzle schema is defined in `server/db/schema.sqlite.ts`, with an
+optional PostgreSQL schema in `server/db/schema.postgresql.ts`. Dialect-specific
+migration sources are stored under `server/db/migrations/{sqlite,postgresql}`.
+NuxtHub discovers the selected sources and generates the `@nuxthub/db` runtime
+and `@nuxthub/db/schema` exports. Feature repositories retain ownership of
+domain queries, mapping, pagination, and domain errors.
 
-```bash
-pnpm db:push
-```
+### Development and Builds
 
-Optionally, seed the database with sample data:
+Apply Local migrations with `pnpm db:migrate`, then start the app with
+`pnpm dev`. Local demo data is an explicit `db:seed` Nitro Task, available from
+Nuxt DevTools after migration. Use `pnpm build` for the production or Preview
+Cloudflare build selected by the environment.
 
-```bash
-pnpm db:seed
-```
-
-After seeding, you can login with:
-
-| Email               | Password    | Role  |
-|---------------------|-------------|-------|
-| <admin@example.com> | password123 | ADMIN |
-| <user@example.com>  | password123 | USER  |
-
-### `pnpm dev`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `pnpm build`
-
-Builds the app for production.\
-It correctly bundles Nuxt in production mode and optimizes the build
-for the best performance.
-
-See the section about
-[deployment](https://nuxt.com/docs/getting-started/deployment)
-for more information.
+See [Testing](./docs/testing.md), [Deployment](./docs/deployment.md), and the
+[NuxtHub DB Practices](../../docs/practices/nuxt-hub-db/index.md) for the
+environment-specific lifecycle boundaries and reusable guidance.
 
 ## 📚 Documentation
 

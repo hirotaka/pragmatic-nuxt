@@ -5,9 +5,6 @@ Run testing commands from `apps/bulletproof-nuxt`.
 ## Prerequisites
 
 - Install dependencies with pnpm.
-- Copy `.env.example` to `.env` for local Nuxt commands.
-- Keep the committed `.env.test` for the test database and E2E server configuration.
-- Install the Playwright browser when it is not already available.
 
 ## Test Directories
 
@@ -29,37 +26,39 @@ Temporary evidence is excluded from the default durable unit suite. An empty tem
 | `pnpm test:evidence:exploration` | Run a non-empty Exploration inventory explicitly. |
 | `pnpm test:evidence:characterization` | Run a non-empty Characterization inventory explicitly. |
 
-## E2E Commands
+## Database-Backed E2E
 
-Prepare the dedicated test database before a local E2E run:
+The canonical local and E2E lifecycle uses NuxtHub's committed migrations. E2E preparation removes only the dedicated `.data/e2e` database, lets NuxtHub apply migrations during the build, then uses `start-server-and-test` to manage preview and Playwright.
+
+Prepare a fresh migration-only database characterization:
 
 ```bash
 pnpm test:e2e:prepare
 ```
 
-This removes and recreates `db/test.db` using `.env.test`. Do not point `.env.test` at a development or production database.
-
-Start the Nuxt test server in one terminal:
-
-```bash
-pnpm test:e2e:dev
-```
-
-Run Playwright against the same port from another terminal:
-
-```bash
-NUXT_PORT=3100 pnpm test:e2e
-```
-
-The Playwright command expects an external Nuxt server. Keep `NUXT_PORT` aligned with the port used by `test:e2e:dev`, and check that the port belongs to the intended process before accepting a result.
-
-Use the CI-style wrapper to prepare the database, build the app, start a production preview on port `3100`, and run Playwright:
+Run the production-like local E2E lifecycle:
 
 ```bash
 pnpm test:e2e:ci
 ```
 
-Additional Playwright entry points are available as `test:e2e:ui` and `test:e2e:debug`.
+The lifecycle does not use the developer's default `.data/db/sqlite.db`, does not create `db/test.db`, and does not use schema push. Do not run overlapping Nuxt generation or E2E lifecycles in the same checkout.
+
+Local demo data is an explicit operation. Run `pnpm db:migrate` first, start the Local dev server, and run the `db:seed` task from Nuxt DevTools. The task uses the generated Local package and is not added to E2E preparation, CI, or dev startup:
+
+The task seeds only the Engineering and Product teams with the Admin and Regular demo users. Re-running it is safe for compatible records. Unexpected Team names, User emails, or stable identities cause the task to fail without partial writes. The task must not be run against Preview, Production, or another remote database. The demo password is disposable Local-only data and must never be used for shared or deployed environments.
+
+For a disposable Local database cycle, remove only the database storage and rebuild it from committed migrations:
+
+```bash
+pnpm db:reset
+```
+
+Hosted CI validates this same Local SQLite lifecycle on a fresh GitHub runner. Cloudflare D1, remote reset, and deployment lifecycle evidence are tracked separately and are not established by these local commands.
+
+See the [NuxtHub DB Practices](../../../docs/practices/nuxt-hub-db/index.md) for
+the separate Local SQLite, hosted CI, D1, deployment, PostgreSQL, and seed
+evidence boundaries.
 
 ## Support Files
 
