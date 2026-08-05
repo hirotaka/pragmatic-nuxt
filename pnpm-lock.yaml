@@ -119,7 +119,7 @@ importers:
         version: 2.8.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(magicast@0.5.2)
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.6.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -270,7 +270,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.6.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -439,7 +439,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.6.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -599,7 +599,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.6.0
       vee-validate:
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.40(typescript@6.0.3))
@@ -759,7 +759,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.6.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -916,7 +916,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.6.0
       vee-validate:
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.40(typescript@6.0.3))
@@ -1067,7 +1067,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.6.0
       unhead:
         specifier: ^3.0.0
         version: 3.1.0(vite@7.3.6(@types/node@24.12.3)(jiti@2.6.1)(lightningcss@1.33.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))
@@ -9537,8 +9537,8 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tailwind-merge@3.5.0:
-    resolution: {integrity: sha512-I8K9wewnVDkL1NTGoqWmVEIlUcB9gFriAEkXkfCjX5ib8ezGxtR3xD7iZIxrfArjEsH7F1CHD4RFUtxefdqV/A==}
+  tailwind-merge@3.6.0:
+    resolution: {integrity: sha512-uxL7qAVQriqRQPAyK3pj66VqskWqoZ37PW94jwOTwNfq/z9oyu1V+eqrZqtR2+fCiXdYOZe/Modt8GtvqNzu+w==}
 
   tailwindcss@4.2.4:
     resolution: {integrity: sha512-HhKppgO81FQof5m6TEnuBWCZGgfRAWbaeOaGT00KOy/Pf/j6oUihdvBpA7ltCeAvZpFhW3j0PTclkxsd4IXYDA==}
@@ -20557,7 +20557,7 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tailwind-merge@3.5.0: {}
+  tailwind-merge@3.6.0: {}
 
   tailwindcss@4.2.4: {}
 
