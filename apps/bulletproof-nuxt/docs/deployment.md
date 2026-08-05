@@ -1,46 +1,26 @@
-# 🌐 Deployment
-
-Nuxt applications can be deployed to various platforms. Since Nuxt is a full-stack framework with server-side capabilities, you'll need a platform that supports server-side rendering or serverless functions.
+# Deployment
 
 ## Cloudflare Workers and D1
 
-The app builds for Cloudflare Workers with `NITRO_PRESET=cloudflare_module`.
-Production and Preview builds select different D1 resources in `nuxt.config.ts`.
-The release scripts apply remote D1 migrations before publishing the Worker:
+The Canonical app runs on Cloudflare Workers with D1 as its default Cloudflare
+database target. Production and Preview use separate resources and have
+separate release responsibilities.
 
-```bash
-pnpm build
-pnpm deploy:cloudflare
-```
+Applying the corresponding database migration is a prerequisite for release
+readiness. Resource selection, migration application, and Worker release remain
+distinct responsibilities, and a migration failure prevents the corresponding
+release from being considered ready.
 
-Preview builds use the Preview environment and upload a version:
-
-```bash
-pnpm build:preview
-pnpm deploy:cloudflare:preview
-```
-
-Migration failure prevents the corresponding release command from publishing.
-Keep resource selection, migration application, and Worker publication as
-separate operational steps. PostgreSQL is an optional dialect path and is not
-the default Cloudflare deployment target.
-
-The Canonical D1 resources are a fresh-resource cutover. The application does
-not migrate data from the previous D1 resources, and the previous resources are
-not targets for reset, seed, or migration commands in this publication. Initial
-migration of the new Production and Preview resources must succeed before their
-corresponding release is considered ready. Existing-data continuity, backup,
-restore, and rollback evidence require a separately approved operational scope.
-
-This publication keeps `main-worker` as the Cloudflare Production branch.
-Creating a review PR does not activate Production or change that selector.
+Initial migration of a resource is distinct from continuity of existing data.
+Backup, restore, rollback, and recovery procedures require a separately owned
+operational scope.
 
 See the [Nuxt Cloudflare Deployment Guide](https://nuxt.com/deploy/cloudflare)
 and [Cloudflare D1 documentation](https://developers.cloudflare.com/d1/) for
 general platform information.
 
 See the [NuxtHub DB Practices](../../../docs/practices/nuxt-hub-db/index.md) for
-verified scope and limitations around D1, Workers, and PostgreSQL deployment.
+reusable guidance and verified scope around D1, Workers, and PostgreSQL.
 
 ## Alternative Deployment Platforms
 
