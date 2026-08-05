@@ -173,6 +173,34 @@ test("discussion navigation waits for the initial read before showing the target
   await expect(page.getByText(marker)).toBeVisible();
 });
 
+test("cancelled discussion navigation cannot publish stale page state", { tag: ["@discussions", "@navigation", "@initial-read"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "cancelled-discussions");
+  await page.goto("/app", { waitUntil: "networkidle" });
+
+  const requestStarted = deferred();
+  const responseRelease = deferred();
+  await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
+    requestStarted.resolve();
+    await responseRelease.promise;
+    await route.continue();
+  });
+
+  const discussionsNavigation = page.getByRole("link", { name: "Discussions" }).click();
+  await requestStarted.promise;
+
+  await page.getByRole("link", { name: "Users" }).click();
+  await page.waitForURL("/app/users");
+  await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
+
+  responseRelease.resolve();
+  await discussionsNavigation;
+  await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 0)));
+
+  await expect(page).toHaveURL(/\/app\/users$/);
+  await expect(page).toHaveTitle("Users | Bulletproof Nuxt");
+  await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
+});
+
 test("discussion detail follows a reactive route identity", { tag: ["@discussions", "@navigation"] }, async ({ page }) => {
   await registerIsolatedUser(page, "reactive-discussion-detail");
   const unique = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
