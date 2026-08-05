@@ -2,3 +2,42 @@ packages:
   - "apps/*"
   - "apps/reference/*"
   - "apps/sandboxes/*"
+
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+  msw: false
+  sharp: false
+  unrs-resolver: false
+  vue-demi: false
+  workerd: false
+
+overrides:
+  vue: "3.5.40"
+  vite: "^7.0.0"
+  jiti: "2.6.1"
+  prisma: "npm:empty-npm-package@1.0.0"
+  "@prisma/client": "npm:empty-npm-package@1.0.0"
+  "@unhead/vue": "3.1.0"
+  basic-ftp: "^6.0.0"
+  editorconfig: "^3.0.0"
+  dompurify: "3.4.12"
+  defu: "6.1.7"
+  fast-uri: "3.1.4"
+  brace-expansion: "5.0.8"
+  h3: "1.15.11"
+  lodash: "4.18.1"
+  node-forge: "1.4.0"
+  picomatch: "4.0.5"
+  qs: "6.15.2"
+  srvx: "0.11.15"
+  yaml: "2.8.4"
+  "@eslint/config-inspector@1.4.2>h3": "1.15.11"
+  "nuxt-auth-utils@0.5.29>h3": "1.15.11"
+  "@nuxt/nitro-server@4.4.2>h3": "1.15.11"
+  "nitropack@2.13.1>h3": "1.15.11"
+  serialize-javascript: "^7.0.5"
+  systeminformation: "^5.30.8"
+  esbuild: ">=0.25.0"
+  "@types/node": "^24.10.3"
+  uuid: "14.0.0"

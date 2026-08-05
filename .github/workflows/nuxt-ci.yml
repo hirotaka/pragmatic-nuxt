@@ -12,6 +12,8 @@ on:
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
       - "apps/reference/bulletproof-nuxt-original-ui/**"
       - "pnpm-lock.yaml"
+      - "package.json"
+      - "pnpm-workspace.yaml"
       - ".github/workflows/nuxt-ci.yml"
   pull_request:
     branches: [main]
@@ -23,6 +25,8 @@ on:
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
       - "apps/reference/bulletproof-nuxt-original-ui/**"
       - "pnpm-lock.yaml"
+      - "package.json"
+      - "pnpm-workspace.yaml"
       - ".github/workflows/nuxt-ci.yml"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
