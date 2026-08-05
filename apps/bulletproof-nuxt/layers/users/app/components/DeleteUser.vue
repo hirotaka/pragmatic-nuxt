@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import ConfirmationDialog from "~~/components/app/ConfirmationDialog.vue";
-import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
+import { Button } from "~~/app/components/ui/button";
 import { useDeleteUser } from "~users/app/composables/useDeleteUser";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 interface DeleteUserProps {
   id: string;
+  refresh: () => Promise<void>;
 }
 
 const props = defineProps<DeleteUserProps>();
@@ -16,26 +17,31 @@ const { user } = useUser();
 const { addNotification } = useNotifications();
 
 const isOpen = ref(false);
+const isPending = ref(false);
+const deleteUser = useDeleteUser();
 
-const deleteUserMutation = useDeleteUser({
-  onSuccess: () => {
-    addNotification({
-      type: "success",
-      title: "User Deleted",
-    });
-    isOpen.value = false;
-  },
-  onError: (error) => {
-    addNotification({
-      type: "error",
-      title: "Failed to delete user",
-      message: error.message,
-    });
-  },
-});
+const handleDelete = async () => {
+  if (isPending.value) return;
 
-const handleDelete = () => {
-  deleteUserMutation.mutate(props.id);
+  isPending.value = true;
+
+  try {
+    await deleteUser(props.id);
+  }
+  catch {
+    // `$api` reports the request failure.
+    isPending.value = false;
+    return;
+  }
+
+  addNotification({
+    type: "success",
+    title: "User Deleted",
+  });
+  // The read owner reports refresh failures without changing mutation success.
+  await props.refresh().catch(() => undefined);
+  isOpen.value = false;
+  isPending.value = false;
 };
 </script>
 
@@ -54,7 +60,7 @@ const handleDelete = () => {
       title="Delete User"
       body="Are you sure you want to delete this user?"
       confirm-text="Delete User"
-      :is-loading="deleteUserMutation.isPending.value"
+      :is-loading="isPending"
       @confirm="handleDelete"
     />
   </div>

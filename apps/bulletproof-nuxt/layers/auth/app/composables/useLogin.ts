@@ -1,28 +1,22 @@
 import type { LoginInput } from "~auth/shared/schemas";
-import type { User } from "~auth/shared/types";
-import { useMutation } from "#layers/base/app/composables/useMutation";
+import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
-interface UseLoginConfig {
-  onSuccess?: (user: User) => void;
-}
+export const useLogin = () => {
+  const { $api } = useNuxtApp();
+  const { fetch: refreshSession } = useUserSession();
+  const { addNotification } = useNotifications();
 
-export const useLogin = (config?: UseLoginConfig) => {
-  const { fetch } = useUserSession();
+  return async (input: LoginInput): Promise<void> => {
+    await $api("/api/auth/login", {
+      method: "POST",
+      body: input,
+    });
 
-  return useMutation<LoginInput, User>(
-    async (input: LoginInput) => {
-      const response = await $fetch<{ user: User }>("/api/auth/login", {
-        method: "POST",
-        body: input,
-      });
+    await refreshSession();
 
-      // Refresh the session from the server
-      await fetch();
-
-      return response.user;
-    },
-    {
-      onSuccess: config?.onSuccess,
-    },
-  );
+    addNotification({
+      type: "success",
+      title: "Logged In",
+    });
+  };
 };

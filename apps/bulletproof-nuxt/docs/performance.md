@@ -42,8 +42,6 @@ Since Google started taking web vitals into account when indexing websites, you 
 
 ### Data Prefetching
 
-Nuxt's `useFetch` and `useAsyncData` automatically handle data fetching with SSR support and client-side caching. Data is fetched on the server during SSR and hydrated on the client, improving initial page load performance. For navigation, Nuxt automatically prefetches page data when links are visible in the viewport.
-
-You can also use the `lazy` option to defer non-critical data fetching to the client side.
+This app uses Nuxt AsyncData for page-rendering reads that participate in server rendering and payload hydration. See [Use `useFetch` Semantics for Page Rendering Data](../../../docs/practices/use-fetch/page-rendering-data.md) for the confirmed lifecycle guidance.
 
 [Nuxt Data Fetching Documentation](https://nuxt.com/docs/getting-started/data-fetching)

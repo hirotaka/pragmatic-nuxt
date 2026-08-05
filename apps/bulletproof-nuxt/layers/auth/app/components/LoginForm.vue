@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRegleSchema } from "@regle/schemas";
-import { Form, type FormSubmitEvent } from "@/components/form";
-import { FormField } from "@/components/form-field";
+import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { FormField } from "~~/app/components/form-field";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "~~/app/components/ui/card";
+import { Input } from "~~/app/components/ui/input";
+import { Button } from "~~/app/components/ui/button";
 import { useLogin } from "~auth/app/composables/useLogin";
 import { loginInputSchema, type LoginInput } from "~auth/shared/schemas";
 
@@ -19,11 +19,8 @@ const emit = defineEmits<{
   success: [];
 }>();
 
-const login = useLogin({
-  onSuccess: () => {
-    emit("success");
-  },
-});
+const login = useLogin();
+const isPending = ref(false);
 
 const state = reactive<LoginInput>({
   email: "",
@@ -32,12 +29,18 @@ const state = reactive<LoginInput>({
 const { r$ } = useRegleSchema(state, loginInputSchema);
 
 const handleSubmit = async (event: FormSubmitEvent<LoginInput | undefined>) => {
+  if (!event.data || isPending.value) return;
+  isPending.value = true;
+
   try {
-    if (!event.data) return;
-    await login.mutate(event.data);
+    await login(event.data);
+    emit("success");
   }
   catch {
-    // Error is already handled in the composable via notification
+    // `$api` reports the request failure.
+  }
+  finally {
+    isPending.value = false;
   }
 };
 </script>
@@ -82,7 +85,7 @@ const handleSubmit = async (event: FormSubmitEvent<LoginInput | undefined>) => {
           />
         </FormField>
         <Button
-          :is-loading="login.isPending.value"
+          :is-loading="isPending"
           type="submit"
           class="w-full"
         >

@@ -1,55 +1,74 @@
 # 🧪 Testing
 
-The efficacy of testing lies in the comprehensive coverage provided by integration and end-to-end (e2e) tests. While unit tests serve a purpose in isolating and validating individual components, the true value and confidence in application functionality stem from robust integration and e2e testing strategies.
+Run testing commands from `apps/bulletproof-nuxt`.
 
-## Types of Tests
+## Prerequisites
 
-### Unit Tests
+- Install dependencies with pnpm.
 
-Unit tests are the smallest tests you can write. They test individual parts of your application in isolation. They are useful for testing shared components, composables, and utility functions that are used throughout the entire application. They are also useful for testing complex logic in a single component. They are fast to run and easy to write.
+## Test Directories
 
-[Unit Test Example Code](../layers/auth/app/components/__tests__/LoginForm.test.ts)
+- Durable Vitest tests stay beside their Production owners in `app/**/__tests__/*.test.ts` and `layers/**/__tests__/*.test.ts`.
+- Browser tests live in `e2e/*.spec.ts`. Product journeys use feature files, while direct HTTP and wire contracts live in `e2e/api-contracts.spec.ts`.
+- Temporary Exploration and Characterization tests live beside their owners under `__evidence__/exploration/` and `__evidence__/characterization/`.
+- Shared render helpers and data factories live under `test/`; the configured Vitest setup entry is `vitest.setup.ts`.
 
-### Integration Tests
+Temporary evidence is excluded from the default durable unit suite. An empty temporary-evidence inventory is valid; the dedicated evidence command exits nonzero when no matching files exist, so run it only while that lifecycle has an active inventory.
 
-Integration testing checks how different parts of your application work together. It's crucial to focus on integration tests for most of your testing, as they provide significant benefits and boost confidence in your application's reliability. While unit tests are helpful for individual parts, passing them doesn't guarantee your app will function correctly if the connections between parts are flawed. Testing various features with integration tests is vital to ensure that your application works smoothly and consistently.
+## Vitest Commands
 
-[Integration Test Example Code](../layers/discussions/app/pages/app/discussions/__tests__/discussion.test.ts)
+| Command | Purpose |
+| --- | --- |
+| `pnpm test:unit` | Run the durable Vitest suite once. |
+| `pnpm test` | Run Vitest in its default development mode. |
+| `pnpm test:watch` | Run the durable suite in watch mode. |
+| `pnpm test:ui` | Open the Vitest UI. |
+| `pnpm test:evidence:exploration` | Run a non-empty Exploration inventory explicitly. |
+| `pnpm test:evidence:characterization` | Run a non-empty Characterization inventory explicitly. |
 
-### E2E Tests
+## Database-Backed E2E
 
-End-to-End Testing is a method that evaluates an application as a whole. These tests involve automating the complete application, including both the frontend and backend, to confirm that the entire system functions correctly. End-to-End tests simulate how a user would interact with the application.
+The documented local and E2E lifecycle uses NuxtHub's committed migrations. E2E preparation removes only the dedicated `.data/e2e` database, lets NuxtHub apply migrations during the build, then uses `start-server-and-test` to manage preview and Playwright.
 
-[E2E Test Example Code](../e2e/smoke.spec.ts)
+Prepare a fresh migration-only database characterization:
 
-## Recommended Tooling
+```bash
+pnpm test:e2e:prepare
+```
 
-### [Vitest](https://vitest.dev)
+Run the production-like local E2E lifecycle:
 
-Vitest is a powerful testing framework with features similar to Jest, but it's more up-to-date and works well with modern tools. It offers native TypeScript support, watch mode with HMR, and built-in coverage reporting. It's highly customizable and flexible, making it a popular option for testing JavaScript code.
+```bash
+pnpm test:e2e:ci
+```
 
-### [Vue Testing Library](https://testing-library.com/docs/vue-testing-library/intro)
+The lifecycle does not use the developer's default `.data/db/sqlite.db`, does not create `db/test.db`, and does not use schema push. Do not run overlapping Nuxt generation or E2E lifecycles in the same checkout.
 
-Testing Library is a set of libraries and tools that makes testing easier than ever before. Its philosophy is to test your app in a way it is being used by a real world user instead of testing implementation details. For example, don't test what is the current state value in a component, but test what that component renders on the screen for its user.
+Local demo data is an explicit operation. Run `pnpm db:migrate` first, start the Local dev server, and run the `db:seed` task from Nuxt DevTools. The task uses the generated Local package and is not added to E2E preparation, CI, or dev startup:
 
-### [Playwright](https://playwright.dev)
+The task seeds only the Engineering and Product teams with the Admin and Regular demo users. Re-running it is safe for compatible records. Unexpected Team names, User emails, or stable identities cause the task to fail without partial writes. The task must not be run against Preview, Production, or another remote database. The demo password is disposable Local-only data and must never be used for shared or deployed environments.
 
-Playwright is a tool for running e2e tests in an automated way. You define all the commands a real world user would execute when using the app and then start the test. It can be started in two modes:
+For a disposable Local database cycle, remove only the database storage and rebuild it from committed migrations:
 
-- **Browser mode** - Opens a dedicated browser and runs your application. You get tools to visualize and inspect your application on each step. Run this locally when developing.
-- **Headless mode** - Starts a headless browser and runs your application. Useful for integrating with CI/CD to run on every deploy.
+```bash
+pnpm db:reset
+```
 
-### [@nuxt/test-utils](https://nuxt.com/docs/getting-started/testing)
+Hosted CI validates this same Local SQLite lifecycle on a fresh GitHub runner. Cloudflare D1, remote reset, and deployment lifecycle evidence are tracked separately and are not established by these local commands.
 
-Official Nuxt testing utilities that integrate with both Vitest and Playwright. It provides helpers for mounting components with Nuxt context, SSR testing support, and hydration-aware navigation for e2e tests.
+See the [NuxtHub DB Practices](../../../docs/practices/nuxt-hub-db/index.md) for
+the separate Local SQLite, hosted CI, D1, deployment, PostgreSQL, and seed
+evidence boundaries.
 
-## Test Structure
+## Support Files
 
-Tests should be colocated with their source files for unit and integration tests. E2E tests live in a dedicated `e2e/` directory:
+- [Shared render helpers](../test/test-utils.ts)
+- [Data generators](../test/data-generators.ts)
+- [Vitest configuration](../vitest.config.ts)
+- [Temporary evidence configuration](../vitest.evidence.config.ts)
+- [Playwright configuration](../playwright.config.ts)
 
-- Unit/integration tests: `ComponentName.spec.ts` next to `ComponentName.vue`
-- E2E tests: `e2e/*.spec.ts` for full workflow tests
+## Detailed Practices
 
-[Test Utilities Example Code](../test/test-utils.ts)
-
-[Data Generators Example Code](../test/data-generators.ts)
+- Use [Test Data-Fetching Claims at Their Owning Boundaries](../../../docs/practices/use-fetch/data-fetching-test-evidence.md) for data-fetching-specific claim, owner, and fidelity guidance.
+- See the [Nuxt Data Fetching Practices](../../../docs/practices/use-fetch/index.md) for related confirmed contracts.

@@ -17,17 +17,17 @@ Keep your code style consistent. Vue and Nuxt provide official style guides and 
 
 If your component is accepting too many props you might consider splitting it into multiple components or use the composition technique via children or slots.
 
-[Composition Example Code](../layers/base/app/components/ui/dialog/DialogContent.vue)
+[Composition Example Code](../app/components/ui/dialog/DialogContent.vue)
 
 #### Abstract shared components into a component library
 
 For larger projects, it is a good idea to build abstractions around all the shared components. It makes the application more consistent and easier to maintain. Identify repetitions before creating the components to avoid wrong abstractions.
 
-[Component Library Example Code](../layers/base/app/components/ui/Button.vue)
+[Component Library Example Code](../app/components/ui/button/Button.vue)
 
 It is a good idea to wrap 3rd party components as well in order to adapt them to the application's needs. It might be easier to make the underlying changes in the future without affecting the application's functionality.
 
-[3rd Party Component Example Code](../layers/base/app/components/ui/link/Link.vue)
+[3rd Party Component Example Code](../app/components/ui/dialog/DialogRoot.vue)
 
 ## Component libraries
 
@@ -65,6 +65,8 @@ With the rise of headless component libraries, there is another tier of componen
 
 - [shadcn-vue](https://www.shadcn-vue.com/)
 - [Inspira UI](https://inspira-ui.com/)
+
+This project keeps shadcn-vue UI source under `app/components/ui/`. The `shadcn-nuxt` module reads each generated `index.ts` barrel and registers its uppercase component exports with an empty prefix. Application consumers continue to use explicit barrel imports such as `@/components/ui/button`.
 
 ## Storybook
 

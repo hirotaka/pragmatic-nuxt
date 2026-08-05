@@ -1,21 +1,42 @@
+import type { Page } from "@playwright/test";
 import { test, expect } from "@nuxt/test-utils/playwright";
 
 import {
   createDiscussion,
   createComment,
 } from "../test/data-generators";
+import { expectEmptyResponse } from "./support/api-response";
+import { waitForNuxtHydration } from "./support/nuxt-navigation";
+
+async function registerIsolatedUser(page: Page) {
+  const unique = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expectEmptyResponse(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+    data: {
+      firstName: "Smoke",
+      lastName: "Admin",
+      email: `smoke-${unique}@example.com`,
+      password: "Password123!",
+      teamId: null,
+      teamName: `Smoke Team ${unique}`,
+    },
+  }), 201);
+}
 
 test("smoke", async ({ page, goto }) => {
   const discussion = createDiscussion();
   const comment = createComment();
 
+  await registerIsolatedUser(page);
   await goto("/", { waitUntil: "hydration" });
   await page.getByRole("button", { name: "Get started" }).click();
   await page.waitForURL("/app");
+  await waitForNuxtHydration(page);
 
   // create discussion:
   await page.getByRole("link", { name: "Discussions" }).click();
   await page.waitForURL("/app/discussions");
+  await waitForNuxtHydration(page);
 
   await expect(page.getByRole("button", { name: "Create Discussion" })).toBeVisible();
   await page.getByRole("button", { name: "Create Discussion" }).click();
@@ -32,10 +53,15 @@ test("smoke", async ({ page, goto }) => {
     .click();
   await expect(page.getByText(discussion.title)).toBeVisible();
   await page.reload();
+  await waitForNuxtHydration(page);
   await expect(page.getByText(discussion.title)).toBeVisible();
 
   // visit discussion page:
-  await page.getByRole("link", { name: "View" }).click();
+  await page
+    .getByRole("row")
+    .filter({ hasText: discussion.title })
+    .getByRole("link", { name: "View" })
+    .click();
 
   await expect(page.getByText(discussion.body)).toBeVisible();
 
@@ -55,6 +81,7 @@ test("smoke", async ({ page, goto }) => {
 
   await expect(page.getByText(`${discussion.body} - updated`)).toBeVisible();
   await page.reload();
+  await waitForNuxtHydration(page);
   await expect(page.getByText(`${discussion.body} - updated`)).toBeVisible();
 
   // create comment:
@@ -70,6 +97,7 @@ test("smoke", async ({ page, goto }) => {
     .getByRole("button", { name: "Close" })
     .click();
   await page.reload();
+  await waitForNuxtHydration(page);
   await expect(page.getByText(comment.body)).toBeVisible();
 
   // delete comment:
@@ -88,6 +116,7 @@ test("smoke", async ({ page, goto }) => {
   ).toBeVisible();
   await expect(page.getByText(comment.body)).toBeHidden();
   await page.reload();
+  await waitForNuxtHydration(page);
   await expect(
     page.getByRole("heading", { name: "No Comments Found" }),
   ).toBeVisible();
@@ -96,9 +125,15 @@ test("smoke", async ({ page, goto }) => {
   // go back to discussions:
   await page.getByRole("link", { name: "Discussions" }).click();
   await page.waitForURL("/app/discussions");
+  await waitForNuxtHydration(page);
 
   // delete discussion:
-  await page.getByRole("button", { name: "Open discussion actions" }).click();
+  const discussionRow = page
+    .getByRole("row")
+    .filter({ hasText: `${discussion.title} - updated` });
+  await discussionRow
+    .getByRole("button", { name: "Open discussion actions" })
+    .click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
   await page.getByRole("button", { name: "Delete Discussion" }).click();
   await page
@@ -109,6 +144,7 @@ test("smoke", async ({ page, goto }) => {
     page.getByRole("heading", { name: "No Entries Found" }),
   ).toBeVisible();
   await page.reload();
+  await waitForNuxtHydration(page);
   await expect(
     page.getByRole("heading", { name: "No Entries Found" }),
   ).toBeVisible();

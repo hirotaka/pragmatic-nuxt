@@ -1,53 +1,85 @@
 <script setup lang="ts">
-import { ArchiveX } from "lucide-vue-next";
-import { onMounted } from "vue";
-import MarkdownPreview from "~~/components/app/MarkdownPreview.vue";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { useComments } from "~comments/app/composables/useComments";
+import { ref } from "vue";
+import { ArchiveX, CircleAlert } from "lucide-vue-next";
+import MarkdownPreview from "~~/app/components/app/MarkdownPreview.vue";
+import { Button } from "~~/app/components/ui/button";
+import { Spinner } from "~~/app/components/ui/spinner";
 import { formatDate } from "#layers/base/app/utils/format";
 import { POLICIES } from "#layers/auth/app/composables/useAuthorization";
+import type { Comment } from "~comments/shared/types";
 
 interface CommentsListProps {
-  discussionId: string;
-  refreshTrigger?: number;
+  comments: Comment[];
+  currentPage: number;
+  hasInitialError: boolean;
+  hasMore: boolean;
+  isInitialReady: boolean;
+  isLoading: boolean;
+  loadMore: () => Promise<void>;
+  refresh: () => Promise<void>;
 }
 
 const props = defineProps<CommentsListProps>();
 
 const { user } = useUser();
-const { comments, currentPage, hasMore, isLoading, loadComments, loadMore } = useComments(
-  () => props.discussionId,
-);
+const isRetrying = ref(false);
 
-const handleCommentDeleted = async () => {
-  await loadComments(1);
+const handleRetry = async () => {
+  if (isRetrying.value) return;
+
+  isRetrying.value = true;
+  try {
+    await props.refresh();
+  }
+  finally {
+    isRetrying.value = false;
+  }
 };
-
-onMounted(async () => {
-  await loadComments(1);
-});
-
-watch(
-  () => props.refreshTrigger,
-  async (val) => {
-    if (val !== undefined) {
-      await loadComments(1);
-    }
-  },
-);
 </script>
 
 <template>
   <div
-    v-if="isLoading && currentPage === 1"
-    class="flex h-48 w-full items-center justify-center"
+    v-if="props.hasInitialError || isRetrying"
+    class="flex h-40 items-center justify-center"
   >
-    <Spinner size="lg" />
+    <div
+      aria-label="Comments unavailable"
+      class="flex w-full flex-col items-center justify-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-6 text-center"
+      role="alert"
+    >
+      <CircleAlert class="size-8 text-destructive" />
+      <div class="space-y-1">
+        <h4 class="font-medium">
+          Comments unavailable
+        </h4>
+        <p class="text-sm text-muted-foreground">
+          We couldn't load comments. Try again.
+        </p>
+      </div>
+      <Button
+        variant="outline"
+        size="sm"
+        :disabled="isRetrying"
+        @click="handleRetry"
+      >
+        <Spinner v-if="isRetrying" />
+        Retry comments
+      </Button>
+    </div>
   </div>
 
   <div
-    v-else-if="!comments.length"
+    v-else-if="!props.isInitialReady"
+    aria-label="Loading comments"
+    class="flex h-48 w-full items-center justify-center"
+    role="status"
+  >
+    <Spinner size="lg" />
+    <span class="sr-only">Loading comments</span>
+  </div>
+
+  <div
+    v-else-if="!props.comments.length"
     aria-label="comments"
     class="flex h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-muted/30 text-muted-foreground"
   >
@@ -61,7 +93,7 @@ watch(
       class="flex flex-col space-y-3"
     >
       <li
-        v-for="(comment, index) in comments"
+        v-for="(comment, index) in props.comments"
         :key="comment.id"
         :aria-label="`comment-${comment.body}-${index}`"
         class="w-full rounded-lg border bg-background p-4 shadow-sm"
@@ -81,9 +113,9 @@ watch(
           <Authorization :policy-check="user ? POLICIES['comment:delete'](user, comment) : false">
             <DeleteComment
               :comment-id="comment.id"
+              :refresh="props.refresh"
               as-menu-item
               :action-label="`Open comment actions for comment ${index + 1}`"
-              @deleted="handleCommentDeleted"
             />
           </Authorization>
         </div>
@@ -93,14 +125,14 @@ watch(
     </ul>
 
     <div
-      v-if="hasMore"
+      v-if="props.hasMore"
       class="flex items-center justify-center py-4"
     >
       <Button
         variant="outline"
-        @click="loadMore"
+        @click="props.loadMore"
       >
-        <Spinner v-if="isLoading && currentPage > 1" />
+        <Spinner v-if="props.isLoading && props.currentPage > 1" />
         <template v-else>
           Load More Comments
         </template>

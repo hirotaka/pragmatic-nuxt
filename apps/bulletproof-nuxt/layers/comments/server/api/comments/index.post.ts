@@ -1,17 +1,9 @@
 import { createCommentInputSchema } from "~comments/shared/schemas";
 import { createCommentRepository } from "~comments/server/repository/commentRepository";
+import type { User } from "#layers/auth/shared/types";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = (await requireUserSession(event)).user as User;
 
   const body = await readBody(event);
 
@@ -19,21 +11,19 @@ export default defineEventHandler(async (event) => {
   if (!validationResult.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation failed",
-      data: validationResult.error.issues,
+      statusMessage: "Invalid comment",
     });
   }
 
   const { body: commentBody, discussionId } = validationResult.data;
 
-  const commentRepository = await createCommentRepository(event);
+  const commentRepository = createCommentRepository();
 
-  const comment = await commentRepository.create({
+  await commentRepository.create({
     body: commentBody,
     discussionId,
     authorId: sessionUser.id,
   });
 
   setResponseStatus(event, 201);
-  return { data: comment };
 });

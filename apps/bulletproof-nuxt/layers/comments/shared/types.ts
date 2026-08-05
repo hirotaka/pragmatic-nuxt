@@ -1,3 +1,5 @@
+import type { PaginatedResult, PaginationMeta as BasePaginationMeta } from "#layers/base/shared/types/pagination";
+
 export interface Comment {
   id: string;
   body: string;
@@ -8,21 +10,12 @@ export interface Comment {
     firstName: string;
     lastName: string;
   };
-  createdAt: string | number | Date;
-  updatedAt: string | number | Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface PaginationMeta {
-  page: number;
-  total: number;
-  totalPages: number;
-  hasMore?: boolean;
-}
-
-export interface PaginatedComments {
-  data: Comment[];
-  meta: PaginationMeta;
-}
+export type PaginationMeta = BasePaginationMeta;
+export type PaginatedComments = PaginatedResult<Comment>;
 
 export interface CreateCommentInput {
   body: string;

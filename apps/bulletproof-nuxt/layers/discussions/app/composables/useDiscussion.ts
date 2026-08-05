@@ -1,39 +1,14 @@
-import type { Discussion } from "~discussions/shared/types";
+import type { FetchResult, UseFetchOptions } from "#app";
+import { useAPI } from "#layers/base/app/composables/useAPI";
 
-export function useDiscussion(id: MaybeRefOrGetter<string>) {
-  const discussionId = computed(() => toValue(id));
+type DiscussionRoute = `/api/discussions/${string}`;
 
-  const { data, status, error, execute, refresh } = useFetch<{
-    discussion: Discussion;
-  }>(() => `/api/discussions/${discussionId.value}`, {
-    default: () => ({
-      discussion: {
-        id: "",
-        title: "",
-        body: "",
-        authorId: "",
-        teamId: "",
-        createdAt: new Date(0),
-        updatedAt: new Date(0),
-        author: {
-          id: "",
-          firstName: "",
-          lastName: "",
-        },
-      },
-    }),
-    immediate: false,
-  });
-
-  const isPending = computed(() => status.value === "pending");
-  const isSuccess = computed(() => status.value === "success");
-
-  return {
-    data,
-    isPending,
-    isSuccess,
-    error,
-    fetch: execute,
-    refresh,
-  };
+export async function useDiscussion(
+  id: MaybeRefOrGetter<string>,
+  options?: UseFetchOptions<FetchResult<DiscussionRoute, "get">>,
+) {
+  return await useAPI(
+    () => `/api/discussions/${toValue(id)}`,
+    options,
+  );
 }
