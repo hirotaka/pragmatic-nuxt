@@ -5,12 +5,16 @@ on:
     paths:
       - "apps/reference/bulletproof-vue-vite/**"
       - "pnpm-lock.yaml"
+      - "package.json"
+      - "pnpm-workspace.yaml"
       - ".github/workflows/vue-vite-ci.yml"
   pull_request:
     branches: [main]
     paths:
       - "apps/reference/bulletproof-vue-vite/**"
       - "pnpm-lock.yaml"
+      - "package.json"
+      - "pnpm-workspace.yaml"
       - ".github/workflows/vue-vite-ci.yml"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
