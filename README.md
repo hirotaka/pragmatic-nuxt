@@ -18,21 +18,17 @@ What you'll find here:
 
 ### Start Here
 
-If you want the current recommended Nuxt setup, start with:
+If you want to explore a working Nuxt application, start with:
 
 - [apps/bulletproof-nuxt](apps/bulletproof-nuxt)
 
-Technical decisions for actively maintained apps are documented in the [Technical Radar](docs/technical-radar.md). Confirmed guidance is collected in the [Nuxt Data Fetching Practices](docs/practices/use-fetch/index.md).
+This repository tries Nuxt application themes and implementation approaches in real applications and accumulates confirmed Practices from that work.
 
-### Canonical Apps
-
-Canonical Apps are actively maintained and follow current Adopt decisions from the Technical Radar.
+### Showcase Apps
 
 | Showcase | Description | Key Libraries | Demo |
 |----------|-------------|---------------|------|
-| [bulletproof-nuxt](apps/bulletproof-nuxt) | Canonical Nuxt full-stack business app | Nuxt Layers, shadcn-vue, Regle, Zod v4, Drizzle ORM | [Live](https://bulletproof-nuxt.pages.dev) |
-| `apps/chat` | Canonical AI chat app reference | Nuxt, AI SDK, shadcn-vue/reka-ui | Planned |
-| `apps/dashboard` | Canonical dashboard app reference | Nuxt, Regle, Pinia Colada | Planned |
+| [bulletproof-nuxt](apps/bulletproof-nuxt) | Nuxt full-stack business app | Nuxt Layers, shadcn-vue, Regle, Zod v4, Drizzle ORM | [Live](https://bulletproof-nuxt.pages.dev) |
 
 ### Reference Apps
 

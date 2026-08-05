@@ -1,5 +1,5 @@
-import type { H3Event } from "h3";
-import { discussions } from "~~/db/schema";
+import { db } from "@nuxthub/db";
+import { discussions } from "@nuxthub/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import type { PaginatedResult } from "#layers/base/shared/types/pagination";
 
@@ -14,9 +14,7 @@ export type DiscussionWithAuthor = Pick<
   };
 };
 
-export const createDiscussionRepository = async (event: H3Event) => {
-  const db = await useDb(event);
-
+export const createDiscussionRepository = () => {
   const findAll = async (params: {
     teamId: string;
     page: number;

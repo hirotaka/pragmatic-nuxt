@@ -1,5 +1,5 @@
-import type { H3Event } from "h3";
-import { teams } from "~~/db/schema";
+import { db } from "@nuxthub/db";
+import { teams } from "@nuxthub/db/schema";
 import { eq, desc } from "drizzle-orm";
 
 export interface Team {
@@ -9,9 +9,7 @@ export interface Team {
   updatedAt: Date;
 }
 
-export const createTeamRepository = async (event: H3Event) => {
-  const db = await useDb(event);
-
+export const createTeamRepository = () => {
   const create = async (name: string): Promise<Team> => {
     const [team] = await db
       .insert(teams)

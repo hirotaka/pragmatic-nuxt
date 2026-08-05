@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const userRepository = await createUserRepository(event);
+  const userRepository = createUserRepository();
 
   if (await userRepository.emailExistsForOtherUser(validationResult.data.email, sessionUser.id)) {
     throw createError({

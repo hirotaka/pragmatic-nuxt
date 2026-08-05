@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const { page, limit } = parsePagination(query);
 
-  const discussionRepository = await createDiscussionRepository(event);
+  const discussionRepository = createDiscussionRepository();
 
   const discussions = await discussionRepository.findAll({
     teamId: sessionUser.teamId,
