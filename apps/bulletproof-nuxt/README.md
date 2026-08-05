@@ -1,6 +1,6 @@
 # 🛡️  Bulletproof Nuxt
 
-This app is the canonical Nuxt full-stack business application. It uses
+This app is a Nuxt full-stack business application. It uses
 shadcn-vue / Reka UI open-code primitives for the UI foundation while keeping
 Regle as the app-owned form validation library.
 
