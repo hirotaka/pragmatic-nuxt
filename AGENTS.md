@@ -56,7 +56,11 @@
 ## Documentation ownership
 
 - Canonical Nuxt structural implementation docs: `apps/bulletproof-nuxt/docs`. Keep these focused on app structure, responsibility boundaries, placement, wiring, and code entry points.
+- Canonical app docs may also record app-specific domain, actors/capabilities, responsibility composition, Practice differences, and invariants. They are a composition layer, not a copy of the repo-wide Practice collection.
 - Repo-wide detailed Practices: `docs/practices/*`. App docs should link to these Practices instead of copying rationale, decision criteria, trade-offs, or tutorial guidance.
+- Permanent app docs must not carry commands, implementation paths, code snippets, versions, branch or resource identifiers, or temporary workflow/publication state. Keep those details in their owning artifacts.
+- Review app docs when app-specific responsibility, domain relation, capability ownership, Practice composition, deployment responsibility, or data-safety invariants change. A package, command, path, version, or Practice wording change alone does not require an app-doc update.
+- Keep existing topic docs while Practices mature; converge them incrementally when the relevant Practice is ready or the topic document is otherwise changed.
 - Nuxt reference apps (`apps/reference/bulletproof-nuxt-*`) should link to canonical docs for shared implementation guidance instead of carrying copied base docs; keep only reference-specific deltas when they add reader value.
 - Canonicalization and reference publication work must verify docs ownership when moving apps between canonical/reference/sandbox roles.
 - Repo-level technology decisions: `docs/technical-radar.md`.
