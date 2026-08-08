@@ -83,7 +83,7 @@ async function registerIsolatedAccount(page: Page, label: string, teamId?: strin
 
 async function openUserDeleteDialog(page: Page, email: string) {
   const row = page.getByRole("row").filter({ hasText: email });
-  await row.getByRole("button", { name: "Delete", exact: true }).click();
+  await row.getByRole("button", { name: "Delete User", exact: true }).click();
   return page.getByRole("dialog", { name: "Delete User" });
 }
 

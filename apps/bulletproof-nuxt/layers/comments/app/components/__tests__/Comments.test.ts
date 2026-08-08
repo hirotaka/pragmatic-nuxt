@@ -52,7 +52,7 @@ vi.mock("~comments/app/composables/useComments", () => ({
       hasMore: { __v_isRef: true, value: false },
       isInitialReady,
       isLoading,
-      loadComments,
+      refreshFirstPage: loadComments,
       loadMore: vi.fn(),
     };
   },
@@ -101,7 +101,7 @@ test("recovers an initial comments failure through the existing read owner", asy
   expect(screen.getByRole("button", { name: /create comment/i }).hasAttribute("disabled")).toBe(true);
   await userEvent.click(screen.getByRole("button", { name: "Retry comments" }));
 
-  expect(loadComments).toHaveBeenCalledWith(1);
+  expect(loadComments).toHaveBeenCalledWith();
   expect(screen.getByRole("button", { name: "Retry comments" }).hasAttribute("disabled")).toBe(true);
 
   retrySettlement.resolve();
@@ -162,7 +162,7 @@ test("wires one accumulated-state owner through create refresh", async () => {
   await userEvent.click(bodyScreen.getByRole("button", { name: /submit/i }));
 
   await waitFor(() => expect(loadComments).toHaveBeenCalledOnce());
-  expect(loadComments).toHaveBeenCalledWith(1);
+  expect(loadComments).toHaveBeenCalledWith();
   expect(bodyScreen.getByLabelText(/body/i)).toBeTruthy();
 
   refreshSettlement.resolve();

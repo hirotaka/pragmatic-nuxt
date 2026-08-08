@@ -35,7 +35,7 @@ export async function useComments(discussionId: MaybeRefOrGetter<string>) {
     hasMore: computed(() => pagination.data.value?.meta.hasMore ?? false),
     isInitialReady,
     isLoading: pagination.isLoading,
-    loadComments: pagination.loadPage,
+    refreshFirstPage: () => pagination.loadPage(1),
     loadMore: pagination.loadMore,
   };
 }

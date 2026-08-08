@@ -46,7 +46,7 @@ vi.mock("#layers/base/app/composables/useNotifications", () => ({
 }));
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
-  useUser: () => ({ user: { id: "current-user" } }),
+  useUser: () => ({ user: { value: { id: "current-user" } } }),
 }));
 
 vi.mock("~users/app/composables/useDeleteUser", () => ({
@@ -62,7 +62,7 @@ function deferred() {
 }
 
 beforeEach(() => {
-  refresh.mockReset();
+  refresh.mockReset().mockResolvedValue(undefined);
   addNotification.mockReset();
   deleteUserMutate.mockReset().mockResolvedValue(undefined);
   usersState.data = users;
@@ -135,9 +135,13 @@ test("UsersList refreshes the users read after mobile delete succeeds", async ()
 
   const screen = within(wrapper.element as HTMLElement);
   const mobileCards = screen.getByRole("list", { name: "User directory cards" });
-  await within(mobileCards).getByRole("button", { name: "Delete User" }).click();
+  await userEvent.click(within(mobileCards).getByRole("button", { name: "Delete User" }));
+  const bodyScreen = within(document.body);
+  const deleteButtons = bodyScreen.getAllByRole("button", { name: "Delete User" });
+  await userEvent.click(deleteButtons[deleteButtons.length - 1]!);
 
   expect(refresh).toHaveBeenCalledTimes(1);
+  expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
 });
 
 test("wires the users refresh through real DeleteUser and waits before close", async () => {
@@ -148,13 +152,13 @@ test("wires the users refresh through real DeleteUser and waits before close", a
   const bodyScreen = within(document.body);
   const desktopTable = screen.getByRole("table");
 
-  await userEvent.click(within(desktopTable).getByRole("button", { name: /^delete$/i }));
+  await userEvent.click(within(desktopTable).getByRole("button", { name: /delete user/i }));
   const deleteButtons = await bodyScreen.findAllByRole("button", { name: /delete user/i });
   await userEvent.click(deleteButtons[deleteButtons.length - 1]!);
 
   await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
   expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
-  expect(bodyScreen.getByText(/are you sure you want to delete this user/i)).toBeTruthy();
+  expect(bodyScreen.getByText(/are you sure you want to delete Ada Lovelace/i)).toBeTruthy();
 
   refreshSettlement.resolve();
 
@@ -172,7 +176,7 @@ test("does not refresh a remounted users owner when an earlier delete settles", 
   const firstScreen = within(firstOwner.element as HTMLElement);
   const bodyScreen = within(document.body);
 
-  await userEvent.click(within(firstScreen.getByRole("table")).getByRole("button", { name: /^delete$/i }));
+  await userEvent.click(within(firstScreen.getByRole("table")).getByRole("button", { name: /delete user/i }));
   const deleteButtons = await bodyScreen.findAllByRole("button", { name: /delete user/i });
   await userEvent.click(deleteButtons[deleteButtons.length - 1]!);
   await waitFor(() => expect(deleteUserMutate).toHaveBeenCalledWith("user-1"));
