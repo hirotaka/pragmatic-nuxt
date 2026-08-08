@@ -15,11 +15,9 @@ const {
   hasMore,
   isInitialReady,
   isLoading,
-  loadComments,
+  refreshFirstPage,
   loadMore,
 } = await useComments(() => props.discussionId);
-
-const refreshComments = () => loadComments(1);
 </script>
 
 <template>
@@ -34,7 +32,7 @@ const refreshComments = () => loadComments(1);
           :key="props.discussionId"
           :disabled="!isInitialReady"
           :discussion-id="props.discussionId"
-          :refresh="refreshComments"
+          :refresh="refreshFirstPage"
         />
       </div>
     </CardHeader>
@@ -48,7 +46,7 @@ const refreshComments = () => loadComments(1);
         :is-initial-ready="isInitialReady"
         :is-loading="isLoading"
         :load-more="loadMore"
-        :refresh="refreshComments"
+        :refresh="refreshFirstPage"
       />
     </CardContent>
   </Card>
