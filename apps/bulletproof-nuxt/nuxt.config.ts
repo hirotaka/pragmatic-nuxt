@@ -34,7 +34,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ["./app/assets/css/main.css"],
+  css: ["~/assets/css/main.css"],
   // Nuxt 4 compatibility
   future: {
     compatibilityVersion: 4,
