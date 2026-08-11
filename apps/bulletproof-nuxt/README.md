@@ -43,8 +43,10 @@ domain queries, mapping, pagination, and domain errors.
 ### Development and Builds
 
 Apply Local migrations with `pnpm db:migrate`, then start the app with
-`pnpm dev`. Local demo data is an explicit `db:seed` Nitro Task, available from
-Nuxt DevTools after migration. Use `pnpm build` for the production or Preview
+`pnpm dev` when you want the app available. Local demo data is an explicit
+`db:seed` operation. Run it from Nuxt DevTools or with `pnpm db:seed`; the
+command prepares the generated Local database runtime and calls the app-owned
+seed implementation directly. Use `pnpm build` for the production or Preview
 Cloudflare build selected by the environment.
 
 See [Testing](./docs/testing.md), [Deployment](./docs/deployment.md), and the
