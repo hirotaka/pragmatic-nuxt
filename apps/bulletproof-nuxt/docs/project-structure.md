@@ -27,6 +27,7 @@ apps/bulletproof-nuxt
 |       +-- schema.sqlite.ts      # app-owned SQLite Drizzle schema discovered by NuxtHub
 |       +-- schema.postgresql.ts  # app-owned PostgreSQL Drizzle schema for portability work
 |       +-- seed.ts               # app-owned seed implementation
+|       +-- seed-cli.mjs          # terminal wrapper for the app-owned seed implementation
 |       +-- migrations
 |           +-- sqlite     # SQLite migration SQL and Drizzle metadata
 |           +-- postgresql # PostgreSQL migration SQL and Drizzle metadata

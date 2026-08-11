@@ -44,7 +44,12 @@ pnpm test:e2e:ci
 
 The lifecycle does not use the developer's default `.data/db/sqlite.db`, does not create `db/test.db`, and does not use schema push. Do not run overlapping Nuxt generation or E2E lifecycles in the same checkout.
 
-Local demo data is an explicit operation. Run `pnpm db:migrate` first, start the Local dev server, and run the `db:seed` task from Nuxt DevTools. The task uses the generated Local package and is not added to E2E preparation, CI, or dev startup:
+Local demo data is an explicit operation. Run `pnpm db:migrate` first, then choose one of these invocation paths:
+
+- Run the `db:seed` task from Nuxt DevTools.
+- Run `pnpm db:seed`. It prepares the generated Local database runtime and calls the app-owned seed implementation directly.
+
+Both paths invoke the same task through the generated Local package. The task is not added to E2E preparation, CI, or dev startup:
 
 The task seeds only the Engineering and Product teams with the Admin and Regular demo users. Re-running it is safe for compatible records. Unexpected Team names, User emails, or stable identities cause the task to fail without partial writes. The task must not be run against Preview, Production, or another remote database. The demo password is disposable Local-only data and must never be used for shared or deployed environments.
 

@@ -25,6 +25,7 @@
     "db:generate": "rm -rf .nuxt && NUXT_HUB_DB_APPLY_MIGRATIONS=false nuxt db generate",
     "db:migrate": "rm -rf .nuxt && nuxt db migrate",
     "db:reset": "rm -rf .data/db && pnpm db:migrate",
+    "db:seed": "nuxt prepare && node --experimental-strip-types server/db/seed-cli.mjs",
     "db:clear:d1": "wrangler d1 execute bulletproof-nuxt --remote --file db/clear.sql",
     "db:clear:d1:preview": "wrangler d1 execute bulletproof-nuxt-preview --remote --file db/clear.sql",
     "deploy:cloudflare": "sh -c 'pnpm exec wrangler --cwd .output/server d1 migrations apply DB --remote && pnpm exec wrangler --cwd .output deploy --keep-vars'",
