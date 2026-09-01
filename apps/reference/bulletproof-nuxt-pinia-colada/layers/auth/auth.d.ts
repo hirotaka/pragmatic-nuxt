@@ -8,7 +8,7 @@ declare module "#auth-utils" {
     bio?: string;
     teamId: string;
     role: "ADMIN" | "USER";
-    createdAt: Date;
+    createdAt: string;
   }
 }
 

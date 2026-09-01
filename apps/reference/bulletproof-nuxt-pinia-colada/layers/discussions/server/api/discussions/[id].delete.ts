@@ -1,21 +1,13 @@
 import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
+import { requireCurrentUser } from "#layers/auth/server/utils/requireCurrentUser";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = await requireCurrentUser(event);
 
   if (!sessionUser.teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "User must belong to a team",
+      statusMessage: "Team membership required",
     });
   }
 
@@ -28,7 +20,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const discussionRepository = await createDiscussionRepository(event);
+  const discussionRepository = createDiscussionRepository();
 
   const existingDiscussion = await discussionRepository.findByIdAndTeam(id, sessionUser.teamId);
 
@@ -42,11 +34,11 @@ export default defineEventHandler(async (event) => {
   if (existingDiscussion.authorId !== sessionUser.id) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Forbidden - Only the author can delete this discussion",
+      statusMessage: "Discussion delete not allowed",
     });
   }
 
   await discussionRepository.delete(id);
 
-  return { success: true };
+  setResponseStatus(event, 204);
 });

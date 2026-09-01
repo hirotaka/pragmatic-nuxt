@@ -10,7 +10,7 @@ export default defineVitestConfig({
       "**/dist/**",
       "**/.nuxt/**",
       "**/e2e/**",
-      "**/__tests__/integration/**",
+      "**/__evidence__/**",
     ],
     coverage: {
       provider: "v8",
@@ -27,7 +27,11 @@ export default defineVitestConfig({
     },
     onConsoleLog(log) {
       // Suppress known warnings that can't be fixed at the moment
-      if (log.includes("<Suspense> is an experimental feature")) {
+      if (
+        log.includes("<Suspense> is an experimental feature")
+        || log.includes("injection \"Symbol(regle)\" not found")
+        || log.includes("Regle Devtools are not available")
+      ) {
         return false;
       }
     },

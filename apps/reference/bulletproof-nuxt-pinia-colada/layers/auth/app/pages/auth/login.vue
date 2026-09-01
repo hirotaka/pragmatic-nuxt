@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from "vue-router";
+import { resolveLoginRedirect } from "#layers/auth/app/utils/loginRedirect";
 
 definePageMeta({
   layout: "auth",
@@ -12,10 +13,8 @@ useHead({
 
 const router = useRouter();
 const route = useRoute();
-const redirectTo = route.query.redirectTo as string | undefined;
-
 const handleSuccess = () => {
-  router.replace(redirectTo || "/app");
+  router.replace(resolveLoginRedirect(route.query.redirectTo));
 };
 </script>
 

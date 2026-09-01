@@ -49,21 +49,22 @@ command prepares the generated Local database runtime and calls the app-owned
 seed implementation directly. Use `pnpm build` for the production or Preview
 Cloudflare build selected by the environment.
 
-See [Testing](./docs/testing.md), [Deployment](./docs/deployment.md), and the
+See [Testing](../../docs/bulletproof-nuxt/testing.md),
+[Deployment](../../docs/bulletproof-nuxt/deployment.md), and the
 [NuxtHub DB Practices](../../docs/practices/nuxt-hub-db/index.md) for the
 environment-specific lifecycle boundaries and reusable guidance.
 
 ## 📚 Documentation
 
-- [💻 Application Overview](./docs/application-overview.md)
-- [⚙️ Project Standards](./docs/project-standards.md)
-- [🗄️ Project Structure](./docs/project-structure.md)
-- [🧱 Components And Styling](./docs/components-and-styling.md)
-- [📡 API Layer](./docs/api-layer.md)
-- [🗃️ State Management](./docs/state-management.md)
-- [🧪 Testing](./docs/testing.md)
-- [⚠️ Error Handling](./docs/error-handling.md)
-- [🔐 Security](./docs/security.md)
-- [🚄 Performance](./docs/performance.md)
-- [🌐 Deployment](./docs/deployment.md)
-- [📚 Additional Resources](./docs/additional-resources.md)
+- [💻 Application Overview](../../docs/bulletproof-nuxt/application-overview.md)
+- [⚙️ Project Standards](../../docs/bulletproof-nuxt/project-standards.md)
+- [🗄️ Project Structure](../../docs/bulletproof-nuxt/project-structure.md)
+- [🧱 Components And Styling](../../docs/bulletproof-nuxt/components-and-styling.md)
+- [📡 API Layer](../../docs/bulletproof-nuxt/api-layer.md)
+- [🗃️ State Management](../../docs/bulletproof-nuxt/state-management.md)
+- [🧪 Testing](../../docs/bulletproof-nuxt/testing.md)
+- [⚠️ Error Handling](../../docs/bulletproof-nuxt/error-handling.md)
+- [🔐 Security](../../docs/bulletproof-nuxt/security.md)
+- [🚄 Performance](../../docs/bulletproof-nuxt/performance.md)
+- [🌐 Deployment](../../docs/bulletproof-nuxt/deployment.md)
+- [📚 Additional Resources](../../docs/bulletproof-nuxt/additional-resources.md)

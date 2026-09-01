@@ -1,5 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
+
 interface CommentsProps {
   discussionId: string;
 }
@@ -8,13 +10,20 @@ const props = defineProps<CommentsProps>();
 </script>
 
 <template>
-  <div>
-    <div class="mb-4 flex items-center justify-between">
-      <h3 class="text-xl font-bold">
-        Comments:
-      </h3>
-      <CreateComment :discussion-id="props.discussionId" />
-    </div>
-    <CommentsList :discussion-id="props.discussionId" />
-  </div>
+  <Card>
+    <CardHeader>
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <CardTitle>Comments</CardTitle>
+          <CardDescription>Continue the discussion with your team.</CardDescription>
+        </div>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <CommentsList
+        :key="props.discussionId"
+        :discussion-id="props.discussionId"
+      />
+    </CardContent>
+  </Card>
 </template>

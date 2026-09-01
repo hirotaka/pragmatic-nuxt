@@ -1,6 +1,8 @@
 import { createUserRepository } from "#layers/users/server/repository/userRepository";
 import { loginInputSchema } from "~auth/shared/schemas";
 import { customVerifyPassword } from "~auth/server/utils/password";
+import { serializeSessionIdentity } from "~auth/server/utils/serializeUser";
+import type { User } from "~auth/shared/types";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -9,20 +11,19 @@ export default defineEventHandler(async (event) => {
   if (!validationResult.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation failed",
-      data: validationResult.error.issues,
+      statusMessage: "Invalid login",
     });
   }
 
   const { email, password } = validationResult.data;
 
-  const userRepository = await createUserRepository(event);
+  const userRepository = createUserRepository();
 
   const user = await userRepository.findByEmail(email);
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: "Invalid username or password",
+      statusMessage: "Invalid email or password",
     });
   }
 
@@ -30,33 +31,12 @@ export default defineEventHandler(async (event) => {
   if (!isPasswordValid) {
     throw createError({
       statusCode: 401,
-      statusMessage: "Invalid username or password",
+      statusMessage: "Invalid email or password",
     });
   }
 
-  await setUserSession(event, {
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      role: user.role,
-      teamId: user.teamId,
-      createdAt: user.createdAt,
-    },
-  });
+  const sessionUser = serializeSessionIdentity(user);
 
-  return {
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      role: user.role,
-      teamId: user.teamId,
-      createdAt: user.createdAt,
-    },
-  };
+  await replaceUserSession(event, { user: sessionUser as unknown as User });
+  setResponseStatus(event, 204);
 });

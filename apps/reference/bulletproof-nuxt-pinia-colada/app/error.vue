@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Button } from "@/components/ui/button";
+
 const router = useRouter();
 
 defineProps<{
@@ -14,27 +16,27 @@ defineProps<{
     title="Page Not Found"
     description="The page you're looking for doesn't exist"
   />
-  <div class="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
-    <div class="text-center">
-      <h1 class="text-9xl font-bold text-gray-900">
+  <div class="flex min-h-screen flex-col items-center justify-center bg-muted px-4">
+    <div class="rounded-xl border bg-card p-8 text-center shadow-sm">
+      <h1 class="text-8xl font-bold tracking-tight">
         {{ error.statusCode }}
       </h1>
-      <h2 class="mt-4 text-3xl font-semibold text-gray-700">
+      <h2 class="mt-4 text-3xl font-semibold tracking-tight">
         Page Not Found
       </h2>
-      <p class="mt-2 text-lg text-gray-600">
+      <p class="mt-2 text-lg text-muted-foreground">
         Sorry, we couldn't find the page you're looking for.
       </p>
       <div class="mt-8 flex justify-center gap-4">
-        <UButton @click="router.push('/')">
+        <Button @click="router.push('/')">
           Go to Home
-        </UButton>
-        <UButton
+        </Button>
+        <Button
           variant="outline"
           @click="router.back()"
         >
           Go Back
-        </UButton>
+        </Button>
       </div>
     </div>
   </div>
