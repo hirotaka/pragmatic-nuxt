@@ -14,4 +14,8 @@ test("profile", async ({ page, goto }) => {
     .getByRole("button", { name: "Close" })
     .click();
   await expect(page.getByText("My bio")).toBeVisible();
+
+  await page.getByRole("button", { name: "Open user menu" }).click();
+  await page.getByRole("menuitem", { name: "Sign Out" }).click();
+  await page.waitForURL("/");
 });

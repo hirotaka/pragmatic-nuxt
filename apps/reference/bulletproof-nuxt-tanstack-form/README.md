@@ -73,4 +73,4 @@ for more information.
 
 ## 📚 Documentation
 
-See [bulletproof-nuxt documentation](../../bulletproof-nuxt/README.md#documentation) for the base documentation.
+See the [Bulletproof Nuxt family documentation](../../../docs/bulletproof-nuxt/application-overview.md) for shared structure and implementation guidance.

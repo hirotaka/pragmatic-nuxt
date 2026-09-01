@@ -1,20 +1,16 @@
-export interface User {
+export interface SessionIdentity {
   id: string;
+}
+
+export interface User extends SessionIdentity {
   email: string;
   firstName: string;
   lastName: string;
   bio?: string;
   role: "ADMIN" | "USER";
   teamId: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
-export interface AuthResponse {
-  user: User;
-}
-
-export interface Team {
-  id: string;
-  name: string;
-  createdAt: Date;
-}
+/** Compatibility name for server authorization consumers during the session migration. */
+export type SessionUser = User;

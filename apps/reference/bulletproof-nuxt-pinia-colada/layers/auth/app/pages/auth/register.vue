@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import type { Team } from "~auth/shared/types";
 import { useQuery } from "@pinia/colada";
+import AppSpinner from "~~/app/components/app/AppSpinner.vue";
+import { Button } from "~~/app/components/ui/button";
+import { teamsQuery } from "~teams/app/queries/teams";
+import { resolveLoginRedirect } from "#layers/auth/app/utils/loginRedirect";
 
 definePageMeta({
   layout: "auth",
@@ -12,26 +16,40 @@ useHead({
   title: "Register your account",
 });
 
-const { $api } = useNuxtApp();
 const router = useRouter();
 const route = useRoute();
-const redirectTo = route.query.redirectTo as string | undefined;
+const { data: teamsData, status, refresh } = useQuery(() => teamsQuery());
 
-// Fetch teams
-const { data: teamsData } = useQuery({
-  key: () => ["teams"],
-  query: () => $api<Team[]>("/api/teams"),
-});
+const teams = computed(() => teamsData.value);
+const hasSettledTeams = computed(() => teams.value !== undefined);
 
 const handleSuccess = () => {
-  router.replace(redirectTo ?? "/app");
+  router.replace(resolveLoginRedirect(route.query.redirectTo));
 };
-
-const teams = computed(() => teamsData.value ?? []);
 </script>
 
 <template>
+  <AppSpinner
+    v-if="status === 'pending' && !teams"
+    label="Loading teams"
+    class="flex min-h-48 items-center justify-center"
+    size="lg"
+  />
+  <div
+    v-else-if="status === 'error' && !teams"
+    class="flex min-h-48 flex-col items-center justify-center gap-3 text-center"
+    role="alert"
+  >
+    <p>Teams could not be loaded.</p>
+    <Button
+      variant="outline"
+      @click="refresh()"
+    >
+      Retry
+    </Button>
+  </div>
   <RegisterForm
+    v-else-if="hasSettledTeams"
     :teams="teams"
     @success="handleSuccess"
   />

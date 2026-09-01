@@ -1,108 +1,149 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { reactive, watch } from "vue";
 import { Pen } from "lucide-vue-next";
-import { useUpdateProfile } from "~users/app/composables/useUpdateProfile";
-import { updateProfileInputSchema } from "~users/shared/schemas";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { useMutation } from "@pinia/colada";
+import { useRegleSchema } from "@regle/schemas";
+import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { FormField } from "~~/app/components/form-field";
+import FormDrawer from "~~/app/components/app/FormDrawer.vue";
+import { Input } from "~~/app/components/ui/input";
+import { Textarea } from "~~/app/components/ui/textarea";
+import { Button } from "~~/app/components/ui/button";
+import { updateProfileMutation } from "~users/app/queries/profile";
+import { updateProfileInputSchema, type UpdateProfileInput } from "~users/shared/schemas";
 import { useUser } from "#layers/auth/app/composables/useUser";
+import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
-const { addNotification } = useNotifications();
 const { user } = useUser();
-const { fetch: fetchSession } = useUserSession();
+const { addNotification } = useNotifications();
 
-const updateProfile = useUpdateProfile({
-  onSuccess: async () => {
-    // Refresh user session from server
-    await fetchSession();
+const { isLoading, mutateAsync, status } = useMutation(updateProfileMutation());
+const isPending = computed(() => isLoading.value);
+const isDone = computed(() => status.value === "success");
 
-    addNotification({
-      type: "success",
-      title: "Profile Updated",
-    });
-  },
-  onError: (error) => {
-    addNotification({
-      type: "error",
-      title: "Failed to update profile",
-      message: error.message,
-    });
-  },
+const state = reactive<UpdateProfileInput>({
+  email: "",
+  firstName: "",
+  lastName: "",
+  bio: "",
 });
 
-const handleSubmit = (values: Record<string, unknown>) => {
-  updateProfile.mutate({
-    email: String(values.email ?? ""),
-    firstName: String(values.firstName ?? ""),
-    lastName: String(values.lastName ?? ""),
-    bio: String(values.bio ?? ""),
+const { r$ } = useRegleSchema(state, updateProfileInputSchema);
+
+watch(
+  () => user.value,
+  (nextUser) => {
+    if (!nextUser) return;
+    r$.$value.email = nextUser.email;
+    r$.$value.firstName = nextUser.firstName;
+    r$.$value.lastName = nextUser.lastName;
+    r$.$value.bio = nextUser.bio ?? "";
+  },
+  { immediate: true },
+);
+
+const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput | undefined>) => {
+  if (isLoading.value || !user.value) return;
+
+  const values = event.data ?? r$.$value;
+
+  try {
+    await mutateAsync({
+      email: values.email,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      bio: values.bio ?? "",
+    });
+  }
+  catch {
+    return;
+  }
+
+  addNotification({
+    type: "success",
+    title: "Profile Updated",
   });
 };
-
-const initialValues = computed(() => ({
-  email: user.value?.email ?? "",
-  firstName: user.value?.firstName ?? "",
-  lastName: user.value?.lastName ?? "",
-  bio: user.value?.bio ?? "",
-}));
 </script>
 
 <template>
-  <UFormDrawer
-    :is-done="updateProfile.isSuccess.value"
+  <FormDrawer
+    :is-done="isDone"
+    :is-pending="isPending"
     title="Update Profile"
   >
     <template #triggerButton>
-      <UButton size="sm">
+      <Button
+        variant="outline"
+        size="sm"
+      >
         <template #icon>
           <Pen class="size-4" />
         </template>
         Update Profile
-      </UButton>
+      </Button>
     </template>
 
-    <UForm
+    <Form
       id="update-profile"
       :schema="updateProfileInputSchema"
-      :initial-values="initialValues"
+      :state="r$.$value"
+      :disabled="isPending"
+      class="space-y-6"
       @submit="handleSubmit"
     >
-      <template #default>
-        <UInput
-          name="firstName"
-          type="text"
-          label="First Name"
-          :disabled="updateProfile.isLoading.value"
+      <FormField
+        v-slot="field"
+        name="firstName"
+        label="First Name"
+      >
+        <Input
+          v-model="r$.$value.firstName"
+          v-bind="field"
         />
-        <UInput
-          name="lastName"
-          type="text"
-          label="Last Name"
-          :disabled="updateProfile.isLoading.value"
+      </FormField>
+      <FormField
+        v-slot="field"
+        name="lastName"
+        label="Last Name"
+      >
+        <Input
+          v-model="r$.$value.lastName"
+          v-bind="field"
         />
-        <UInput
-          name="email"
+      </FormField>
+      <FormField
+        v-slot="field"
+        name="email"
+        label="Email"
+      >
+        <Input
+          v-model="r$.$value.email"
+          v-bind="field"
           type="email"
-          label="Email"
-          :disabled="updateProfile.isLoading.value"
         />
-        <UTextarea
-          name="bio"
-          label="Bio"
+      </FormField>
+      <FormField
+        v-slot="field"
+        name="bio"
+        label="Bio"
+      >
+        <Textarea
+          v-model="r$.$value.bio"
+          v-bind="field"
           :rows="4"
-          :disabled="updateProfile.isLoading.value"
         />
-      </template>
-    </UForm>
-
+      </FormField>
+    </Form>
     <template #submitButton>
-      <UButton
+      <Button
         type="submit"
         form="update-profile"
         size="sm"
-        :is-loading="updateProfile.isLoading.value"
+        :is-loading="isPending"
       >
         Submit
-      </UButton>
+      </Button>
     </template>
-  </UFormDrawer>
+  </FormDrawer>
 </template>

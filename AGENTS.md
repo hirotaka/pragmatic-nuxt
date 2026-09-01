@@ -54,11 +54,10 @@
 
 ## Documentation ownership
 
-- Nuxt structural implementation docs: `apps/bulletproof-nuxt/docs`. Keep these focused on app structure, responsibility boundaries, placement, wiring, and code entry points.
-- App docs may also record app-specific domain, actors/capabilities, responsibility composition, Practice differences, and invariants. They are a composition layer, not a copy of the repo-wide Practice collection.
-- Repo-wide detailed Practices: `docs/practices/*`. App docs should link to these Practices instead of copying rationale, decision criteria, trade-offs, or tutorial guidance.
-- Permanent app docs must not carry commands, implementation paths, code snippets, versions, branch or resource identifiers, or temporary workflow/publication state. Keep those details in their owning artifacts.
-- Review app docs when app-specific responsibility, domain relation, capability ownership, Practice composition, deployment responsibility, or data-safety invariants change. A package, command, path, version, or Practice wording change alone does not require an app-doc update.
-- Keep existing topic docs while Practices mature; converge them incrementally when the relevant Practice is ready or the topic document is otherwise changed.
-- Nuxt reference apps (`apps/reference/bulletproof-nuxt-*`) should link to `apps/bulletproof-nuxt` docs for shared implementation guidance instead of carrying copied base docs; keep only reference-specific deltas when they add reader value.
+- Bulletproof Nuxt family docs: `docs/bulletproof-nuxt`. Keep these focused on family structure, domain and responsibility composition, invariants, placement, wiring, and code entry-point navigation.
+- Repo-wide detailed Practices: `docs/practices/*`. These own reusable Apply／Do Not Apply conditions, rationale, decision criteria, implementation guidance, trade-offs, limitations, and evidence ceilings. Family docs link to Practices instead of copying that guidance.
+- App READMEs own checkout identity, setup and operation, variant-specific differences, and maintenance or guarantee ceilings.
+- Permanent family docs must not carry temporary workflow or publication state. Existing commands, implementation paths, snippets, and versions converge incrementally when the relevant topic document is otherwise changed; the initial ownership move does not rewrite them wholesale.
+- Review family docs when family responsibility, domain relations, invariants, Practice composition, deployment responsibility, or data-safety invariants change. When a linked example moves, is deleted, or changes meaning, review its family-doc link and surrounding description in the same change.
+- Nuxt reference apps (`apps/reference/bulletproof-nuxt-*`) should link to root family docs for shared guidance and keep only variant-specific README deltas; do not copy the family topic pages into each Reference.
 - App moves and reference publication work must verify docs ownership without assuming that all apps share the same conventions.

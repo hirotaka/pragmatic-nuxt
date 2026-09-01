@@ -1,40 +1,31 @@
 import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
+import { serializeDiscussion } from "~discussions/server/utils/serializeDiscussion";
+import { parsePagination } from "~base/server/utils/parsePagination";
+import { requireCurrentUser } from "#layers/auth/server/utils/requireCurrentUser";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = await requireCurrentUser(event);
 
   if (!sessionUser.teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "User must belong to a team",
+      statusMessage: "Team membership required",
     });
   }
 
   const query = getQuery(event);
-  const page = parseInt((query.page as string) || "1", 10);
-  const limit = parseInt((query.limit as string) || "10", 10);
+  const { page, limit } = parsePagination(query);
 
-  if (page < 1 || limit < 1 || limit > 100) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Invalid pagination parameters",
-    });
-  }
+  const discussionRepository = createDiscussionRepository();
 
-  const discussionRepository = await createDiscussionRepository(event);
-
-  return discussionRepository.findAll({
+  const discussions = await discussionRepository.findAll({
     teamId: sessionUser.teamId,
     page,
     limit,
   });
+
+  return {
+    ...discussions,
+    data: discussions.data.map(serializeDiscussion),
+  };
 });

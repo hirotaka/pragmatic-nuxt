@@ -4,11 +4,6 @@ import { fileURLToPath } from "node:url";
 export default defineNuxtConfig({
   components: [
     {
-      path: "./components/ui",
-      prefix: "U",
-      pathPrefix: false,
-    },
-    {
       path: "./components",
       pathPrefix: true,
     },

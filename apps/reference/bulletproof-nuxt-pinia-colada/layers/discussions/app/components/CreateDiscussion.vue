@@ -1,6 +1,14 @@
 <script setup lang="ts">
+import { reactive, ref } from "vue";
+import { useMutation } from "@pinia/colada";
 import { Plus } from "lucide-vue-next";
-import { useCreateDiscussion } from "~discussions/app/composables/useCreateDiscussion";
+import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { FormField } from "~~/app/components/form-field";
+import FormDrawer from "~~/app/components/app/FormDrawer.vue";
+import { Input } from "~~/app/components/ui/input";
+import { Textarea } from "~~/app/components/ui/textarea";
+import { Button } from "~~/app/components/ui/button";
+import { createDiscussionMutation } from "~discussions/app/queries/discussions";
 import {
   createDiscussionInputSchema,
   type CreateDiscussionInput,
@@ -8,65 +16,91 @@ import {
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
 const { addNotification } = useNotifications();
+const isDone = ref(false);
+const { isLoading, mutateAsync } = useMutation(createDiscussionMutation());
 
-const createDiscussion = useCreateDiscussion({
-  onSuccess: () => {
-    addNotification({
-      type: "success",
-      title: "Discussion Created",
-    });
-  },
+const state = reactive<CreateDiscussionInput>({
+  title: "",
+  body: "",
 });
 
-const handleSubmit = (values: Record<string, unknown>) => {
-  createDiscussion.mutate(values as CreateDiscussionInput);
+const handleSubmit = async (event: FormSubmitEvent<CreateDiscussionInput | undefined>) => {
+  const values = event.data ?? state;
+
+  isDone.value = false;
+  try {
+    await mutateAsync(values);
+  }
+  catch {
+    return;
+  }
+
+  addNotification({
+    type: "success",
+    title: "Discussion Created",
+  });
+  isDone.value = true;
 };
 </script>
 
 <template>
-  <UFormDrawer
-    :is-done="createDiscussion.isSuccess.value"
+  <FormDrawer
+    :is-done="isDone"
+    :is-pending="isLoading"
     title="Create Discussion"
   >
     <template #triggerButton>
-      <UButton size="sm">
+      <Button
+        variant="outline"
+        size="sm"
+      >
         <template #icon>
           <Plus class="size-4" />
         </template>
         Create Discussion
-      </UButton>
+      </Button>
     </template>
 
-    <UForm
+    <Form
       id="create-discussion"
       :schema="createDiscussionInputSchema"
+      :state="state"
+      :disabled="isLoading"
+      class="space-y-6"
       @submit="handleSubmit"
     >
-      <template #default>
-        <UInput
-          name="title"
+      <FormField
+        v-slot="field"
+        name="title"
+        label="Title"
+      >
+        <Input
+          v-model="state.title"
+          v-bind="field"
           type="text"
-          label="Title"
-          :disabled="createDiscussion.isLoading.value"
         />
-        <UTextarea
-          name="body"
-          label="Body"
+      </FormField>
+      <FormField
+        v-slot="field"
+        name="body"
+        label="Body"
+      >
+        <Textarea
+          v-model="state.body"
+          v-bind="field"
           :rows="5"
-          :disabled="createDiscussion.isLoading.value"
         />
-      </template>
-    </UForm>
-
+      </FormField>
+    </Form>
     <template #submitButton>
-      <UButton
+      <Button
         type="submit"
         form="create-discussion"
         size="sm"
-        :is-loading="createDiscussion.isLoading.value"
+        :is-loading="isLoading"
       >
         Submit
-      </UButton>
+      </Button>
     </template>
-  </UFormDrawer>
+  </FormDrawer>
 </template>

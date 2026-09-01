@@ -1,16 +1,8 @@
 import { createCommentRepository } from "~comments/server/repository/commentRepository";
+import { requireCurrentUser } from "#layers/auth/server/utils/requireCurrentUser";
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-
-  if (!session?.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const sessionUser = session.user as SessionUser;
+  const sessionUser = await requireCurrentUser(event);
 
   const id = getRouterParam(event, "id");
 
@@ -21,7 +13,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const commentRepository = await createCommentRepository(event);
+  const commentRepository = createCommentRepository();
 
   const existingComment = await commentRepository.findById(id);
 
@@ -38,11 +30,11 @@ export default defineEventHandler(async (event) => {
   if (!isAuthor && !isAdmin) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Forbidden - Only the author or admin can delete this comment",
+      statusMessage: "Comment delete not allowed",
     });
   }
 
   await commentRepository.delete(id);
 
-  return { success: true };
+  setResponseStatus(event, 204);
 });

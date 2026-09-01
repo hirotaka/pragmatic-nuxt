@@ -1,7 +1,10 @@
 import { createTeamRepository } from "~teams/server/repository/teamRepository";
+import { serializeTeam } from "~teams/server/utils/serializeTeam";
 
-export default defineEventHandler(async (event) => {
-  const teamRepository = await createTeamRepository(event);
+export default defineEventHandler(async () => {
+  const teamRepository = createTeamRepository();
 
-  return teamRepository.findAll();
+  const teams = await teamRepository.findAll();
+
+  return teams.map(serializeTeam);
 });

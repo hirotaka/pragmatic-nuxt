@@ -1,11 +1,11 @@
 import { expect, test, vi } from "vitest";
 import { registerEndpoint } from "@nuxt/test-utils/runtime";
-import { readBody } from "h3";
+import { readBody, setResponseStatus } from "h3";
 import LoginForm from "../LoginForm.vue";
 import { createUser } from "~~/test/data-generators";
 import { renderComponent, screen, userEvent, waitFor } from "~~/test/test-utils";
 
-test("should login new user and call onSuccess cb which should navigate the user to the app", async () => {
+test("logs in a user and calls the successful submit callback", async () => {
   const newUser = createUser({ teamId: undefined });
   const onSuccess = vi.fn();
 
@@ -17,7 +17,7 @@ test("should login new user and call onSuccess cb which should navigate the user
     lastName: newUser.lastName,
     teamId: newUser.teamId,
     role: "USER",
-    createdAt: Date.now(),
+    createdAt: new Date().toISOString(),
   };
 
   let capturedBody: Record<string, unknown> | undefined;
@@ -26,12 +26,12 @@ test("should login new user and call onSuccess cb which should navigate the user
     method: "POST",
     handler: async (event) => {
       capturedBody = await readBody(event);
-      return { user: mockUser };
+      return new Response(null, { status: 204 });
     },
   });
 
   // Mock session refresh endpoint
-  registerEndpoint("/api/_auth/session", () => ({}));
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: mockUser }));
 
   await renderComponent(LoginForm, {
     props: { onSuccess },
@@ -54,35 +54,95 @@ test("should login new user and call onSuccess cb which should navigate the user
   });
 });
 
-test("should display validation errors for invalid input", async () => {
-  await renderComponent(LoginForm, {
-    props: { onSuccess: vi.fn() },
+test("should block login when validation fails", async () => {
+  const onSuccess = vi.fn();
+  const loginHandler = vi.fn();
+
+  registerEndpoint("/api/auth/login", {
+    method: "POST",
+    handler: loginHandler,
   });
 
-  // Type invalid email and short password
-  await userEvent.type(screen.getByLabelText(/email address/i), "invalid");
-  await userEvent.type(screen.getByLabelText(/password/i), "ab");
+  await renderComponent(LoginForm, {
+    props: { onSuccess },
+  });
 
-  // Submit the form
+  await userEvent.type(screen.getByLabelText(/email address/i), "not-an-email");
   await userEvent.click(screen.getByRole("button", { name: /log in/i }));
 
-  // Validation errors should appear
-  await waitFor(() => {
-    expect(screen.getByText(/invalid email/i)).toBeDefined();
-  });
+  await screen.findByText(/invalid email/i);
+  expect(loginHandler).toHaveBeenCalledTimes(0);
+  expect(onSuccess).toHaveBeenCalledTimes(0);
 });
 
-test("should display validation errors for empty fields", async () => {
+test("renders login block copy and register cross-link", async () => {
+  await renderComponent(LoginForm);
+
+  expect(screen.getByRole("heading", { name: /welcome back/i })).toBeTruthy();
+  expect(screen.getByText(/continue managing your team's discussions/i)).toBeTruthy();
+  expect(screen.getByText(/register/i)).toBeTruthy();
+});
+
+test("should disable submit while login is pending", async () => {
+  const newUser = createUser({ teamId: undefined });
+  const onSuccess = vi.fn();
+  let resolveLogin: (response: Response) => void = () => {};
+  const loginResponse = new Promise<Response>((resolve) => {
+    resolveLogin = resolve;
+  });
+  const loginHandler = vi.fn(async () => loginResponse);
+
+  registerEndpoint("/api/auth/login", {
+    method: "POST",
+    handler: loginHandler,
+  });
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: newUser }));
+
   await renderComponent(LoginForm, {
-    props: { onSuccess: vi.fn() },
+    props: { onSuccess },
   });
 
-  // Submit without filling any fields
-  await userEvent.click(screen.getByRole("button", { name: /log in/i }));
+  await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
+  await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
 
-  // Required errors should appear
-  await waitFor(() => {
-    const requiredErrors = screen.getAllByText(/required/i);
-    expect(requiredErrors.length).toBeGreaterThanOrEqual(2);
+  const submitButton = screen.getByRole("button", { name: /log in/i });
+  await userEvent.click(submitButton);
+
+  await waitFor(() => expect((submitButton as HTMLButtonElement).disabled).toBe(true));
+  await userEvent.click(submitButton);
+  expect(loginHandler).toHaveBeenCalledTimes(1);
+
+  resolveLogin(new Response(null, { status: 204 }));
+  await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+});
+
+test("releases pending state after login failure and allows retry", async () => {
+  const newUser = createUser({ teamId: undefined });
+  const onSuccess = vi.fn();
+  let attempts = 0;
+  const loginHandler = vi.fn((event) => {
+    attempts++;
+    if (attempts === 1) {
+      setResponseStatus(event, 500);
+      return { message: "Login failed" };
+    }
+    return new Response(null, { status: 204 });
   });
+
+  registerEndpoint("/api/auth/login", { method: "POST", handler: loginHandler });
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: newUser }));
+
+  await renderComponent(LoginForm, { props: { onSuccess } });
+  await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
+  await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
+  const submitButton = screen.getByRole("button", { name: /log in/i }) as HTMLButtonElement;
+
+  await userEvent.click(submitButton);
+  await waitFor(() => expect(loginHandler).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(submitButton.disabled).toBe(false));
+  expect(onSuccess).not.toHaveBeenCalled();
+
+  await userEvent.click(submitButton);
+  await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+  expect(loginHandler).toHaveBeenCalledTimes(2);
 });

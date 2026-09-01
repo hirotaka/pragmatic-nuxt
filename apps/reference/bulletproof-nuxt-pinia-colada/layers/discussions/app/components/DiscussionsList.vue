@@ -1,29 +1,41 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useDiscussions } from "~discussions/app/composables/useDiscussions";
+import { computed } from "vue";
+import { useQuery, useQueryCache } from "@pinia/colada";
+import AppSpinner from "~~/app/components/app/AppSpinner.vue";
+import { Button } from "~~/app/components/ui/button";
+import DataTable from "~~/app/components/app/DataTable.vue";
 import { formatDate } from "#layers/base/app/utils/format";
 import type { Discussion } from "~discussions/shared/types";
-import type { TableColumn } from "#layers/base/app/components/ui/types";
+import type { TableColumn } from "~~/app/components/app/data-table";
 import DeleteDiscussion from "./DeleteDiscussion.vue";
+import { useUser } from "#layers/auth/app/composables/useUser";
+import { discussionDetailQuery, discussionListQuery } from "~discussions/app/queries/discussions";
 
-const emit = defineEmits<{
-  discussionPrefetch: [id: string];
-}>();
-
-const currentPage = ref(1);
-const limit = ref(10);
-
-const discussions = useDiscussions({
-  page: currentPage,
+const route = useRoute();
+const router = useRouter();
+const limit = 10;
+const queryCache = useQueryCache();
+const currentPage = computed(() => Number(route.query.page || 1));
+const { data, status, asyncStatus, refresh } = useQuery(() => discussionListQuery({
+  page: currentPage.value,
   limit,
-});
+}));
+
+const { isAdmin } = useUser();
 
 const handlePageChange = (page: number) => {
-  currentPage.value = page;
+  void router.push({
+    query: {
+      ...route.query,
+      page: page === 1 ? undefined : String(page),
+    },
+  });
 };
 
-const handleDiscussionHover = (id: string) => {
-  emit("discussionPrefetch", id);
+const handleDiscussionPointerDown = (id: string) => {
+  const entry = queryCache.ensure(discussionDetailQuery({ id }));
+  entry.ext.isPrefetch = true;
+  void queryCache.refresh(entry).catch(() => undefined);
 };
 
 const columns: TableColumn<Discussion>[] = [
@@ -37,48 +49,70 @@ const columns: TableColumn<Discussion>[] = [
 <template>
   <div>
     <div
-      v-if="discussions.error.value"
-      class="mb-4 text-sm text-destructive"
-      role="alert"
+      v-if="data && asyncStatus === 'loading'"
+      class="flex justify-end"
     >
-      {{ discussions.error.value.message }}
+      <AppSpinner label="Refreshing discussions" />
     </div>
+
+    <AppSpinner
+      v-if="status === 'pending' && !data"
+      label="Loading discussions"
+      class="flex justify-center p-8"
+      size="lg"
+    />
 
     <div
-      v-if="discussions.isPending.value"
-      class="flex justify-center p-8"
+      v-else-if="status === 'error' && !data"
+      aria-label="Discussions unavailable"
+      class="flex flex-col items-center justify-center gap-3 p-8 text-center"
+      role="alert"
     >
-      <USpinner />
+      <p>Discussions could not be loaded.</p>
+      <Button
+        variant="outline"
+        @click="refresh()"
+      >
+        Retry
+      </Button>
     </div>
 
-    <UTable
-      v-else
-      :data="discussions.data.value?.data ?? []"
-      :columns="columns"
-      :pagination="discussions.data.value?.meta
-        ? {
-          totalPages: discussions.data.value.meta.totalPages,
-          currentPage: discussions.data.value.meta.page,
-        }
-        : undefined
-      "
-      @page-change="handlePageChange"
-    >
-      <template #cell-createdAt="{ entry }">
-        {{ formatDate(entry.createdAt) }}
-      </template>
-      <template #cell-view="{ entry }">
-        <NuxtLink
-          :to="`/app/discussions/${entry.id}`"
-          class="text-slate-600 hover:text-slate-900"
-          @mouseenter="handleDiscussionHover(entry.id)"
-        >
-          View
-        </NuxtLink>
-      </template>
-      <template #cell-delete="{ entry }">
-        <DeleteDiscussion :id="entry.id" />
-      </template>
-    </UTable>
+    <template v-else>
+      <DataTable
+        title="Discussion queue"
+        description="Track team conversations, moderation actions, and recent activity."
+        :summary="`${data?.meta.total ?? 0} discussions`"
+        :data="data?.data ?? []"
+        :columns="columns"
+        empty-title="No Entries Found"
+        empty-description="Create a discussion to start the conversation."
+        :pagination="{
+          totalPages: data?.meta.totalPages ?? 0,
+          currentPage: data?.meta.page ?? currentPage,
+        }"
+        @page-change="handlePageChange"
+      >
+        <template #cell-createdAt="{ entry }">
+          {{ formatDate(entry.createdAt) }}
+        </template>
+        <template #cell-view="{ entry }">
+          <NuxtLink
+            :to="`/app/discussions/${entry.id}`"
+            class="inline-flex h-8 items-center rounded-md px-3 text-sm font-medium text-primary transition hover:bg-primary/10"
+            @pointerdown="handleDiscussionPointerDown(entry.id)"
+          >
+            View
+          </NuxtLink>
+        </template>
+        <template #cell-delete="{ entry }">
+          <DeleteDiscussion
+            v-if="isAdmin"
+            :id="entry.id"
+            as-menu-item
+            :action-label="`Open discussion actions for ${entry.title}`"
+          />
+        </template>
+      </DataTable>
+    </template>
   </div>
 </template>

@@ -10,12 +10,13 @@ useHead({
 </script>
 
 <template>
-  <LayoutsContentLayout title="Discussions">
-    <div class="flex justify-end">
+  <LayoutsContentLayout
+    title="Discussions"
+    description="Create, update, and moderate team discussions."
+  >
+    <template #actions>
       <CreateDiscussion />
-    </div>
-    <div class="mt-4">
-      <DiscussionsList />
-    </div>
+    </template>
+    <DiscussionsList />
   </LayoutsContentLayout>
 </template>

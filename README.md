@@ -21,6 +21,7 @@ What you'll find here:
 If you want to explore a working Nuxt application, start with:
 
 - [apps/bulletproof-nuxt](apps/bulletproof-nuxt)
+- [Bulletproof Nuxt family documentation](docs/bulletproof-nuxt/application-overview.md)
 
 This repository tries Nuxt application themes and implementation approaches in real applications and accumulates confirmed Practices from that work.
 

@@ -19,7 +19,7 @@ const generateUser = () => ({
   teamName: randCompanyName(),
   role: "ADMIN",
   bio: randParagraph(),
-  createdAt: Date.now(),
+  createdAt: new Date().toISOString(),
 });
 
 export const createUser = <T extends Partial<ReturnType<typeof generateUser>>>(
@@ -32,7 +32,8 @@ const generateTeam = () => ({
   id: randUuid(),
   name: randCompanyName(),
   description: randParagraph(),
-  createdAt: Date.now(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 });
 
 export const createTeam = <T extends Partial<ReturnType<typeof generateTeam>>>(
