@@ -4,10 +4,14 @@ import { useDiscussions } from "~discussions/app/composables/useDiscussions";
 
 const currentPage = ref(1);
 const limit = 10;
-const { data, status, loadPage, refresh } = await useDiscussions({ page: currentPage, limit });
+const { data, status, refresh } = await useDiscussions({ page: currentPage, limit });
 const discussions = computed(() => Array.isArray(data.value?.data) && data.value.meta
   ? data.value
   : undefined);
+
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+};
 </script>
 
 <template>
@@ -22,11 +26,10 @@ const discussions = computed(() => Array.isArray(data.value?.data) && data.value
     </template>
     <DiscussionsList
       v-if="discussions"
-      :page="currentPage"
       :discussions="discussions"
       :is-pending="status === 'pending'"
-      :load-page="loadPage"
       :refresh="refresh"
+      @page-change="handlePageChange"
     />
   </LayoutsContentLayout>
 </template>

@@ -54,24 +54,14 @@ const emptyDiscussions: PaginatedDiscussions = {
     hasMore: false,
   },
 };
-const loadPage = vi.fn();
 const refresh = vi.fn();
-const { useDiscussions } = vi.hoisted(() => ({
-  useDiscussions: vi.fn(),
-}));
-
-vi.mock("~discussions/app/composables/useDiscussions", () => ({
-  useDiscussions,
-}));
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({ isAdmin: { value: true } }),
 }));
 
 beforeEach(() => {
-  loadPage.mockReset().mockResolvedValue(undefined);
   refresh.mockReset().mockResolvedValue(undefined);
-  useDiscussions.mockReset();
 });
 
 const mountDiscussionsList = (
@@ -81,7 +71,6 @@ const mountDiscussionsList = (
   props: {
     discussions: paginatedDiscussions,
     isPending: false,
-    loadPage,
     refresh,
     ...props,
   },
@@ -94,7 +83,7 @@ const mountDiscussionsList = (
   },
 });
 
-test("delegates page changes to the pagination owner", async () => {
+test("emits page changes without calling a domain Read", async () => {
   const wrapper = await mountDiscussionsList({}, {
     template: "<button type='button' @click=\"$emit('page-change', 2)\">Next page</button>",
     props: ["data", "columns", "pagination"],
@@ -103,8 +92,7 @@ test("delegates page changes to the pagination owner", async () => {
 
   await wrapper.get("button").trigger("click");
 
-  expect(loadPage).toHaveBeenCalledWith(2);
-  expect(useDiscussions).not.toHaveBeenCalled();
+  expect(wrapper.emitted("pageChange")).toEqual([[2]]);
 });
 
 test("shows a full loading state before initial list data exists", async () => {
