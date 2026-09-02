@@ -89,7 +89,7 @@ Temporary evidence requires explicit execution and cleanup. Keeping it outside d
 
 - [Use Configured API Fetchers for App-Owned Requests](custom-api-fetchers.md)
 - [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
-- [Give App-Owned API Operations an Explicit Owner](api-operation-ownership.md)
+- [Define Domain and Feature API Calls in Composables](domain-feature-api-calls.md)
 - [Let Request Inputs Define AsyncData Identity](async-data-identity.md)
 - [Share AsyncData Through Feature Composables](shared-async-data.md)
 - [Distinguish Mutation Failures from Data Refresh Failures](mutation-refresh-outcomes.md)

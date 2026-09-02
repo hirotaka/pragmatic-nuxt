@@ -12,7 +12,7 @@ This collection documents practices for choosing and composing Nuxt data-fetchin
 2. [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
 3. [Forward Native Options Through Thin Feature Reads](feature-composable-options.md)
 4. [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
-5. [Give App-Owned API Operations an Explicit Owner](api-operation-ownership.md)
+5. [Define Domain and Feature API Calls in Composables](domain-feature-api-calls.md)
 6. [Treat API Payloads as Serialized JSON Values](serialized-api-payloads.md)
 7. [Design API Responses for Direct Use with Nuxt Data Fetching](semantic-api-response-shapes.md)
 

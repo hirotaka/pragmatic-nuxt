@@ -10,17 +10,14 @@ import { useUser } from "#layers/auth/app/composables/useUser";
 
 const emit = defineEmits<{
   discussionPrefetch: [id: string];
+  pageChange: [page: number];
 }>();
 
-const props = withDefaults(defineProps<{
-  page?: number;
+const props = defineProps<{
   discussions: PaginatedDiscussions;
   isPending: boolean;
-  loadPage: (page: number) => Promise<void>;
   refresh: () => Promise<void>;
-}>(), {
-  page: 1,
-});
+}>();
 const { isAdmin } = useUser();
 
 const hasDiscussions = computed(() => props.discussions.data.length > 0);
@@ -28,7 +25,7 @@ const isInitialPending = computed(() => props.isPending && !hasDiscussions.value
 const isRefreshing = computed(() => props.isPending && hasDiscussions.value);
 
 const handlePageChange = (page: number) => {
-  void props.loadPage(page);
+  emit("pageChange", page);
 };
 
 const handleDiscussionHover = (id: string) => {

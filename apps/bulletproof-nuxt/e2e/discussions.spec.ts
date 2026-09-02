@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Page, Request } from "@playwright/test";
 import { expect, test } from "@nuxt/test-utils/playwright";
 import { expectCreatedResponse, expectEmptyResponse, expectJson } from "./support/api-response";
 import { gotoWithSsrHtml } from "./support/nuxt-navigation";
@@ -269,21 +269,82 @@ test("custom fetcher reports each failed initial GET attempt without an inline e
   await expect(page.locator("main").getByRole("alert")).toHaveCount(0);
 });
 
-test("page-2 last-row deletion clamps to page 1 and renders the new-key rows", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
-  await registerIsolatedUser(page, "clamp");
+test("rapid discussion page selection keeps the last selected page", { tag: ["@discussions", "@pagination"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "rapid-pagination");
 
-  for (let index = 1; index <= 11; index += 1) {
+  for (let index = 1; index <= 21; index += 1) {
     await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
       data: {
-        title: `Clamp discussion ${String(index).padStart(2, "0")}`,
-        body: `Clamp body ${index}`,
+        title: `Rapid discussion ${String(index).padStart(2, "0")}`,
+        body: `Rapid body ${index}`,
       },
     }));
   }
 
-  const firstPage = await expectJson(await page.request.get(
-    new URL("/api/discussions?page=1&limit=10", page.url()).href,
+  const secondPage = await expectJson(await page.request.get(
+    new URL("/api/discussions?page=2&limit=10", page.url()).href,
   ));
+  const thirdPage = await expectJson(await page.request.get(
+    new URL("/api/discussions?page=3&limit=10", page.url()).href,
+  ));
+  const secondPageTitle = secondPage.data[0].title as string;
+  const thirdPageTitle = thirdPage.data[0].title as string;
+
+  await page.goto("/app/discussions", { waitUntil: "networkidle" });
+  const secondPageStarted = deferred();
+  const releaseSecondPage = deferred();
+  const secondPageRouteHandled = deferred();
+  const secondPageTerminal = deferred();
+  const resolveSecondPageTerminal = (request: Request) => {
+    const requestUrl = new URL(request.url());
+    if (request.method() === "GET" && requestUrl.pathname === "/api/discussions" && requestUrl.searchParams.get("page") === "2") {
+      secondPageTerminal.resolve();
+    }
+  };
+  page.on("requestfinished", resolveSecondPageTerminal);
+  page.on("requestfailed", resolveSecondPageTerminal);
+  await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
+    const requestUrl = new URL(route.request().url());
+    if (requestUrl.searchParams.get("page") === "2") {
+      secondPageStarted.resolve();
+      await releaseSecondPage.promise;
+      try {
+        await route.continue();
+      }
+      finally {
+        secondPageRouteHandled.resolve();
+      }
+      return;
+    }
+    await route.continue();
+  });
+
+  await page.getByRole("button", { name: "2", exact: true }).click();
+  await secondPageStarted.promise;
+  await page.getByRole("button", { name: "3", exact: true }).click();
+
+  await expect(page.getByText("Page 3 of 3")).toBeVisible();
+  await expect(page.getByText(thirdPageTitle)).toBeVisible();
+  releaseSecondPage.resolve();
+  await Promise.all([secondPageRouteHandled.promise, secondPageTerminal.promise]);
+
+  await expect(page.getByText("Page 3 of 3")).toBeVisible();
+  await expect(page.getByText(thirdPageTitle)).toBeVisible();
+  await expect(page.getByText(secondPageTitle)).toHaveCount(0);
+});
+
+test("page-2 last-row deletion keeps the native current-page result", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "native-current-page");
+
+  for (let index = 1; index <= 11; index += 1) {
+    await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
+      data: {
+        title: `Native page discussion ${String(index).padStart(2, "0")}`,
+        body: `Native page body ${index}`,
+      },
+    }));
+  }
+
   const secondPage = await expectJson(await page.request.get(
     new URL("/api/discussions?page=2&limit=10", page.url()).href,
   ));
@@ -295,24 +356,35 @@ test("page-2 last-row deletion clamps to page 1 and renders the new-key rows", {
   await expect(page.getByText("Page 2 of 2")).toBeVisible();
   await expect(page.getByText(deletedTitle)).toBeVisible();
 
+  const refreshPages: string[] = [];
+  let deletionStarted = false;
+  page.on("request", (request) => {
+    const requestUrl = new URL(request.url());
+    if (deletionStarted && request.method() === "GET" && requestUrl.pathname === "/api/discussions") {
+      refreshPages.push(requestUrl.searchParams.get("page") ?? "");
+    }
+  });
+
   await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
+  deletionStarted = true;
   await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
 
   await expect(page.getByLabel("Discussion Deleted")).toHaveCount(1);
-  await expect(page.getByText("Page 1 of 1")).toBeVisible();
   await expect(page.getByText(deletedTitle)).toHaveCount(0);
-  await expect(page.getByText(firstPage.data[0].title)).toBeVisible();
+  await expect(page.getByText("No Entries Found")).toBeVisible();
+  expect(refreshPages).toContain("2");
+  expect(refreshPages).not.toContain("1");
 });
 
-test("clamp-target GET failure preserves mutation success and does not restore the deleted page", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
-  await registerIsolatedUser(page, "clamp-failure");
+test("current-page GET failure preserves mutation success", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "current-page-failure");
 
   for (let index = 1; index <= 11; index += 1) {
     await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
       data: {
-        title: `Clamp failure ${String(index).padStart(2, "0")}`,
-        body: `Clamp failure body ${index}`,
+        title: `Current page failure ${String(index).padStart(2, "0")}`,
+        body: `Current page failure body ${index}`,
       },
     }));
   }
@@ -326,14 +398,18 @@ test("clamp-target GET failure preserves mutation success and does not restore t
   await expect(page.getByText("Page 2 of 2")).toBeVisible();
   await expect(page.getByText(deletedTitle)).toBeVisible();
 
-  let failClampTarget = false;
+  let failCurrentPageRefresh = false;
+  const refreshPages: string[] = [];
   await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
     const requestUrl = new URL(route.request().url());
-    if (failClampTarget && requestUrl.searchParams.get("page") === "1") {
+    if (failCurrentPageRefresh) {
+      refreshPages.push(requestUrl.searchParams.get("page") ?? "");
+    }
+    if (failCurrentPageRefresh && requestUrl.searchParams.get("page") === "2") {
       await route.fulfill({
         status: 500,
         contentType: "application/json",
-        body: JSON.stringify({ message: "Clamp target GET failed" }),
+        body: JSON.stringify({ message: "Current page GET failed" }),
       });
       return;
     }
@@ -342,7 +418,7 @@ test("clamp-target GET failure preserves mutation success and does not restore t
 
   await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
-  failClampTarget = true;
+  failCurrentPageRefresh = true;
   await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
 
   const alerts = page.locator("[aria-live='assertive'] [role='alert']");
@@ -350,10 +426,10 @@ test("clamp-target GET failure preserves mutation success and does not restore t
   await expect(alerts.nth(0)).toHaveAttribute("aria-label", "Discussion Deleted");
   await expect(alerts.nth(1)).toHaveAttribute("aria-label", "Error");
   await expect(alerts.nth(2)).toHaveAttribute("aria-label", "Error");
-  await expect(page.getByText("Clamp target GET failed")).toHaveCount(2);
-  await expect(page.getByText(deletedTitle)).toHaveCount(0);
-  await expect(page.getByText("Page 2 of 2")).toHaveCount(0);
+  await expect(page.getByText("Current page GET failed")).toHaveCount(2);
   await expect(page.getByRole("dialog", { name: "Delete Discussion" })).toHaveCount(0);
+  expect(refreshPages).toContain("2");
+  expect(refreshPages).not.toContain("1");
 });
 
 test("mutation failure uses the API notification without an inline form error", { tag: ["@discussions", "@mutation"] }, async ({ page }) => {
