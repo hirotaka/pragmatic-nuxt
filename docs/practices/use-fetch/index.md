@@ -8,7 +8,7 @@ This collection documents practices for choosing and composing Nuxt data-fetchin
 
 ## Request Boundaries
 
-1. [Use Configured API Fetchers for App-Owned Requests](custom-api-fetchers.md)
+1. [Use Custom Fetchers for Your API](custom-api-fetchers.md)
 2. [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
 3. [Forward Native Options Through Thin Feature Reads](feature-composable-options.md)
 4. [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
