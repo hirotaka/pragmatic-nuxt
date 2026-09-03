@@ -1,5 +1,5 @@
 ---
-title: Forward Native Options Through Thin Feature Reads
+title: Pass Native `useFetch` Options Through Data-Fetching Composables
 semanticId: feature-composable-options
 category: request-boundaries
 prerequisites:
@@ -8,40 +8,38 @@ prerequisites:
 status: confirmed
 ---
 
-# Forward Native Options Through Thin Feature Reads
+# Pass Native `useFetch` Options Through Data-Fetching Composables
 
 ## Practice
 
-Let thin Read feature composables accept native `useFetch` options and pass them unchanged to the app's configured `useAPI`. Keep the endpoint and default response type visible in the feature composable while preserving native lifecycle, request, identity, cache, data-shaping, retry, and hook options for callers.
+Let data-fetching composables accept native `useFetch` options and pass them directly to the app's custom `useFetch` composable. This lets each use adjust fetch behavior with familiar Nuxt options instead of wrapper-specific options.
 
-Use this full pass-through only when the composable does not own fixed options that would compete with callers. A composable that owns pagination query values, `watch` behavior, or collection mechanics needs its own explicit contract instead of pretending to provide unrestricted native options.
+Keep the endpoint and default response type in the composable so those API details remain consistent wherever it is used.
 
 ## Apply When
 
-- A thin feature composable owns an endpoint and default response type.
-- Callers need native `useFetch` options such as `server`, `lazy`, `immediate`, `dedupe`, cache controls, or hooks.
-- The composable can forward one options object without filtering, renaming, or overriding fields.
+- A composable defines the endpoint and default response type for a data-fetching request.
+- Application code that uses the composable needs to adjust `useFetch` behavior through native options, such as `server`, `lazy`, `immediate`, `dedupe`, caching, or hooks.
+- The composable can pass those options to the custom `useFetch` composable without translating them into wrapper-specific names.
 
 ## Do Not Apply When
 
-- The composable owns fixed query, key, watch, pagination, or data-shaping behavior that conflicts with caller options.
-- The feature needs a smaller domain-specific contract rather than the complete native option surface.
-- The operation is an imperative workflow that should use the configured `$api` mutation boundary.
+- The composable already owns query values, watch sources, pagination, or response transformation.
+- The feature needs a smaller, domain-specific set of inputs rather than all native options.
+- The request is an imperative operation that does not need AsyncData state. Use the app's custom `$fetch` boundary instead.
 
 ## Why
 
-Native option names preserve Nuxt semantics and avoid a second wrapper vocabulary such as `clientOnly` or `deferred`. Passing the object through unchanged also keeps the configured `useAPI` boundary responsible for app-wide hooks while allowing caller hooks to compose with it.
+Using Nuxt's `UseFetchOptions` preserves Nuxt's option names. Application code can choose server rendering, request timing, deduplication, caching, and hooks without learning wrapper-specific options.
 
-Full pass-through is intentionally powerful. It includes method, body, manual key, query, data shaping, cache, retry, and hooks, not only rendering lifecycle flags. Callers are responsible for choosing options compatible with the endpoint and with other consumers sharing the same AsyncData key.
+The composable keeps the endpoint and default response type in one place, while the custom `useFetch` composable applies shared defaults and hooks. This separates stable API details from fetch behavior that varies by use.
 
 ## Implementation Guidance
 
-- Derive the default GET response with `FetchResult<Route, "get">`, type the options with `UseFetchOptions`, and call the configured `useAPI` with the same object. Let the request URL drive the actual `useAPI` inference.
-- Do not derive the option type from `Parameters<typeof useAPI>`; the overloaded generic function can collapse to an `unknown` response type.
-- Do not clone, pick, rename, or silently override fields in a contract described as full pass-through.
-- Keep reactive endpoint inputs in the feature composable so the default generated identity follows resource changes.
-- Preserve the configured fetcher's hook composition; do not replace it with raw `useFetch` or a caller-provided transport by accident.
-- Keep imperative mutation guidance separate even though the native option type contains `method` and `body`.
+- Type the options with `UseFetchOptions<FetchResult<Route, "get">>` and pass them directly to the custom `useFetch` composable. Keep the request URL reactive when the endpoint can change.
+- When the composable sets query values, an AsyncData key, watch sources, pagination, or response transformation, accept only the specific inputs that may vary.
+- Use the custom `useFetch` composable instead of raw `useFetch` so that shared defaults and hooks still apply.
+- Use the app's custom `$fetch` boundary for imperative requests. Passing `method` or `body` through this wrapper does not change its default GET response type.
 
 ## Minimal Nuxt Example
 
@@ -62,31 +60,31 @@ export async function useProject(
 ```
 
 ```ts
-const project = await useProject(projectId, {
-  server: false,
+const { data: project } = await useProject(projectId, {
   dedupe: "defer",
-  onResponse({ response }) {
-    recordProjectRead(response.status);
-  },
 });
 ```
 
+`useProject` owns the reactive endpoint and the default GET response type. Code using it can pass compatible native options, such as `dedupe`, without repeating those API details.
+
 ## Verified App Example
 
-- [`useDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussion.ts) forwards native options to the configured `useAPI` while retaining its reactive endpoint and default Discussion response type.
+- [`useDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussion.ts) defines a reactive endpoint and the default GET response type, then forwards its `options` argument to the app's custom `useAPI` composable.
 
 ## Trade-offs and Limitations
 
-The wrapper's option type uses the endpoint's GET response as its default shape but does not reproduce every generic inference path of calling native `useFetch` directly. A method with a different response, such as DELETE, remains typed as the GET response. A caller-provided transform or default also does not create a new inferred wrapper return type. Use the configured imperative API boundary when the operation needs method-specific result typing.
+Accepting the complete `UseFetchOptions` type keeps the wrapper simple and avoids maintaining a separate set of options. It also exposes options that may not fit an endpoint-specific GET request.
 
-Manual keys and options not included in Nuxt's generated key can create incompatible same-key consumers. Keep shared callers compatible or choose distinct keys deliberately.
+The wrapper's response type remains based on the endpoint's default GET result. Changing `method`, or using a shape-changing `transform` or `default`, does not reproduce the return-type inference of a direct `useFetch` call. Use a dedicated imperative request composable when an operation needs a different method or response type.
 
-Do not apply this contract mechanically to pagination composables. Their query, watch, accumulation, and refresh mechanics are feature-owned behavior rather than transparent native options.
+Options such as `$fetch` and a manual `key` can change the request transport or AsyncData identity. Use them only when that change is intentional and compatible with the app's custom `useFetch` composable and other code using the same key.
 
 ## Sources
 
 - [Nuxt `useFetch`](https://nuxt.com/docs/4.x/api/composables/use-fetch)
+- [Nuxt `createUseFetch`](https://nuxt.com/docs/4.x/api/composables/create-use-fetch)
 - [Nuxt custom `useFetch`](https://nuxt.com/docs/4.x/guide/recipes/custom-usefetch)
+- [Nuxt 4.5.1 `useFetch` source](https://github.com/nuxt/nuxt/blob/v4.5.1/packages/nuxt/src/app/composables/fetch.ts)
 
 ## Related Practices
 
