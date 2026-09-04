@@ -10,7 +10,7 @@ This collection documents practices for choosing and composing Nuxt data-fetchin
 
 1. [Use Custom Fetchers for Your API](custom-api-fetchers.md)
 2. [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
-3. [Forward Native Options Through Thin Feature Reads](feature-composable-options.md)
+3. [Pass Native `useFetch` Options Through Data-Fetching Composables](feature-composable-options.md)
 4. [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 5. [Define Domain and Feature API Calls in Composables](domain-feature-api-calls.md)
 6. [Treat API Payloads as Serialized JSON Values](serialized-api-payloads.md)

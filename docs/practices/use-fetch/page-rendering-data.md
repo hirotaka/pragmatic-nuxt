@@ -10,41 +10,48 @@ status: confirmed
 
 ## Practice
 
-Use the app's configured `useAPI` composable for data required to render a page. Preserve Nuxt `useFetch` semantics so the read participates in server rendering, payload hydration, native AsyncData state, reactive updates, and the owning component's refresh lifecycle.
+Use Nuxt `useFetch` for data used in page rendering, and await its initial promise by default. `useFetch` integrates the request with server rendering and payload hydration while returning native `AsyncData` state for reactive updates and refreshes.
+
+Awaiting keeps code after the call and client-side navigation pending until the initial request settles. Change the initial lifecycle only when a concrete requirement calls for different behavior before the data is ready.
 
 ## Apply When
 
-- A route needs the data for its initial meaningful render.
-- Server rendering and payload hydration should avoid repeating the initial browser request.
-- The owner needs AsyncData status, error, or refresh behavior.
-- The URL or request options are reactive inputs to replacement-style data.
+- Data is fetched for page rendering, and no concrete requirement calls for a different initial lifecycle.
+- Code after the `useFetch` call depends on the fetched data.
+- The destination should present the fetched content when client-side navigation finishes.
+- The server-rendered response should include content based on the fetched data.
+- The page or component needs native AsyncData `status`, `error`, or `refresh` behavior while fetching the data.
+- Changes to reactive URLs or request options should fetch new data and replace the current AsyncData value.
 
 ## Do Not Apply When
 
-- An imperative request does not need AsyncData state or Nuxt's read lifecycle.
-- Later pages append to an existing local collection instead of replacing one AsyncData value.
-- The work is unrelated to page rendering and another owner already defines its lifecycle.
+- The destination page should open before the data is ready and display its own loading or error state while the request is pending.
+- The page remains useful while an independent section loads after navigation.
+- The application starts the request imperatively and requires no AsyncData state for its result.
+- A later request appends items to an existing local collection instead of replacing the current AsyncData value.
+- A page or parent component already fetches the data and passes it to the component that renders it.
 
 ## Why
 
-The configured `useAPI` preserves `useFetch` integration with Nuxt's server-rendering and hydration lifecycle while applying the app's common API transport behavior. Awaiting its initial promise at the page or data-aware owner gives Nuxt responsibility for initial settlement without adding a second server-state layer or an application-specific readiness wrapper.
+During universal rendering, `useFetch` sends server-fetched data to the browser through the Nuxt payload, avoiding the same request during hydration. The server-rendered HTML is the same whether or not the `useFetch` call is awaited.
+
+For page-rendering data, `await` pauses code after the call and keeps client-side navigation pending until the request settles. This gives data-dependent rendering a predictable starting point without the need for an application-specific readiness wrapper.
+
+Nuxt also supports non-blocking, delayed, and browser-only lifecycles when a concrete requirement calls for them.
 
 ## Implementation Guidance
 
-- Keep the URL and options in a feature composable when the read represents a feature resource.
-- Return and await the native AsyncData result rather than wrapping its `data`, `status`, `error`, or `refresh` refs.
-- Start with Nuxt's initial-fetch defaults. Change the initial lifecycle only for a concrete route or browser-only requirement.
-- Use `immediate: false` when a Nuxt-owned read is intentionally started later, and `server: false` when the data is intentionally browser-only. These options change initial execution without turning the read into an imperative `$api` action.
-- Leave `data` undefined until a successful response unless the same domain-valid fallback before the request and after failure is an explicit contract.
-- Distinguish a successful empty response from unavailable data. Do not turn a missing or failed response into an empty collection for template convenience.
-- Await reactive refetches and manual refreshes at the operation that owns them; they are separate from the initial setup promise.
+- Await the initial `useFetch` promise for page-rendering data.
+- Return `AsyncData` directly and use its native `data`, `status`, `error`, and `refresh` behavior.
+- Keep Nuxt's initial-fetch defaults unless a concrete requirement calls for different timing. Use `lazy: true` for non-blocking navigation, `immediate: false` for a request started later, and `server: false` for browser-only data.
+- When the initial lifecycle does not wait for data, render loading and error states from the returned `status` and `error` refs.
+- Leave `data` undefined until a successful response unless an explicit domain-valid default exists. Keep a successful empty response distinct from unavailable data.
 
 ## Minimal Nuxt Example
 
 ```vue
 <script setup lang="ts">
-const { data, status, refresh } = await useAPI("/api/projects");
-const projects = computed(() => data.value?.projects);
+const { data: projects, status, refresh } = await useFetch("/api/projects");
 </script>
 
 <template>
@@ -57,25 +64,38 @@ const projects = computed(() => data.value?.projects);
 </template>
 ```
 
+The endpoint returns projects as an array. `useFetch` exposes the response through its `data` ref, which this example renames to `projects`.
+
+The list appears after a successful response and receives the array as its `projects` prop. An empty array is still a successful response, so the list can display its empty state.
+
+The `status` and `refresh` values let the list show refresh progress and request another result.
+
 ## Verified App Examples
 
-- The [discussion collection composable](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) centralizes a page-rendering read with reactive pagination inputs.
-- The [discussion detail page](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/%5Bid%5D.vue) awaits its resource before rendering dependent UI.
-- The [users list](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) renders successful empty data separately from unavailable data.
-- The [registration page](../../../apps/bulletproof-nuxt/layers/auth/app/pages/auth/register.vue) owns a simple fixed-URL page read.
+- The [discussion collection](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsCollection.vue) awaits a [feature composable](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) that returns `AsyncData` with reactive pagination inputs.
+- The [discussion detail page](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/%5Bid%5D.vue) awaits one discussion before rendering the UI that uses it.
+- The [user directory](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) awaits an array of users and renders a successful empty array separately from unavailable data.
+- The [registration page](../../../apps/bulletproof-nuxt/layers/auth/app/pages/auth/register.vue) awaits the teams before passing them to the registration form.
 
 ## Trade-offs and Limitations
 
-Awaiting route data can delay navigation settlement, so the app should provide route-level progress feedback. This practice is scoped to data needed for the page render; it does not require every GET request to use AsyncData. Transport deadlines and cancellation ownership are separate concerns.
+With `await`, client-side navigation is blocked until the data resolves, so the user stays on the current page while the request is pending. A `<NuxtLoadingIndicator>` can show progress between page navigations.
+
+Without `await`, navigation happens immediately, and the page must handle loading and error states through the returned `status` and `error` refs. Use `lazy` when non-blocking behavior should be explicit and the request should be deferred until the component mounts.
+
+This practice covers the initial `useFetch` call for page-rendering data. It does not define imperative requests, pagination that appends items, error presentation, timeouts, or how to cancel an in-flight request.
 
 ## Sources
 
 - [Nuxt `useFetch`](https://nuxt.com/docs/4.x/api/composables/use-fetch)
-- [Nuxt data fetching guide](https://nuxt.com/docs/4.x/getting-started/data-fetching)
+- [Nuxt Data Fetching: A note on `await`](https://nuxt.com/docs/4.x/getting-started/data-fetching#a-note-on-await)
+- [Nuxt `<NuxtLoadingIndicator>`](https://nuxt.com/docs/4.x/api/components/nuxt-loading-indicator)
+- [Nuxt 4.5.1 `useFetch` source](https://github.com/nuxt/nuxt/blob/v4.5.1/packages/nuxt/src/app/composables/fetch.ts)
+- [Nuxt 4.5.1 `useAsyncData` source](https://github.com/nuxt/nuxt/blob/v4.5.1/packages/nuxt/src/app/composables/asyncData.ts)
 
 ## Related Practices
 
-- [Use Configured API Fetchers for App-Owned Requests](custom-api-fetchers.md)
+- [Use Custom Fetchers for Your API](custom-api-fetchers.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 - [Let Request Inputs Define AsyncData Identity](async-data-identity.md)
 - [Share AsyncData Through Feature Composables](shared-async-data.md)
