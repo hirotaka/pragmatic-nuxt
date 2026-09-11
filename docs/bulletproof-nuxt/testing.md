@@ -71,5 +71,5 @@ evidence boundaries.
 ## Detailed Practices
 
 - See the [Pinia Colada Practices](../practices/pinia-colada/index.md) for reusable Query and Mutation guidance; durable app evidence remains beside its feature owner.
-- Use [Test Data-Fetching Claims at Their Owning Boundaries](../practices/use-fetch/data-fetching-test-evidence.md) for data-fetching-specific claim, owner, and fidelity guidance.
+- Use [Match Data-Fetching Tests to the Behavior They Exercise](../practices/use-fetch/data-fetching-test-boundaries.md) to choose a test boundary that matches the behavior and to understand what each test does and does not cover.
 - See the [Nuxt Data Fetching Practices](../practices/use-fetch/index.md) for related confirmed contracts.
