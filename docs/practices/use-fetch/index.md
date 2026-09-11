@@ -36,4 +36,4 @@ This collection documents practices for choosing and composing Nuxt data-fetchin
 
 This section contains testing guidance specific to the data-fetching Practices above.
 
-15. [Test Data-Fetching Claims at Their Owning Boundaries](data-fetching-test-evidence.md)
+15. [Match Data-Fetching Tests to the Behavior They Exercise](data-fetching-test-boundaries.md)
