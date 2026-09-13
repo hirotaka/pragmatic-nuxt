@@ -1,10 +1,7 @@
 import { createCommentInputSchema } from "~comments/shared/schemas";
 import { createCommentRepository } from "~comments/server/repository/commentRepository";
-import type { User } from "#layers/auth/shared/types";
 
-export default defineEventHandler(async (event) => {
-  const sessionUser = (await requireUserSession(event)).user as User;
-
+export default defineProtectedEventHandler(async (event, sessionUser) => {
   const body = await readBody(event);
 
   const validationResult = createCommentInputSchema.safeParse(body);

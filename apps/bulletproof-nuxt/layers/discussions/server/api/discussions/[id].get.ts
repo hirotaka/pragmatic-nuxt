@@ -1,10 +1,7 @@
 import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
 import { serializeDiscussion } from "~discussions/server/utils/serializeDiscussion";
-import type { User } from "#layers/auth/shared/types";
 
-export default defineEventHandler(async (event) => {
-  const sessionUser = (await requireUserSession(event)).user as User;
-
+export default defineProtectedEventHandler(async (event, sessionUser) => {
   if (!sessionUser.teamId) {
     throw createError({
       statusCode: 400,

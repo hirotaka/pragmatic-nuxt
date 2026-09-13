@@ -65,9 +65,18 @@ Writes](../practices/pinia-colada/synchronize-related-queries-in-the-background-
 
 ### Auth Session Synchronization
 
-Nuxt Auth Utils manages the cookie-backed authentication session, logged-in state, and current user. In the Pinia Colada Reference, login, registration, and profile Mutations await `useUserSession().fetch()` after their write succeeds. Logout awaits `useUserSession().clear()` before reloading the public route, while a protected request that returns `401 Unauthorized` reloads the current route so session state and route access are read again.
+Nuxt Auth Utils manages the cookie-backed authentication session, logged-in
+state, and current user. In the Pinia Colada Reference, Mutations send
+authentication and profile requests while Nuxt Auth Utils owns session refresh
+and clear operations. Reloading after logout or session expiry replaces the
+current Nuxt app instance and its Query Cache.
 
-See [Use Nuxt Auth Utils for Authentication Session Management with Pinia Colada](../practices/pinia-colada/keep-authentication-session-state-in-nuxt-auth-utils.md) for the reusable Query Cache and session lifecycle guidance.
+See [Use Nuxt Auth Utils for Authentication Session Management with Pinia
+Colada](../practices/pinia-colada/keep-authentication-session-state-in-nuxt-auth-utils.md)
+for Query Cache integration, [Orchestrate Auth Session State Outside the Fetch
+Client](../practices/use-fetch/auth-session-orchestration.md) for workflow
+ownership, and the [Nuxt Auth Utils
+Practices](../practices/nuxt-auth-utils/index.md) for provider-specific guidance.
 
 ## Form State
 

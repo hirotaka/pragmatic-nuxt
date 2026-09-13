@@ -70,6 +70,7 @@ evidence boundaries.
 
 ## Detailed Practices
 
+- See the [Nuxt Auth Utils Practices](../practices/nuxt-auth-utils/index.md) for the authentication contracts exercised by co-located auth, user, base-layout, and protected-route tests.
 - See the [Pinia Colada Practices](../practices/pinia-colada/index.md) for reusable Query and Mutation guidance; durable app evidence remains beside its feature owner.
 - Use [Match Data-Fetching Tests to the Behavior They Exercise](../practices/use-fetch/data-fetching-test-boundaries.md) to choose a test boundary that matches the behavior and to understand what each test does and does not cover.
 - See the [Nuxt Data Fetching Practices](../practices/use-fetch/index.md) for related confirmed contracts.

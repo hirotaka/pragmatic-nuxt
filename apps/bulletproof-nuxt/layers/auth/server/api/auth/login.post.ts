@@ -1,7 +1,6 @@
 import { createUserRepository } from "#layers/users/server/repository/userRepository";
 import { loginInputSchema } from "~auth/shared/schemas";
-import { customVerifyPassword } from "~auth/server/utils/password";
-import { serializeUser } from "~auth/server/utils/serializeUser";
+import { serializeSessionIdentity } from "~auth/server/utils/serializeSessionIdentity";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -26,7 +25,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const isPasswordValid = await customVerifyPassword(password, user.password);
+  let isPasswordValid = false;
+  try {
+    isPasswordValid = await verifyPassword(user.password, password);
+  }
+  catch {
+    // Stored hashes that the configured provider cannot verify are invalid credentials.
+  }
   if (!isPasswordValid) {
     throw createError({
       statusCode: 401,
@@ -34,8 +39,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const serializedUser = serializeUser(user);
-
-  await setUserSession(event, { user: serializedUser });
+  await replaceUserSession(event, { user: serializeSessionIdentity(user) });
   setResponseStatus(event, 204);
 });

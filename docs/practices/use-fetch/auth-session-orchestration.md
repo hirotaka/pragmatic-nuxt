@@ -10,9 +10,9 @@ status: confirmed
 
 ## Practice
 
-When an authentication request changes the server session, synchronize the client auth state before completing the interaction.
+When an authentication request changes the server session, synchronize the client authentication state before completing the interaction.
 
-Treat the authentication request and the session operation as separate responsibilities. Keep session synchronization, logout, navigation, and interaction completion outside the fetch client.
+Treat the authentication request and the session operation as separate responsibilities. Keep session synchronization, logout, navigation, and interaction completion in the workflow that owns the interaction, outside the fetch client.
 
 Protect server APIs independently from client-side navigation. Client-side route middleware can improve the user experience, but it does not protect an API from direct requests.
 
@@ -44,10 +44,10 @@ Page access and API access are separate security boundaries. Restricting navigat
 ## Implementation Guidance
 
 - Send login, registration, and authenticated profile requests through the app's configured API client.
-- In the server route, call `setUserSession()` after validating the request and completing the operation that creates or updates the session.
-- After the request succeeds, await `useUserSession().fetch()` before reporting success, completing the form, or navigating.
-- For logout, await `useUserSession().clear()`. If it fails, do not report success or navigate as though logout had completed.
-- Protect server APIs with `requireUserSession()` before protected work. Use client-side route middleware only for page navigation.
+- In a login or registration route, replace the session after validating the request. Store the stable user ID instead of mutable user fields.
+- After the request succeeds, refresh the session and confirm that the refreshed session is authenticated before reporting success, completing the form, or navigating.
+- For logout, clear the user session before reporting success. Handle navigation after logout as a separate outcome.
+- Before a protected server route performs domain work, validate the session user ID and load the current user record. Use client-side route middleware only for page navigation.
 
 ## Minimal Nuxt Example
 
@@ -55,7 +55,7 @@ Page access and API access are separate security boundaries. Restricting navigat
 // composables/useLogin.ts
 export function useLogin() {
   const { $api } = useNuxtApp();
-  const { fetch: refreshSession } = useUserSession();
+  const { fetch: refreshSession, loggedIn } = useUserSession();
 
   return async (credentials: LoginInput): Promise<void> => {
     await $api("/api/auth/login", {
@@ -64,11 +64,14 @@ export function useLogin() {
     });
 
     await refreshSession();
+    if (!loggedIn.value) {
+      throw new Error("The user session could not be refreshed.");
+    }
   };
 }
 ```
 
-The feature composable sends the login request and refreshes the client session before resolving.
+The feature composable sends the login request, refreshes the client session, and confirms that it remains authenticated before resolving.
 
 ```vue
 <!-- pages/login.vue -->
@@ -90,38 +93,37 @@ export default defineEventHandler(async (event) => {
   const credentials = await readValidatedBody(event, loginSchema.parse);
   const user = await authenticate(credentials);
 
-  await setUserSession(event, { user });
+  await replaceUserSession(event, { user: { id: user.id } });
   return {};
 });
 ```
 
-The login API creates the server session only after authentication succeeds.
+The login API replaces the server session with the stable user ID only after authentication succeeds.
 
 ```ts
 // server/api/projects.get.ts
-export default defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event);
-  return getProjectsForUser(user.id);
+export default defineProtectedEventHandler(async (event, currentUser) => {
+  return getProjectsForUser(currentUser.id);
 });
 ```
 
-The protected API requires an authenticated session before accessing protected data.
+The protected API validates the session user ID and loads the current user record before accessing protected data.
 
 ## App Examples
 
 - [`useLogin.ts`](../../../apps/bulletproof-nuxt/layers/auth/app/composables/useLogin.ts) sends the login request and refreshes the client session before reporting success.
-- [`login.post.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/api/auth/login.post.ts) creates the server session after authentication succeeds.
-- [`dashboard.vue`](../../../apps/bulletproof-nuxt/layers/base/app/layouts/dashboard.vue) waits for the session to clear before reporting logout success and navigating.
-- The [discussion collection API route](../../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/index.get.ts) requires a user session before accessing discussion data.
+- [`login.post.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/api/auth/login.post.ts) replaces the server session with the stable user ID after authentication succeeds.
+- [`dashboard.vue`](../../../apps/bulletproof-nuxt/layers/base/app/layouts/dashboard.vue) waits for the session to clear before reporting logout success and then handles navigation separately.
+- The [discussion collection API route](../../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/index.get.ts) loads the current user record before accessing discussion data.
 - The [auth route middleware](../../../apps/bulletproof-nuxt/layers/auth/app/middleware/auth.ts) redirects unauthenticated page navigation.
 
 ## Trade-offs and Limitations
 
 Refreshing the client auth state adds another request after an authentication change, so notification, form completion, and navigation take longer.
 
-Session synchronization can fail even after the primary authentication request succeeds. Awaiting the session operation establishes ordering, but its success or failure still follows the provider's contract. Fallback session behavior and separate refresh-failure notifications require additional product decisions.
+Session synchronization can fail even after the primary authentication request succeeds. The workflow must preserve the completed request result while handling the session outcome separately.
 
-Session clearing can also fail. Logout must not be reported as complete before clearing succeeds. If clearing succeeds but navigation fails, session clearing remains successful; handle the navigation failure separately.
+Session clearing can also fail. The workflow must not report logout as complete before clearing succeeds. A later navigation failure does not reverse a completed logout.
 
 Concurrent operations that write session state can finish out of order. When logout must remain the final session change, additional operation ordering or server-side invalidation is needed.
 
@@ -139,3 +141,7 @@ Password handling, provider selection, session payloads, redirect validation, se
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 - [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
 - [Separate Completed Changes from Data Refresh Failures](completed-change-refresh-failures.md)
+- [Store a User ID and Load the Current User When Fetching the Session](../nuxt-auth-utils/store-user-id-and-load-current-user.md)
+- [Load the Current User Record Before Processing a Protected Request](../nuxt-auth-utils/load-current-user-before-protected-request.md)
+- [Check Authentication State After a Session Refresh](../nuxt-auth-utils/check-authentication-state-after-session-refresh.md)
+- [Complete Logout Only After Clearing the User Session](../nuxt-auth-utils/complete-logout-only-after-clearing-user-session.md)

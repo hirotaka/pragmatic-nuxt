@@ -158,6 +158,28 @@ async function expectUserPresent(request: APIRequestContext, userId: string) {
   expect(users.some(user => isApiRecord(user) && user.id === userId)).toBe(true);
 }
 
+test("session GET returns the allowlisted current public User projection", { tag: ["@contract", "@auth"] }, async ({ page }) => {
+  const { unique } = await registerIsolatedUser(page, "session-projection");
+  const session: unknown = await expectJson(await page.request.get(new URL("/api/_auth/session", page.url()).href));
+
+  if (!isApiRecord(session) || !isApiRecord(session.user)) {
+    throw new Error("Test setup failed: session response has no public user");
+  }
+
+  expect(Object.keys(session.user).sort()).toEqual([
+    "createdAt",
+    "email",
+    "firstName",
+    "id",
+    "lastName",
+    "role",
+    "teamId",
+  ]);
+  expect(session.user.email).toBe(`${unique}@example.com`);
+  expect(session.user).not.toHaveProperty("password");
+  expectIsoString(session.user.createdAt);
+});
+
 test("discussion and comment pagination enforce the route contract", { tag: ["@contract", "@discussions", "@comments"] }, async ({ page }) => {
   await registerIsolatedUser(page, "invalid-pagination");
   const discussion = await createDiscussion(page, `Invalid pagination ${Date.now()}`);

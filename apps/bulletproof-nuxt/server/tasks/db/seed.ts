@@ -6,6 +6,6 @@ export default defineTask({
     description: "Seed the disposable Local database with demo Teams and Users",
   },
   async run() {
-    return { result: await seedDatabase() };
+    return { result: await seedDatabase(hashPassword) };
   },
 });

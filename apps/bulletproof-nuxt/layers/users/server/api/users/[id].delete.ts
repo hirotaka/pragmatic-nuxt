@@ -1,9 +1,6 @@
 import { createUserRepository } from "~users/server/repository/userRepository";
-import type { User } from "#layers/auth/shared/types";
 
-export default defineEventHandler(async (event) => {
-  const sessionUser = (await requireUserSession(event)).user as User;
-
+export default defineProtectedEventHandler(async (event, sessionUser) => {
   if (sessionUser.role !== "ADMIN") {
     throw createError({
       statusCode: 403,

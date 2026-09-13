@@ -1,3 +1,4 @@
+import { computed } from "vue";
 import { afterEach, expect, test, vi, beforeEach } from "vitest";
 import { mockNuxtImport, mountSuspended, registerEndpoint } from "@nuxt/test-utils/runtime";
 import { readBody, setResponseStatus } from "h3";
@@ -25,6 +26,7 @@ const { mockUser, addNotification, refreshSession, session } = vi.hoisted(() => 
 
 mockNuxtImport("useUserSession", () => () => ({
   session,
+  loggedIn: computed(() => Boolean(session.value?.user)),
   fetch: refreshSession,
 }));
 
@@ -43,7 +45,7 @@ vi.mock("#layers/base/app/composables/useNotifications", () => ({
 beforeEach(() => {
   addNotification.mockClear();
   refreshSession.mockReset().mockResolvedValue(undefined);
-  session.value = null;
+  session.value = { id: "session-1", user: mockUser.value };
   mockUser.value = {
     id: "user-1",
     email: "user@example.com",
@@ -145,11 +147,14 @@ test("UpdateProfile does not create a fallback session when refresh settles empt
   await userEvent.click(await bodyScreen.findByRole("button", { name: /submit/i }));
 
   await waitFor(() => expect(refreshSession).toHaveBeenCalledOnce());
-  await waitFor(() => expect(bodyScreen.queryByRole("dialog", { name: /update profile/i })).toBeNull());
+  await waitFor(() => expect((bodyScreen.getByRole("button", { name: /submit/i }) as HTMLButtonElement).disabled).toBe(false));
+  expect(bodyScreen.getByRole("dialog", { name: /update profile/i })).toBeTruthy();
   expect(session.value).toBeNull();
+  expect(addNotification).toHaveBeenCalledOnce();
   expect(addNotification).toHaveBeenCalledWith({
-    type: "success",
-    title: "Profile Updated",
+    type: "error",
+    title: "Session Unavailable",
+    message: "The request completed, but the session could not be refreshed. Please try again.",
   });
 });
 

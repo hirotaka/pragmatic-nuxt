@@ -2,7 +2,7 @@ import type { UpdateProfileInput } from "~users/shared/schemas";
 
 export const useUpdateProfile = () => {
   const { $api } = useNuxtApp();
-  const { fetch: refreshSession } = useUserSession();
+  const refreshSession = useRequiredUserSessionRefresh();
 
   return async (input: UpdateProfileInput) => {
     await $api("/api/profile", {

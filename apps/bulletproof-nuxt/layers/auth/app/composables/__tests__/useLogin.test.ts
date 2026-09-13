@@ -14,7 +14,7 @@ mockNuxtImport<typeof useNuxtApp>("useNuxtApp", original => (...args) => new Pro
     ? api
     : Reflect.get(target, property, receiver),
 }));
-mockNuxtImport("useUserSession", () => () => ({ fetch: refreshSession }));
+mockNuxtImport("useRequiredUserSessionRefresh", () => () => refreshSession);
 vi.mock("#layers/base/app/composables/useNotifications", () => ({
   useNotifications: () => ({ addNotification }),
 }));

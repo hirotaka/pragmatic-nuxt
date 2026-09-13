@@ -68,6 +68,27 @@ test("logs in a user and calls the successful submit callback", async () => {
   });
 });
 
+test("keeps the form retryable when session refresh settles logged out", async () => {
+  const newUser = createUser({ teamId: undefined });
+  const onSuccess = vi.fn();
+
+  registerEndpoint("/api/auth/login", {
+    method: "POST",
+    handler: () => new Response(null, { status: 204 }),
+  });
+  registerEndpoint("/api/_auth/session", () => null);
+
+  await renderComponent(LoginForm, { props: { onSuccess } });
+  await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
+  await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
+
+  const submitButton = screen.getByRole("button", { name: /log in/i }) as HTMLButtonElement;
+  await userEvent.click(submitButton);
+
+  await waitFor(() => expect(submitButton.disabled).toBe(false));
+  expect(onSuccess).not.toHaveBeenCalled();
+});
+
 test("should block login when validation fails", async () => {
   const onSuccess = vi.fn();
   const loginHandler = vi.fn();
@@ -110,7 +131,7 @@ test("should disable submit while login is pending", async () => {
     method: "POST",
     handler: loginHandler,
   });
-  registerEndpoint("/api/_auth/session", () => ({}));
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: newUser }));
 
   await renderComponent(LoginForm, {
     props: { onSuccess },

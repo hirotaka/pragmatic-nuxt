@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { db } from "@nuxthub/db";
 import { teams, users } from "@nuxthub/db/schema";
 
@@ -46,6 +45,8 @@ export type SeedSummary = {
   usersCreated: number;
   usersExisting: number;
 };
+
+export type PasswordHashProducer = (password: string) => Promise<string>;
 
 export function isNonLocalSeedRuntime(env: SeedEnvironment = process.env) {
   return env.NITRO_PRESET === "cloudflare_module" || Boolean(env.CLOUDFLARE_ENV);
@@ -98,12 +99,12 @@ export function findSeedCollisions(
   return collisions;
 }
 
-export async function seedDatabase(): Promise<SeedSummary> {
+export async function seedDatabase(hashPassword: PasswordHashProducer): Promise<SeedSummary> {
   if (isNonLocalSeedRuntime()) {
     throw new Error("Database seed is available only for a disposable Local database.");
   }
 
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await hashPassword(password);
 
   return db.transaction(async (tx) => {
     const existingTeams = await tx.select().from(teams);

@@ -61,7 +61,7 @@ const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput | undefine
     isSuccess.value = true;
   }
   catch {
-    // `$api` reports the request failure.
+    // The request or session owner reports the failure.
   }
   finally {
     isPending.value = false;

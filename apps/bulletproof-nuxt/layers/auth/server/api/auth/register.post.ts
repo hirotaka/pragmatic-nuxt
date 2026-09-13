@@ -1,8 +1,7 @@
 import { createUserRepository } from "#layers/users/server/repository/userRepository";
 import { createTeamRepository } from "#layers/teams/server/repository/teamRepository";
 import { registerInputSchema } from "~auth/shared/schemas";
-import { customHashPassword } from "~auth/server/utils/password";
-import { serializeUser } from "~auth/server/utils/serializeUser";
+import { serializeSessionIdentity } from "~auth/server/utils/serializeSessionIdentity";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -40,7 +39,6 @@ export default defineEventHandler(async (event) => {
       });
     }
     teamId = data.teamId;
-    role = "USER";
   }
   else if (data.teamName) {
     const newTeam = await teamRepository.create(data.teamName);
@@ -54,7 +52,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const hashedPassword = await customHashPassword(data.password);
+  const hashedPassword = await hashPassword(data.password);
 
   const user = await userRepository.create({
     email: data.email,
@@ -65,8 +63,6 @@ export default defineEventHandler(async (event) => {
     role,
   });
 
-  const serializedUser = serializeUser(user);
-
-  await setUserSession(event, { user: serializedUser });
+  await replaceUserSession(event, { user: serializeSessionIdentity(user) });
   setResponseStatus(event, 201);
 });
