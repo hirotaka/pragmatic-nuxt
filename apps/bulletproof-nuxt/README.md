@@ -47,6 +47,7 @@ Apply Local migrations with `pnpm db:migrate`, then start the app with
 `db:seed` operation. Run it from Nuxt DevTools or with `pnpm db:seed`; the
 command prepares the generated Local database runtime and calls the app-owned
 seed implementation directly. Use `pnpm build` for the production or Preview
+Cloudflare build selected by the environment.
 
 See [Testing](../../docs/bulletproof-nuxt/testing.md),
 [Deployment](../../docs/bulletproof-nuxt/deployment.md), the
