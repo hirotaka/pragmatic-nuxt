@@ -37,7 +37,7 @@ const handleSubmit = async (event: FormSubmitEvent<LoginInput | undefined>) => {
     emit("success");
   }
   catch {
-    // `$api` reports the request failure.
+    // The request or session owner reports the failure.
   }
   finally {
     isPending.value = false;

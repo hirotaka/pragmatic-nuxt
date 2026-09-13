@@ -3,9 +3,7 @@ import type { PaginatedComments } from "~comments/shared/types";
 import { serializeComment } from "~comments/server/utils/serializeComment";
 import { parsePagination } from "~base/server/utils/parsePagination";
 
-export default defineEventHandler(async (event): Promise<PaginatedComments> => {
-  await requireUserSession(event);
-
+export default defineProtectedEventHandler(async (event): Promise<PaginatedComments> => {
   const query = getQuery(event);
   const discussionId = query.discussionId as string;
   const { page, limit } = parsePagination(query);

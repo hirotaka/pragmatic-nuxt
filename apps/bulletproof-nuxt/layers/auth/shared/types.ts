@@ -1,5 +1,8 @@
-export interface User {
+export interface SessionIdentity {
   id: string;
+}
+
+export interface User extends SessionIdentity {
   email: string;
   firstName: string;
   lastName: string;

@@ -2,9 +2,9 @@ import type { H3Event } from "h3";
 import { createError } from "h3";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
-const { createDiscussionRepository, requireUserSession } = vi.hoisted(() => ({
+const { createDiscussionRepository, requireCurrentUser } = vi.hoisted(() => ({
   createDiscussionRepository: vi.fn(),
-  requireUserSession: vi.fn(),
+  requireCurrentUser: vi.fn(),
 }));
 
 vi.mock("~discussions/server/repository/discussionRepository", () => ({
@@ -13,9 +13,9 @@ vi.mock("~discussions/server/repository/discussionRepository", () => ({
 
 beforeEach(() => {
   createDiscussionRepository.mockReset();
-  requireUserSession.mockReset();
-  vi.stubGlobal("defineEventHandler", <T>(eventHandler: T) => eventHandler);
-  vi.stubGlobal("requireUserSession", requireUserSession);
+  requireCurrentUser.mockReset();
+  vi.stubGlobal("defineProtectedEventHandler", <T extends (event: H3Event, currentUser: unknown) => unknown>(eventHandler: T) =>
+    async (event: H3Event) => eventHandler(event, await requireCurrentUser(event)));
 });
 
 afterEach(() => {
@@ -24,7 +24,7 @@ afterEach(() => {
 
 test("rejects an unauthenticated request before entering the discussion repository", async () => {
   const { default: handler } = await import("../api/discussions/index.get");
-  requireUserSession.mockRejectedValueOnce(createError({
+  requireCurrentUser.mockRejectedValueOnce(createError({
     statusCode: 401,
     statusMessage: "Unauthorized",
   }));

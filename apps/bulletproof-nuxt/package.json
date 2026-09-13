@@ -34,6 +34,7 @@
     "type-check": "nuxt typecheck"
   },
   "dependencies": {
+    "@adonisjs/hash": "^9.1.1",
     "@electric-sql/pglite": "^0.5.4",
     "@libsql/client": "^0.17.0",
     "@neondatabase/serverless": "^1.0.0",
@@ -43,7 +44,6 @@
     "@regle/nuxt": "^1.0.0",
     "@regle/rules": "^1.0.0",
     "@regle/schemas": "^1.13.0",
-    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",

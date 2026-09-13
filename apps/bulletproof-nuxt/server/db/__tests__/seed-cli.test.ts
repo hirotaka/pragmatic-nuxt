@@ -14,6 +14,17 @@ describe("seed CLI", () => {
     consoleLog.mockRestore();
   });
 
+  it("passes the standalone password producer to the shared seed function", async () => {
+    const seedDatabase = vi.fn().mockResolvedValue({ teamsCreated: 2, usersCreated: 2 });
+    const hashPassword = vi.fn();
+    const consoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    await main(seedDatabase, hashPassword);
+
+    expect(seedDatabase).toHaveBeenCalledWith(hashPassword);
+    consoleLog.mockRestore();
+  });
+
   it("prints failures and exits unsuccessfully", async () => {
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
     process.exitCode = 0;

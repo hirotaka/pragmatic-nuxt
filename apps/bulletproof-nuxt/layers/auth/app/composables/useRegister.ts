@@ -3,7 +3,7 @@ import { useNotifications } from "#layers/base/app/composables/useNotifications"
 
 export const useRegister = () => {
   const { $api } = useNuxtApp();
-  const { fetch: refreshSession } = useUserSession();
+  const refreshSession = useRequiredUserSessionRefresh();
   const { addNotification } = useNotifications();
 
   return async (input: RegisterInput): Promise<void> => {

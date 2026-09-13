@@ -12,13 +12,25 @@ This application uses cookie-based session authentication with [nuxt-auth-utils]
 
 [Login API Example Code](../../apps/bulletproof-nuxt/layers/auth/server/api/auth/login.post.ts)
 
-Protected API routes call `requireUserSession` before applying feature-specific authorization. Login and registration call `setUserSession` to establish authentication claims; Profile reads and updates use the authenticated session identity without rewriting the session cookie.
+Login and registration replace the session with the stable user ID after
+successful password authentication. Protected API routes validate the session user ID
+and load the current user record from the database before applying
+feature-specific authorization. Profile updates do not rewrite the user ID
+stored in the cookie, but the client refreshes the session response before
+reporting completion.
 
 [Protected API Example Code](../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/index.get.ts)
 
+See the [Nuxt Auth Utils Practices](../practices/nuxt-auth-utils/index.md) for
+reusable password, session, protected-request, refresh, and logout guidance.
+
 ### Handling User Data
 
-Authentication and current User data are available through `useUserSession`. The sealed cookie stores only the User ID; the session response is enriched from the database with an allowlisted public User. Protected server routes resolve the current User from the database and never trust role or team claims from the cookie.
+Authentication and current user data are available through `useUserSession`.
+The sealed cookie stores only the user ID. The session response loads the user
+record from the database and includes only public user fields. Protected server
+routes load the current user record from the database and never trust role or
+team claims from the cookie.
 
 [Auth Middleware Example Code](../../apps/bulletproof-nuxt/layers/auth/app/middleware/auth.ts)
 

@@ -1,7 +1,8 @@
-export async function main(seedDatabase) {
+export async function main(seedDatabase, hashPassword) {
   try {
     const seed = seedDatabase ?? (await import("./seed.ts")).seedDatabase;
-    const result = await seed();
+    const producer = hashPassword ?? (await import("./standalonePassword.ts")).hashStandalonePassword;
+    const result = await seed(producer);
     console.log("Database seeded successfully:", result);
   }
   catch (error) {

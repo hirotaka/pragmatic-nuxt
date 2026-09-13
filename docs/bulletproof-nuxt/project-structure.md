@@ -47,6 +47,14 @@ Nuxt Layers allow you to organize code by feature domain. Each layer is a self-c
 - Repository patterns
 - Types
 
+The `auth` layer owns authentication UI, session-aware composables, session
+projection, password authentication routes, and protected server-route helpers.
+Other feature layers consume those helpers while retaining their own
+authorization rules and domain queries. See the [Nuxt Auth Utils
+Practices](../practices/nuxt-auth-utils/index.md) for reusable authentication
+decisions and [Security](security.md) for this app's authentication and
+authorization boundaries.
+
 A layer typically has the following structure:
 
 ```sh

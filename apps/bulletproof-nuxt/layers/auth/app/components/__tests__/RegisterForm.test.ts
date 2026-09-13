@@ -99,6 +99,35 @@ test("registers a new user and calls the successful submit callback", async () =
   });
 });
 
+test("keeps the form retryable when session refresh settles logged out", async () => {
+  const newUser = createUser({});
+  const onSuccess = vi.fn();
+
+  registerEndpoint("/api/teams", () => []);
+  registerEndpoint("/api/auth/register", {
+    method: "POST",
+    handler: () => new Response(null, { status: 201 }),
+  });
+  registerEndpoint("/api/_auth/session", () => null);
+
+  await renderComponent(RegisterForm, {
+    url: "/auth/register",
+    path: "/auth/register",
+    props: { onSuccess },
+  });
+  await userEvent.type(screen.getByLabelText(/first name/i), newUser.firstName);
+  await userEvent.type(screen.getByLabelText(/last name/i), newUser.lastName);
+  await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
+  await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
+  await userEvent.type(screen.getByLabelText(/team name/i), newUser.teamName);
+
+  const submitButton = screen.getByRole("button", { name: /register/i }) as HTMLButtonElement;
+  await userEvent.click(submitButton);
+
+  await waitFor(() => expect(submitButton.disabled).toBe(false));
+  expect(onSuccess).not.toHaveBeenCalled();
+});
+
 test("should register new user with an existing team without leaking team name", async () => {
   const newUser = createUser({});
   const onSuccess = vi.fn();
@@ -113,7 +142,7 @@ test("should register new user with an existing team without leaking team name",
       return new Response(null, { status: 201 });
     },
   });
-  registerEndpoint("/api/_auth/session", () => ({ id: "session-1" }));
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: newUser }));
 
   await renderComponent(RegisterForm, {
     url: "/auth/register",
@@ -167,7 +196,7 @@ test("should disable submit while registration is pending", async () => {
     method: "POST",
     handler: registerHandler,
   });
-  registerEndpoint("/api/_auth/session", () => ({}));
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: newUser }));
 
   await renderComponent(RegisterForm, {
     url: "/auth/register",
