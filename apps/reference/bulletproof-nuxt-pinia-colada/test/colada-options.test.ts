@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { shouldHandleColadaQueryError, shouldRetryQuery } from "../colada.options";
+import { getUnauthorizedReloadPath, shouldHandleColadaQueryError, shouldRetryQuery } from "../colada.options";
 
 test.each([
   [0, { status: 500 }, true],
@@ -9,6 +9,17 @@ test.each([
   [1, { response: { status: 401 } }, false],
 ])("bounds non-401 Query retries and excludes 401: %o", (failureCount, error, expected) => {
   expect(shouldRetryQuery(failureCount, error)).toBe(expected);
+});
+
+test("uses the complete protected route URL for a 401 reload", () => {
+  expect(getUnauthorizedReloadPath(
+    { response: { status: 401 } },
+    { path: "/app/discussions", fullPath: "/app/discussions?view=unread&page=2" },
+  )).toBe("/app/discussions?view=unread&page=2");
+  expect(getUnauthorizedReloadPath(
+    { status: 401 },
+    { path: "/", fullPath: "/?view=public" },
+  )).toBeNull();
 });
 
 test("silences errors from inactive prefetch entries", () => {

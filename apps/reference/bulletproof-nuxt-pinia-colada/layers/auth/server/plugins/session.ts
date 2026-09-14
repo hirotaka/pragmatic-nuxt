@@ -5,9 +5,9 @@ import type { SessionIdentity } from "~auth/shared/types";
 
 export default defineNitroPlugin(() => {
   sessionHooks.hook("fetch", async (session) => {
-    const identity = session.user as Partial<SessionIdentity> | undefined;
-    if (!identity) return;
-    if (typeof identity.id !== "string" || identity.id.length === 0) {
+    const identity = session.user as Partial<SessionIdentity> | null | undefined;
+    if (identity === undefined || identity === null) return;
+    if (typeof identity !== "object" || typeof identity.id !== "string" || identity.id.length === 0) {
       throw createError({
         statusCode: 401,
         message: "Unauthorized",

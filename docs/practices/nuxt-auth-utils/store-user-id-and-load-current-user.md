@@ -33,7 +33,7 @@ The `fetch` session hook runs before Nuxt Auth Utils returns the session respons
 ## Implementation Guidance
 
 - Define one type for the stored user identity and another type for the public user data returned to application code.
-- After authentication succeeds, write `{ user: { id: user.id } }` with `replaceUserSession()` so existing user fields are removed instead of merged.
+- After authentication succeeds, write `{ user: { id: user.id } }` with `replaceUserSession()` rather than the merging `setUserSession()` API. Do not rely on replacement as a migration mechanism for arbitrary fields in cookies issued under an earlier session contract.
 - Register a `sessionHooks.hook("fetch", ...)` callback.
 - Return without querying the database when the session has no `user` field.
 - Validate `session.user.id` before using it in a database query.
@@ -49,7 +49,7 @@ await replaceUserSession(event, {
 });
 ```
 
-`replaceUserSession()` clears the existing session data before storing the user ID.
+`replaceUserSession()` is intended for a replacement write rather than the merging behavior of `setUserSession()`. Applications that change their session shape must separately decide whether previously issued cookies remain valid; do not treat a replacement write as a guarantee that arbitrary legacy cookie fields have been removed.
 
 ```ts
 export default defineNitroPlugin(() => {

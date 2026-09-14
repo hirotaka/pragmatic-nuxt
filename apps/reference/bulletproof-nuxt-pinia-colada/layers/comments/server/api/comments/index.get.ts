@@ -2,11 +2,9 @@ import { createCommentRepository } from "~comments/server/repository/commentRepo
 import type { PaginatedComments } from "~comments/shared/types";
 import { serializeComment } from "~comments/server/utils/serializeComment";
 import { parsePagination } from "~base/server/utils/parsePagination";
-import { requireCurrentUser } from "#layers/auth/server/utils/requireCurrentUser";
+import { defineProtectedEventHandler } from "#layers/auth/server/utils/defineProtectedEventHandler";
 
-export default defineEventHandler(async (event): Promise<PaginatedComments> => {
-  await requireCurrentUser(event);
-
+export default defineProtectedEventHandler(async (event): Promise<PaginatedComments> => {
   const query = getQuery(event);
   const discussionId = query.discussionId as string;
   const { page, limit } = parsePagination(query);

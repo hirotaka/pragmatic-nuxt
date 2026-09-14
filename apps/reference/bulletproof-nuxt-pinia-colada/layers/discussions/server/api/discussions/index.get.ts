@@ -1,11 +1,9 @@
 import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
 import { serializeDiscussion } from "~discussions/server/utils/serializeDiscussion";
 import { parsePagination } from "~base/server/utils/parsePagination";
-import { requireCurrentUser } from "#layers/auth/server/utils/requireCurrentUser";
+import { defineProtectedEventHandler } from "#layers/auth/server/utils/defineProtectedEventHandler";
 
-export default defineEventHandler(async (event) => {
-  const sessionUser = await requireCurrentUser(event);
-
+export default defineProtectedEventHandler(async (event, sessionUser) => {
   if (!sessionUser.teamId) {
     throw createError({
       statusCode: 400,

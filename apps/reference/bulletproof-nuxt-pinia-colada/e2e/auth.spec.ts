@@ -3,6 +3,25 @@ import { createUser } from "../test/data-generators";
 import { expectJson } from "./support/api-response";
 import { waitForNuxtHydration } from "./support/nuxt-navigation";
 
+test("authenticated cold navigation preserves a protected deep-link target", { tag: ["@auth", "@session"] }, async ({ page }) => {
+  await page.goto("/app/discussions?view=cold", { waitUntil: "domcontentloaded" });
+  await waitForNuxtHydration(page);
+
+  await expect(page.getByRole("heading", { name: "Discussions" })).toBeVisible();
+  expect(new URL(page.url()).pathname).toBe("/app/discussions");
+  expect(new URL(page.url()).searchParams.get("view")).toBe("cold");
+});
+
+test("anonymous cold navigation preserves a query-bearing redirect target", { tag: ["@auth", "@session"] }, async ({ page }) => {
+  await page.context().clearCookies();
+  await page.goto("/app/discussions?view=unread&page=2", { waitUntil: "domcontentloaded" });
+
+  await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+  const url = new URL(page.url());
+  expect(url.pathname).toBe("/auth/login");
+  expect(url.searchParams.get("redirectTo")).toBe("/app/discussions?view=unread&page=2");
+});
+
 test("registration and login establish a browser session before redirecting", { tag: ["@auth", "@mutation"] }, async ({ page }) => {
   const user = createUser({
     email: `auth-mutation-${Date.now()}@example.com`,
@@ -71,6 +90,12 @@ test("reloads the current protected route after an authenticated 401", { tag: ["
   await page.getByRole("button", { name: "Register" }).click();
   await expect(page).toHaveURL(/\/app$/);
 
+  const protectedPath = "/app/discussions?source=expired";
+  let pageLoads = 0;
+  page.on("load", () => {
+    pageLoads += 1;
+  });
+
   let discussionRequests = 0;
   await page.route("**/api/discussions**", async (route) => {
     discussionRequests += 1;
@@ -82,10 +107,11 @@ test("reloads the current protected route after an authenticated 401", { tag: ["
     await route.continue();
   });
 
-  const reload = page.waitForEvent("load");
-  await page.getByRole("link", { name: "Discussions" }).click();
-  await expect(page).toHaveURL(/\/app\/discussions$/);
-  await reload;
+  await page.evaluate(async (path) => {
+    await window.useNuxtApp?.().$router.push(path);
+  }, protectedPath);
+  await expect.poll(() => pageLoads).toBe(1);
+  await expect(page).toHaveURL(/\/app\/discussions\?source=expired$/);
   expect(discussionRequests).toBe(1);
 });
 
@@ -109,6 +135,9 @@ test("reloads with fresh session state after the server session is invalidated",
 
   const clearResponse = await page.request.delete("/api/_auth/session");
   expect(clearResponse.ok()).toBe(true);
+
+  const clearedSessionRequest = await page.request.get("/api/discussions?source=cleared-session");
+  expect(clearedSessionRequest.status()).toBe(401);
 
   const unauthorizedRequest = page.waitForResponse((response) => {
     return new URL(response.url()).pathname === "/api/discussions" && response.status() === 401;
