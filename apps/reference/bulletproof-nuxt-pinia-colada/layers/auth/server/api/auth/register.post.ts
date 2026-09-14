@@ -3,7 +3,6 @@ import { createTeamRepository } from "#layers/teams/server/repository/teamReposi
 import { registerInputSchema } from "~auth/shared/schemas";
 import { customHashPassword } from "~auth/server/utils/password";
 import { serializeSessionIdentity } from "~auth/server/utils/serializeUser";
-import type { User } from "~auth/shared/types";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -68,6 +67,6 @@ export default defineEventHandler(async (event) => {
 
   const sessionUser = serializeSessionIdentity(user);
 
-  await replaceUserSession(event, { user: sessionUser as unknown as User });
+  await replaceUserSession(event, { user: sessionUser });
   setResponseStatus(event, 201);
 });

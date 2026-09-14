@@ -1,10 +1,8 @@
 import { createUserRepository } from "~users/server/repository/userRepository";
 import { updateProfileInputSchema } from "~users/shared/schemas";
-import { requireCurrentUser } from "#layers/auth/server/utils/requireCurrentUser";
+import { defineProtectedEventHandler } from "#layers/auth/server/utils/defineProtectedEventHandler";
 
-export default defineEventHandler(async (event) => {
-  const sessionUser = await requireCurrentUser(event);
-
+export default defineProtectedEventHandler(async (event, sessionUser) => {
   const body = await readBody(event);
   const validationResult = updateProfileInputSchema.safeParse(body);
 

@@ -16,6 +16,19 @@ declare module "@pinia/colada" {
   }
 }
 
+type RouteLocation = {
+  path: string;
+  fullPath: string;
+};
+
+export function getUnauthorizedReloadPath(error: unknown, route: RouteLocation): string | null {
+  const isProtectedRoute = route.path === "/app" || route.path.startsWith("/app/");
+
+  return extractErrorStatusCode(error) === 401 && isProtectedRoute
+    ? route.fullPath
+    : null;
+}
+
 function handleColadaError(error: unknown): void {
   if (import.meta.server) {
     return;
@@ -35,12 +48,10 @@ function handleColadaError(error: unknown): void {
 
   // Error hooks run outside component setup, so restore Nuxt context before using composables.
   nuxtApp.runWithContext(() => {
-    const route = useRoute();
-    const isProtectedRoute = route.path === "/app" || route.path.startsWith("/app/");
-    const shouldReloadForUnauthorizedError = extractErrorStatusCode(error) === 401 && isProtectedRoute;
+    const reloadPath = getUnauthorizedReloadPath(error, useRoute());
 
-    if (shouldReloadForUnauthorizedError) {
-      reloadNuxtApp({ path: route.fullPath });
+    if (reloadPath) {
+      reloadNuxtApp({ path: reloadPath });
       return;
     }
 

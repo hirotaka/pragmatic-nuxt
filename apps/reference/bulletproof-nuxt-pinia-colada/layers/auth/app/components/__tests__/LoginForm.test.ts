@@ -116,6 +116,27 @@ test("should disable submit while login is pending", async () => {
   await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
 });
 
+test("does not emit success or replay login when session refresh resolves unauthenticated", async () => {
+  const newUser = createUser({ teamId: undefined });
+  const onSuccess = vi.fn();
+  const loginHandler = vi.fn(() => new Response(null, { status: 204 }));
+
+  registerEndpoint("/api/auth/login", { method: "POST", handler: loginHandler });
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: null }));
+
+  await renderComponent(LoginForm, { props: { onSuccess } });
+  await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
+  await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
+  const submitButton = screen.getByRole("button", { name: /log in/i }) as HTMLButtonElement;
+
+  await userEvent.click(submitButton);
+
+  await waitFor(() => expect(submitButton.disabled).toBe(false));
+  expect(onSuccess).not.toHaveBeenCalled();
+  expect(loginHandler).toHaveBeenCalledOnce();
+  expect((screen.getByLabelText(/email address/i) as HTMLInputElement).value).toBe(newUser.email);
+});
+
 test("releases pending state after login failure and allows retry", async () => {
   const newUser = createUser({ teamId: undefined });
   const onSuccess = vi.fn();

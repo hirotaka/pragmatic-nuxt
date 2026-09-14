@@ -11,6 +11,3 @@ export interface User extends SessionIdentity {
   teamId: string;
   createdAt: string;
 }
-
-/** Compatibility name for server authorization consumers during the session migration. */
-export type SessionUser = User;

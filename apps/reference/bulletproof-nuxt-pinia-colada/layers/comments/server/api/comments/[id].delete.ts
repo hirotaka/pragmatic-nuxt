@@ -1,9 +1,7 @@
 import { createCommentRepository } from "~comments/server/repository/commentRepository";
-import { requireCurrentUser } from "#layers/auth/server/utils/requireCurrentUser";
+import { defineProtectedEventHandler } from "#layers/auth/server/utils/defineProtectedEventHandler";
 
-export default defineEventHandler(async (event) => {
-  const sessionUser = await requireCurrentUser(event);
-
+export default defineProtectedEventHandler(async (event, sessionUser) => {
   const id = getRouterParam(event, "id");
 
   if (!id) {

@@ -3,9 +3,10 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { LoginInput, RegisterInput } from "~auth/shared/schemas";
 import { loginMutation, registerMutation } from "../auth";
 
-const { fetchMock, refreshSession } = vi.hoisted(() => ({
+const { fetchMock, refreshSession, loggedIn } = vi.hoisted(() => ({
   fetchMock: vi.fn(),
   refreshSession: vi.fn(),
+  loggedIn: { value: true },
 }));
 
 vi.mock("@pinia/colada", () => ({
@@ -17,7 +18,7 @@ vi.mock("#imports", async importOriginal => ({
   $fetch: fetchMock,
 }));
 vi.mock("#build/fetch.mjs", () => ({ $fetch: fetchMock }));
-mockNuxtImport("useUserSession", () => () => ({ fetch: refreshSession }));
+mockNuxtImport("useUserSession", () => () => ({ fetch: refreshSession, loggedIn }));
 
 const loginInput: LoginInput = { email: "ada@example.com", password: "Password123!" };
 const registerInput: RegisterInput = {
@@ -32,6 +33,7 @@ const registerInput: RegisterInput = {
 beforeEach(() => {
   fetchMock.mockReset().mockResolvedValue(undefined);
   refreshSession.mockReset().mockResolvedValue(undefined);
+  loggedIn.value = true;
   Object.assign(useNuxtApp(), { $api: fetchMock });
 });
 
@@ -71,5 +73,55 @@ describe.each([
 
     resolveRefresh();
     await operation;
+  });
+
+  test("resolves the API client when the mutation executes", async () => {
+    const mutation = createMutation() as unknown as {
+      mutation: (value: typeof input) => Promise<void>;
+    };
+    const executionApi = vi.fn().mockResolvedValue(undefined);
+    Object.assign(useNuxtApp(), { $api: executionApi });
+
+    await mutation.mutation(input);
+
+    expect(executionApi).toHaveBeenCalledWith(endpoint, { method: "POST", body: input });
+  });
+
+  test("does not refresh when the write fails and preserves the write error", async () => {
+    const writeError = new Error("Authenticated write failed");
+    fetchMock.mockRejectedValueOnce(writeError);
+    const mutation = createMutation() as unknown as {
+      mutation: (value: typeof input) => Promise<void>;
+    };
+
+    await expect(mutation.mutation(input)).rejects.toBe(writeError);
+    expect(refreshSession).not.toHaveBeenCalled();
+  });
+
+  test("rejects when refresh resolves without an authenticated session", async () => {
+    loggedIn.value = false;
+    const mutation = createMutation() as unknown as {
+      mutation: (value: typeof input) => Promise<void>;
+    };
+
+    await expect(mutation.mutation(input)).rejects.toMatchObject({
+      name: "UserSessionRefreshError",
+    });
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(refreshSession).toHaveBeenCalledOnce();
+  });
+
+  test("propagates a refresh rejection after a successful write", async () => {
+    const refreshError = new Error("Session refresh failed");
+    refreshSession.mockRejectedValueOnce(refreshError);
+    const mutation = createMutation() as unknown as {
+      mutation: (value: typeof input) => Promise<void>;
+    };
+
+    await expect(mutation.mutation(input)).rejects.toMatchObject({
+      name: "UserSessionRefreshError",
+    });
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(refreshSession).toHaveBeenCalledOnce();
   });
 });

@@ -6,9 +6,10 @@ import userEvent from "@testing-library/user-event";
 import { ref } from "vue";
 import UpdateProfile from "../UpdateProfile.vue";
 
-const { addNotification, fetchSession, user } = vi.hoisted(() => ({
+const { addNotification, fetchSession, loggedIn, user } = vi.hoisted(() => ({
   addNotification: vi.fn(),
   fetchSession: vi.fn().mockResolvedValue(undefined),
+  loggedIn: { value: true },
   user: {
     value: {
       id: "user-1",
@@ -26,6 +27,7 @@ const { addNotification, fetchSession, user } = vi.hoisted(() => ({
 mockNuxtImport("useUserSession", () => () => ({
   user,
   fetch: fetchSession,
+  loggedIn,
 }));
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
@@ -59,6 +61,8 @@ vi.mock("@pinia/colada", async (importOriginal) => {
 
 beforeEach(() => {
   addNotification.mockReset();
+  fetchSession.mockReset().mockResolvedValue(undefined);
+  loggedIn.value = true;
 });
 
 afterEach(() => {
@@ -119,6 +123,27 @@ test("UpdateProfile keeps local validation before calling Profile API", async ()
 
   await bodyScreen.findByText(/invalid email address/i);
   expect(profileHandler).not.toHaveBeenCalled();
+});
+
+test("UpdateProfile keeps the drawer open without success notification when refresh resolves unauthenticated", async () => {
+  const profileHandler = vi.fn(() => new Response(null, { status: 204 }));
+  registerEndpoint("/api/profile", { method: "PATCH", handler: profileHandler });
+  loggedIn.value = false;
+
+  const wrapper = await mountSuspended(UpdateProfile);
+  const screen = within(wrapper.element as HTMLElement);
+  const bodyScreen = within(document.body);
+  await userEvent.click(screen.getByRole("button", { name: /update profile/i }));
+  const bio = await bodyScreen.findByLabelText(/bio/i);
+  await userEvent.clear(bio);
+  await userEvent.type(bio, "Changed but awaiting session");
+  await userEvent.click(bodyScreen.getByRole("button", { name: /submit/i }));
+
+  await waitFor(() => expect(profileHandler).toHaveBeenCalledOnce());
+  expect(bodyScreen.getByRole("dialog", { name: /update profile/i })).toBeTruthy();
+  expect(getInputValue(bodyScreen.getByLabelText(/bio/i))).toBe("Changed but awaiting session");
+  expect(addNotification).not.toHaveBeenCalledWith({ type: "success", title: "Profile Updated" });
+  expect(fetchSession).toHaveBeenCalledOnce();
 });
 
 test("UpdateProfile keeps the drawer open and allows retry after a write failure", async () => {
