@@ -15,12 +15,16 @@ The initial Query function invocation and each retry then correspond to one `$fe
 
 ## Apply When
 
+Use this practice when:
+
 - Pinia Colada Queries use a custom `$fetch` instance and should retry failed reads a limited number of times.
 - Each Query retry should send one HTTP request so the maximum number of requests remains predictable.
 - The application needs to decide retry eligibility based on the error and failure count.
 - A specific Query may need a different retry policy from the global policy.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The Query should stop after its first failed request rather than retry automatically.
 - The request runs outside a Pinia Colada Query.
@@ -48,6 +52,7 @@ With `$fetch` set to `retry: 0`, each Query function call sends one HTTP request
 Create a custom `$fetch` instance with `retry: 0`.
 
 ```ts
+// layers/base/app/utils/createAppApi.ts
 export default defineNuxtPlugin(() => {
   const api = $fetch.create({
     retry: 0,
@@ -62,6 +67,7 @@ export default defineNuxtPlugin(() => {
 Register the Pinia Colada Retry plugin (`@pinia/colada-plugin-retry`) only on the client and set a global limit of two retries per Query. Because the Pinia Colada Retry plugin is not registered on the server, a failed SSR Query stops after its first request.
 
 ```ts
+// colada.options.ts
 import { PiniaColadaRetry } from "@pinia/colada-plugin-retry";
 import type { PiniaColadaOptions } from "@pinia/colada";
 
@@ -75,6 +81,7 @@ export default {
 Call `$api` from the Query without a per-request `retry` override, and forward the Query's abort signal.
 
 ```ts
+// layers/teams/app/queries/teams.ts
 export const projectQuery = defineQueryOptions((id: string) => ({
   key: ["projects", id],
   query: ({ signal }) => {

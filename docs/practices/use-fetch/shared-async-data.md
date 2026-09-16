@@ -14,10 +14,14 @@ Use a feature composable to share AsyncData state between components that need t
 
 ## Apply When
 
+Use this practice when:
+
 - Multiple components need access to the same API data, loading state, or error state.
 - A component needs to refresh data that other components also use, such as after saving an edit.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - A component only displays data provided to it.
 - Components need separate data, loading, or error states for the same resource.
@@ -52,6 +56,7 @@ export function useProject(id: MaybeRefOrGetter<string>) {
 The page reads the project and passes the ID from the loaded data to `ProjectEditor`.
 
 ```vue
+<!-- layers/discussions/app/pages/app/discussions/[id].vue -->
 <script setup lang="ts">
 const { data: project } = await useProject("project-1");
 </script>
@@ -101,6 +106,6 @@ With `server: false`, the component does not start a server-side fetch. Another 
 
 ## Related Practices
 
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Let Request Inputs Define AsyncData Identity](async-data-identity.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)

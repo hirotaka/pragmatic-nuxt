@@ -25,12 +25,16 @@ Use Nuxt's native AsyncData without adding feature-specific state unless the fea
 
 ## Apply When
 
+Use this practice when:
+
 - The app has an API call for a domain or feature, and its URL, request inputs, and returned value should be defined together.
 - A Page needs AsyncData to render data without defining the API URL or request options itself.
 - A Component needs a function it can call after a form submission, deletion confirmation, or another event.
 - A Page or Route combines API calls from several domains or features and should call their composables instead of repeating request details.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - Nuxt Auth Utils or another library already provides the request and updates the related client state. Use that library's API instead of wrapping it in an app composable.
 - The change applies to every app request, such as a base URL, header, credential, retry setting, or shared response hook. Configure the app's fetch client instead.
@@ -79,6 +83,7 @@ export function useCreateProject() {
 ```
 
 ```vue
+<!-- layers/discussions/app/components/DiscussionsCollection.vue -->
 <script setup lang="ts">
 const { data: projects, refresh } = await useProjects()
 const createProject = useCreateProject()
@@ -98,7 +103,7 @@ async function handleCreate(name: string) {
 - [`useCreateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useCreateDiscussion.ts) and [`useDeleteDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDeleteDiscussion.ts) keep each request's URL, method, and input together and return functions for later execution.
 - [`CreateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CreateDiscussion.vue) and [`DeleteDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DeleteDiscussion.vue) invoke those functions after form submission or deletion confirmation and decide pending feedback, success notifications, refresh timing, and when the drawer or dialog closes.
 
-## Trade-offs And Limitations
+## Trade-offs and Limitations
 
 Defining a request in a domain-specific composable adds a file and indirection compared with defining it directly in a Page or Component. A reader may need to open the composable to see the exact API URL and request options.
 
@@ -112,8 +117,8 @@ Native AsyncData follows Nuxt's standard behavior. A feature that needs differen
 
 ## Related Practices
 
-- [Use Configured API Fetchers for App-Owned Requests](custom-api-fetchers.md)
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use Custom Fetchers for Your API](custom-api-fetchers.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 - [Share AsyncData Through Feature Composables](shared-async-data.md)
-- [Choose Replacement or Append Pagination at the Feature Boundary](pagination-strategies.md)
+- [Update Paginated Lists Differently for Page Navigation and Load More](pagination-strategies.md)

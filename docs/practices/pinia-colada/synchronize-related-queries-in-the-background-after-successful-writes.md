@@ -14,11 +14,15 @@ If the related Query refetch fails after the write succeeds, do not treat the su
 
 ## Apply When
 
+Use this practice when:
+
 - The success flow can continue without waiting for fresh Query data, such as showing confirmation, closing a form or dialog, or navigating away.
 - The current screen can temporarily show stale data while its related Queries refetch.
 - A Query refetch failure can be reported or recovered as a separate read error without presenting the completed write as failed.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The next navigation, selection, calculation, or authorization decision depends on freshly refetched Query data.
 - The operation is not considered complete until the client refetches and confirms the server state after the write.
@@ -41,6 +45,7 @@ If the refetch fails, the successful server write is not reversed. Presenting th
 The Mutation function waits for the server write to complete, then starts the related Query refetch in the background after success.
 
 ```ts
+// layers/users/app/queries/users.ts
 export const deleteUserMutation = defineMutationOptions(() => {
   const { $api } = useNuxtApp();
   const queryCache = useQueryCache();
@@ -63,6 +68,7 @@ export const deleteUserMutation = defineMutationOptions(() => {
 The component waits for the server write to complete before continuing the success flow.
 
 ```ts
+// layers/users/app/components/DeleteUser.vue
 const { mutateAsync } = useMutation(deleteUserMutation());
 
 const removeUser = async (userId: string) => {

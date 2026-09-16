@@ -14,6 +14,8 @@ Use Nuxt-generated AsyncData keys by default. When request inputs such as page n
 
 ## Apply When
 
+Use this practice when:
+
 - The request URL and query parameters do not change, as with a simple user list.
 - Query parameters such as page number, search text, or sort order determine which results to fetch.
 - The resource ID in the URL determines which resource to fetch.
@@ -21,6 +23,8 @@ Use Nuxt-generated AsyncData keys by default. When request inputs such as page n
 - You need to keep AsyncData state separate for otherwise identical requests.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - Requests need a separate AsyncData state for values that Nuxt does not include in the generated key, such as a language header.
 - The application controls when to fetch data after request inputs change, instead of relying on automatic refetching.
@@ -41,6 +45,7 @@ Reactive URLs and query values also let Nuxt handle data fetching when those inp
 ## Minimal Nuxt Example
 
 ```ts
+// layers/discussions/app/composables/useDiscussions.ts
 const page = ref(1);
 const projectId = ref("project-1");
 
@@ -76,6 +81,6 @@ Generated keys are useful for managing request inputs without a separate naming 
 
 ## Related Practices
 
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Share AsyncData Through Feature Composables](shared-async-data.md)
-- [Share Pagination Mechanics and Choose the Collection Strategy](pagination-strategies.md)
+- [Update Paginated Lists Differently for Page Navigation and Load More](pagination-strategies.md)

@@ -18,6 +18,8 @@ Protect server APIs independently from client-side navigation. Client-side route
 
 ## Apply When
 
+Use this practice when:
+
 - A login or registration request creates a server session.
 - An authenticated profile change updates user data stored in the session.
 - Logout must clear both the session cookie and client auth state.
@@ -25,6 +27,8 @@ Protect server APIs independently from client-side navigation. Client-side route
 - The app uses Nuxt Auth Utils to manage cookie-backed user sessions.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - A request does not change the authenticated user or session state.
 - Page-rendering data belongs in AsyncData rather than auth session state.

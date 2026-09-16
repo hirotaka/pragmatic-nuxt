@@ -18,11 +18,15 @@ Keep the endpoint and default response type in the composable so those API detai
 
 ## Apply When
 
+Use this practice when:
+
 - A composable defines the endpoint and default response type for a data-fetching request.
 - Application code that uses the composable needs to adjust `useFetch` behavior through native options, such as `server`, `lazy`, `immediate`, `dedupe`, caching, or hooks.
 - The composable can pass those options to the custom `useFetch` composable without translating them into wrapper-specific names.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The composable already owns query values, watch sources, pagination, or response transformation.
 - The feature needs a smaller, domain-specific set of inputs rather than all native options.
@@ -44,6 +48,7 @@ The composable keeps the endpoint and default response type in one place, while 
 ## Minimal Nuxt Example
 
 ```ts
+// layers/discussions/app/composables/useDiscussion.ts
 import type { FetchResult, UseFetchOptions } from "#app";
 
 type ProjectRoute = `/api/projects/${string}`;
@@ -60,6 +65,7 @@ export async function useProject(
 ```
 
 ```ts
+// layers/discussions/app/pages/app/discussions/[id].vue
 const { data: project } = await useProject(projectId, {
   dedupe: "defer",
 });
@@ -67,7 +73,7 @@ const { data: project } = await useProject(projectId, {
 
 `useProject` owns the reactive endpoint and the default GET response type. Code using it can pass compatible native options, such as `dedupe`, without repeating those API details.
 
-## Verified App Example
+## App Examples
 
 - [`useDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussion.ts) defines a reactive endpoint and the default GET response type, then forwards its `options` argument to the app's custom `useAPI` composable.
 
@@ -88,7 +94,7 @@ Options such as `$fetch` and a manual `key` can change the request transport or 
 
 ## Related Practices
 
-- [Use Configured API Fetchers for App-Owned Requests](custom-api-fetchers.md)
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use Custom Fetchers for Your API](custom-api-fetchers.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Let Request Inputs Define AsyncData Identity](async-data-identity.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)

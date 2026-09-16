@@ -13,11 +13,15 @@ Load the current user record before processing a request in a protected server r
 
 ## Apply When
 
+Use this practice when:
+
 - Protected Nuxt server routes use a Nuxt Auth Utils session to identify the user.
 - Protected routes need the current user record because it can change or be deleted after the session is created.
 - Multiple protected routes need to load the current user record before processing requests.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - A route is public or creates an authenticated session.
 - The authenticated session is designed to be self-contained, and protected requests must not query a user database.
@@ -42,6 +46,7 @@ Protected routes that depend on database-managed user data need the current user
 ## Minimal Nuxt Example
 
 ```ts
+// layers/auth/server/utils/requireCurrentUser.ts
 export async function requireCurrentUser(event: H3Event) {
   const session = await requireUserSession(event);
   const userId = session.user.id;
@@ -62,6 +67,7 @@ export async function requireCurrentUser(event: H3Event) {
 The helper validates the session user ID before loading the user record. This example returns `401` when the user ID is invalid or the user record does not exist.
 
 ```ts
+// layers/auth/server/utils/defineProtectedEventHandler.ts
 export function defineProtectedEventHandler(handler: ProtectedHandler) {
   return defineEventHandler(async (event) => {
     const currentUser = await requireCurrentUser(event);

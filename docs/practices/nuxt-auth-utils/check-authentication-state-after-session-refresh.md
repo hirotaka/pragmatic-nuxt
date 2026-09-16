@@ -13,11 +13,15 @@ After a successful request, continue to UI that requires authentication only if 
 
 ## Apply When
 
+Use this practice when:
+
 - Nuxt Auth Utils manages the client session state.
 - UI shown after a successful request requires refreshed authenticated session data.
 - The original request and the session refresh can succeed or fail independently.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - UI shown after the request does not require an authenticated session.
 - The session refresh is optional and does not determine whether the interaction continues.
@@ -41,6 +45,7 @@ The original request and the session refresh have independent outcomes. Treating
 ## Minimal Nuxt Example
 
 ```ts
+// layers/auth/app/composables/useRequiredUserSessionRefresh.ts
 const { fetch, loggedIn } = useUserSession();
 
 await fetch();

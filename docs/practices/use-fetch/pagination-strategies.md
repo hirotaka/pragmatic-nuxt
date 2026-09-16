@@ -18,6 +18,8 @@ For a load more interaction, keep the displayed items and append the next page's
 
 ## Apply When
 
+Use this practice when:
+
 - An endpoint returns one page from a larger list rather than the entire list at once.
 - The interface supports one or both of these interactions:
   - Moving between pages, where the selected page replaces the displayed items.
@@ -25,6 +27,8 @@ For a load more interaction, keep the displayed items and append the next page's
 - The first page must be available in server-rendered output and reused during hydration.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The interface displays the complete list in one response and provides neither page navigation nor load more.
 - Pagination uses a cursor or continuation token instead of page numbers.
@@ -54,6 +58,7 @@ For load more, a pending or failed request must not erase accumulated items. Tho
 For page navigation, pass the selected page as a reactive query value and use the returned AsyncData state as the current page.
 
 ```ts
+// layers/discussions/app/composables/useDiscussions.ts
 export function useProjects(page: MaybeRefOrGetter<number>) {
   return useFetch<PaginatedResult<Project>>("/api/projects", {
     query: {
@@ -67,6 +72,7 @@ export function useProjects(page: MaybeRefOrGetter<number>) {
 For load more, keep the request state separate from the accumulated list. In this example, `usePaginatedData` is an application composable that implements the append behavior described above; it is not a Nuxt API.
 
 ```ts
+// layers/base/app/composables/usePaginatedData.ts
 export async function useActivities(
   projectId: MaybeRefOrGetter<string>,
 ) {
@@ -118,7 +124,7 @@ The guidance above assumes a fixed page size and page numbers. Cursor pagination
 
 ## Related Practices
 
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Let Request Inputs Define AsyncData Identity](async-data-identity.md)
 - [Share AsyncData Through Feature Composables](shared-async-data.md)
 - [Keep Existing Data Visible During Refresh](refresh-data-visibility.md)

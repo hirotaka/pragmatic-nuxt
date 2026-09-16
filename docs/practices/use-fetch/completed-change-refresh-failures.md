@@ -16,12 +16,16 @@ If reloading the data fails, tell the user that the change was completed but the
 
 ## Apply When
 
+Use this practice when:
+
 - The app reloads a list or detail view after a create, update, or delete request succeeds.
 - Users need different messages depending on whether the change request or the data reload fails.
 - Retrying a completed change after a data reload failure could create duplicates or repeat an operation.
 - The app can determine that the change succeeded independently of whether the latest data can be loaded.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - A user action is not considered successful until its follow-up work is complete, such as confirming a payment.
 - The app can safely update the displayed data from the successful create, update, or delete response without sending another request.
@@ -47,6 +51,7 @@ Report the completed change first. If reloading the data fails, use the app's er
 ## Minimal Nuxt Example
 
 ```ts
+// layers/discussions/app/components/UpdateDiscussion.vue
 const { refresh } = await useProjects();
 const updateProject = useUpdateProject();
 
@@ -93,7 +98,7 @@ Request cancellation, preventing duplicate submissions, and handling work that f
 
 ## Related Practices
 
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 - [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
 - [Keep Existing Data Visible During Refresh](refresh-data-visibility.md)

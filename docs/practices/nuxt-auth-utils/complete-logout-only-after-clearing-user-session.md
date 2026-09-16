@@ -13,11 +13,15 @@ Treat logout as complete only after the user session has been cleared. Treat nav
 
 ## Apply When
 
+Use this practice when:
+
 - Nuxt Auth Utils manages the user session.
 - Logout is followed by navigation to unauthenticated UI.
 - Clearing the user session and navigating can fail independently.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The same logout operation must also end an identity-provider session, revoke an external token, or end sessions on other devices.
 - The user session being cleared is not managed by Nuxt Auth Utils.
@@ -41,6 +45,7 @@ Reporting logout success before the session clear finishes can claim a state tha
 ## Minimal Nuxt Example
 
 ```ts
+// layers/base/app/layouts/dashboard.vue
 const { clear } = useUserSession();
 
 await clear();

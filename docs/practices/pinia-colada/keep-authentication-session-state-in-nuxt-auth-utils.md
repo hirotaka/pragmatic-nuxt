@@ -17,11 +17,15 @@ After an operation changes authentication state, synchronize the session through
 
 ## Apply When
 
+Use this practice when:
+
 - Nuxt Auth Utils provides the cookie-backed session and current user state, while Pinia Colada sends requests that require authentication.
 - Login, registration, or a profile update changes the user information returned by the session endpoint.
 - A protected API returns `401 Unauthorized` when the session is missing or expired, and route middleware handles access after the page reloads.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The app uses another authentication provider with its own client-side session management. Follow that provider's session and refresh APIs instead.
 - Do not reload the page for every `401 Unauthorized`. Reload only when a protected request uses the current session and the API defines `401` as a missing or expired session.
@@ -52,6 +56,7 @@ This approach avoids maintaining a list of authenticated Queries or manually res
 Wait for `useUserSession().clear()` and then reload a public route.
 
 ```ts
+// layers/base/app/layouts/dashboard.vue
 const { clear: clearSession } = useUserSession();
 
 const logout = async () => {
@@ -65,6 +70,7 @@ const logout = async () => {
 When a protected request returns `401 Unauthorized` for a missing or expired session, reload the current route.
 
 ```ts
+// colada.options.ts
 const reloadAfterSessionExpiry = (statusCode: number) => {
   const route = useRoute();
   const isProtectedRoute = route.path === "/app" || route.path.startsWith("/app/");
@@ -84,12 +90,7 @@ const reloadAfterSessionExpiry = (statusCode: number) => {
 
 ## Trade-offs and Limitations
 
-- Calling `useUserSession().fetch()` after login, registration, or a profile update adds another request to the Mutation workflow.
-- The authentication or profile request and the session refresh can have different outcomes. Provider-specific guidance determines when the workflow can continue to UI that requires authentication.
-- A full page reload restarts the entire Nuxt app, not only the Pinia Colada Query Cache. It can take more time and discard temporary interface state, but it avoids tracking and resetting every Query associated with the previous session.
-- If `useUserSession().clear()` rejects, the app cannot determine from that response alone whether the server kept or cleared the session. The current page can remain available for retry, but it must not report that logout succeeded.
-- Session refresh and page reload affect only the current browser tab. Cross-tab logout, silent reauthentication, and switching users require separate coordination.
-- An app that must preserve the current Nuxt app instance can use Pinia Colada cancellation and removal actions instead of a full page reload. That approach must identify the Query entries associated with the previous session, cancel pending requests, remove the entries, and verify the behavior.
+Calling `useUserSession().fetch()` after login, registration, or a profile update adds another request to the Mutation workflow. The authentication or profile request and the session refresh can have different outcomes; provider-specific guidance determines when the workflow can continue to UI that requires authentication. A full page reload restarts the entire Nuxt app, not only the Pinia Colada Query Cache. It can take more time and discard temporary interface state, but it avoids tracking and resetting every Query associated with the previous session. If `useUserSession().clear()` rejects, the app cannot determine from that response alone whether the server kept or cleared the session. The current page can remain available for retry, but it must not report that logout succeeded. Session refresh and page reload affect only the current browser tab. Cross-tab logout, silent reauthentication, and switching users require separate coordination. An app that must preserve the current Nuxt app instance can use Pinia Colada cancellation and removal actions instead of a full page reload. That approach must identify the Query entries associated with the previous session, cancel pending requests, remove the entries, and verify the behavior.
 
 ## Sources
 
