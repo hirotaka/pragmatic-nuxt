@@ -15,10 +15,14 @@ During initial loading, there is no previous data to display, so show loading fe
 
 ## Apply When
 
+Use this practice when:
+
 - Previously loaded data remains valid and visible while the Query refetches.
 - The loading indicator should remain hidden for short refetches and appear only if the refetch is still pending after the chosen delay.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - You need to postpone or debounce request execution. The Delay plugin only delays the `asyncStatus` transition to `loading`.
 - Loading feedback must appear when the request starts. Disable the delay with `delay: 0` or `delay: false` for that Query.
@@ -41,6 +45,7 @@ A loading indicator shows when a request is still running. During a background r
 Register `PiniaColadaDelayQuery()` in `colada.options.ts`. This example uses a 200ms delay; choose a threshold that fits the application's UI.
 
 ```ts
+// colada.options.ts
 import { PiniaColadaDelayQuery } from "@pinia/colada-plugin-delay";
 import type { PiniaColadaOptions } from "@pinia/colada";
 
@@ -54,6 +59,7 @@ export default {
 Use Query `status` for initial loading and delayed `asyncStatus` for background feedback. Keep the current data visible while the Query refetches. In this example, `projectListQuery` represents the application's existing Query definition.
 
 ```vue
+<!-- layers/discussions/app/components/DiscussionsList.vue -->
 <script setup lang="ts">
 const { data, status, asyncStatus } = useQuery(projectListQuery);
 </script>
@@ -78,6 +84,7 @@ const { data, status, asyncStatus } = useQuery(projectListQuery);
 Set `delay: 0` on a Query that must show feedback immediately.
 
 ```ts
+// layers/comments/app/queries/comments.ts
 export const activityQuery = defineQueryOptions(() => ({
   key: ["activity"],
   delay: 0,

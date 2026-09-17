@@ -18,12 +18,16 @@ Keeping these differences explicit makes it easier to see what the API sends and
 
 ## Apply When
 
+Use this practice when:
+
 - A value has different types in server code and in a JSON request or response, such as a `Date` represented as an ISO string.
 - Deciding which type definitions to share between server code, API composables, and components.
 - Considering automatic conversion of JSON response values in a shared fetch client.
 - Connecting a JSON response value to a UI control or calculation that requires another type.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - Choosing types for data used only within server or client code, without crossing a JSON API boundary.
 - Sending or receiving files, streams, `FormData`, or other non-JSON content.
@@ -112,6 +116,6 @@ An ISO datetime string does not determine which timezone to display or how a dat
 ## Related Practices
 
 - [Use Custom Fetchers for Your API](custom-api-fetchers.md)
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 - [Design API Responses for Direct Use with Nuxt Data Fetching](semantic-api-response-shapes.md)

@@ -15,11 +15,15 @@ between pages.
 
 ## Apply When
 
+Use this practice when:
+
 - The list is split into multiple pages and shows one page at a time.
 - Each page is fetched when the user switches to it.
 - The previous page should remain visible while the new page is loading.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The user wants to accumulate pages in one result. Use `useInfiniteQuery()` and
   `pageParam` for that behavior instead.
@@ -49,6 +53,7 @@ the request completes, the new page's data replaces the placeholder data.
 ## Minimal Nuxt Example
 
 ```ts
+// layers/discussions/app/queries/discussions.ts
 const route = useRoute()
 const page = computed(() => Number(route.query.page || 1))
 const limit = 10

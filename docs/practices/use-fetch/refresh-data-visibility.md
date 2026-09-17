@@ -14,10 +14,14 @@ Keep previously fetched data visible while `useFetch` refreshes it. Show initial
 
 ## Apply When
 
+Use this practice when:
+
 - A list or detail view already has fetched data to display.
 - Users can continue viewing the previous result while updated data is being fetched.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The initial request is pending and there is no previously fetched data to display.
 - The previous result must no longer be displayed, for example because the user no longer has permission to view it.
@@ -49,6 +53,7 @@ export function useProjects() {
 Use its data, status, and refresh function in the component.
 
 ```vue
+<!-- layers/discussions/app/components/DiscussionsList.vue -->
 <script setup lang="ts">
 const { data: projects, status, refresh } = useProjects();
 </script>
@@ -92,8 +97,8 @@ Keeping data visible while a refresh is pending does not guarantee that it will 
 
 ## Related Practices
 
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Let Request Inputs Define AsyncData Identity](async-data-identity.md)
 - [Separate Completed Changes from Data Refresh Failures](completed-change-refresh-failures.md)
 - [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
-- [Share Pagination Mechanics and Choose the Collection Strategy](pagination-strategies.md)
+- [Update Paginated Lists Differently for Page Navigation and Load More](pagination-strategies.md)

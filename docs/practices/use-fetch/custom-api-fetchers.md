@@ -16,11 +16,15 @@ Add default options and hooks only when they apply across API calls. Define API 
 
 ## Apply When
 
+Use this practice when:
+
 - Several calls to your API require the same base URL, headers, or request and response hooks.
 - Page-rendering data must use shared default options without losing the AsyncData and SSR behavior of `useFetch`.
 - A request that runs after setup, such as a form submission, must use shared default options without creating AsyncData state.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - Nuxt Auth Utils sends the request as part of its session handling.
 - A request starts in a server handler that can call server-only code or access data without another HTTP request.
@@ -114,7 +118,7 @@ Neither `useAPI` nor `$api` configures credentials, authentication, request-head
 
 ## Related Practices
 
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 - [Define Domain and Feature API Calls in Composables](domain-feature-api-calls.md)
 - [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)

@@ -19,12 +19,16 @@ Use a broader boundary only when the behavior depends on it—for example, when 
 
 ## Apply When
 
+Use this practice when:
+
 - A data read, an API request that changes data, a pagination flow, refresh after a completed change, an HTTP status, or a response body needs a test.
 - A test uses a mock or intercepted response, and you need to know which application code it skips.
 - Tests cover the same user journey at more than one boundary, and you need to decide which tests catch different failures.
 - Installed Nuxt behavior is unclear, and you need to decide whether a temporary test is useful.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - The behavior does not read, change, or display fetched data and does not depend on a request lifecycle.
 - You need instructions for test locations, commands, CI workflows, fixtures, or local database setup; use the app testing guide instead.
@@ -48,6 +52,7 @@ Broader tests are not automatically stronger. Shared request hooks are easier to
 ## Minimal Nuxt Example
 
 ```ts
+// layers/discussions/app/composables/useDiscussion.ts
 export async function useProject(id: MaybeRefOrGetter<string>) {
   return await useAPI(() => `/api/projects/${toValue(id)}`);
 }
@@ -85,8 +90,8 @@ Tests at multiple boundaries are justified when each catches a different failure
 
 ## Related Practices
 
-- [Use Configured API Fetchers for App-Owned Requests](custom-api-fetchers.md)
-- [Use `useFetch` Semantics for Page Rendering Data](page-rendering-data.md)
+- [Use Custom Fetchers for Your API](custom-api-fetchers.md)
+- [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Define Domain and Feature API Calls in Composables](domain-feature-api-calls.md)
 - [Let Request Inputs Define AsyncData Identity](async-data-identity.md)
 - [Share AsyncData Through Feature Composables](shared-async-data.md)

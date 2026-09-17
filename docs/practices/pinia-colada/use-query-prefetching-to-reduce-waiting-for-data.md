@@ -14,12 +14,16 @@ When the page or component later uses the same Query, Pinia Colada can reuse fre
 
 ## Apply When
 
+Use this practice when:
+
 - The application can identify which Query will likely be needed next, such as when a user starts navigating to a specific page.
 - The prefetch and later `useQuery()` call can use the same Query options. If the prefetch has completed, `useQuery()` can use its cached result; if it is still running, `useQuery()` can reuse that request.
 - The action that triggers the prefetch can continue without waiting for the request, giving the request time to run before the page or component needs the data.
 - The application can accept the network request and cache entry when no page or component ends up using the prefetched data.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - A page or component already needs the data. Call `useQuery()` there instead of adding a separate prefetch step.
 - The data is already available from another source. Ensure the Query entry and populate it with `setQueryData()` instead of starting another network request.
@@ -41,6 +45,7 @@ When a page or component starts loading only when it needs to display data, the 
 Define the Query options once in the feature's Query module.
 
 ```ts
+// layers/discussions/app/queries/discussions.ts
 import { defineQueryOptions } from "@pinia/colada";
 
 export const projectDetailQuery = defineQueryOptions(
@@ -58,6 +63,7 @@ export const projectDetailQuery = defineQueryOptions(
 Start the Query from an action that indicates the project data is likely to be needed soon.
 
 ```vue
+<!-- layers/discussions/app/components/DiscussionsList.vue -->
 <script setup lang="ts">
 import { useQueryCache } from "@pinia/colada";
 import { projectDetailQuery } from "~/queries/projects";
@@ -87,6 +93,7 @@ const prefetchProject = () => {
 In this example, `pointerdown` starts the request before the `NuxtLink` navigation completes, while the link continues without waiting. A different trigger can be used when it reliably identifies the Query that will be needed next. The destination page or component uses the same Query options.
 
 ```vue
+<!-- layers/discussions/app/components/DiscussionView.vue -->
 <script setup lang="ts">
 import { useQuery } from "@pinia/colada";
 import { projectDetailQuery } from "~/queries/projects";

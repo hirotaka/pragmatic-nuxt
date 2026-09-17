@@ -24,6 +24,8 @@ responsibilities.
 
 ## Apply When
 
+Use this practice when:
+
 - Multiple Pinia Colada Query or Mutation functions use the same app-specific `$fetch` options
   or request handling.
 - A same-app API request made during SSR needs headers from the current Nuxt request.
@@ -31,6 +33,8 @@ responsibilities.
   Query or Mutation behavior remain in feature boundaries.
 
 ## Do Not Apply When
+
+Do not use this practice when:
 
 - Do not create a custom `$fetch` instance when Query and Mutation functions need only the
   default `$fetch` behavior; call the `$fetch` utility function directly instead.
@@ -75,6 +79,7 @@ During SSR, create a custom `$fetch` instance in a Nuxt plugin that uses the cur
 request's `Cookie` header, and provide it as `$api`.
 
 ```ts
+// layers/base/app/plugins/api.ts
 export default defineNuxtPlugin(() => {
   const api = $fetch.create({
     headers: import.meta.server
@@ -97,6 +102,7 @@ export default defineNuxtPlugin(() => {
 Use `$api` from a Pinia Colada Query definition.
 
 ```ts
+// layers/discussions/app/queries/discussions.ts
 export const discussionDetailQuery = defineQueryOptions((id: string) => ({
   key: ["discussions", id],
   query: ({ signal }) => {
