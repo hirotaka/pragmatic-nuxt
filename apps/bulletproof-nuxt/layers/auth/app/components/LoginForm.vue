@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import { useRegleSchema } from "@regle/schemas";
 import { Form, type FormSubmitEvent } from "~~/app/components/form";
 import { FormField } from "~~/app/components/form-field";
@@ -20,7 +20,6 @@ const emit = defineEmits<{
 }>();
 
 const login = useLogin();
-const isPending = ref(false);
 
 const state = reactive<LoginInput>({
   email: "",
@@ -29,18 +28,14 @@ const state = reactive<LoginInput>({
 const { r$ } = useRegleSchema(state, loginInputSchema);
 
 const handleSubmit = async (event: FormSubmitEvent<LoginInput | undefined>) => {
-  if (!event.data || isPending.value) return;
-  isPending.value = true;
+  const values = event.data ?? r$.$value;
 
   try {
-    await login(event.data);
+    await login(values);
     emit("success");
   }
   catch {
     // The request or session owner reports the failure.
-  }
-  finally {
-    isPending.value = false;
   }
 };
 </script>
@@ -57,6 +52,7 @@ const handleSubmit = async (event: FormSubmitEvent<LoginInput | undefined>) => {
     </CardHeader>
     <CardContent>
       <Form
+        v-slot="{ loading }"
         :schema="r$"
         :state="r$.$value"
         class="space-y-6"
@@ -85,7 +81,7 @@ const handleSubmit = async (event: FormSubmitEvent<LoginInput | undefined>) => {
           />
         </FormField>
         <Button
-          :is-loading="isPending"
+          :is-loading="loading"
           type="submit"
           class="w-full"
         >

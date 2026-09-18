@@ -1,28 +1,22 @@
 import { computed } from "vue";
-import { afterEach, expect, test, vi, beforeEach } from "vitest";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { mockNuxtImport, mountSuspended, registerEndpoint } from "@nuxt/test-utils/runtime";
 import { readBody, setResponseStatus } from "h3";
-import { cleanup, waitFor, within } from "@testing-library/vue";
-import userEvent from "@testing-library/user-event";
+import { cleanup, waitFor } from "@testing-library/vue";
 import UpdateProfile from "../UpdateProfile.vue";
 
-const { mockUser, addNotification, refreshSession, session } = vi.hoisted(() => ({
-  mockUser: {
-    value: {
-      id: "user-1",
-      email: "user@example.com",
-      firstName: "Test",
-      lastName: "User",
-      role: "USER",
-      bio: "Existing bio",
-      teamId: "team-1",
-      createdAt: "2026-07-10T00:00:00.000Z",
-    },
-  },
+const { addNotification, refreshSession, session } = vi.hoisted(() => ({
   addNotification: vi.fn(),
   refreshSession: vi.fn(),
   session: { value: null as Record<string, unknown> | null },
 }));
+
+const profile = {
+  email: "user@example.com",
+  firstName: "Test",
+  lastName: "User",
+  bio: "Existing bio",
+};
 
 mockNuxtImport("useUserSession", () => () => ({
   session,
@@ -30,56 +24,22 @@ mockNuxtImport("useUserSession", () => () => ({
   fetch: refreshSession,
 }));
 
-vi.mock("#layers/auth/app/composables/useUser", () => ({
-  useUser: () => ({
-    user: mockUser,
-  }),
-}));
-
 vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({
-    addNotification,
-  }),
+  useNotifications: () => ({ addNotification }),
 }));
 
 beforeEach(() => {
   addNotification.mockClear();
   refreshSession.mockReset().mockResolvedValue(undefined);
-  session.value = { id: "session-1", user: mockUser.value };
-  mockUser.value = {
-    id: "user-1",
-    email: "user@example.com",
-    firstName: "Test",
-    lastName: "User",
-    role: "USER",
-    bio: "Existing bio",
-    teamId: "team-1",
-    createdAt: "2026-07-10T00:00:00.000Z",
-  };
+  session.value = { id: "session-1", user: profile };
 });
 
-afterEach(() => {
-  cleanup();
-  document.body.innerHTML = "";
-});
+afterEach(() => cleanup());
 
-function getInputValue(element: HTMLElement) {
-  return (element as HTMLInputElement | HTMLTextAreaElement).value;
-}
+const mountForm = () => mountSuspended(UpdateProfile, { props: { profile } });
 
-function deferred() {
-  let resolve!: () => void;
-  const promise = new Promise<void>((nextResolve) => {
-    resolve = nextResolve;
-  });
-  return { promise, resolve };
-}
-
-test("UpdateProfile populates current user values and submits normalized payload", async () => {
+test("UpdateProfile populates values and submits normalized payload", async () => {
   let capturedBody: Record<string, unknown> | undefined;
-  const sessionSettlement = deferred();
-  refreshSession.mockReturnValueOnce(sessionSettlement.promise);
-
   registerEndpoint("/api/profile", {
     method: "PATCH",
     handler: async (event) => {
@@ -87,50 +47,20 @@ test("UpdateProfile populates current user values and submits normalized payload
       return new Response(null, { status: 204 });
     },
   });
+  const wrapper = await mountForm();
 
-  const wrapper = await mountSuspended(UpdateProfile);
-  const screen = within(wrapper.element as HTMLElement);
-  const bodyScreen = within(document.body);
-
-  await userEvent.click(screen.getByRole("button", { name: /update profile/i }));
-
-  const firstName = await bodyScreen.findByLabelText(/first name/i);
-  expect(getInputValue(firstName)).toBe("Test");
-  expect(getInputValue(bodyScreen.getByLabelText(/last name/i))).toBe("User");
-  expect(getInputValue(bodyScreen.getByLabelText(/^email$/i))).toBe("user@example.com");
-  expect(getInputValue(bodyScreen.getByLabelText(/bio/i))).toBe("Existing bio");
-
-  await userEvent.clear(bodyScreen.getByLabelText(/bio/i));
-  await userEvent.type(bodyScreen.getByLabelText(/bio/i), "Updated bio");
-  await userEvent.click(bodyScreen.getByRole("button", { name: /submit/i }));
+  expect((wrapper.get("input[name='firstName']").element as HTMLInputElement).value).toBe("Test");
+  expect((wrapper.get("textarea[name='bio']").element as HTMLTextAreaElement).value).toBe("Existing bio");
+  await wrapper.get("textarea[name='bio']").setValue("Updated bio");
+  await wrapper.get("form").trigger("submit");
 
   await waitFor(() => expect(capturedBody).toBeDefined());
-  expect(capturedBody).toMatchObject({
-    email: "user@example.com",
-    firstName: "Test",
-    lastName: "User",
-    bio: "Updated bio",
-  });
-  const closeButton = bodyScreen
-    .getAllByRole("button", { name: /close/i })
-    .find(button => button.hasAttribute("disabled"));
-  expect(closeButton).toBeTruthy();
-  await userEvent.click(closeButton!);
-  await userEvent.keyboard("{Escape}");
-  expect(bodyScreen.getByRole("dialog", { name: /update profile/i })).toBeTruthy();
-  expect(addNotification).not.toHaveBeenCalled();
-
-  sessionSettlement.resolve();
-
-  await waitFor(() => expect(addNotification).toHaveBeenCalledWith({
-    type: "success",
-    title: "Profile Updated",
-  }));
-  await waitFor(() => expect(bodyScreen.queryByRole("dialog", { name: /update profile/i })).toBeNull());
+  expect(capturedBody).toMatchObject({ ...profile, bio: "Updated bio" });
+  await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
+  expect(addNotification).toHaveBeenCalledWith({ type: "success", title: "Profile Updated" });
 });
 
-test("UpdateProfile does not create a fallback session when refresh settles empty", async () => {
-  session.value = { id: "session-1", user: mockUser.value };
+test("UpdateProfile does not emit success when session refresh settles empty", async () => {
   refreshSession.mockImplementationOnce(async () => {
     session.value = null;
   });
@@ -138,19 +68,13 @@ test("UpdateProfile does not create a fallback session when refresh settles empt
     method: "PATCH",
     handler: () => new Response(null, { status: 204 }),
   });
+  const wrapper = await mountForm();
 
-  const wrapper = await mountSuspended(UpdateProfile);
-  const screen = within(wrapper.element as HTMLElement);
-  const bodyScreen = within(document.body);
-
-  await userEvent.click(screen.getByRole("button", { name: /update profile/i }));
-  await userEvent.click(await bodyScreen.findByRole("button", { name: /submit/i }));
+  await wrapper.get("form").trigger("submit");
 
   await waitFor(() => expect(refreshSession).toHaveBeenCalledOnce());
-  await waitFor(() => expect((bodyScreen.getByRole("button", { name: /submit/i }) as HTMLButtonElement).disabled).toBe(false));
-  expect(bodyScreen.getByRole("dialog", { name: /update profile/i })).toBeTruthy();
   expect(session.value).toBeNull();
-  expect(addNotification).toHaveBeenCalledOnce();
+  expect(wrapper.emitted("success")).toBeUndefined();
   expect(addNotification).toHaveBeenCalledWith({
     type: "error",
     title: "Session Unavailable",
@@ -160,26 +84,17 @@ test("UpdateProfile does not create a fallback session when refresh settles empt
 
 test("UpdateProfile blocks invalid input before calling profile API", async () => {
   const profileHandler = vi.fn();
+  registerEndpoint("/api/profile", { method: "PATCH", handler: profileHandler });
+  const wrapper = await mountForm();
 
-  registerEndpoint("/api/profile", {
-    method: "PATCH",
-    handler: profileHandler,
-  });
+  await wrapper.get("input[name='email']").setValue("not-an-email");
+  await wrapper.get("form").trigger("submit");
 
-  const wrapper = await mountSuspended(UpdateProfile);
-  const screen = within(wrapper.element as HTMLElement);
-  const bodyScreen = within(document.body);
-
-  await userEvent.click(screen.getByRole("button", { name: /update profile/i }));
-  await userEvent.clear(await bodyScreen.findByLabelText(/^email$/i));
-  await userEvent.type(bodyScreen.getByLabelText(/^email$/i), "not-an-email");
-  await userEvent.click(bodyScreen.getByRole("button", { name: /submit/i }));
-
-  await bodyScreen.findByText(/invalid email address/i);
-  expect(profileHandler).toHaveBeenCalledTimes(0);
+  await waitFor(() => expect(wrapper.text()).toMatch(/invalid email address/i));
+  expect(profileHandler).not.toHaveBeenCalled();
 });
 
-test("UpdateProfile keeps the drawer open and allows retry after API failure", async () => {
+test("UpdateProfile remains retryable after API failure", async () => {
   let attempts = 0;
   registerEndpoint("/api/profile", {
     method: "PATCH",
@@ -192,22 +107,15 @@ test("UpdateProfile keeps the drawer open and allows retry after API failure", a
       return new Response(null, { status: 204 });
     },
   });
-  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: mockUser.value }));
+  registerEndpoint("/api/_auth/session", () => ({ id: "session-1", user: profile }));
+  const wrapper = await mountForm();
 
-  const wrapper = await mountSuspended(UpdateProfile);
-  const screen = within(wrapper.element as HTMLElement);
-  const bodyScreen = within(document.body);
+  await wrapper.get("form").trigger("submit");
+  await waitFor(() => expect(attempts).toBe(1));
+  await waitFor(() => expect(wrapper.get("input[name='email']").attributes("disabled")).toBeUndefined());
+  expect(wrapper.emitted("success")).toBeUndefined();
 
-  await userEvent.click(screen.getByRole("button", { name: /update profile/i }));
-  await userEvent.click(await bodyScreen.findByRole("button", { name: /submit/i }));
-
-  const submitButton = bodyScreen.getByRole("button", { name: /submit/i }) as HTMLButtonElement;
-  await waitFor(() => expect(submitButton.disabled).toBe(false));
-  expect(bodyScreen.getByRole("dialog", { name: /update profile/i })).toBeTruthy();
-  const closeButton = bodyScreen.getAllByRole("button", { name: /close/i })[0]!;
-  expect(closeButton.hasAttribute("disabled")).toBe(false);
-
-  await userEvent.click(submitButton);
+  await wrapper.get("form").trigger("submit");
   await waitFor(() => expect(attempts).toBe(2));
-  await waitFor(() => expect(bodyScreen.queryByRole("dialog", { name: /update profile/i })).toBeNull());
+  await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
 });

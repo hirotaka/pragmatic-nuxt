@@ -203,7 +203,7 @@ test("failed later comments page keeps the comments already displayed", { tag: [
   await expect(page.getByRole("button", { name: "Load More Comments" })).toBeVisible();
 });
 
-test("comment create stays pending until its comments refresh settles", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
+test("comment create closes after its comments refresh settles", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
   const discussionId = await createDiscussionForComments(page, "comment-create-refresh");
   const commentBody = "Created after delayed refresh";
 
@@ -229,9 +229,6 @@ test("comment create stays pending until its comments refresh settles", { tag: [
 
   await expect.poll(() => refreshGetCount).toBe(1);
   await expect(page.getByLabel("Comment Created")).toHaveCount(1);
-  await expect(drawer).toBeVisible();
-  await expect(drawer.getByRole("button", { name: "Submit" })).toBeDisabled();
-  await page.keyboard.press("Escape");
   await expect(drawer).toBeVisible();
 
   refresh.resolve();

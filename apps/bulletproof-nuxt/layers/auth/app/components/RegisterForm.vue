@@ -48,7 +48,6 @@ const route = useRoute();
 const redirectTo = route.query.redirectTo as string | undefined;
 
 const register = useRegister();
-const isPending = ref(false);
 
 const state = reactive<RegisterFormState>({
   firstName: "",
@@ -75,26 +74,20 @@ watch(chooseTeam, (nextChooseTeam) => {
   }
 });
 
-const handleSubmit = async (event: FormSubmitEvent<RegisterFormState | undefined>): Promise<void> => {
-  if (isPending.value) return;
-
-  const values = event.data ?? state;
+const handleSubmit = async (event: FormSubmitEvent<RegisterFormState | undefined>) => {
+  const values = event.data ?? r$.$value;
   const input = {
     ...values,
     teamId: chooseTeam.value && values.teamId ? values.teamId : null,
     teamName: !chooseTeam.value && values.teamName ? values.teamName : null,
   } as RegisterInput;
 
-  isPending.value = true;
   try {
     await register(input);
     emit("success");
   }
   catch {
     // The request or session owner reports the failure.
-  }
-  finally {
-    isPending.value = false;
   }
 };
 
@@ -124,6 +117,7 @@ const teamOptions = computed(
     </CardHeader>
     <CardContent class="px-5 pb-4">
       <Form
+        v-slot="{ loading }"
         :schema="r$"
         :state="r$.$value"
         class="space-y-3"
@@ -223,7 +217,7 @@ const teamOptions = computed(
         </FormField>
 
         <Button
-          :is-loading="isPending"
+          :is-loading="loading"
           type="submit"
           class="w-full"
         >

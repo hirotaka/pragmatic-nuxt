@@ -9,6 +9,14 @@ import { renderComponent, screen, userEvent, waitFor } from "~~/test/test-utils"
 
 type EmailState = { email: string };
 
+function deferred() {
+  let resolve!: () => void;
+  const promise = new Promise<void>((nextResolve) => {
+    resolve = nextResolve;
+  });
+  return { promise, resolve };
+}
+
 const CustomValidateForm = defineComponent({
   props: {
     onSubmit: {
@@ -161,6 +169,26 @@ test("Stackhacker Form validates app-owned state", async () => {
   await userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
   await waitFor(() => expect(handleSubmit).toHaveBeenCalledWith({ email: "user@example.com" }));
+});
+
+test("Stackhacker Form owns async submission loading and duplicate-submit prevention", async () => {
+  const settlement = deferred();
+  const handleSubmit = vi.fn(() => settlement.promise);
+
+  await renderComponent(CustomValidateForm, {
+    props: { onSubmit: handleSubmit },
+  });
+
+  await userEvent.type(screen.getByLabelText(/email/i), "user@example.com");
+  await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+  await waitFor(() => expect(handleSubmit).toHaveBeenCalledOnce());
+  expect(screen.getByLabelText(/email/i).hasAttribute("disabled")).toBe(true);
+
+  await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+  expect(handleSubmit).toHaveBeenCalledOnce();
+
+  settlement.resolve();
+  await waitFor(() => expect(screen.getByLabelText(/email/i).hasAttribute("disabled")).toBe(false));
 });
 
 test("Stackhacker Form supports app-owned Regle schema", async () => {

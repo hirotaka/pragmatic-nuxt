@@ -27,19 +27,19 @@ const { useDiscussionMock } = vi.hoisted(() => ({
 vi.mock("~discussions/app/composables/useDiscussion", () => ({
   useDiscussion: async (id: MaybeRefOrGetter<string>) => {
     useDiscussionMock(toValue(id));
-    return { data: ref(discussion) };
+    return { data: ref(discussion), refresh: vi.fn() };
   },
+}));
+
+vi.mock("#layers/auth/app/composables/useUser", () => ({
+  useUser: () => ({ isAdmin: { value: true } }),
 }));
 
 const UpdateDiscussionStub = defineComponent({
   name: "UpdateDiscussion",
-  props: {
-    discussionId: {
-      type: String,
-      required: true,
-    },
-  },
-  template: "<button>Update Discussion</button>",
+  props: ["body", "discussionId", "refresh", "title"],
+  emits: ["success"],
+  template: "<div />",
 });
 
 const MarkdownPreviewStub = defineComponent({
@@ -68,8 +68,11 @@ test("renders discussion metadata and the update control", async () => {
 
   expect(wrapper.text()).toContain(formatDate(discussion.createdAt));
   expect(wrapper.text()).toContain("Test User");
-  expect(wrapper.getComponent(UpdateDiscussionStub).text()).toBe("Update Discussion");
+  expect(wrapper.text()).toContain("Update Discussion");
+  await wrapper.get("button").trigger("click");
   expect(wrapper.getComponent(UpdateDiscussionStub).props("discussionId")).toBe(discussion.id);
+  expect(wrapper.getComponent(UpdateDiscussionStub).props("title")).toBe(discussion.title);
+  expect(wrapper.getComponent(UpdateDiscussionStub).props("body")).toBe(discussion.body);
   expect(useDiscussionMock).toHaveBeenCalledWith(discussion.id);
 });
 

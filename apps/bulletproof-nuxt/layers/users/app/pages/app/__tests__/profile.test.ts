@@ -17,7 +17,7 @@ const { mockUser } = vi.hoisted(() => ({
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({
-    user: mockUser,
+    user: { __v_isRef: true, value: mockUser },
   }),
 }));
 
@@ -27,7 +27,9 @@ describe("Profile page", () => {
       global: {
         stubs: {
           UpdateProfile: {
-            template: "<button>Update Profile</button>",
+            props: ["profile"],
+            emits: ["success"],
+            template: "<div />",
           },
         },
       },

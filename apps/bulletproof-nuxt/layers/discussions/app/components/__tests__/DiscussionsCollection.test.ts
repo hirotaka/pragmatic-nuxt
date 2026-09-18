@@ -1,5 +1,6 @@
 import { beforeEach, expect, test, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { waitFor } from "@testing-library/vue";
 import { ref, type Ref } from "vue";
 import type { PaginatedDiscussions } from "~discussions/shared/types";
 import DiscussionsCollection from "../DiscussionsCollection.vue";
@@ -41,7 +42,7 @@ const mountCollection = () => mountSuspended(DiscussionsCollection, {
       },
       CreateDiscussion: {
         name: "CreateDiscussion",
-        props: ["refresh"],
+        emits: ["success"],
         template: "<div />",
       },
       DiscussionsList: {
@@ -67,20 +68,39 @@ test("owns the current page and updates the reactive Read query from List events
   expect(params.page.value).toBe(1);
   expect(params.limit).toBe(10);
 
-  await wrapper.get("button:nth-of-type(1)").trigger("click");
+  const pageButtons = wrapper.findAll("button").filter(button => button.text().startsWith("Page"));
+  await pageButtons[0]!.trigger("click");
   expect(params.page.value).toBe(2);
 
-  await wrapper.get("button:nth-of-type(2)").trigger("click");
+  await pageButtons[1]!.trigger("click");
   expect(params.page.value).toBe(3);
 });
 
-test("passes native AsyncData state and refresh to the interaction owners", async () => {
+test("keeps list refresh ownership in the collection", async () => {
   const wrapper = await mountCollection();
   const list = wrapper.findComponent({ name: "DiscussionsList" });
+  const createTrigger = wrapper.findAll("button").find(button => button.text().includes("Create Discussion"));
+  await createTrigger!.trigger("click");
   const create = wrapper.findComponent({ name: "CreateDiscussion" });
 
   expect(list.props("discussions")).toEqual(discussions);
   expect(list.props("isPending")).toBe(false);
   expect(list.props("refresh")).toBe(refresh);
-  expect(create.props("refresh")).toBe(refresh);
+  expect(create.props()).not.toHaveProperty("refresh");
+
+  create.vm.$emit("success");
+  await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussion" }).exists()).toBe(false));
+});
+
+test("closes the create drawer when refreshing the collection fails", async () => {
+  refresh.mockRejectedValueOnce(new Error("Refresh failed"));
+  const wrapper = await mountCollection();
+  const createTrigger = wrapper.findAll("button").find(button => button.text().includes("Create Discussion"));
+  await createTrigger!.trigger("click");
+
+  wrapper.findComponent({ name: "CreateDiscussion" }).vm.$emit("success");
+
+  await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussion" }).exists()).toBe(false));
 });

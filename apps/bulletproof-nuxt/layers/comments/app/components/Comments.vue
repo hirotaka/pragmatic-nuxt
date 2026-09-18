@@ -1,5 +1,8 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
+import { Plus } from "lucide-vue-next";
+import FormDrawer from "~~/app/components/app/FormDrawer.vue";
+import { Button } from "~~/app/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
 import { useComments } from "~comments/app/composables/useComments";
 
@@ -8,6 +11,7 @@ interface CommentsProps {
 }
 
 const props = defineProps<CommentsProps>();
+
 const {
   comments,
   currentPage,
@@ -28,12 +32,43 @@ const {
           <CardTitle>Comments</CardTitle>
           <CardDescription>Continue the discussion with your team.</CardDescription>
         </div>
-        <CreateComment
+        <FormDrawer
           :key="props.discussionId"
-          :disabled="!isInitialReady"
-          :discussion-id="props.discussionId"
-          :refresh="refreshFirstPage"
-        />
+          title="Create Comment"
+        >
+          <template #triggerButton>
+            <Button
+              :disabled="!isInitialReady"
+              variant="outline"
+              size="sm"
+            >
+              <template #icon>
+                <Plus class="size-4" />
+              </template>
+              Create Comment
+            </Button>
+          </template>
+
+          <template #default="{ close }">
+            <CreateComment
+              :disabled="!isInitialReady"
+              :discussion-id="props.discussionId"
+              :refresh="refreshFirstPage"
+              @success="close"
+            />
+          </template>
+
+          <template #submitButton>
+            <Button
+              :disabled="!isInitialReady"
+              type="submit"
+              form="create-comment"
+              size="sm"
+            >
+              Submit
+            </Button>
+          </template>
+        </FormDrawer>
       </div>
     </CardHeader>
     <CardContent>

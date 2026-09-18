@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { DialogClose } from "reka-ui";
-import { watch } from "vue";
 import { Button } from "@/components/ui/button";
 import {
   DrawerContent,
@@ -12,35 +11,16 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-const props = withDefaults(defineProps<{
-  isDone?: boolean;
-  isPending?: boolean;
+defineProps<{
   title: string;
-}>(), {
-  isDone: false,
-  isPending: false,
-});
+}>();
 
 const { isOpen, open, close } = useDisclosure();
 
 const handleOpenChange = (value: boolean) => {
-  if (!value && props.isPending) return;
-  if (value) {
-    open();
-  }
-  else {
-    close();
-  }
+  if (value) open();
+  else close();
 };
-
-watch(
-  () => props.isDone,
-  (isDone) => {
-    if (isDone) {
-      close();
-    }
-  },
-);
 </script>
 
 <template>
@@ -63,7 +43,7 @@ watch(
           </DrawerDescription>
         </DrawerHeader>
         <div>
-          <slot />
+          <slot :close="close" />
         </div>
       </div>
       <DrawerFooter>
@@ -72,7 +52,6 @@ watch(
             <Button
               variant="outline"
               type="button"
-              :disabled="isPending"
             >
               Close
             </Button>
