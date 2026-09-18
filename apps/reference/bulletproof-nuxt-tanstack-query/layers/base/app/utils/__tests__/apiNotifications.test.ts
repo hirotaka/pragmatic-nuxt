@@ -1,0 +1,27 @@
+import { expect, test } from "vitest";
+import { resolveApiErrorNotification } from "../apiNotifications";
+
+test("builds a concise notification from a native api error body", () => {
+  expect(resolveApiErrorNotification({
+    statusCode: 404,
+    statusMessage: "Discussion not found",
+    message: "Discussion not found",
+  })).toEqual({
+    type: "error",
+    title: "Error",
+    message: "Discussion not found",
+  });
+});
+
+test("suppresses AbortError cancellation", () => {
+  expect(resolveApiErrorNotification(
+    new DOMException("This operation was aborted", "AbortError"),
+  )).toBeNull();
+});
+
+test("suppresses a wrapped AbortError cancellation", () => {
+  expect(resolveApiErrorNotification({
+    name: "FetchError",
+    cause: new DOMException("This operation was aborted", "AbortError"),
+  })).toBeNull();
+});

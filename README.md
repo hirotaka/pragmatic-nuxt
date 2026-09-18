@@ -42,6 +42,7 @@ Reference Apps preserve alternative implementations and past experiments for com
 | [reference/bulletproof-nuxt-tanstack-form](apps/reference/bulletproof-nuxt-tanstack-form) | Nuxt full-stack TanStack Form comparison | TanStack Form, Zod v4 | - |
 | [reference/bulletproof-nuxt-formwerk](apps/reference/bulletproof-nuxt-formwerk) | Nuxt full-stack Formwerk comparison | Formwerk, Zod v4 | - |
 | [reference/bulletproof-nuxt-pinia-colada](apps/reference/bulletproof-nuxt-pinia-colada) | Nuxt full-stack Pinia Colada comparison | Pinia Colada, Nuxt | - |
+| [reference/bulletproof-nuxt-tanstack-query](apps/reference/bulletproof-nuxt-tanstack-query) | Nuxt full-stack TanStack Query reference | Nuxt Query, TanStack Query | - |
 | [reference/bulletproof-nuxt-original-ui](apps/reference/bulletproof-nuxt-original-ui) | Nuxt port of the original Bulletproof React UI composition | Nuxt Layers, Regle, Reka UI | - |
 
 ## 🗺️ Roadmap

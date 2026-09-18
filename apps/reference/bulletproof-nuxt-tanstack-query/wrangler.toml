@@ -1,0 +1,3 @@
+name = "bulletproof-nuxt"
+compatibility_date = "2025-07-15"
+compatibility_flags = ["nodejs_compat", "no_nodejs_compat_v2"]

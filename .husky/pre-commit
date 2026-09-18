@@ -3,6 +3,7 @@ for app in \
   reference/bulletproof-vue-vite \
   reference/bulletproof-nuxt-veevalidate \
   reference/bulletproof-nuxt-tanstack-form \
+  reference/bulletproof-nuxt-tanstack-query \
   reference/bulletproof-nuxt-formwerk \
   reference/bulletproof-nuxt-pinia-colada \
   reference/bulletproof-nuxt-original-ui

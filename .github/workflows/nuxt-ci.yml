@@ -8,6 +8,7 @@ on:
       - "apps/bulletproof-nuxt/**"
       - "apps/reference/bulletproof-nuxt-veevalidate/**"
       - "apps/reference/bulletproof-nuxt-tanstack-form/**"
+      - "apps/reference/bulletproof-nuxt-tanstack-query/**"
       - "apps/reference/bulletproof-nuxt-formwerk/**"
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
       - "apps/reference/bulletproof-nuxt-original-ui/**"
@@ -21,6 +22,7 @@ on:
       - "apps/bulletproof-nuxt/**"
       - "apps/reference/bulletproof-nuxt-veevalidate/**"
       - "apps/reference/bulletproof-nuxt-tanstack-form/**"
+      - "apps/reference/bulletproof-nuxt-tanstack-query/**"
       - "apps/reference/bulletproof-nuxt-formwerk/**"
       - "apps/reference/bulletproof-nuxt-pinia-colada/**"
       - "apps/reference/bulletproof-nuxt-original-ui/**"
@@ -44,6 +46,8 @@ jobs:
             app_slug: bulletproof-nuxt-veevalidate
           - app: reference/bulletproof-nuxt-tanstack-form
             app_slug: bulletproof-nuxt-tanstack-form
+          - app: reference/bulletproof-nuxt-tanstack-query
+            app_slug: bulletproof-nuxt-tanstack-query
           - app: reference/bulletproof-nuxt-formwerk
             app_slug: bulletproof-nuxt-formwerk
           - app: reference/bulletproof-nuxt-pinia-colada
@@ -86,6 +90,8 @@ jobs:
             app_slug: bulletproof-nuxt-veevalidate
           - app: reference/bulletproof-nuxt-tanstack-form
             app_slug: bulletproof-nuxt-tanstack-form
+          - app: reference/bulletproof-nuxt-tanstack-query
+            app_slug: bulletproof-nuxt-tanstack-query
           - app: reference/bulletproof-nuxt-formwerk
             app_slug: bulletproof-nuxt-formwerk
           - app: reference/bulletproof-nuxt-pinia-colada
