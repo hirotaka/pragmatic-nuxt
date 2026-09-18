@@ -29,54 +29,14 @@ The Server Cache State refers to the data retrieved from the server that is stor
 Good Server Cache Solutions for Nuxt:
 
 - [Pinia Colada](https://pinia-colada.esm.dev/) - Query and Mutation server state used in the Pinia Colada Reference
+- [TanStack Query](https://tanstack.com/query/latest) - Query and Mutation server state used in the TanStack Query Reference
 - [useFetch](https://nuxt.com/docs/api/composables/use-fetch) - Nuxt's built-in data fetching with caching
 - [$fetch](https://nuxt.com/docs/api/utils/dollarfetch) - Underlying requests without managed Query state
 - [useAsyncData](https://nuxt.com/docs/api/composables/use-async-data) - Custom async operations
 
-The following subsections describe how the [Pinia Colada Reference](../../apps/reference/bulletproof-nuxt-pinia-colada/README.md) composes server state. They are variant-specific examples rather than canonical app behavior. See the [Pinia Colada Practices](../practices/pinia-colada/index.md) for reusable decision boundaries and guidance.
+The [Pinia Colada Reference](../../apps/reference/bulletproof-nuxt-pinia-colada/README.md) uses Pinia Colada for its server-state variant. Its implementation examples are Reference-specific; see the [Pinia Colada Practices](../practices/pinia-colada/index.md) for reusable guidance and limitations.
 
-### Query Organization
-
-In the Pinia Colada Reference, feature-owned Query factories define Query keys, request behavior, and cache options. Pages and components use those shared Query options instead of defining their own copies. See [Organize Queries by Domain with `defineQueryOptions()`](../practices/pinia-colada/query-organization.md) for the reusable organization guidance.
-
-### Query Prefetching
-
-In the Pinia Colada Reference, the Discussions list can start the selected Discussion detail Query before navigation finishes. The detail page and view use the same Query options after navigation, so they can use the prefetched result or reuse the request while it is still running. Navigation continues without waiting for the prefetch.
-
-See [Use Query Prefetching to Reduce Waiting for Data](../practices/pinia-colada/use-query-prefetching-to-reduce-waiting-for-data.md) for the reusable timing, Query reuse, and fallback guidance.
-
-### Accumulated Comments State
-
-In the Pinia Colada Reference, comments keep accumulated pages in one feature-owned Infinite Query so later pages append to the current list.
-
-[Comments State](../../apps/reference/bulletproof-nuxt-pinia-colada/layers/comments/app/queries/comments.ts)
-
-### Mutation Organization
-
-In the Pinia Colada Reference, Mutation definitions use `defineMutationOptions()` in domain-specific files. Components pass
-those options to `useMutation()` and own the interaction associated with executing the
-Mutation. Mutation functions wait for write requests to complete, and components wait for
-`mutateAsync()` before continuing their success interactions. Related Query invalidation
-remains with the domain Mutation definition and continues in the background after a
-successful write. See [Wait for Mutation Requests to
-Complete](../practices/pinia-colada/wait-for-mutation-requests-to-complete.md)
-and [Synchronize Related Queries in the Background After Successful
-Writes](../practices/pinia-colada/synchronize-related-queries-in-the-background-after-successful-writes.md).
-
-### Auth Session Synchronization
-
-Nuxt Auth Utils manages the cookie-backed authentication session, logged-in
-state, and current user. In the Pinia Colada Reference, Mutations send
-authentication and profile requests while Nuxt Auth Utils owns session refresh
-and clear operations. Reloading after logout or session expiry replaces the
-current Nuxt app instance and its Query Cache.
-
-See [Use Nuxt Auth Utils for Authentication Session Management with Pinia
-Colada](../practices/pinia-colada/keep-authentication-session-state-in-nuxt-auth-utils.md)
-for Query Cache integration, [Orchestrate Auth Session State Outside the Fetch
-Client](../practices/use-fetch/auth-session-orchestration.md) for workflow
-ownership, and the [Nuxt Auth Utils
-Practices](../practices/nuxt-auth-utils/index.md) for provider-specific guidance.
+The [TanStack Query Reference](../../apps/reference/bulletproof-nuxt-tanstack-query/README.md) uses Nuxt Query and TanStack Query for its server-state variant. Its implementation examples are Reference-specific; see the [TanStack Query Practices](../practices/tanstack-query/index.md) for reusable guidance and limitations.
 
 ## Form State
 

@@ -1,0 +1,474 @@
+import type { Page, Request } from "@playwright/test";
+import { expect, test } from "@nuxt/test-utils/playwright";
+import { expectCreatedResponse, expectEmptyResponse, expectJson } from "./support/api-response";
+import { gotoWithSsrHtml } from "./support/nuxt-navigation";
+
+const password = "Password123!";
+
+async function registerIsolatedUser(page: Page, label: string) {
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  const unique = `${label}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  await expectEmptyResponse(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+    data: {
+      email: `${unique}@example.com`,
+      firstName: "Data",
+      lastName: "Evidence",
+      password,
+      teamId: null,
+      teamName: `Evidence ${unique}`,
+    },
+  }), 201);
+  return { unique };
+}
+
+function isApiRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+async function findDiscussionByTitle(page: Page, title: string) {
+  const result: unknown = await expectJson(await page.request.get(
+    new URL("/api/discussions?limit=100", page.url()).href,
+  ));
+  if (!isApiRecord(result) || !Array.isArray(result.data)) {
+    throw new Error("Test setup failed: discussions response has invalid data");
+  }
+
+  const discussion = result.data.find(item => isApiRecord(item) && item.title === title);
+  if (!isApiRecord(discussion) || typeof discussion.id !== "string") {
+    throw new Error(`Test setup failed: discussion not found for title: ${title}`);
+  }
+
+  return discussion;
+}
+
+function deferred() {
+  let resolve!: () => void;
+  const promise = new Promise<void>((nextResolve) => {
+    resolve = nextResolve;
+  });
+  return { promise, resolve };
+}
+
+async function createDiscussion(page: Page, title: string) {
+  await expectEmptyResponse(await page.request.post(
+    new URL("/api/discussions", page.url()).href,
+    {
+      data: {
+        title,
+        body: `${title} body`,
+      },
+    },
+  ), 201);
+  const discussion = await findDiscussionByTitle(page, title);
+
+  return { id: discussion.id, title };
+}
+
+test("discussions are SSR-rendered without a hydration GET", { tag: ["@discussions", "@ssr"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "ssr-discussions");
+  const marker = `SSR discussion ${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
+    data: {
+      title: marker,
+      body: "SSR evidence body",
+    },
+  }));
+
+  let browserDiscussionGets = 0;
+  page.on("request", (request) => {
+    const url = new URL(request.url());
+    if (request.method() === "GET" && url.pathname === "/api/discussions") {
+      browserDiscussionGets += 1;
+    }
+  });
+
+  const { html } = await gotoWithSsrHtml(page, "/app/discussions");
+  const documentHtml = html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "");
+  expect(documentHtml).toContain(marker);
+  await expect(page.getByText(marker)).toBeVisible();
+  expect(browserDiscussionGets).toBe(0);
+});
+
+test("direct discussion detail is SSR-rendered without a hydration GET", { tag: ["@discussions", "@ssr"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "ssr-discussion-detail");
+  const discussion = await createDiscussion(page, `SSR discussion detail ${Date.now()}`);
+  const commentBody = `SSR discussion comment ${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  await expectCreatedResponse(await page.request.post(new URL("/api/comments", page.url()).href, {
+    data: { discussionId: discussion.id, body: commentBody },
+  }));
+  let browserDiscussionGets = 0;
+  let browserCommentGets = 0;
+  page.on("request", (request) => {
+    const url = new URL(request.url());
+    if (request.method() === "GET" && url.pathname === `/api/discussions/${discussion.id}`) {
+      browserDiscussionGets += 1;
+    }
+    if (request.method() === "GET" && url.pathname === "/api/comments") {
+      browserCommentGets += 1;
+    }
+  });
+
+  const { html } = await gotoWithSsrHtml(page, `/app/discussions/${discussion.id}`);
+  const documentHtml = html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "");
+  expect(documentHtml).toContain(discussion.title);
+  expect(documentHtml).toContain(commentBody);
+  await expect(page.getByRole("heading", { name: discussion.title })).toBeVisible();
+  await expect(page.getByText(`${discussion.title} body`)).toBeVisible();
+  await expect(page.getByText(commentBody)).toBeVisible();
+  expect(browserDiscussionGets).toBe(0);
+  expect(browserCommentGets).toBe(0);
+});
+
+test("SSR detail failure leaves recovery with the hydrated Query read surface", { tag: ["@discussions", "@ssr"] }, async ({ page, goto }) => {
+  await registerIsolatedUser(page, "ssr-detail-failure");
+  const discussionId = `missing-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const response = await goto(`/app/discussions/${discussionId}`, { waitUntil: "hydration" });
+  expect(response).not.toBeNull();
+
+  await expect(page.locator("main").getByRole("alert")).toContainText(
+    "Discussion could not be loaded.",
+    { timeout: 15_000 },
+  );
+  await expect(page.getByLabel("Error")).toHaveCount(0);
+});
+
+test("discussion navigation shows the target pending surface until the initial read settles", { tag: ["@discussions", "@navigation", "@initial-read"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "awaited-discussions");
+  await page.goto("/app", { waitUntil: "networkidle" });
+  const marker = `Awaited discussion ${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
+    data: {
+      title: marker,
+      body: "Awaited navigation evidence body",
+    },
+  }));
+
+  const requestStarted = deferred();
+  const responseRelease = deferred();
+  await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
+    requestStarted.resolve();
+    await responseRelease.promise;
+    await route.continue();
+  });
+
+  const navigation = page.getByRole("link", { name: "Discussions" }).click();
+  await requestStarted.promise;
+
+  await expect(page.getByRole("heading", { name: "Discussions", exact: true })).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "Loading discussions" })).toBeVisible();
+
+  responseRelease.resolve();
+  await navigation;
+  await page.waitForURL("/app/discussions");
+  await expect(page.getByText(marker)).toBeVisible();
+});
+
+test("cancelled discussion navigation cannot publish stale page state", { tag: ["@discussions", "@navigation", "@initial-read"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "cancelled-discussions");
+  await page.goto("/app", { waitUntil: "networkidle" });
+
+  const requestStarted = deferred();
+  const responseRelease = deferred();
+  await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
+    requestStarted.resolve();
+    await responseRelease.promise;
+    await route.continue();
+  });
+
+  const discussionsNavigation = page.getByRole("link", { name: "Discussions" }).click();
+  await requestStarted.promise;
+
+  await page.getByRole("link", { name: "Users" }).click();
+  await page.waitForURL("/app/users");
+  await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
+
+  responseRelease.resolve();
+  await discussionsNavigation;
+  await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 0)));
+
+  await expect(page).toHaveURL(/\/app\/users$/);
+  await expect(page).toHaveTitle("Users | Bulletproof Nuxt");
+  await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
+});
+
+test("discussion detail resets to a pending surface for a reactive route identity", { tag: ["@discussions", "@navigation"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "reactive-discussion-detail");
+  const unique = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const discussionA = await createDiscussion(page, `Reactive discussion A ${unique}`);
+  const discussionB = await createDiscussion(page, `Reactive discussion B ${unique}`);
+  const discussionBComment = `Reactive discussion B comment ${unique}`;
+  await expectCreatedResponse(await page.request.post(new URL("/api/comments", page.url()).href, {
+    data: { discussionId: discussionB.id, body: discussionBComment },
+  }));
+
+  await page.goto(`/app/discussions/${discussionA.id}`, { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: discussionA.title })).toBeVisible();
+
+  const requestStarted = deferred();
+  const responseRelease = deferred();
+  await page.route((url) => {
+    return url.pathname === `/api/discussions/${discussionB.id}`;
+  }, async (route) => {
+    requestStarted.resolve();
+    await responseRelease.promise;
+    await route.continue();
+  });
+
+  const navigation = page.evaluate((path) => {
+    const root = document.querySelector("#__nuxt") as HTMLElement & {
+      __vue_app__?: {
+        config: {
+          globalProperties: {
+            $router?: { push: (to: string) => Promise<unknown> };
+          };
+        };
+      };
+    };
+    const router = root.__vue_app__?.config.globalProperties.$router;
+    if (!router) throw new Error("Vue router is unavailable");
+    return router.push(path);
+  }, `/app/discussions/${discussionB.id}`);
+  await requestStarted.promise;
+
+  await expect(page.getByRole("heading", { name: discussionA.title })).toHaveCount(0);
+  await expect(page.getByText(`${discussionB.title} body`)).toHaveCount(0);
+  await expect(page.getByText(discussionBComment)).toHaveCount(0);
+  await expect(page.getByRole("status").filter({ hasText: "Loading discussion" })).toBeVisible();
+
+  responseRelease.resolve();
+  await navigation;
+  await page.waitForURL(`/app/discussions/${discussionB.id}`);
+
+  await expect(page.getByRole("heading", { name: discussionB.title })).toBeVisible();
+  await expect(page.getByText(`${discussionB.title} body`)).toBeVisible();
+  await expect(page.getByText(discussionBComment)).toBeVisible();
+});
+
+test("rapid discussion page selection keeps the last selected page", { tag: ["@discussions", "@pagination"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "rapid-pagination");
+
+  for (let index = 1; index <= 21; index += 1) {
+    await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
+      data: {
+        title: `Rapid discussion ${String(index).padStart(2, "0")}`,
+        body: `Rapid body ${index}`,
+      },
+    }));
+  }
+
+  const secondPage = await expectJson(await page.request.get(
+    new URL("/api/discussions?page=2&limit=10", page.url()).href,
+  ));
+  const thirdPage = await expectJson(await page.request.get(
+    new URL("/api/discussions?page=3&limit=10", page.url()).href,
+  ));
+  const secondPageTitle = secondPage.data[0].title as string;
+  const thirdPageTitle = thirdPage.data[0].title as string;
+
+  await page.goto("/app/discussions", { waitUntil: "networkidle" });
+  const secondPageStarted = deferred();
+  const releaseSecondPage = deferred();
+  const secondPageRouteHandled = deferred();
+  const secondPageTerminal = deferred();
+  const resolveSecondPageTerminal = (request: Request) => {
+    const requestUrl = new URL(request.url());
+    if (request.method() === "GET" && requestUrl.pathname === "/api/discussions" && requestUrl.searchParams.get("page") === "2") {
+      secondPageTerminal.resolve();
+    }
+  };
+  page.on("requestfinished", resolveSecondPageTerminal);
+  page.on("requestfailed", resolveSecondPageTerminal);
+  await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
+    const requestUrl = new URL(route.request().url());
+    if (requestUrl.searchParams.get("page") === "2") {
+      secondPageStarted.resolve();
+      await releaseSecondPage.promise;
+      try {
+        await route.continue();
+      }
+      finally {
+        secondPageRouteHandled.resolve();
+      }
+      return;
+    }
+    await route.continue();
+  });
+
+  await page.getByRole("button", { name: "2", exact: true }).click();
+  await secondPageStarted.promise;
+  await page.getByRole("button", { name: "3", exact: true }).click();
+
+  await expect(page.getByText("Page 3 of 3")).toBeVisible();
+  await expect(page.getByText(thirdPageTitle)).toBeVisible();
+  releaseSecondPage.resolve();
+  await Promise.all([secondPageRouteHandled.promise, secondPageTerminal.promise]);
+
+  await expect(page.getByText("Page 3 of 3")).toBeVisible();
+  await expect(page.getByText(thirdPageTitle)).toBeVisible();
+  await expect(page.getByText(secondPageTitle)).toHaveCount(0);
+});
+
+test("page-2 last-row deletion keeps the native current-page result", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "native-current-page");
+
+  for (let index = 1; index <= 11; index += 1) {
+    await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
+      data: {
+        title: `Native page discussion ${String(index).padStart(2, "0")}`,
+        body: `Native page body ${index}`,
+      },
+    }));
+  }
+
+  const secondPage = await expectJson(await page.request.get(
+    new URL("/api/discussions?page=2&limit=10", page.url()).href,
+  ));
+  expect(secondPage.data).toHaveLength(1);
+  const deletedTitle = secondPage.data[0].title as string;
+
+  await page.goto("/app/discussions", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "2", exact: true }).click();
+  await expect(page.getByText("Page 2 of 2")).toBeVisible();
+  await expect(page.getByText(deletedTitle)).toBeVisible();
+
+  const refreshPages: string[] = [];
+  let deletionStarted = false;
+  page.on("request", (request) => {
+    const requestUrl = new URL(request.url());
+    if (deletionStarted && request.method() === "GET" && requestUrl.pathname === "/api/discussions") {
+      refreshPages.push(requestUrl.searchParams.get("page") ?? "");
+    }
+  });
+
+  await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
+  await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
+  deletionStarted = true;
+  await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
+
+  await expect(page.getByLabel("Discussion Deleted")).toHaveCount(1);
+  await expect(page.getByText(deletedTitle)).toHaveCount(0);
+  await expect(page.getByText("No Entries Found")).toBeVisible();
+  expect(refreshPages).toContain("2");
+  expect(refreshPages).not.toContain("1");
+});
+
+test("current-page GET failure preserves mutation success", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "current-page-failure");
+
+  for (let index = 1; index <= 11; index += 1) {
+    await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
+      data: {
+        title: `Current page failure ${String(index).padStart(2, "0")}`,
+        body: `Current page failure body ${index}`,
+      },
+    }));
+  }
+  const secondPage = await expectJson(await page.request.get(
+    new URL("/api/discussions?page=2&limit=10", page.url()).href,
+  ));
+  const deletedTitle = secondPage.data[0].title as string;
+
+  await page.goto("/app/discussions", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "2", exact: true }).click();
+  await expect(page.getByText("Page 2 of 2")).toBeVisible();
+  await expect(page.getByText(deletedTitle)).toBeVisible();
+
+  let failCurrentPageRefresh = false;
+  const refreshPages: string[] = [];
+  await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
+    const requestUrl = new URL(route.request().url());
+    if (failCurrentPageRefresh) {
+      refreshPages.push(requestUrl.searchParams.get("page") ?? "");
+    }
+    if (failCurrentPageRefresh && requestUrl.searchParams.get("page") === "2") {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Current page GET failed" }),
+      });
+      return;
+    }
+    await route.continue();
+  });
+
+  await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
+  await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
+  failCurrentPageRefresh = true;
+  await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
+
+  const alerts = page.locator("[aria-live='assertive'] [role='alert']");
+  await expect(alerts).toHaveCount(1);
+  await expect(alerts.first()).toHaveAttribute("aria-label", "Discussion Deleted");
+  await expect(page.locator("main").getByRole("alert")).toContainText(
+    "Discussions could not be refreshed.",
+    { timeout: 15_000 },
+  );
+  await expect(page.getByText("Current page GET failed")).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "Delete Discussion" })).toHaveCount(0);
+  expect(refreshPages).toContain("2");
+  expect(refreshPages).not.toContain("1");
+});
+
+test("create settles its drawer before a detached list refetch completes", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "create-detached-refresh");
+  await page.goto("/app/discussions", { waitUntil: "networkidle" });
+
+  const refetchStarted = deferred();
+  const releaseRefetch = deferred();
+  let synchronize = false;
+  await page.route(/\/api\/discussions(?:\?.*)?$/, async (route) => {
+    if (synchronize && route.request().method() === "GET") {
+      refetchStarted.resolve();
+      await releaseRefetch.promise;
+    }
+    await route.continue();
+  });
+
+  try {
+    await page.getByRole("button", { name: "Create Discussion" }).click();
+    const drawer = page.getByRole("dialog", { name: "Create Discussion" });
+    await drawer.getByLabel("Title").fill("Detached synchronization");
+    await drawer.getByLabel("Body").fill("The committed write must settle first");
+    synchronize = true;
+    await drawer.getByRole("button", { name: "Submit" }).click();
+
+    await refetchStarted.promise;
+    await expect(page.getByLabel("Discussion Created")).toHaveCount(1);
+    await expect(drawer).toHaveCount(0);
+  }
+  finally {
+    releaseRefetch.resolve();
+  }
+});
+
+test("mutation failure uses the QueryClient notification without an inline form error", { tag: ["@discussions", "@mutation"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "mutation-failure");
+  await page.goto("/app/discussions", { waitUntil: "networkidle" });
+  await page.route(/\/api\/discussions$/, async (route) => {
+    if (route.request().method() === "POST") {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Discussion creation failed" }),
+      });
+      return;
+    }
+    await route.continue();
+  });
+
+  await page.getByRole("button", { name: "Create Discussion" }).click();
+  const drawer = page.getByRole("dialog", { name: "Create Discussion" });
+  await drawer.getByLabel("Title").fill("Failed discussion");
+  await drawer.getByLabel("Body").fill("This request should fail");
+  await drawer.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page.getByLabel("Error")).toHaveCount(1);
+  await expect(page.getByText("Discussion creation failed")).toHaveCount(1);
+  await expect(drawer.getByRole("alert")).toHaveCount(0);
+  await expect(drawer.getByRole("button", { name: "Submit" })).toBeEnabled();
+  await expect(drawer).toBeVisible();
+});
