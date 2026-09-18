@@ -3,9 +3,18 @@ import { useAPI } from "#layers/base/app/composables/useAPI";
 import { usePaginatedData } from "#layers/base/app/composables/usePaginatedData";
 
 export async function useComments(discussionId: MaybeRefOrGetter<string>) {
-  const page = ref(1);
+  const pages = useState<Record<string, number>>("comments-current-pages", () => ({}));
   const limit = 10;
   const resourceKey = computed(() => toValue(discussionId));
+  const page = computed({
+    get: () => pages.value[resourceKey.value] ?? 1,
+    set: (value: number) => {
+      pages.value = {
+        ...pages.value,
+        [resourceKey.value]: value,
+      };
+    },
+  });
   const read = useAPI("/api/comments", {
     query: {
       discussionId: resourceKey,
@@ -22,20 +31,21 @@ export async function useComments(discussionId: MaybeRefOrGetter<string>) {
 
   await read;
 
-  const isInitialReady = computed(() => pagination.data.value !== undefined);
-  const hasInitialError = computed(() => {
-    return !isInitialReady.value && pagination.status.value === "error";
-  });
+  const comments = computed(() => pagination.data.value);
+
+  const refreshAfterCreate = async () => {
+    await pagination.loadPage(1).catch(() => undefined);
+  };
+
+  const refreshAfterDelete = async () => {
+    await pagination.loadPage(1).catch(() => undefined);
+  };
 
   return {
-    comments: computed(() => pagination.data.value?.data ?? []),
-    currentPage: computed(() => pagination.data.value?.meta.page ?? 1),
-    hasInitialError,
-    totalPages: computed(() => pagination.data.value?.meta.totalPages ?? 0),
-    hasMore: computed(() => pagination.data.value?.meta.hasMore ?? false),
-    isInitialReady,
+    comments,
     isLoading: pagination.isLoading,
-    refreshFirstPage: () => pagination.loadPage(1),
+    refreshAfterCreate,
+    refreshAfterDelete,
     loadMore: pagination.loadMore,
   };
 }

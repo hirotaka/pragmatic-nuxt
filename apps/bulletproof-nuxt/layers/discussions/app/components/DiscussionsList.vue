@@ -1,25 +1,27 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import DataTable from "~~/app/components/app/DataTable.vue";
 import { formatDate } from "#layers/base/app/utils/format";
-import type { Discussion, PaginatedDiscussions } from "~discussions/shared/types";
+import type { Discussion } from "~discussions/shared/types";
 import type { TableColumn } from "~~/app/components/app/data-table";
-import DeleteDiscussion from "./DeleteDiscussion.vue";
+import DiscussionActionsMenu from "./DiscussionActionsMenu.vue";
+import { useDiscussions } from "~discussions/app/composables/useDiscussions";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 const emit = defineEmits<{
   discussionPrefetch: [id: string];
-  pageChange: [page: number];
 }>();
 
-const props = defineProps<{
-  discussions: PaginatedDiscussions;
-  isPending: boolean;
-  refresh: () => Promise<void>;
-}>();
 const { isAdmin } = useUser();
 
+const { currentPage, data, refreshAfterDelete, status } = await useDiscussions();
+
+const discussions = computed(() => Array.isArray(data.value?.data) && data.value.meta
+  ? data.value
+  : undefined);
+
 const handlePageChange = (page: number) => {
-  emit("pageChange", page);
+  currentPage.value = page;
 };
 
 const handleDiscussionHover = (id: string) => {
@@ -35,25 +37,25 @@ const columns: TableColumn<Discussion>[] = [
 </script>
 
 <template>
-  <div>
+  <div v-if="discussions">
     <p
       class="mb-3 min-h-5 text-sm text-muted-foreground"
       aria-live="polite"
     >
-      {{ props.isPending ? "Refreshing discussions..." : "" }}
+      {{ status === "pending" ? "Refreshing discussions..." : "" }}
     </p>
 
     <DataTable
       title="Discussion queue"
       description="Track team conversations, moderation actions, and recent activity."
-      :summary="`${props.discussions.meta.total} discussions`"
-      :data="props.discussions.data"
+      :summary="`${discussions.meta.total} discussions`"
+      :data="discussions.data"
       :columns="columns"
       empty-title="No Entries Found"
       empty-description="Create a discussion to start the conversation."
       :pagination="{
-        totalPages: props.discussions.meta.totalPages,
-        currentPage: props.discussions.meta.page,
+        totalPages: discussions.meta.totalPages,
+        currentPage: discussions.meta.page,
       }"
       @page-change="handlePageChange"
     >
@@ -70,12 +72,11 @@ const columns: TableColumn<Discussion>[] = [
         </NuxtLink>
       </template>
       <template #cell-delete="{ entry }">
-        <DeleteDiscussion
+        <DiscussionActionsMenu
           v-if="isAdmin"
-          :id="entry.id"
-          :refresh="props.refresh"
-          as-menu-item
+          :discussion="entry"
           :action-label="`Open discussion actions for ${entry.title}`"
+          @success="refreshAfterDelete"
         />
       </template>
     </DataTable>

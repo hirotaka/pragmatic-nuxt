@@ -1,6 +1,5 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref } from "vue";
 import { Plus } from "lucide-vue-next";
 import FormDrawer from "~~/app/components/app/FormDrawer.vue";
 import { Button } from "~~/app/components/ui/button";
@@ -12,39 +11,11 @@ interface CommentsProps {
 }
 
 const props = defineProps<CommentsProps>();
-
-const {
-  comments,
-  currentPage,
-  hasInitialError,
-  hasMore,
-  isInitialReady,
-  isLoading,
-  refreshFirstPage,
-  loadMore,
-} = await useComments(() => props.discussionId);
-
-const isRetrying = ref(false);
-
-const refreshComments = async () => {
-  await refreshFirstPage().catch(() => undefined);
-};
+const { refreshAfterCreate } = await useComments(() => props.discussionId);
 
 const handleCreateSuccess = async (close: () => void) => {
-  await refreshComments();
+  await refreshAfterCreate();
   close();
-};
-
-const handleRetry = async () => {
-  if (isRetrying.value) return;
-
-  isRetrying.value = true;
-  try {
-    await refreshFirstPage();
-  }
-  finally {
-    isRetrying.value = false;
-  }
 };
 </script>
 
@@ -62,7 +33,6 @@ const handleRetry = async () => {
         >
           <template #triggerButton>
             <Button
-              :disabled="!isInitialReady"
               variant="outline"
               size="sm"
             >
@@ -75,7 +45,6 @@ const handleRetry = async () => {
 
           <template #default="{ close }">
             <CreateCommentForm
-              :disabled="!isInitialReady"
               :discussion-id="props.discussionId"
               @success="handleCreateSuccess(close)"
             />
@@ -83,7 +52,6 @@ const handleRetry = async () => {
 
           <template #submitButton>
             <Button
-              :disabled="!isInitialReady"
               type="submit"
               form="create-comment"
               size="sm"
@@ -97,16 +65,7 @@ const handleRetry = async () => {
     <CardContent>
       <CommentsList
         :key="props.discussionId"
-        :comments="comments"
-        :current-page="currentPage"
-        :has-initial-error="hasInitialError"
-        :has-more="hasMore"
-        :is-initial-ready="isInitialReady"
-        :is-loading="isLoading"
-        :is-retrying="isRetrying"
-        @delete-success="refreshComments"
-        @load-more="loadMore"
-        @retry="handleRetry"
+        :discussion-id="props.discussionId"
       />
     </CardContent>
   </Card>

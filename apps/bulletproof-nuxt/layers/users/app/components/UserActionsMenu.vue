@@ -7,14 +7,15 @@ import {
   DropdownRoot,
   DropdownTrigger,
 } from "~~/app/components/ui/dropdown";
-import DeleteCommentDialog from "./DeleteCommentDialog.vue";
+import type { User } from "~users/shared/types";
+import DeleteUserDialog from "./DeleteUserDialog.vue";
 
-interface CommentActionsMenuProps {
+interface UserActionsMenuProps {
   actionLabel: string;
-  commentId: string;
+  user: User;
 }
 
-defineProps<CommentActionsMenuProps>();
+defineProps<UserActionsMenuProps>();
 
 const emit = defineEmits<{
   success: [];
@@ -27,7 +28,7 @@ const emit = defineEmits<{
       <Button
         variant="ghost"
         size="icon"
-        class="size-8 shrink-0"
+        class="size-8"
         :aria-label="actionLabel"
       >
         <MoreHorizontal class="size-4" />
@@ -38,17 +39,17 @@ const emit = defineEmits<{
       force-mount
       class="data-[state=closed]:hidden"
     >
-      <DeleteCommentDialog
-        :comment-id="commentId"
+      <DeleteUserDialog
+        :user="user"
         @success="emit('success')"
       >
         <template #triggerButton>
           <DropdownItem class="text-destructive focus:text-destructive">
             <Trash class="mr-2 size-4" />
-            Delete Comment
+            Delete User
           </DropdownItem>
         </template>
-      </DeleteCommentDialog>
+      </DeleteUserDialog>
     </DropdownContent>
   </DropdownRoot>
 </template>

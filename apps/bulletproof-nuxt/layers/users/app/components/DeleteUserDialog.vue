@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
-import { useDeleteDiscussion } from "~discussions/app/composables/useDeleteDiscussion";
-import type { Discussion } from "~discussions/shared/types";
+import { useDeleteUser } from "~users/app/composables/useDeleteUser";
+import type { User } from "~users/shared/types";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
-interface DeleteDiscussionDialogProps {
-  discussion: Discussion;
+interface DeleteUserDialogProps {
+  user: User;
 }
 
-const props = defineProps<DeleteDiscussionDialogProps>();
+const props = defineProps<DeleteUserDialogProps>();
 
 const emit = defineEmits<{
   success: [];
 }>();
 
 const { addNotification } = useNotifications();
-const deleteDiscussion = useDeleteDiscussion();
+const deleteUser = useDeleteUser();
 const isOpen = ref(false);
 const isPending = ref(false);
 
@@ -25,7 +25,7 @@ const handleConfirm = async () => {
 
   isPending.value = true;
   try {
-    await deleteDiscussion(props.discussion.id);
+    await deleteUser(props.user.id);
   }
   catch {
     // `$api` reports the request failure; keep the dialog open for another attempt.
@@ -35,7 +35,7 @@ const handleConfirm = async () => {
 
   addNotification({
     type: "success",
-    title: "Discussion Deleted",
+    title: "User Deleted",
   });
   emit("success");
   isPending.value = false;
@@ -52,12 +52,11 @@ const handleOpenChange = (value: boolean) => {
 <template>
   <ConfirmationDialog
     :open="isOpen"
-    :is-loading="isPending"
     variant="danger"
-    title="Delete Discussion"
-    :body="`Are you sure you want to delete &quot;${discussion.title}&quot;? This action cannot be undone.`"
-    confirm-text="Delete"
-    cancel-text="Cancel"
+    title="Delete User"
+    :body="`Are you sure you want to delete ${user.firstName} ${user.lastName}?`"
+    confirm-text="Delete User"
+    :is-loading="isPending"
     @confirm="handleConfirm"
     @update:open="handleOpenChange"
   >
