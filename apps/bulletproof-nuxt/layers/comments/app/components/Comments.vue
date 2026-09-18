@@ -1,5 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
+import { ref } from "vue";
 import { Plus } from "lucide-vue-next";
 import FormDrawer from "~~/app/components/app/FormDrawer.vue";
 import { Button } from "~~/app/components/ui/button";
@@ -22,6 +23,29 @@ const {
   refreshFirstPage,
   loadMore,
 } = await useComments(() => props.discussionId);
+
+const isRetrying = ref(false);
+
+const refreshComments = async () => {
+  await refreshFirstPage().catch(() => undefined);
+};
+
+const handleCreateSuccess = async (close: () => void) => {
+  await refreshComments();
+  close();
+};
+
+const handleRetry = async () => {
+  if (isRetrying.value) return;
+
+  isRetrying.value = true;
+  try {
+    await refreshFirstPage();
+  }
+  finally {
+    isRetrying.value = false;
+  }
+};
 </script>
 
 <template>
@@ -50,11 +74,10 @@ const {
           </template>
 
           <template #default="{ close }">
-            <CreateComment
+            <CreateCommentForm
               :disabled="!isInitialReady"
               :discussion-id="props.discussionId"
-              :refresh="refreshFirstPage"
-              @success="close"
+              @success="handleCreateSuccess(close)"
             />
           </template>
 
@@ -80,8 +103,10 @@ const {
         :has-more="hasMore"
         :is-initial-ready="isInitialReady"
         :is-loading="isLoading"
-        :load-more="loadMore"
-        :refresh="refreshFirstPage"
+        :is-retrying="isRetrying"
+        @delete-success="refreshComments"
+        @load-more="loadMore"
+        @retry="handleRetry"
       />
     </CardContent>
   </Card>

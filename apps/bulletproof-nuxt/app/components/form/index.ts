@@ -1,3 +1,17 @@
 export { default as Form, type FormProps } from "./Form.vue";
-export type { FormError, FormErrorEvent, FormInputEvent, FormSubmitEvent, FormValidate } from "./form-types";
-export { findFormErrors, FORM_CONTEXT_KEY, normalizeFormErrors, validateWithSchema } from "./form-utils";
+export type {
+  FormError,
+  FormErrorEvent,
+  FormSchemaOutput,
+  FormSubmitEvent,
+  FormValidate,
+  FormValidationResult,
+} from "./form-types";
+export {
+  findFormErrors,
+  FORM_CONTEXT_KEY,
+  getSchemaErrors,
+  normalizeFormErrors,
+  touchSchemaField,
+  validateWithSchema,
+} from "./form-utils";

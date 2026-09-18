@@ -20,5 +20,26 @@ const handleSuccess = () => {
 </script>
 
 <template>
-  <LoginForm @success="handleSuccess" />
+  <Card>
+    <CardHeader class="text-center">
+      <CardTitle class="text-xl">
+        Welcome back
+      </CardTitle>
+      <CardDescription>
+        Log in to continue managing your team's discussions.
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <LoginForm @success="handleSuccess" />
+      <div class="mt-4 text-center text-sm">
+        Don&apos;t have an account?
+        <NuxtLink
+          to="/auth/register"
+          class="font-medium underline underline-offset-4"
+        >
+          Register
+        </NuxtLink>
+      </div>
+    </CardContent>
+  </Card>
 </template>

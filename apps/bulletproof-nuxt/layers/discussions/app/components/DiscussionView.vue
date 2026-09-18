@@ -4,7 +4,7 @@ import FormDrawer from "~~/app/components/app/FormDrawer.vue";
 import MarkdownPreview from "~~/app/components/app/MarkdownPreview.vue";
 import { Button } from "~~/app/components/ui/button";
 import { Card, CardContent, CardHeader } from "~~/app/components/ui/card";
-import UpdateDiscussion from "./UpdateDiscussion.vue";
+import UpdateDiscussionForm from "./UpdateDiscussionForm.vue";
 import { formatDate } from "#layers/base/app/utils/format";
 import { useDiscussion } from "~discussions/app/composables/useDiscussion";
 import { useUser } from "#layers/auth/app/composables/useUser";
@@ -46,7 +46,7 @@ const { data: discussion, refresh } = await useDiscussion(() => props.discussion
           </template>
 
           <template #default="{ close }">
-            <UpdateDiscussion
+            <UpdateDiscussionForm
               :body="discussion.body"
               :discussion-id="discussion.id"
               :refresh="refresh"

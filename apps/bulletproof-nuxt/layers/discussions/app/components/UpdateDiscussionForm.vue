@@ -1,34 +1,51 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import { useRegleSchema } from "@regle/schemas";
+import { reactive, watch } from "vue";
 import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { useFormSchema } from "~~/app/composables/useFormSchema";
 import { FormField } from "~~/app/components/form-field";
 import { Input } from "~~/app/components/ui/input";
 import { Textarea } from "~~/app/components/ui/textarea";
-import { useCreateDiscussion } from "~discussions/app/composables/useCreateDiscussion";
+import { useUpdateDiscussion } from "~discussions/app/composables/useUpdateDiscussion";
 import {
-  createDiscussionInputSchema,
-  type CreateDiscussionInput,
+  updateDiscussionInputSchema,
+  type UpdateDiscussionFormState,
+  type UpdateDiscussionInput,
 } from "~discussions/shared/schemas";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
+interface UpdateDiscussionFormProps {
+  body: string;
+  discussionId: string;
+  refresh: () => Promise<void>;
+  title: string;
+}
+
+const props = defineProps<UpdateDiscussionFormProps>();
 const emit = defineEmits<{
   success: [];
 }>();
 const { addNotification } = useNotifications();
-const createDiscussion = useCreateDiscussion();
+const updateDiscussion = useUpdateDiscussion(() => props.discussionId);
 
-const state = reactive<CreateDiscussionInput>({
-  title: "",
-  body: "",
+const state = reactive<UpdateDiscussionFormState>({
+  title: props.title,
+  body: props.body,
 });
-const { r$ } = useRegleSchema(state, createDiscussionInputSchema);
+const { r$ } = useFormSchema(state, updateDiscussionInputSchema);
 
-const handleSubmit = async (event: FormSubmitEvent<CreateDiscussionInput | undefined>) => {
-  const values = event.data ?? r$.$value;
+watch(
+  () => [props.title, props.body] as const,
+  ([title, body]) => {
+    r$.$value.title = title;
+    r$.$value.body = body;
+  },
+);
+
+const handleSubmit = async (event: FormSubmitEvent<UpdateDiscussionInput>) => {
+  const values = event.data;
 
   try {
-    await createDiscussion(values);
+    await updateDiscussion(values);
   }
   catch {
     return;
@@ -36,15 +53,16 @@ const handleSubmit = async (event: FormSubmitEvent<CreateDiscussionInput | undef
 
   addNotification({
     type: "success",
-    title: "Discussion Created",
+    title: "Discussion Updated",
   });
+  await props.refresh().catch(() => undefined);
   emit("success");
 };
 </script>
 
 <template>
   <Form
-    id="create-discussion"
+    id="update-discussion"
     :schema="r$"
     :state="r$.$value"
     class="space-y-6"
@@ -58,7 +76,6 @@ const handleSubmit = async (event: FormSubmitEvent<CreateDiscussionInput | undef
       <Input
         v-model="r$.$value.title"
         v-bind="field"
-        type="text"
       />
     </FormField>
     <FormField
@@ -69,7 +86,6 @@ const handleSubmit = async (event: FormSubmitEvent<CreateDiscussionInput | undef
       <Textarea
         v-model="r$.$value.body"
         v-bind="field"
-        :rows="5"
       />
     </FormField>
   </Form>

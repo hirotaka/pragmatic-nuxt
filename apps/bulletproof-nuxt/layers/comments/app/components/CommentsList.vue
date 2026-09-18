@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { ArchiveX, CircleAlert } from "lucide-vue-next";
 import MarkdownPreview from "~~/app/components/app/MarkdownPreview.vue";
 import { Button } from "~~/app/components/ui/button";
 import { Spinner } from "~~/app/components/ui/spinner";
+import CommentActionsMenu from "./CommentActionsMenu.vue";
 import { formatDate } from "#layers/base/app/utils/format";
 import { POLICIES } from "#layers/auth/app/composables/useAuthorization";
 import type { Comment } from "~comments/shared/types";
@@ -15,26 +15,18 @@ interface CommentsListProps {
   hasMore: boolean;
   isInitialReady: boolean;
   isLoading: boolean;
-  loadMore: () => Promise<void>;
-  refresh: () => Promise<void>;
+  isRetrying: boolean;
 }
 
 const props = defineProps<CommentsListProps>();
 
+const emit = defineEmits<{
+  "delete-success": [];
+  "load-more": [];
+  "retry": [];
+}>();
+
 const { user } = useUser();
-const isRetrying = ref(false);
-
-const handleRetry = async () => {
-  if (isRetrying.value) return;
-
-  isRetrying.value = true;
-  try {
-    await props.refresh();
-  }
-  finally {
-    isRetrying.value = false;
-  }
-};
 </script>
 
 <template>
@@ -60,7 +52,7 @@ const handleRetry = async () => {
         variant="outline"
         size="sm"
         :disabled="isRetrying"
-        @click="handleRetry"
+        @click="emit('retry')"
       >
         <Spinner v-if="isRetrying" />
         Retry comments
@@ -111,11 +103,10 @@ const handleRetry = async () => {
             </span>
           </div>
           <Authorization :policy-check="user ? POLICIES['comment:delete'](user, comment) : false">
-            <DeleteComment
-              :comment-id="comment.id"
-              :refresh="props.refresh"
-              as-menu-item
+            <CommentActionsMenu
               :action-label="`Open comment actions for comment ${index + 1}`"
+              :comment-id="comment.id"
+              @success="emit('delete-success')"
             />
           </Authorization>
         </div>
@@ -130,7 +121,7 @@ const handleRetry = async () => {
     >
       <Button
         variant="outline"
-        @click="props.loadMore"
+        @click="emit('load-more')"
       >
         <Spinner v-if="props.isLoading && props.currentPage > 1" />
         <template v-else>

@@ -1,7 +1,6 @@
-import { defineComponent } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { within } from "@testing-library/vue";
-import { beforeEach, expect, test, vi } from "vitest";
+import { expect, test, vi } from "vitest";
 import CommentsList from "../CommentsList.vue";
 
 const comments = [{
@@ -18,22 +17,9 @@ const comments = [{
   updatedAt: "2026-07-10T00:00:00.000Z",
 }];
 
-const refresh = vi.fn();
-const loadMore = vi.fn();
-const DeleteCommentStub = defineComponent({
-  name: "DeleteComment",
-  props: ["commentId", "refresh", "asMenuItem", "actionLabel"],
-  template: "<button>Delete Comment</button>",
-});
-
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({ user: { value: null } }),
 }));
-
-beforeEach(() => {
-  refresh.mockReset().mockResolvedValue(undefined);
-  loadMore.mockReset().mockResolvedValue(undefined);
-});
 
 const mountCommentsList = (props: Partial<InstanceType<typeof CommentsList>["$props"]> = {}) => {
   return mountSuspended(CommentsList, {
@@ -44,14 +30,12 @@ const mountCommentsList = (props: Partial<InstanceType<typeof CommentsList>["$pr
       hasMore: false,
       isInitialReady: true,
       isLoading: false,
-      loadMore,
-      refresh,
+      isRetrying: false,
       ...props,
     },
     global: {
       stubs: {
         Authorization: { template: "<div><slot /></div>" },
-        DeleteComment: DeleteCommentStub,
         MarkdownPreview: {
           template: "<p>{{ value }}</p>",
           props: ["value"],
@@ -97,27 +81,16 @@ test("shows persistent recovery without presenting initial failure as successful
 });
 
 test("keeps persistent recovery visible and disables retry while it settles", async () => {
-  let resolveRetry!: () => void;
-  refresh.mockImplementationOnce(() => new Promise<void>((resolve) => {
-    resolveRetry = resolve;
-  }));
   const wrapper = await mountCommentsList({
     comments: [],
     hasInitialError: true,
     isInitialReady: false,
+    isRetrying: true,
   });
   const screen = within(wrapper.element as HTMLElement);
 
-  await screen.getByRole("button", { name: "Retry comments" }).click();
-
   expect(screen.getByRole("alert", { name: "Comments unavailable" })).toBeTruthy();
   expect(screen.getByRole("button", { name: "Retry comments" }).hasAttribute("disabled")).toBe(true);
-
-  resolveRetry();
-  await vi.waitFor(() => {
-    expect(screen.getByRole("button", { name: "Retry comments" }).hasAttribute("disabled")).toBe(false);
-  });
-  expect(refresh).toHaveBeenCalledOnce();
 });
 
 test("shows successful empty only after initial comments settle", async () => {
@@ -134,5 +107,5 @@ test("delegates pagination to the accumulated-state owner", async () => {
 
   await screen.getByRole("button", { name: /load more comments/i }).click();
 
-  expect(loadMore).toHaveBeenCalledOnce();
+  expect(wrapper.emitted("load-more")).toHaveLength(1);
 });

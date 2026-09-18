@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { reactive, watch } from "vue";
-import { useRegleSchema } from "@regle/schemas";
 import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { useFormSchema } from "~~/app/composables/useFormSchema";
 import { FormField } from "~~/app/components/form-field";
 import { Input } from "~~/app/components/ui/input";
 import { Textarea } from "~~/app/components/ui/textarea";
 import { useUpdateProfile } from "~users/app/composables/useUpdateProfile";
-import { updateProfileInputSchema, type UpdateProfileInput } from "~users/shared/schemas";
+import {
+  updateProfileInputSchema,
+  type UpdateProfileFormState,
+  type UpdateProfileInput,
+} from "~users/shared/schemas";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
 const props = defineProps<{
@@ -18,11 +22,11 @@ const emit = defineEmits<{
 const { addNotification } = useNotifications();
 const updateProfile = useUpdateProfile();
 
-const state = reactive<UpdateProfileInput>({
+const state = reactive<UpdateProfileFormState>({
   ...props.profile,
   bio: props.profile.bio ?? "",
 });
-const { r$ } = useRegleSchema(state, updateProfileInputSchema);
+const { r$ } = useFormSchema(state, updateProfileInputSchema);
 
 watch(
   () => props.profile,
@@ -35,8 +39,8 @@ watch(
   { deep: true },
 );
 
-const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput | undefined>) => {
-  const values = event.data ?? r$.$value;
+const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput>) => {
+  const values = event.data;
 
   try {
     await updateProfile(values);

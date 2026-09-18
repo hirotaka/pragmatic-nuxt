@@ -35,8 +35,8 @@ vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({ isAdmin: { value: true } }),
 }));
 
-const UpdateDiscussionStub = defineComponent({
-  name: "UpdateDiscussion",
+const UpdateDiscussionFormStub = defineComponent({
+  name: "UpdateDiscussionForm",
   props: ["body", "discussionId", "refresh", "title"],
   emits: ["success"],
   template: "<div />",
@@ -57,7 +57,7 @@ const mountDiscussionView = () => mountSuspended(DiscussionView, {
   props: { discussionId: discussion.id },
   global: {
     stubs: {
-      UpdateDiscussion: UpdateDiscussionStub,
+      UpdateDiscussionForm: UpdateDiscussionFormStub,
       MarkdownPreview: MarkdownPreviewStub,
     },
   },
@@ -70,9 +70,9 @@ test("renders discussion metadata and the update control", async () => {
   expect(wrapper.text()).toContain("Test User");
   expect(wrapper.text()).toContain("Update Discussion");
   await wrapper.get("button").trigger("click");
-  expect(wrapper.getComponent(UpdateDiscussionStub).props("discussionId")).toBe(discussion.id);
-  expect(wrapper.getComponent(UpdateDiscussionStub).props("title")).toBe(discussion.title);
-  expect(wrapper.getComponent(UpdateDiscussionStub).props("body")).toBe(discussion.body);
+  expect(wrapper.getComponent(UpdateDiscussionFormStub).props("discussionId")).toBe(discussion.id);
+  expect(wrapper.getComponent(UpdateDiscussionFormStub).props("title")).toBe(discussion.title);
+  expect(wrapper.getComponent(UpdateDiscussionFormStub).props("body")).toBe(discussion.body);
   expect(useDiscussionMock).toHaveBeenCalledWith(discussion.id);
 });
 

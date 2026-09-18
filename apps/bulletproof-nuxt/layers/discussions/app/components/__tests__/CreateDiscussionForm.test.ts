@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cleanup, waitFor } from "@testing-library/vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import CreateDiscussion from "../CreateDiscussion.vue";
+import CreateDiscussionForm from "../CreateDiscussionForm.vue";
 
 const { addNotification, createDiscussionMutate } = vi.hoisted(() => ({
   addNotification: vi.fn(),
@@ -31,9 +31,9 @@ function deferred() {
   return { promise, resolve };
 }
 
-const mountForm = () => mountSuspended(CreateDiscussion);
+const mountForm = () => mountSuspended(CreateDiscussionForm);
 
-test("CreateDiscussion blocks invalid submit and sends a valid payload", async () => {
+test("CreateDiscussionForm blocks invalid submit and sends a valid payload", async () => {
   const wrapper = await mountForm();
 
   await wrapper.get("form").trigger("submit");
@@ -52,7 +52,7 @@ test("CreateDiscussion blocks invalid submit and sends a valid payload", async (
   expect(wrapper.emitted("success")).toHaveLength(1);
 });
 
-test("CreateDiscussion ignores another submit while its mutation is pending", async () => {
+test("CreateDiscussionForm ignores another submit while its mutation is pending", async () => {
   const mutationSettlement = deferred();
   createDiscussionMutate.mockReturnValueOnce(mutationSettlement.promise);
   const wrapper = await mountForm();
@@ -68,7 +68,7 @@ test("CreateDiscussion ignores another submit while its mutation is pending", as
   await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
 });
 
-test("CreateDiscussion remains retryable after mutation failure", async () => {
+test("CreateDiscussionForm remains retryable after mutation failure", async () => {
   createDiscussionMutate.mockRejectedValueOnce(new Error("Create failed"));
   const wrapper = await mountForm();
 

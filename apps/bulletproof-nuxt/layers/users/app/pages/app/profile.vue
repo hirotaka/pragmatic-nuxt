@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { Pen } from "lucide-vue-next";
 import FormDrawer from "~~/app/components/app/FormDrawer.vue";
 import { Button } from "~~/app/components/ui/button";
-import UpdateProfile from "~users/app/components/UpdateProfile.vue";
+import UpdateProfileForm from "~users/app/components/UpdateProfileForm.vue";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
@@ -46,7 +46,7 @@ const profile = computed(() => ({
         </template>
 
         <template #default="{ close }">
-          <UpdateProfile
+          <UpdateProfileForm
             :profile="profile"
             @success="close"
           />

@@ -170,7 +170,7 @@ test("wires one accumulated-state owner through create refresh", async () => {
   await waitFor(() => expect(bodyScreen.queryByLabelText(/body/i)).toBeNull());
 });
 
-test("wires the owner refresh through CommentsList and real DeleteComment", async () => {
+test("wires the owner refresh through CommentsList and the real DeleteCommentDialog", async () => {
   commentsState.value = [{
     id: "comment-1",
     body: "Existing comment",
@@ -205,11 +205,9 @@ test("wires the owner refresh through CommentsList and real DeleteComment", asyn
 
   await waitFor(() => expect(loadComments).toHaveBeenCalledOnce());
   expect(deleteCommentMutate).toHaveBeenCalledWith("comment-1");
-  expect(bodyScreen.getByText(/are you sure you want to delete this comment/i)).toBeTruthy();
-
-  refreshSettlement.resolve();
-
   await waitFor(() => {
     expect(bodyScreen.queryByText(/are you sure you want to delete this comment/i)).toBeNull();
   });
+
+  refreshSettlement.resolve();
 });

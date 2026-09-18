@@ -1,36 +1,39 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { useRegleSchema } from "@regle/schemas";
 import { Form, type FormSubmitEvent } from "~~/app/components/form";
+import { useFormSchema } from "~~/app/composables/useFormSchema";
 import { FormField } from "~~/app/components/form-field";
 import { Textarea } from "~~/app/components/ui/textarea";
 import { useCreateComment } from "~comments/app/composables/useCreateComment";
-import { createCommentInputSchema, type CreateCommentInput } from "~comments/shared/schemas";
+import {
+  createCommentInputSchema,
+  type CreateCommentFormState,
+  type CreateCommentInput,
+} from "~comments/shared/schemas";
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
 
-interface CreateCommentProps {
+interface CreateCommentFormProps {
   disabled?: boolean;
   discussionId: string;
-  refresh: () => Promise<void>;
 }
 
-const props = defineProps<CreateCommentProps>();
+const props = defineProps<CreateCommentFormProps>();
 const emit = defineEmits<{
   success: [];
 }>();
 const { addNotification } = useNotifications();
 const createComment = useCreateComment();
 
-const state = reactive<CreateCommentInput>({
+const state = reactive<CreateCommentFormState>({
   body: "",
   discussionId: props.discussionId,
 });
-const { r$ } = useRegleSchema(state, createCommentInputSchema);
+const { r$ } = useFormSchema(state, createCommentInputSchema);
 
-const handleSubmit = async (event: FormSubmitEvent<CreateCommentInput | undefined>) => {
+const handleSubmit = async (event: FormSubmitEvent<CreateCommentInput>) => {
   if (props.disabled) return;
 
-  const values = event.data ?? r$.$value;
+  const values = event.data;
 
   try {
     await createComment(values);
@@ -43,7 +46,6 @@ const handleSubmit = async (event: FormSubmitEvent<CreateCommentInput | undefine
     type: "success",
     title: "Comment Created",
   });
-  await props.refresh().catch(() => undefined);
   emit("success");
 };
 </script>

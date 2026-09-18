@@ -1,5 +1,5 @@
 import type { InjectionKey } from "vue";
-import type { FormContextValue, FormError } from "./form-types";
+import type { FormContextValue, FormError, FormValidationResult } from "./form-types";
 
 export const FORM_CONTEXT_KEY: InjectionKey<FormContextValue> = Symbol("stackhacker-ui-form-context");
 
@@ -80,12 +80,40 @@ export function findFormErrors(errors: FormError[], name?: string, errorPattern?
   });
 }
 
-export async function validateWithSchema(schema: unknown, state: unknown): Promise<FormError[]> {
-  if (!schema) return [];
+export function getSchemaErrors(schema: unknown): FormError[] | undefined {
+  if (!isRecord(schema) || typeof schema.$validate !== "function") return undefined;
+  return normalizeFormErrors(schema.$errors);
+}
+
+export function touchSchemaField(schema: unknown, name: string): boolean {
+  if (!isRecord(schema) || typeof schema.$validate !== "function") return false;
+
+  let status: unknown = schema;
+  for (const segment of name.split(".")) {
+    if (!isRecord(status)) return false;
+    const fields = isRecord(status.$fields) ? status.$fields : status;
+    status = fields[segment];
+  }
+
+  if (!isRecord(status) || typeof status.$touch !== "function") return false;
+  status.$touch();
+  return true;
+}
+
+export async function validateWithSchema<TData = unknown>(
+  schema: unknown,
+  state: unknown,
+): Promise<FormValidationResult<TData>> {
+  if (!schema) return { data: state as TData, errors: [] };
 
   if (isRecord(schema) && typeof schema.$validate === "function") {
-    await schema.$validate();
-    return normalizeFormErrors(schema.$errors);
+    const result = await schema.$validate();
+    if (isRecord(result) && result.valid === true) {
+      return { data: result.data as TData, errors: [] };
+    }
+
+    const validationErrors = isRecord(result) ? result.errors : schema.$errors;
+    return { errors: normalizeFormErrors(validationErrors) };
   }
 
   if (isRecord(schema) && isRecord(schema["~standard"])) {
@@ -93,29 +121,34 @@ export async function validateWithSchema(schema: unknown, state: unknown): Promi
     if (typeof standard.validate === "function") {
       const result = await standard.validate(state);
       if (isRecord(result) && Array.isArray(result.issues)) {
-        return normalizeFormErrors(result.issues);
+        return { errors: normalizeFormErrors(result.issues) };
       }
-      return [];
+      return {
+        data: isRecord(result) ? result.value as TData : state as TData,
+        errors: [],
+      };
     }
   }
 
   if (isRecord(schema) && typeof schema.safeParse === "function") {
     const result = await schema.safeParse(state);
     if (isRecord(result) && result.success === false && isRecord(result.error)) {
-      return normalizeFormErrors(result.error.issues);
+      return { errors: normalizeFormErrors(result.error.issues) };
     }
-    return [];
+    return {
+      data: isRecord(result) ? result.data as TData : state as TData,
+      errors: [],
+    };
   }
 
   if (isRecord(schema) && typeof schema.parse === "function") {
     try {
-      await schema.parse(state);
-      return [];
+      return { data: await schema.parse(state) as TData, errors: [] };
     }
     catch (error) {
-      return normalizeFormErrors(isRecord(error) ? error.issues : error);
+      return { errors: normalizeFormErrors(isRecord(error) ? error.issues : error) };
     }
   }
 
-  return [];
+  return { data: state as TData, errors: [] };
 }

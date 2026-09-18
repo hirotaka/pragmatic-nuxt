@@ -1,24 +1,37 @@
-<script setup lang="ts" generic="TState = unknown">
+<script setup lang="ts" generic="TState = unknown, TSchema = unknown, TOutput = FormSchemaOutput<TSchema, TState>">
 import type { HTMLAttributes } from "vue";
-import type { FormErrorEvent, FormInputEvent, FormSubmitEvent, FormValidate } from "./form-types";
-import { computed, provide, ref, toRef } from "vue";
+import type {
+  FormErrorEvent,
+  FormSchemaOutput,
+  FormSubmitEvent,
+  FormValidate,
+} from "./form-types";
+import { computed, provide, ref, toRef, watchEffect } from "vue";
 import { cn } from "@/lib/utils";
-import { findFormErrors, FORM_CONTEXT_KEY, validateWithSchema } from "./form-utils";
+import {
+  findFormErrors,
+  FORM_CONTEXT_KEY,
+  getSchemaErrors,
+  touchSchemaField,
+  validateWithSchema,
+} from "./form-utils";
 
-export interface FormProps<TState = unknown> {
+export interface FormProps<
+  TState = unknown,
+  TSchema = unknown,
+  TOutput = FormSchemaOutput<TSchema, TState>,
+> {
   id?: string;
   state?: TState;
-  schema?: unknown;
+  schema?: TSchema;
   validate?: FormValidate<TState>;
-  validateOn?: FormInputEvent[];
   disabled?: boolean;
   loadingAuto?: boolean;
-  onSubmit?: (event: FormSubmitEvent<TState | undefined>) => Promise<void> | void;
+  onSubmit?: (event: FormSubmitEvent<TOutput>) => Promise<void> | void;
   class?: HTMLAttributes["class"];
 }
 
-const props = withDefaults(defineProps<FormProps<TState>>(), {
-  validateOn: () => ["blur"],
+const props = withDefaults(defineProps<FormProps<TState, TSchema, TOutput>>(), {
   disabled: false,
   loadingAuto: true,
   id: undefined,
@@ -34,7 +47,6 @@ defineOptions({
 });
 
 const emit = defineEmits<{
-  submit: [event: FormSubmitEvent<TState | undefined>];
   error: [event: FormErrorEvent<TState | undefined>];
 }>();
 
@@ -48,20 +60,32 @@ const loading = computed(() => props.loadingAuto && isSubmitting.value);
 const state = toRef(props, "state");
 const disabled = computed(() => props.disabled || loading.value);
 
-async function validateForm(event?: Event) {
-  const nextErrors = props.validate
-    ? await props.validate(props.state as TState)
-    : await validateWithSchema(props.schema, props.state);
+watchEffect(() => {
+  const schemaErrors = getSchemaErrors(props.schema);
+  if (schemaErrors) errors.value = schemaErrors;
+});
 
-  errors.value = nextErrors;
-  if (event && nextErrors.length) {
+async function runValidation(event?: Event) {
+  const result = props.validate
+    ? {
+        data: props.state as unknown as TOutput,
+        errors: await props.validate(props.state as TState),
+      }
+    : await validateWithSchema<TOutput>(props.schema, props.state);
+
+  errors.value = result.errors;
+  if (event && result.errors.length) {
     emit("error", {
       originalEvent: event,
-      errors: nextErrors,
+      errors: result.errors,
       data: props.state,
     });
   }
-  return nextErrors;
+  return result;
+}
+
+async function validateForm(event?: Event) {
+  return (await runValidation(event)).errors;
 }
 
 async function handleSubmit(event: SubmitEvent) {
@@ -70,33 +94,17 @@ async function handleSubmit(event: SubmitEvent) {
 
   isSubmitting.value = true;
   try {
-    const nextErrors = await validateForm(event);
-    if (nextErrors.length) return;
+    const result = await runValidation(event);
+    if (result.errors.length) return;
 
     await props.onSubmit?.({
       originalEvent: event,
-      data: props.state,
+      data: result.data as TOutput,
     });
   }
   finally {
     isSubmitting.value = false;
   }
-}
-
-function shouldValidateOn(type: FormInputEvent) {
-  return props.validateOn.includes(type);
-}
-
-async function onInput(event: Event) {
-  if (shouldValidateOn("input")) await validateForm(event);
-}
-
-async function onChange(event: Event) {
-  if (shouldValidateOn("change")) await validateForm(event);
-}
-
-async function onBlur(event: Event) {
-  if (shouldValidateOn("blur")) await validateForm(event);
 }
 
 provide(FORM_CONTEXT_KEY, {
@@ -105,19 +113,18 @@ provide(FORM_CONTEXT_KEY, {
   state,
   validate: validateForm,
   getFieldErrors: (name, errorPattern) => findFormErrors(errors.value, name, errorPattern),
+  touchField: name => touchSchemaField(props.schema, name),
 });
 </script>
 
 <template>
   <form
     :id="id"
+    novalidate
     data-slot="form"
     :data-disabled="disabled ? '' : undefined"
     :class="cn(props.class)"
     @submit="handleSubmit"
-    @input.capture="onInput"
-    @change.capture="onChange"
-    @blur.capture="onBlur"
   >
     <slot :loading="loading" />
   </form>

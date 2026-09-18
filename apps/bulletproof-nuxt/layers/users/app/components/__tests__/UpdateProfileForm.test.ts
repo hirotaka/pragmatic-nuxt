@@ -3,7 +3,7 @@ import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { mockNuxtImport, mountSuspended, registerEndpoint } from "@nuxt/test-utils/runtime";
 import { readBody, setResponseStatus } from "h3";
 import { cleanup, waitFor } from "@testing-library/vue";
-import UpdateProfile from "../UpdateProfile.vue";
+import UpdateProfileForm from "../UpdateProfileForm.vue";
 
 const { addNotification, refreshSession, session } = vi.hoisted(() => ({
   addNotification: vi.fn(),
@@ -36,9 +36,9 @@ beforeEach(() => {
 
 afterEach(() => cleanup());
 
-const mountForm = () => mountSuspended(UpdateProfile, { props: { profile } });
+const mountForm = () => mountSuspended(UpdateProfileForm, { props: { profile } });
 
-test("UpdateProfile populates values and submits normalized payload", async () => {
+test("UpdateProfileForm populates values and submits normalized payload", async () => {
   let capturedBody: Record<string, unknown> | undefined;
   registerEndpoint("/api/profile", {
     method: "PATCH",
@@ -60,7 +60,7 @@ test("UpdateProfile populates values and submits normalized payload", async () =
   expect(addNotification).toHaveBeenCalledWith({ type: "success", title: "Profile Updated" });
 });
 
-test("UpdateProfile does not emit success when session refresh settles empty", async () => {
+test("UpdateProfileForm does not emit success when session refresh settles empty", async () => {
   refreshSession.mockImplementationOnce(async () => {
     session.value = null;
   });
@@ -82,7 +82,7 @@ test("UpdateProfile does not emit success when session refresh settles empty", a
   });
 });
 
-test("UpdateProfile blocks invalid input before calling profile API", async () => {
+test("UpdateProfileForm blocks invalid input before calling profile API", async () => {
   const profileHandler = vi.fn();
   registerEndpoint("/api/profile", { method: "PATCH", handler: profileHandler });
   const wrapper = await mountForm();
@@ -94,7 +94,7 @@ test("UpdateProfile blocks invalid input before calling profile API", async () =
   expect(profileHandler).not.toHaveBeenCalled();
 });
 
-test("UpdateProfile remains retryable after API failure", async () => {
+test("UpdateProfileForm remains retryable after API failure", async () => {
   let attempts = 0;
   registerEndpoint("/api/profile", {
     method: "PATCH",

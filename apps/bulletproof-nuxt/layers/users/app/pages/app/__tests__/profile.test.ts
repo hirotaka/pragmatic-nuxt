@@ -26,7 +26,7 @@ describe("Profile page", () => {
     const wrapper = await mountSuspended(ProfilePage, {
       global: {
         stubs: {
-          UpdateProfile: {
+          UpdateProfileForm: {
             props: ["profile"],
             emits: ["success"],
             template: "<div />",

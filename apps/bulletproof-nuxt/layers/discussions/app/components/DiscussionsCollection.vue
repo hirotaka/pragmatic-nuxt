@@ -42,7 +42,7 @@ const handleCreateSuccess = async (close: () => void) => {
         </template>
 
         <template #default="{ close }">
-          <CreateDiscussion @success="handleCreateSuccess(close)" />
+          <CreateDiscussionForm @success="handleCreateSuccess(close)" />
         </template>
 
         <template #submitButton>

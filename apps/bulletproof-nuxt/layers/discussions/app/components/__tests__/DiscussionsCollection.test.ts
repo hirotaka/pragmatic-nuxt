@@ -40,8 +40,8 @@ const mountCollection = () => mountSuspended(DiscussionsCollection, {
       LayoutsContentLayout: {
         template: "<section><slot name='actions' /><slot /></section>",
       },
-      CreateDiscussion: {
-        name: "CreateDiscussion",
+      CreateDiscussionForm: {
+        name: "CreateDiscussionForm",
         emits: ["success"],
         template: "<div />",
       },
@@ -81,7 +81,7 @@ test("keeps list refresh ownership in the collection", async () => {
   const list = wrapper.findComponent({ name: "DiscussionsList" });
   const createTrigger = wrapper.findAll("button").find(button => button.text().includes("Create Discussion"));
   await createTrigger!.trigger("click");
-  const create = wrapper.findComponent({ name: "CreateDiscussion" });
+  const create = wrapper.findComponent({ name: "CreateDiscussionForm" });
 
   expect(list.props("discussions")).toEqual(discussions);
   expect(list.props("isPending")).toBe(false);
@@ -90,7 +90,7 @@ test("keeps list refresh ownership in the collection", async () => {
 
   create.vm.$emit("success");
   await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
-  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussion" }).exists()).toBe(false));
+  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussionForm" }).exists()).toBe(false));
 });
 
 test("closes the create drawer when refreshing the collection fails", async () => {
@@ -99,8 +99,8 @@ test("closes the create drawer when refreshing the collection fails", async () =
   const createTrigger = wrapper.findAll("button").find(button => button.text().includes("Create Discussion"));
   await createTrigger!.trigger("click");
 
-  wrapper.findComponent({ name: "CreateDiscussion" }).vm.$emit("success");
+  wrapper.findComponent({ name: "CreateDiscussionForm" }).vm.$emit("success");
 
   await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
-  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussion" }).exists()).toBe(false));
+  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussionForm" }).exists()).toBe(false));
 });

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cleanup, waitFor } from "@testing-library/vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import UpdateDiscussion from "../UpdateDiscussion.vue";
+import UpdateDiscussionForm from "../UpdateDiscussionForm.vue";
 
 const { addNotification, discussionRefresh, updateDiscussionMutate } = vi.hoisted(() => ({
   addNotification: vi.fn(),
@@ -25,7 +25,7 @@ beforeEach(() => {
 
 afterEach(() => cleanup());
 
-const mountForm = () => mountSuspended(UpdateDiscussion, {
+const mountForm = () => mountSuspended(UpdateDiscussionForm, {
   props: {
     body: "Existing body",
     discussionId: "discussion-1",
@@ -34,7 +34,7 @@ const mountForm = () => mountSuspended(UpdateDiscussion, {
   },
 });
 
-test("UpdateDiscussion preloads current values and submits changed data", async () => {
+test("UpdateDiscussionForm preloads current values and submits changed data", async () => {
   const wrapper = await mountForm();
   const title = wrapper.get("input[name='title']").element;
 
@@ -59,7 +59,7 @@ test("UpdateDiscussion preloads current values and submits changed data", async 
   expect(wrapper.emitted("success")).toHaveLength(1);
 });
 
-test("UpdateDiscussion keeps mutation success when its refresh rejects", async () => {
+test("UpdateDiscussionForm keeps mutation success when its refresh rejects", async () => {
   discussionRefresh.mockRejectedValueOnce(new Error("Refresh failed"));
   const wrapper = await mountForm();
 
@@ -71,7 +71,7 @@ test("UpdateDiscussion keeps mutation success when its refresh rejects", async (
   expect(wrapper.emitted("success")).toHaveLength(1);
 });
 
-test("UpdateDiscussion remains retryable after mutation failure", async () => {
+test("UpdateDiscussionForm remains retryable after mutation failure", async () => {
   updateDiscussionMutate.mockRejectedValueOnce(new Error("Update failed"));
   const wrapper = await mountForm();
 
