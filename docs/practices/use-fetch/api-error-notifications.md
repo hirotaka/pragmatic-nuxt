@@ -3,7 +3,7 @@ title: Present API Failures from Custom Fetchers
 semanticId: api-error-notifications
 category: failure-and-workflow-outcomes
 prerequisites: [custom-api-fetchers]
-status: proposed
+status: confirmed
 ---
 
 # Present API Failures from Custom Fetchers
