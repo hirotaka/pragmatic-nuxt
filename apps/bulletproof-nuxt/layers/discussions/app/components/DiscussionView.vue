@@ -1,17 +1,27 @@
 <script setup lang="ts">
+import { Pen } from "lucide-vue-next";
+import FormDrawer from "~~/app/components/app/FormDrawer.vue";
 import MarkdownPreview from "~~/app/components/app/MarkdownPreview.vue";
+import { Button } from "~~/app/components/ui/button";
 import { Card, CardContent, CardHeader } from "~~/app/components/ui/card";
-import UpdateDiscussion from "./UpdateDiscussion.vue";
+import UpdateDiscussionForm from "./UpdateDiscussionForm.vue";
 import { formatDate } from "#layers/base/app/utils/format";
 import { useDiscussion } from "~discussions/app/composables/useDiscussion";
+import { useUser } from "#layers/auth/app/composables/useUser";
 
 interface DiscussionViewProps {
   discussionId: string;
 }
 
 const props = defineProps<DiscussionViewProps>();
+const { isAdmin } = useUser();
 
-const { data: discussion } = await useDiscussion(() => props.discussionId);
+const { data: discussion, refresh } = await useDiscussion(() => props.discussionId);
+
+const handleUpdateSuccess = async (close: () => void) => {
+  await refresh().catch(() => undefined);
+  close();
+};
 </script>
 
 <template>
@@ -24,9 +34,41 @@ const { data: discussion } = await useDiscussion(() => props.discussionId);
             by {{ discussion.author.firstName }} {{ discussion.author.lastName }}
           </span>
         </div>
-        <UpdateDiscussion
-          :discussion-id="discussion.id"
-        />
+        <FormDrawer
+          v-if="isAdmin"
+          title="Update Discussion"
+        >
+          <template #triggerButton>
+            <Button
+              variant="outline"
+              size="sm"
+            >
+              <template #icon>
+                <Pen class="size-4" />
+              </template>
+              Update Discussion
+            </Button>
+          </template>
+
+          <template #default="{ close }">
+            <UpdateDiscussionForm
+              :body="discussion.body"
+              :discussion-id="discussion.id"
+              :title="discussion.title"
+              @success="handleUpdateSuccess(close)"
+            />
+          </template>
+
+          <template #submitButton>
+            <Button
+              type="submit"
+              form="update-discussion"
+              size="sm"
+            >
+              Submit
+            </Button>
+          </template>
+        </FormDrawer>
       </div>
     </CardHeader>
     <CardContent>

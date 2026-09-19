@@ -5,4 +5,5 @@ export const createCommentInputSchema = z.object({
   discussionId: z.string().min(1, "Discussion ID is required"),
 });
 
-export type CreateCommentInput = z.infer<typeof createCommentInputSchema>;
+export type CreateCommentFormState = z.input<typeof createCommentInputSchema>;
+export type CreateCommentInput = z.output<typeof createCommentInputSchema>;

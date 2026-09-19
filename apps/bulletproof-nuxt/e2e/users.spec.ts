@@ -83,7 +83,8 @@ async function registerIsolatedAccount(page: Page, label: string, teamId?: strin
 
 async function openUserDeleteDialog(page: Page, email: string) {
   const row = page.getByRole("row").filter({ hasText: email });
-  await row.getByRole("button", { name: "Delete User", exact: true }).click();
+  await row.getByRole("button", { name: /Open user actions for/ }).click();
+  await page.getByRole("menuitem", { name: "Delete User" }).click();
   return page.getByRole("dialog", { name: "Delete User" });
 }
 
@@ -114,7 +115,7 @@ test("direct users collection is SSR-rendered without a hydration GET", { tag: [
   expect(browserUserGets).toBe(0);
 });
 
-test("user delete stays pending until its users refresh settles", { tag: ["@users", "@mutation-refresh"] }, async ({ page, goto }) => {
+test("user delete closes after mutation while its users refresh settles", { tag: ["@users", "@mutation-refresh"] }, async ({ page, goto }) => {
   await goto("/app/users", { waitUntil: "hydration" });
   const member = await createSameTeamMember(page, "user-delete-refresh");
   await page.reload({ waitUntil: "networkidle" });
@@ -142,13 +143,8 @@ test("user delete stays pending until its users refresh settles", { tag: ["@user
   await expect.poll(() => refreshGetCount).toBe(1);
   await expect(page.locator("table").getByText(member.email)).toBeVisible();
   await expect(page.getByLabel("User Deleted")).toHaveCount(1);
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole("button", { name: "Delete User" })).toBeDisabled();
-  await expect(dialog.getByRole("button", { name: "Cancel" })).toBeDisabled();
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeVisible();
+  await expect(dialog).toBeHidden();
 
   refresh.resolve();
-  await expect(dialog).toBeHidden();
   await expect(page.getByText(member.email)).toHaveCount(0);
 });

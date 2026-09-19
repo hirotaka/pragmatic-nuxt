@@ -1,8 +1,20 @@
 import { beforeEach, expect, test, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import type { Component } from "vue";
+import { nextTick, ref, type Component, type Ref } from "vue";
 import type { Discussion, PaginatedDiscussions } from "~discussions/shared/types";
 import DiscussionsList from "../DiscussionsList.vue";
+
+const { useDiscussions } = vi.hoisted(() => ({
+  useDiscussions: vi.fn(),
+}));
+
+vi.mock("~discussions/app/composables/useDiscussions", () => ({
+  useDiscussions,
+}));
+
+vi.mock("#layers/auth/app/composables/useUser", () => ({
+  useUser: () => ({ isAdmin: { value: true } }),
+}));
 
 const discussions: Discussion[] = [
   {
@@ -54,66 +66,67 @@ const emptyDiscussions: PaginatedDiscussions = {
     hasMore: false,
   },
 };
-const refresh = vi.fn();
 
-vi.mock("#layers/auth/app/composables/useUser", () => ({
-  useUser: () => ({ isAdmin: { value: true } }),
-}));
+const refreshAfterDelete = vi.fn();
+let currentPage: Ref<number>;
+let data: Ref<PaginatedDiscussions | undefined>;
+let status: Ref<string>;
 
 beforeEach(() => {
-  refresh.mockReset().mockResolvedValue(undefined);
+  currentPage = ref(1);
+  data = ref(paginatedDiscussions);
+  status = ref("success");
+  refreshAfterDelete.mockReset().mockResolvedValue(undefined);
+  useDiscussions.mockReset().mockResolvedValue({ currentPage, data, refreshAfterDelete, status });
 });
 
-const mountDiscussionsList = (
-  props: Partial<InstanceType<typeof DiscussionsList>["$props"]>,
-  dataTableStub: Component,
-) => mountSuspended(DiscussionsList, {
-  props: {
-    discussions: paginatedDiscussions,
-    isPending: false,
-    refresh,
-    ...props,
-  },
+const mountDiscussionsList = (dataTableStub: Component) => mountSuspended(DiscussionsList, {
   global: {
     stubs: {
       DataTable: dataTableStub,
-      DeleteDiscussion: true,
+      DiscussionActionsMenu: true,
       Spinner: { template: "<div data-testid='spinner' />" },
     },
   },
 });
 
-test("emits page changes without calling a domain Read", async () => {
-  const wrapper = await mountDiscussionsList({}, {
+test("owns the current page and updates its reactive Read query", async () => {
+  const wrapper = await mountDiscussionsList({
     template: "<button type='button' @click=\"$emit('page-change', 2)\">Next page</button>",
     props: ["data", "columns", "pagination"],
     emits: ["page-change"],
   });
+  expect(useDiscussions).toHaveBeenCalledWith();
+  expect(currentPage.value).toBe(1);
 
   await wrapper.get("button").trigger("click");
 
-  expect(wrapper.emitted("pageChange")).toEqual([[2]]);
+  expect(currentPage.value).toBe(2);
 });
 
 test.each([
   { name: "empty", response: emptyDiscussions, content: "No Entries Found" },
   { name: "nonempty", response: paginatedDiscussions, content: "First Discussion" },
 ])("keeps a fetched $name table mounted throughout refresh", async ({ response, content }) => {
-  const wrapper = await mountDiscussionsList({ discussions: response }, {
+  data.value = response;
+  const wrapper = await mountDiscussionsList({
     template: "<div data-testid='data-table'>{{ data.length ? data[0].title : emptyTitle }}</div>",
     props: ["data", "columns", "pagination", "emptyTitle"],
   });
   const table = wrapper.get("[data-testid='data-table']").element;
   expect(wrapper.text()).toContain(content);
 
-  await wrapper.setProps({ isPending: true });
+  status.value = "pending";
+  await nextTick();
 
   expect(wrapper.get("[data-testid='data-table']").element).toBe(table);
   expect(wrapper.text()).toContain(content);
   expect(wrapper.text()).toContain("Refreshing discussions...");
   expect(wrapper.find("[data-testid='spinner']").exists()).toBe(false);
 
-  await wrapper.setProps({ isPending: false, discussions: paginatedDiscussions });
+  status.value = "success";
+  data.value = paginatedDiscussions;
+  await nextTick();
 
   expect(wrapper.get("[data-testid='data-table']").element).toBe(table);
   expect(wrapper.text()).toContain("First Discussion");
@@ -121,7 +134,7 @@ test.each([
 });
 
 test("reserves the refresh message space before, during, and after refresh", async () => {
-  const wrapper = await mountDiscussionsList({}, {
+  const wrapper = await mountDiscussionsList({
     template: "<div />",
     props: ["data", "columns", "pagination"],
   });
@@ -129,26 +142,40 @@ test("reserves the refresh message space before, during, and after refresh", asy
   expect(message.classes()).toContain("min-h-5");
   expect(message.text()).toBe("");
 
-  await wrapper.setProps({ isPending: true });
+  status.value = "pending";
+  await nextTick();
   expect(wrapper.get("[aria-live='polite']").element).toBe(message.element);
   expect(message.text()).toBe("Refreshing discussions...");
 
-  await wrapper.setProps({ isPending: false });
+  status.value = "success";
+  await nextTick();
   expect(wrapper.get("[aria-live='polite']").element).toBe(message.element);
   expect(message.text()).toBe("");
 });
 
-test("renders the empty state when the list succeeds with no discussions", async () => {
-  const wrapper = await mountDiscussionsList({ discussions: emptyDiscussions }, {
-    template: "<p>{{ emptyTitle }}</p>",
-    props: ["data", "columns", "pagination", "emptyTitle"],
+test("settles its data after successful deletion", async () => {
+  const wrapper = await mountSuspended(DiscussionsList, {
+    global: {
+      stubs: {
+        DataTable: {
+          props: ["data"],
+          template: "<div><slot name='cell-delete' :entry='data[0]' /></div>",
+        },
+        DiscussionActionsMenu: {
+          emits: ["success"],
+          template: "<button type='button' @click='$emit(\"success\")'>Delete succeeded</button>",
+        },
+      },
+    },
   });
 
-  expect(wrapper.text()).toContain("No Entries Found");
+  await wrapper.get("button").trigger("click");
+
+  expect(refreshAfterDelete).toHaveBeenCalledOnce();
 });
 
 test("renders discussion rows", async () => {
-  const wrapper = await mountDiscussionsList({}, {
+  const wrapper = await mountDiscussionsList({
     template: `
       <table>
         <tbody>

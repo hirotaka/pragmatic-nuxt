@@ -101,5 +101,5 @@ This practice addresses response structure, not which fields a user may access o
 - [Treat API Payloads as Serialized JSON Values](serialized-api-payloads.md)
 - [Use Custom Fetchers for Your API](custom-api-fetchers.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
-- [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
+- [Present API Failures from Custom Fetchers](api-error-notifications.md)
 - [Share Pagination Mechanics and Choose the Collection Strategy](pagination-strategies.md)

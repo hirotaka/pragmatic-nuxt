@@ -23,8 +23,34 @@ const handleSuccess = () => {
 </script>
 
 <template>
-  <RegisterForm
-    :teams="teamsData"
-    @success="handleSuccess"
-  />
+  <Card>
+    <CardHeader class="px-5 py-4 text-center">
+      <div class="flex justify-center">
+        <Badge variant="secondary">
+          Demo workspace
+        </Badge>
+      </div>
+      <CardTitle class="text-xl">
+        Create your account
+      </CardTitle>
+      <CardDescription>
+        Start a new team or join an existing one. Demo data is periodically cleared.
+      </CardDescription>
+    </CardHeader>
+    <CardContent class="px-5 pb-4">
+      <RegisterForm
+        :teams="teamsData"
+        @success="handleSuccess"
+      />
+      <div class="mt-4 text-center text-sm">
+        Already have an account?
+        <NuxtLink
+          :to="`/auth/login${redirectTo ? `?redirectTo=${redirectTo}` : ''}`"
+          class="font-medium underline underline-offset-4"
+        >
+          Log in
+        </NuxtLink>
+      </div>
+    </CardContent>
+  </Card>
 </template>

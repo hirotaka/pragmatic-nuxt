@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import UpdateProfile from "~users/app/components/UpdateProfile.vue";
+import { computed } from "vue";
+import { Pen } from "lucide-vue-next";
+import FormDrawer from "~~/app/components/app/FormDrawer.vue";
+import { Button } from "~~/app/components/ui/button";
+import UpdateProfileForm from "~users/app/components/UpdateProfileForm.vue";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
@@ -13,6 +17,12 @@ useHead({
 });
 
 const { user } = useUser();
+const profile = computed(() => ({
+  email: user.value?.email ?? "",
+  firstName: user.value?.firstName ?? "",
+  lastName: user.value?.lastName ?? "",
+  bio: user.value?.bio ?? "",
+}));
 </script>
 
 <template>
@@ -22,7 +32,36 @@ const { user } = useUser();
     description="Manage the account details used across this workspace."
   >
     <template #actions>
-      <UpdateProfile />
+      <FormDrawer title="Update Profile">
+        <template #triggerButton>
+          <Button
+            variant="outline"
+            size="sm"
+          >
+            <template #icon>
+              <Pen class="size-4" />
+            </template>
+            Update Profile
+          </Button>
+        </template>
+
+        <template #default="{ close }">
+          <UpdateProfileForm
+            :profile="profile"
+            @success="close"
+          />
+        </template>
+
+        <template #submitButton>
+          <Button
+            type="submit"
+            form="update-profile"
+            size="sm"
+          >
+            Submit
+          </Button>
+        </template>
+      </FormDrawer>
     </template>
     <Card>
       <CardHeader>

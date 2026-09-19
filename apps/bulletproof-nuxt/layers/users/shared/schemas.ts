@@ -7,4 +7,5 @@ export const updateProfileInputSchema = z.object({
   bio: z.string().optional(),
 });
 
-export type UpdateProfileInput = z.infer<typeof updateProfileInputSchema>;
+export type UpdateProfileFormState = z.input<typeof updateProfileInputSchema>;
+export type UpdateProfileInput = z.output<typeof updateProfileInputSchema>;

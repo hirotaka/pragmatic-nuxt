@@ -105,60 +105,30 @@ test("discussion content waits for the initial comments response", { tag: ["@com
   await expect(page.getByRole("button", { name: "Create Comment" })).toBeEnabled();
 });
 
-test("failed initial comments provide persistent recovery and retry to success", { tag: ["@comments", "@initial-read"] }, async ({ page }) => {
+test("unexpected initial comment read failures open the error page", { tag: ["@comments", "@initial-read"] }, async ({ page }) => {
   await registerIsolatedUser(page, "comments-failure");
   const discussion = await createDiscussion(page, `Comments failure ${Date.now()}`);
   await page.goto("/app/discussions", { waitUntil: "networkidle" });
 
-  let failCommentsRead = true;
-  const retryStarted = deferred();
-  const retryRelease = deferred();
   await page.route((url) => {
     return url.pathname === "/api/comments"
       && url.searchParams.get("discussionId") === discussion.id;
-  }, async (route) => {
-    if (failCommentsRead) {
-      await route.fulfill({
-        status: 500,
-        contentType: "application/json",
-        body: JSON.stringify({ message: "Initial comments GET failed" }),
-      });
-      return;
-    }
-
-    retryStarted.resolve();
-    await retryRelease.promise;
-    await route.continue();
-  });
+  }, async route => route.fulfill({
+    status: 500,
+    contentType: "application/json",
+    body: JSON.stringify({ message: "Initial comments GET failed" }),
+  }));
 
   const row = page.getByRole("row").filter({ hasText: discussion.title });
   await row.getByRole("link", { name: "View" }).click();
 
-  await expect(page).toHaveURL(new RegExp(`/app/discussions/${discussion.id}$`));
-  await expect(page.getByRole("heading", { name: discussion.title })).toBeVisible();
-  await expect(page.getByLabel("Error").first()).toBeVisible();
-  await expect(page.getByText("Initial comments GET failed").first()).toBeVisible();
-  await expect(page.getByRole("alert", { name: "Comments unavailable" })).toBeVisible();
-  await expect(page.getByRole("status", { name: "Loading comments" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "No Comments Found" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Create Comment" })).toBeDisabled();
-
-  failCommentsRead = false;
-  await page.getByRole("button", { name: "Retry comments" }).click();
-  await retryStarted.promise;
-
-  await expect(page.getByRole("alert", { name: "Comments unavailable" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Retry comments" })).toBeDisabled();
-  await expect(page.getByRole("button", { name: "Create Comment" })).toBeDisabled();
-
-  retryRelease.resolve();
-
-  await expect(page.getByRole("alert", { name: "Comments unavailable" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "No Comments Found" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Create Comment" })).toBeEnabled();
+  await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
+  await expect(page.getByText("Initial comments GET failed")).toBeVisible();
+  await expect(page.getByLabel("Error")).toHaveCount(0);
 });
 
-test("failed later comments page keeps the comments already displayed", { tag: ["@comments", "@pagination"] }, async ({ page }) => {
+test("unexpected later comment page failures open the error page", { tag: ["@comments", "@pagination"] }, async ({ page }) => {
   const discussionId = await createDiscussionForComments(page, "comments-later-page-failure");
   const commentBodies = Array.from(
     { length: 11 },
@@ -196,14 +166,12 @@ test("failed later comments page keeps the comments already displayed", { tag: [
   await page.getByRole("button", { name: "Load More Comments" }).click();
 
   await expect.poll(() => laterPageGetCount).toBeGreaterThan(0);
-  await expect(page.getByText("Later comments page failed").first()).toBeVisible();
-  for (const label of displayedLabels) {
-    await expect(page.getByLabel(label, { exact: true })).toBeVisible();
-  }
-  await expect(page.getByRole("button", { name: "Load More Comments" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
+  await expect(page.getByText("Later comments page failed")).toBeVisible();
 });
 
-test("comment create stays pending until its comments refresh settles", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
+test("comment create closes after its comments refresh settles", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
   const discussionId = await createDiscussionForComments(page, "comment-create-refresh");
   const commentBody = "Created after delayed refresh";
 
@@ -230,16 +198,13 @@ test("comment create stays pending until its comments refresh settles", { tag: [
   await expect.poll(() => refreshGetCount).toBe(1);
   await expect(page.getByLabel("Comment Created")).toHaveCount(1);
   await expect(drawer).toBeVisible();
-  await expect(drawer.getByRole("button", { name: "Submit" })).toBeDisabled();
-  await page.keyboard.press("Escape");
-  await expect(drawer).toBeVisible();
 
   refresh.resolve();
   await expect(page.getByText(commentBody)).toBeVisible();
   await expect(drawer).toBeHidden();
 });
 
-test("failed post-delete comments refresh preserves success ordering and existing rows", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
+test("unexpected post-delete comment refresh failures open the error page", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
   const discussionId = await createDiscussionForComments(page, "comment-delete-refresh-failure");
   const commentBody = "Deleted before failed refresh";
   await expectCreatedResponse(await page.request.post(new URL("/api/comments", page.url()).href, {
@@ -270,15 +235,11 @@ test("failed post-delete comments refresh preserves success ordering and existin
   failRefresh = true;
   await dialog.getByRole("button", { name: "Delete Comment" }).click();
 
-  await expect.poll(() => refreshGetCount).toBe(2);
-  const alerts = page.locator("[aria-live='assertive'] [role='alert']");
-  await expect(alerts).toHaveCount(3);
-  await expect(alerts.nth(0)).toHaveAttribute("aria-label", "Comment Deleted");
-  await expect(alerts.nth(1)).toHaveAttribute("aria-label", "Error");
-  await expect(alerts.nth(2)).toHaveAttribute("aria-label", "Error");
-  await expect(page.getByText("Comments refresh failed")).toHaveCount(2);
-  await expect(dialog).toBeHidden();
-  await expect(page.getByText(commentBody)).toBeVisible();
+  await expect.poll(() => refreshGetCount).toBeGreaterThan(0);
+  await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
+  await expect(page.getByText("Comments refresh failed")).toBeVisible();
+  await expect(page.getByLabel("Error")).toHaveCount(0);
 
   const persisted = await expectJson(await page.request.get(
     new URL(`/api/comments?discussionId=${discussionId}`, page.url()).href,

@@ -1,36 +1,23 @@
 <script setup lang="ts">
 import DataTable from "~~/app/components/app/DataTable.vue";
-import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
-import { Button } from "~~/app/components/ui/button";
-import { computed, onUnmounted, ref, unref } from "vue";
+import { computed, unref } from "vue";
 import { Badge } from "~~/app/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~~/app/components/ui/card";
 import { useUsers } from "~users/app/composables/useUsers";
-import { useDeleteUser } from "~users/app/composables/useDeleteUser";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
 import { useUser } from "#layers/auth/app/composables/useUser";
+import UserActionsMenu from "./UserActionsMenu.vue";
 import { formatDate } from "#layers/base/app/utils/format";
 import type { User } from "~auth/shared/types";
 import type { TableColumn } from "~~/app/components/app/data-table";
 
 const { data, refresh } = await useUsers();
 const { user } = useUser();
-const { addNotification } = useNotifications();
-const deleteUser = useDeleteUser();
-const selectedUserId = ref<string>();
-const isDeletePending = ref(false);
 
 const users = computed(() => unref(data));
 
 const adminCount = computed(() => users.value?.filter(user => user.role === "ADMIN").length ?? 0);
 const memberCount = computed(() => users.value?.filter(user => user.role !== "ADMIN").length ?? 0);
 const latestUser = computed(() => users.value?.[0]);
-const selectedUser = computed(() => users.value?.find(entry => entry.id === selectedUserId.value));
-let active = true;
-
-onUnmounted(() => {
-  active = false;
-});
 
 const columns: TableColumn<User>[] = [
   { title: "First Name", field: "firstName" },
@@ -41,36 +28,8 @@ const columns: TableColumn<User>[] = [
   { title: "", field: "id", name: "delete" },
 ];
 
-const selectUserForDeletion = (id: string) => {
-  if (!active || isDeletePending.value || user.value?.id === id) return;
-  selectedUserId.value = id;
-};
-
-const handleDelete = async () => {
-  const id = selectedUserId.value;
-  if (!id || isDeletePending.value || user.value?.id === id) return;
-
-  isDeletePending.value = true;
-  try {
-    await deleteUser(id);
-  }
-  catch {
-    isDeletePending.value = false;
-    return;
-  }
-
-  addNotification({
-    type: "success",
-    title: "User Deleted",
-  });
-
-  if (!active) return;
-
+const refreshUsers = async () => {
   await refresh().catch(() => undefined);
-  if (!active || selectedUserId.value !== id) return;
-
-  selectedUserId.value = undefined;
-  isDeletePending.value = false;
 };
 </script>
 
@@ -109,14 +68,12 @@ const handleDelete = async () => {
         {{ formatDate(entry.createdAt) }}
       </template>
       <template #cell-delete="{ entry }">
-        <Button
+        <UserActionsMenu
           v-if="user?.id !== entry.id"
-          variant="destructive"
-          aria-label="Delete User"
-          @click="selectUserForDeletion(entry.id)"
-        >
-          Delete
-        </Button>
+          :user="entry"
+          :action-label="`Open user actions for ${entry.firstName} ${entry.lastName}`"
+          @success="refreshUsers"
+        />
       </template>
     </DataTable>
   </div>
@@ -129,7 +86,7 @@ const handleDelete = async () => {
       <div class="flex min-w-0 items-start justify-between gap-3">
         <div class="grid min-w-0 gap-1">
           <CardTitle>User directory</CardTitle>
-          <p class="break-words text-sm text-muted-foreground">
+          <p class="wrap-break-word text-sm text-muted-foreground">
             Monitor team access, roles, and account creation activity.
           </p>
         </div>
@@ -157,7 +114,7 @@ const handleDelete = async () => {
         >
           <div class="flex min-w-0 items-start justify-between gap-3">
             <div class="grid min-w-0 gap-1">
-              <p class="break-words text-sm font-semibold text-foreground">
+              <p class="wrap-break-word text-sm font-semibold text-foreground">
                 {{ entry.firstName }} {{ entry.lastName }}
               </p>
               <p class="break-all text-sm text-muted-foreground">
@@ -190,14 +147,12 @@ const handleDelete = async () => {
             </div>
           </dl>
           <div class="flex justify-end">
-            <Button
+            <UserActionsMenu
               v-if="user?.id !== entry.id"
-              variant="destructive"
-              aria-label="Delete User"
-              @click="selectUserForDeletion(entry.id)"
-            >
-              Delete
-            </Button>
+              :user="entry"
+              :action-label="`Open user actions for ${entry.firstName} ${entry.lastName}`"
+              @success="refreshUsers"
+            />
           </div>
         </li>
       </ul>
@@ -253,13 +208,4 @@ const handleDelete = async () => {
       </CardContent>
     </Card>
   </div>
-  <ConfirmationDialog
-    :open="selectedUser !== undefined"
-    :is-loading="isDeletePending"
-    title="Delete User"
-    :body="selectedUser ? `Are you sure you want to delete ${selectedUser.firstName} ${selectedUser.lastName}?` : undefined"
-    confirm-text="Delete User"
-    @confirm="handleDelete"
-    @update:open="(open) => { if (!open && !isDeletePending) selectedUserId = undefined; }"
-  />
 </template>

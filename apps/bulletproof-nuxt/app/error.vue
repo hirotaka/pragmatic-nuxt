@@ -3,18 +3,24 @@ import { Button } from "@/components/ui/button";
 
 const router = useRouter();
 
-defineProps<{
+const props = defineProps<{
   error: {
     statusCode: number;
     message: string;
   };
 }>();
+
+const isNotFound = computed(() => props.error.statusCode === 404);
+const title = computed(() => isNotFound.value ? "Page Not Found" : "Something Went Wrong");
+const description = computed(() => isNotFound.value
+  ? "Sorry, we couldn't find the page you're looking for."
+  : props.error.message);
 </script>
 
 <template>
   <Head
-    title="Page Not Found"
-    description="The page you're looking for doesn't exist"
+    :title="title"
+    :description="description"
   />
   <div class="flex min-h-screen flex-col items-center justify-center bg-muted px-4">
     <div class="rounded-xl border bg-card p-8 text-center shadow-sm">
@@ -22,10 +28,10 @@ defineProps<{
         {{ error.statusCode }}
       </h1>
       <h2 class="mt-4 text-3xl font-semibold tracking-tight">
-        Page Not Found
+        {{ title }}
       </h2>
       <p class="mt-2 text-lg text-muted-foreground">
-        Sorry, we couldn't find the page you're looking for.
+        {{ description }}
       </p>
       <div class="mt-8 flex justify-center gap-4">
         <Button @click="router.push('/')">

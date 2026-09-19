@@ -12,7 +12,7 @@ status: confirmed
 
 After a create, update, or delete request succeeds, an app may send another request to reload the displayed data. Treat the completed change and the data reload as separate results.
 
-If reloading the data fails, tell the user that the change was completed but the latest data could not be loaded. Do not report the completed change as failed.
+If reloading the data fails, do not report the completed change as failed. Present the reload failure according to the shared API failure policy: unexpected failures open the error page, while predictable failures can leave the current interface available.
 
 ## Apply When
 
@@ -45,13 +45,13 @@ Report the completed change first. If reloading the data fails, use the app's er
 - If the request fails, stop without showing a success message or reloading the data.
 - If the request succeeds, show a success message before reloading the data.
 - Run `refresh()` outside the first `try/catch`.
-- If `refresh()` fails, keep the success message and report the data-loading error separately.
+- If `refresh()` fails, preserve the completed mutation outcome and use the shared API failure presentation. An unexpected failure can replace the current interface with the error page.
 - Decide whether the user must wait for `refresh()` to finish or can continue while the data reloads in the background.
 
 ## Minimal Nuxt Example
 
 ```ts
-// layers/discussions/app/components/UpdateDiscussion.vue
+// app/components/UpdateProjectForm.vue
 const { refresh } = await useProjects();
 const updateProject = useUpdateProject();
 
@@ -68,7 +68,7 @@ const handleSubmit = async (input: UpdateProjectInput) => {
     title: "Project Updated",
   });
 
-  // useProjects reports a data-loading error if refresh() fails.
+  // useProjects applies the shared API failure policy if refresh() fails.
   await refresh();
 };
 ```
@@ -77,12 +77,12 @@ The `catch` handles only the update request. The data reload starts after the up
 
 ## App Examples
 
-- [`UpdateDiscussion.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussion.vue) handles the update request in its own `try/catch`, shows `Discussion Updated`, and then calls `refresh()` outside that `try/catch`.
-- [`UsersList.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) shows the `User Deleted` message after a successful deletion and reloads the user list separately. It waits for the reload to finish before closing the deletion confirmation dialog.
+- [`UpdateDiscussionForm.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussionForm.vue) handles the update request in its own `try/catch`, shows `Discussion Updated`, and emits success. [`DiscussionView.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionView.vue) then reloads the shared discussion outside the mutation handler before closing the drawer.
+- [`DeleteUserDialog.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/DeleteUserDialog.vue) shows `User Deleted` and closes after the deletion succeeds. [`UsersList.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) reloads the user list separately after receiving that success event.
 
 ## Trade-offs and Limitations
 
-A success message followed by a data-loading error may appear contradictory. The two messages report separate results: the change succeeded, but the latest data could not be loaded.
+The mutation and reload remain separate results even when an unexpected reload failure opens the error page. The server-side change is still complete; returning to the feature later loads its current state.
 
 Waiting for the data to reload delays completion. Reloading in the background lets the user continue sooner, but the displayed data may remain out of date until the reload succeeds.
 
@@ -100,6 +100,6 @@ Request cancellation, preventing duplicate submissions, and handling work that f
 
 - [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
-- [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
+- [Present API Failures from Custom Fetchers](api-error-notifications.md)
 - [Keep Existing Data Visible During Refresh](refresh-data-visibility.md)
 - [Share AsyncData Through Feature Composables](shared-async-data.md)

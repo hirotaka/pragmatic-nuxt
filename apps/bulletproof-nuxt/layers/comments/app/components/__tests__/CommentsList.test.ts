@@ -1,10 +1,30 @@
-import { defineComponent } from "vue";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { within } from "@testing-library/vue";
 import { beforeEach, expect, test, vi } from "vitest";
+import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { ref, type Ref } from "vue";
+import { within } from "@testing-library/vue";
+import type { Comment } from "~comments/shared/types";
+import type { PaginatedResult } from "#layers/base/shared/types/pagination";
 import CommentsList from "../CommentsList.vue";
 
-const comments = [{
+const {
+  loadMore,
+  refreshAfterDelete,
+  useComments,
+} = vi.hoisted(() => ({
+  loadMore: vi.fn(),
+  refreshAfterDelete: vi.fn(),
+  useComments: vi.fn(),
+}));
+
+vi.mock("~comments/app/composables/useComments", () => ({
+  useComments,
+}));
+
+vi.mock("#layers/auth/app/composables/useUser", () => ({
+  useUser: () => ({ user: { value: null } }),
+}));
+
+const existingComments: Comment[] = [{
   id: "comment-1",
   body: "Existing comment",
   discussionId: "discussion-1",
@@ -18,121 +38,99 @@ const comments = [{
   updatedAt: "2026-07-10T00:00:00.000Z",
 }];
 
-const refresh = vi.fn();
-const loadMore = vi.fn();
-const DeleteCommentStub = defineComponent({
-  name: "DeleteComment",
-  props: ["commentId", "refresh", "asMenuItem", "actionLabel"],
-  template: "<button>Delete Comment</button>",
-});
+const comments: Ref<PaginatedResult<Comment> | undefined> = ref();
+const isLoading = ref(false);
 
-vi.mock("#layers/auth/app/composables/useUser", () => ({
-  useUser: () => ({ user: { value: null } }),
-}));
+const paginatedComments = (data: Comment[] = existingComments): PaginatedResult<Comment> => ({
+  data,
+  meta: {
+    page: 1,
+    limit: 10,
+    total: data.length,
+    totalPages: 1,
+    hasMore: false,
+  },
+});
 
 beforeEach(() => {
-  refresh.mockReset().mockResolvedValue(undefined);
+  comments.value = paginatedComments();
+  isLoading.value = false;
   loadMore.mockReset().mockResolvedValue(undefined);
+  refreshAfterDelete.mockReset().mockResolvedValue(undefined);
+  useComments.mockReset().mockResolvedValue({
+    comments,
+    isLoading,
+    loadMore,
+    refreshAfterDelete,
+  });
 });
 
-const mountCommentsList = (props: Partial<InstanceType<typeof CommentsList>["$props"]> = {}) => {
-  return mountSuspended(CommentsList, {
-    props: {
-      comments,
-      currentPage: 1,
-      hasInitialError: false,
-      hasMore: false,
-      isInitialReady: true,
-      isLoading: false,
-      loadMore,
-      refresh,
-      ...props,
-    },
-    global: {
-      stubs: {
-        Authorization: { template: "<div><slot /></div>" },
-        DeleteComment: DeleteCommentStub,
-        MarkdownPreview: {
-          template: "<p>{{ value }}</p>",
-          props: ["value"],
-        },
-        Spinner: { template: "<span data-testid='spinner' />" },
+const mountCommentsList = () => mountSuspended(CommentsList, {
+  props: {
+    discussionId: "discussion-1",
+  },
+  global: {
+    stubs: {
+      Authorization: { template: "<div><slot /></div>" },
+      CommentActionsMenu: {
+        emits: ["success"],
+        template: "<button type='button' @click='$emit(\"success\")'>Delete succeeded</button>",
       },
+      MarkdownPreview: {
+        template: "<p>{{ value }}</p>",
+        props: ["value"],
+      },
+      Spinner: { template: "<span data-testid='spinner' />" },
     },
-  });
-};
+  },
+});
 
 test("keeps existing comments visible during a page-one reload", async () => {
-  const wrapper = await mountCommentsList({ isLoading: true });
+  isLoading.value = true;
+  const wrapper = await mountCommentsList();
   const screen = within(wrapper.element as HTMLElement);
 
   expect(screen.getByText("Existing comment")).toBeTruthy();
   expect(screen.queryByTestId("spinner")).toBeNull();
 });
 
-test("shows an accessible pending state before initial comments settle", async () => {
-  const wrapper = await mountCommentsList({
-    comments: [],
-    isInitialReady: false,
-  });
-  const screen = within(wrapper.element as HTMLElement);
+test("does not present unsettled comments as successful empty", async () => {
+  comments.value = undefined;
+  const wrapper = await mountCommentsList();
 
-  expect(wrapper.element.getAttribute("role")).toBe("status");
-  expect(wrapper.text()).toContain("Loading comments");
-  expect(screen.queryByText("No Comments Found")).toBeNull();
-});
-
-test("shows persistent recovery without presenting initial failure as successful empty", async () => {
-  const wrapper = await mountCommentsList({
-    comments: [],
-    hasInitialError: true,
-    isInitialReady: false,
-  });
-  const screen = within(wrapper.element as HTMLElement);
-
-  expect(screen.queryByRole("status")).toBeNull();
-  expect(screen.queryByText("No Comments Found")).toBeNull();
-  expect(screen.getByRole("alert", { name: "Comments unavailable" })).toBeTruthy();
-  expect(screen.getByRole("button", { name: "Retry comments" })).toBeTruthy();
-});
-
-test("keeps persistent recovery visible and disables retry while it settles", async () => {
-  let resolveRetry!: () => void;
-  refresh.mockImplementationOnce(() => new Promise<void>((resolve) => {
-    resolveRetry = resolve;
-  }));
-  const wrapper = await mountCommentsList({
-    comments: [],
-    hasInitialError: true,
-    isInitialReady: false,
-  });
-  const screen = within(wrapper.element as HTMLElement);
-
-  await screen.getByRole("button", { name: "Retry comments" }).click();
-
-  expect(screen.getByRole("alert", { name: "Comments unavailable" })).toBeTruthy();
-  expect(screen.getByRole("button", { name: "Retry comments" }).hasAttribute("disabled")).toBe(true);
-
-  resolveRetry();
-  await vi.waitFor(() => {
-    expect(screen.getByRole("button", { name: "Retry comments" }).hasAttribute("disabled")).toBe(false);
-  });
-  expect(refresh).toHaveBeenCalledOnce();
+  expect(wrapper.text()).toBe("");
+  expect(wrapper.find("[aria-label='comments']").exists()).toBe(false);
 });
 
 test("shows successful empty only after initial comments settle", async () => {
-  const wrapper = await mountCommentsList({ comments: [] });
+  comments.value = paginatedComments([]);
+  const wrapper = await mountCommentsList();
   const screen = within(wrapper.element as HTMLElement);
 
   expect(wrapper.find("[aria-label='comments']").exists()).toBe(true);
   expect(screen.getByText("No Comments Found")).toBeTruthy();
 });
 
-test("delegates pagination to the accumulated-state owner", async () => {
-  const wrapper = await mountCommentsList({ hasMore: true });
+test("loads the next page from its data owner", async () => {
+  comments.value = {
+    ...paginatedComments(),
+    meta: {
+      ...paginatedComments().meta,
+      hasMore: true,
+    },
+  };
+  const wrapper = await mountCommentsList();
   const screen = within(wrapper.element as HTMLElement);
 
   await screen.getByRole("button", { name: /load more comments/i }).click();
 
   expect(loadMore).toHaveBeenCalledOnce();
+});
+
+test("settles its data after successful deletion", async () => {
+  const wrapper = await mountCommentsList();
+
+  await wrapper.get("button").trigger("click");
+
+  expect(refreshAfterDelete).toHaveBeenCalledOnce();
 });

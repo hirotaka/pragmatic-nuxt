@@ -12,9 +12,10 @@ vi.mock("#layers/base/app/composables/useNotifications", () => ({
 beforeEach(() => {
   addNotification.mockReset();
   create.mockReset();
+  useError().value = undefined;
 });
 
-test("notifies a transport failure once through onRequestError", async () => {
+test("shows a transport failure through the Nuxt error page", async () => {
   let options: Record<string, unknown> | undefined;
   const api = vi.fn();
   create.mockImplementation((value) => {
@@ -35,11 +36,10 @@ test("notifies a transport failure once through onRequestError", async () => {
   });
 
   expect(result?.provide?.api).toBeTypeOf("function");
-  expect(addNotification).toHaveBeenCalledOnce();
-  expect(addNotification).toHaveBeenCalledWith({
-    type: "error",
-    title: "Error",
-    message: "Network unavailable",
+  expect(addNotification).not.toHaveBeenCalled();
+  expect(useError().value).toMatchObject({
+    statusCode: 500,
+    statusMessage: "Network unavailable",
   });
 });
 
@@ -71,7 +71,7 @@ test("runs shared and request-specific response error handlers in order", async 
   for (const hook of requestOptions.onResponseError) {
     await hook({
       options: {},
-      response: { _data: { message: "Project request failed" } },
+      response: { _data: { statusCode: 422, message: "Project request failed" } },
     });
   }
 
@@ -80,7 +80,7 @@ test("runs shared and request-specific response error handlers in order", async 
   expect(requestHandler).toHaveBeenCalledOnce();
 });
 
-test("runs shared and request-specific request error handlers in order", async () => {
+test("shows unexpected request errors and still runs request-specific handlers", async () => {
   const events: string[] = [];
   let requestOptions: { onRequestError: ErrorHook[] } | undefined;
   const transport = vi.fn((_request: string, options: typeof requestOptions) => {
@@ -110,8 +110,9 @@ test("runs shared and request-specific request error handlers in order", async (
     });
   }
 
-  expect(events).toEqual(["shared", "request"]);
-  expect(addNotification).toHaveBeenCalledOnce();
+  expect(events).toEqual(["request"]);
+  expect(addNotification).not.toHaveBeenCalled();
+  expect(useError().value).toMatchObject({ statusCode: 500 });
   expect(requestHandler).toHaveBeenCalledOnce();
 });
 
@@ -143,7 +144,7 @@ test("runs shared and request-specific response error handlers for $api.raw in o
   for (const hook of requestOptions.onResponseError) {
     await hook({
       options: {},
-      response: { _data: { message: "Project request failed" } },
+      response: { _data: { statusCode: 422, message: "Project request failed" } },
     });
   }
 

@@ -61,6 +61,23 @@ function deferred() {
   return { promise, resolve };
 }
 
+async function confirmDelete(region: HTMLElement) {
+  await userEvent.click(within(region).getByRole("button", { name: /open user actions for ada lovelace/i }));
+
+  let menu!: HTMLElement;
+  await waitFor(() => {
+    menu = region.querySelector<HTMLElement>("[role='menu'][data-state='open']")!;
+    expect(menu).toBeTruthy();
+  });
+  await userEvent.click(within(menu).getByRole("menuitem", { name: /delete user/i }));
+
+  const bodyScreen = within(document.body);
+  const dialog = await bodyScreen.findByRole("dialog", { name: /delete user/i });
+  await userEvent.click(within(dialog).getByRole("button", { name: /delete user/i }));
+
+  return { bodyScreen, dialog };
+}
+
 beforeEach(() => {
   refresh.mockReset().mockResolvedValue(undefined);
   addNotification.mockReset();
@@ -75,9 +92,8 @@ afterEach(() => {
 
 const mountUsersList = () => mountSuspended(UsersList);
 
-test("UsersList renders user rows and delete action cell", async () => {
+test("UsersList renders user rows and action menus", async () => {
   const wrapper = await mountUsersList();
-
   const screen = within(wrapper.element as HTMLElement);
   const desktopTable = screen.getByRole("table");
   const mobileCards = screen.getByRole("list", { name: "User directory cards" });
@@ -87,13 +103,13 @@ test("UsersList renders user rows and delete action cell", async () => {
   expect(within(desktopTable).getByText("admin@example.com")).toBeTruthy();
   expect(within(desktopTable).getByText("Team team-1")).toBeTruthy();
   expect(within(desktopTable).getByText("ADMIN")).toBeTruthy();
-  expect(within(desktopTable).getByRole("button", { name: "Delete User" })).toBeTruthy();
+  expect(within(desktopTable).getByRole("button", { name: /open user actions for ada lovelace/i })).toBeTruthy();
 
   expect(within(mobileCards).getByText("Ada Lovelace")).toBeTruthy();
   expect(within(mobileCards).getByText("admin@example.com")).toBeTruthy();
   expect(within(mobileCards).getByText("team-1")).toBeTruthy();
   expect(within(mobileCards).getByText("ADMIN")).toBeTruthy();
-  expect(within(mobileCards).getByRole("button", { name: "Delete User" })).toBeTruthy();
+  expect(within(mobileCards).getByRole("button", { name: /open user actions for ada lovelace/i })).toBeTruthy();
   expect(refresh).not.toHaveBeenCalled();
 });
 
@@ -119,54 +135,41 @@ test("UsersList renders the successful empty response", async () => {
   expect(screen.getAllByText("0")).toHaveLength(2);
 });
 
-test("UsersList refreshes the users read after mobile delete succeeds", async () => {
+test("refreshes the users read after mobile deletion succeeds", async () => {
   const wrapper = await mountUsersList();
+  const mobileCards = within(wrapper.element as HTMLElement).getByRole("list", { name: "User directory cards" });
 
-  const screen = within(wrapper.element as HTMLElement);
-  const mobileCards = screen.getByRole("list", { name: "User directory cards" });
-  await userEvent.click(within(mobileCards).getByRole("button", { name: "Delete User" }));
-  const bodyScreen = within(document.body);
-  const deleteButtons = bodyScreen.getAllByRole("button", { name: "Delete User" });
-  await userEvent.click(deleteButtons[deleteButtons.length - 1]!);
-
-  expect(refresh).toHaveBeenCalledTimes(1);
-  expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
-});
-
-test("waits for the direct user deletion refresh before close", async () => {
-  const refreshSettlement = deferred();
-  refresh.mockImplementationOnce(() => refreshSettlement.promise);
-  const wrapper = await mountUsersList();
-  const screen = within(wrapper.element as HTMLElement);
-  const bodyScreen = within(document.body);
-  const desktopTable = screen.getByRole("table");
-
-  await userEvent.click(within(desktopTable).getByRole("button", { name: /delete user/i }));
-  const deleteButtons = await bodyScreen.findAllByRole("button", { name: /delete user/i });
-  await userEvent.click(deleteButtons[deleteButtons.length - 1]!);
+  await confirmDelete(mobileCards);
 
   await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
   expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
-  expect(bodyScreen.getByText(/are you sure you want to delete Ada Lovelace/i)).toBeTruthy();
-
-  refreshSettlement.resolve();
-
-  await waitFor(() => {
-    expect(bodyScreen.queryByText(/are you sure you want to delete this user/i)).toBeNull();
-  });
 });
 
-test("keeps user deletion success when the users refresh reports an error", async () => {
+test("closes the dialog without waiting for the owner refresh", async () => {
+  const refreshSettlement = deferred();
+  refresh.mockImplementationOnce(() => refreshSettlement.promise);
+  const wrapper = await mountUsersList();
+  const desktopTable = within(wrapper.element as HTMLElement).getByRole("table");
+  const { bodyScreen } = await confirmDelete(desktopTable);
+
+  await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+  expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
+  await waitFor(() => {
+    expect(bodyScreen.queryByRole("dialog", { name: /delete user/i })).toBeNull();
+  });
+
+  refreshSettlement.resolve();
+});
+
+test("keeps deletion success when the users refresh reports an error", async () => {
   refresh.mockImplementationOnce(async () => {
     addNotification({ type: "error", title: "Error", message: "Users refresh failed" });
+    throw new Error("Users refresh failed");
   });
   const wrapper = await mountUsersList();
-  const screen = within(wrapper.element as HTMLElement);
-  const bodyScreen = within(document.body);
+  const desktopTable = within(wrapper.element as HTMLElement).getByRole("table");
 
-  await userEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /delete user/i }));
-  const deleteButtons = await bodyScreen.findAllByRole("button", { name: /delete user/i });
-  await userEvent.click(deleteButtons[deleteButtons.length - 1]!);
+  await confirmDelete(desktopTable);
 
   await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
   expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
@@ -174,28 +177,23 @@ test("keeps user deletion success when the users refresh reports an error", asyn
     [{ type: "success", title: "User Deleted" }],
     [{ type: "error", title: "Error", message: "Users refresh failed" }],
   ]);
-  await waitFor(() => {
-    expect(bodyScreen.queryByRole("dialog", { name: /delete user/i })).toBeNull();
-  });
 });
 
-test("does not refresh a remounted users owner when an earlier delete settles", async () => {
+test("does not refresh a remounted users owner when an earlier deletion settles", async () => {
   let finishDelete!: () => void;
   deleteUserMutate.mockReturnValueOnce(new Promise<void>((resolve) => {
     finishDelete = resolve;
   }));
   const firstOwner = await mountUsersList();
-  const firstScreen = within(firstOwner.element as HTMLElement);
-  const bodyScreen = within(document.body);
+  const desktopTable = within(firstOwner.element as HTMLElement).getByRole("table");
 
-  await userEvent.click(within(firstScreen.getByRole("table")).getByRole("button", { name: /delete user/i }));
-  const deleteButtons = await bodyScreen.findAllByRole("button", { name: /delete user/i });
-  await userEvent.click(deleteButtons[deleteButtons.length - 1]!);
+  const confirmation = confirmDelete(desktopTable);
   await waitFor(() => expect(deleteUserMutate).toHaveBeenCalledWith("user-1"));
 
   firstOwner.unmount();
   await mountUsersList();
   finishDelete();
+  await confirmation;
   await waitFor(() => expect(addNotification).toHaveBeenCalledWith({
     type: "success",
     title: "User Deleted",

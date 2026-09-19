@@ -1,7 +1,7 @@
 import type { Discussion } from "~discussions/shared/types";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { defineComponent, ref } from "vue";
-import { expect, test, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 import { formatDate } from "#layers/base/app/utils/format";
 import DiscussionView from "../DiscussionView.vue";
 
@@ -20,26 +20,32 @@ const discussion: Discussion = {
   },
 };
 
-const { useDiscussionMock } = vi.hoisted(() => ({
+const { discussionRefresh, useDiscussionMock } = vi.hoisted(() => ({
+  discussionRefresh: vi.fn(),
   useDiscussionMock: vi.fn(),
 }));
 
 vi.mock("~discussions/app/composables/useDiscussion", () => ({
   useDiscussion: async (id: MaybeRefOrGetter<string>) => {
     useDiscussionMock(toValue(id));
-    return { data: ref(discussion) };
+    return { data: ref(discussion), refresh: discussionRefresh };
   },
 }));
 
-const UpdateDiscussionStub = defineComponent({
-  name: "UpdateDiscussion",
-  props: {
-    discussionId: {
-      type: String,
-      required: true,
-    },
-  },
-  template: "<button>Update Discussion</button>",
+vi.mock("#layers/auth/app/composables/useUser", () => ({
+  useUser: () => ({ isAdmin: { value: true } }),
+}));
+
+beforeEach(() => {
+  discussionRefresh.mockReset().mockResolvedValue(undefined);
+  useDiscussionMock.mockClear();
+});
+
+const UpdateDiscussionFormStub = defineComponent({
+  name: "UpdateDiscussionForm",
+  props: ["body", "discussionId", "title"],
+  emits: ["success"],
+  template: "<div />",
 });
 
 const MarkdownPreviewStub = defineComponent({
@@ -57,7 +63,7 @@ const mountDiscussionView = () => mountSuspended(DiscussionView, {
   props: { discussionId: discussion.id },
   global: {
     stubs: {
-      UpdateDiscussion: UpdateDiscussionStub,
+      UpdateDiscussionForm: UpdateDiscussionFormStub,
       MarkdownPreview: MarkdownPreviewStub,
     },
   },
@@ -68,9 +74,22 @@ test("renders discussion metadata and the update control", async () => {
 
   expect(wrapper.text()).toContain(formatDate(discussion.createdAt));
   expect(wrapper.text()).toContain("Test User");
-  expect(wrapper.getComponent(UpdateDiscussionStub).text()).toBe("Update Discussion");
-  expect(wrapper.getComponent(UpdateDiscussionStub).props("discussionId")).toBe(discussion.id);
+  expect(wrapper.text()).toContain("Update Discussion");
+  await wrapper.get("button").trigger("click");
+  expect(wrapper.getComponent(UpdateDiscussionFormStub).props("discussionId")).toBe(discussion.id);
+  expect(wrapper.getComponent(UpdateDiscussionFormStub).props("title")).toBe(discussion.title);
+  expect(wrapper.getComponent(UpdateDiscussionFormStub).props("body")).toBe(discussion.body);
   expect(useDiscussionMock).toHaveBeenCalledWith(discussion.id);
+});
+
+test("refreshes the discussion after an update succeeds", async () => {
+  discussionRefresh.mockResolvedValueOnce(undefined);
+  const wrapper = await mountDiscussionView();
+
+  await wrapper.get("button").trigger("click");
+  wrapper.getComponent(UpdateDiscussionFormStub).vm.$emit("success");
+
+  await vi.waitFor(() => expect(discussionRefresh).toHaveBeenCalledOnce());
 });
 
 test("renders the discussion body", async () => {
