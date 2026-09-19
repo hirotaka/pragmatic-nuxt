@@ -40,7 +40,7 @@ test("runs shared and API-call response error handlers in order", async () => {
   const context = {
     options: {},
     response: {
-      _data: { message: "Project request failed" },
+      _data: { statusCode: 422, message: "Project request failed" },
     },
   };
 
@@ -53,13 +53,10 @@ test("runs shared and API-call response error handlers in order", async () => {
   expect(handleProjectError).toHaveBeenCalledOnce();
 });
 
-test("runs shared and API-call request error handlers in order", async () => {
+test("shows unexpected request errors and still runs the API-call handler", async () => {
   const events: string[] = [];
   const handleProjectError = vi.fn(() => {
     events.push("project");
-  });
-  addNotification.mockImplementation(() => {
-    events.push("shared");
   });
 
   const options = useAPI("/api/projects", {
@@ -74,7 +71,11 @@ test("runs shared and API-call request error handlers in order", async () => {
     await hook(context);
   }
 
-  expect(events).toEqual(["shared", "project"]);
-  expect(addNotification).toHaveBeenCalledOnce();
+  expect(events).toEqual(["project"]);
+  expect(addNotification).not.toHaveBeenCalled();
+  expect(useError().value).toMatchObject({
+    statusCode: 500,
+    statusMessage: "Network unavailable",
+  });
   expect(handleProjectError).toHaveBeenCalledOnce();
 });

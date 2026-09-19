@@ -7,49 +7,51 @@ import { useNotifications } from "#layers/base/app/composables/useNotifications"
 
 interface DeleteDiscussionDialogProps {
   discussion: Discussion;
-  open: boolean;
 }
 
 const props = defineProps<DeleteDiscussionDialogProps>();
 
 const emit = defineEmits<{
-  "update:open": [value: boolean];
-  "success": [];
+  success: [];
 }>();
 
 const { addNotification } = useNotifications();
 const deleteDiscussion = useDeleteDiscussion();
+const isOpen = ref(false);
 const isPending = ref(false);
 
 const handleConfirm = async () => {
+  if (isPending.value) return;
+
   isPending.value = true;
   try {
     await deleteDiscussion(props.discussion.id);
-    addNotification({
-      type: "success",
-      title: "Discussion Deleted",
-    });
-    emit("update:open", false);
-    emit("success");
   }
   catch {
     // `$api` reports the request failure; keep the dialog open for another attempt.
-  }
-  finally {
     isPending.value = false;
+    return;
   }
+
+  addNotification({
+    type: "success",
+    title: "Discussion Deleted",
+  });
+  emit("success");
+  isPending.value = false;
+  isOpen.value = false;
 };
 
 const handleOpenChange = (value: boolean) => {
-  if (!isPending.value) {
-    emit("update:open", value);
-  }
+  if (!value && isPending.value) return;
+
+  isOpen.value = value;
 };
 </script>
 
 <template>
   <ConfirmationDialog
-    :open="open"
+    :open="isOpen"
     :is-loading="isPending"
     variant="danger"
     title="Delete Discussion"
@@ -58,5 +60,9 @@ const handleOpenChange = (value: boolean) => {
     cancel-text="Cancel"
     @confirm="handleConfirm"
     @update:open="handleOpenChange"
-  />
+  >
+    <template #triggerButton>
+      <slot name="triggerButton" />
+    </template>
+  </ConfirmationDialog>
 </template>

@@ -135,7 +135,7 @@ test("smoke", async ({ page, goto }) => {
     .getByRole("button", { name: "Open discussion actions" })
     .click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
-  await page.getByRole("button", { name: "Delete Discussion" }).click();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
   await page
     .getByLabel("Discussion Deleted")
     .getByRole("button", { name: "Close" })

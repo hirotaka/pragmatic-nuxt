@@ -16,7 +16,7 @@ export function resolveApiErrorNotification(
   error: unknown,
   option?: ApiErrorNotificationOption,
 ): Omit<Notification, "id"> | null {
-  if (option === false || isAbortError(error)) {
+  if (option === false || isAbortError(error) || resolveUnexpectedApiError(error)) {
     return null;
   }
 
@@ -25,6 +25,33 @@ export function resolveApiErrorNotification(
     title: option?.title ?? "Error",
     message: option?.message ?? extractErrorMessage(error, "Operation failed"),
   };
+}
+
+export function resolveUnexpectedApiError(error: unknown) {
+  if (isAbortError(error)) return null;
+
+  const statusCode = getStatusCode(error);
+  if (statusCode !== undefined && statusCode < 500) return null;
+
+  return {
+    statusCode: statusCode ?? 500,
+    statusMessage: extractErrorMessage(error, "Unexpected error"),
+    fatal: true,
+  };
+}
+
+function getStatusCode(error: unknown): number | undefined {
+  if (typeof error !== "object" || error === null) return undefined;
+
+  if ("statusCode" in error && typeof error.statusCode === "number") {
+    return error.statusCode;
+  }
+
+  if ("status" in error && typeof error.status === "number") {
+    return error.status;
+  }
+
+  return undefined;
 }
 
 function isAbortError(error: unknown): boolean {

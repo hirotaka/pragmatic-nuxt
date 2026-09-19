@@ -93,16 +93,16 @@ export function useCreateProject() {
 
 ## App Examples
 
-- [`useAPI`](../../../apps/bulletproof-nuxt/layers/base/app/composables/useAPI.ts) defines the custom `useFetch` composable for AsyncData reads. It adds shared `onRequestError` and `onResponseError` notification functions before functions supplied for a specific API call. Its notification functions are not restricted to browser execution.
-- The [API plugin](../../../apps/bulletproof-nuxt/layers/base/app/plugins/api.ts) creates the custom `$fetch` instance and provides it as `$api` for imperative requests. Its error hooks add notifications in the browser and skip notification updates during SSR.
+- [`useAPI`](../../../apps/bulletproof-nuxt/layers/base/app/composables/useAPI.ts) defines the custom `useFetch` composable for AsyncData reads. Its shared error hooks open the Nuxt error page for unexpected failures and notify predictable failures before running hooks supplied for a specific API call.
+- The [API plugin](../../../apps/bulletproof-nuxt/layers/base/app/plugins/api.ts) creates the custom `$fetch` instance and provides it as `$api` for imperative requests. Its browser error hooks apply the same unexpected-error and predictable-notification policy.
 - [`useDiscussions`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) defines the Discussions collection path and query for `useAPI`. [`useCreateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useCreateDiscussion.ts) defines the path, method, and body for `$api`.
-- [`CreateDiscussion.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CreateDiscussion.vue) manages pending state, adds the success notification, refreshes the collection, and completes the drawer after `useCreateDiscussion` succeeds.
+- [`CreateDiscussionForm.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CreateDiscussionForm.vue) starts `useCreateDiscussion`, while the shared Form manages pending submission and prevents duplicate submits. After the form reports success, the [Discussions page](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/index.vue) refreshes the collection and closes the drawer.
 
 ## Trade-offs and Limitations
 
 Using two custom fetchers means that shared hook wiring must be maintained and tested in two places. The custom `useFetch` composable and the custom `$fetch` instance can differ intentionally, and changing one does not change the other.
 
-`useAPI` and `$api` add notifications in different runtimes. The `useAPI` notification functions have no browser-only guard, while the `$api` hooks skip notification updates during SSR. During SSR, notification state can therefore differ depending on which fetcher sends the request.
+`useAPI` can present read failures during SSR or in the browser. The `$api` hooks present imperative-request failures in the browser and skip presentation during SSR. Runtime differences therefore remain relevant when choosing the fetcher.
 
 Requests made through raw `useFetch`, global `$fetch`, Nuxt Auth Utils, server-handler code, or a third-party library do not receive these shared defaults. Another API with different options needs a separate custom fetcher.
 
@@ -121,5 +121,5 @@ Neither `useAPI` nor `$api` configures credentials, authentication, request-head
 - [Use useFetch Semantics for Page Rendering Data](page-rendering-data.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
 - [Define Domain and Feature API Calls in Composables](domain-feature-api-calls.md)
-- [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
+- [Present API Failures from Custom Fetchers](api-error-notifications.md)
 - [Orchestrate Auth Session State Outside the Fetch Client](auth-session-orchestration.md)

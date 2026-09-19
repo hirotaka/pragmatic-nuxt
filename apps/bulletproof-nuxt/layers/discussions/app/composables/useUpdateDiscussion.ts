@@ -1,19 +1,14 @@
 import type { UpdateDiscussionInput } from "~discussions/shared/schemas";
 
-export interface UpdateDiscussionParams {
-  id: string;
-  data: UpdateDiscussionInput;
-}
-
-export const useUpdateDiscussion = () => {
+export const useUpdateDiscussion = (id: MaybeRefOrGetter<string>) => {
   const { $api } = useNuxtApp();
 
-  return async ({ id, data }: UpdateDiscussionParams) => {
+  return async (input: UpdateDiscussionInput) => {
     await $api(
-      `/api/discussions/${id}`,
+      `/api/discussions/${toValue(id)}`,
       {
         method: "PATCH",
-        body: data,
+        body: input,
       },
     );
   };

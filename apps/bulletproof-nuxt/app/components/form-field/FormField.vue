@@ -51,6 +51,9 @@ const errorMessage = computed(() => {
   return contextErrors.value[0]?.message;
 });
 const invalid = computed(() => Boolean(errorMessage.value));
+const touchField = () => {
+  if (props.name) form?.touchField(props.name);
+};
 const describedBy = computed(() => [
   props.description ? descriptionId.value : undefined,
   props.help && !invalid.value ? helpId.value : undefined,
@@ -60,6 +63,8 @@ const slotProps = computed(() => ({
   "id": controlId.value,
   "name": props.name,
   "disabled": form?.disabled.value ?? false,
+  "onBlur": touchField,
+  "onChange": touchField,
   "aria-invalid": invalid.value ? "true" : undefined,
   "aria-describedby": describedBy.value,
 }));

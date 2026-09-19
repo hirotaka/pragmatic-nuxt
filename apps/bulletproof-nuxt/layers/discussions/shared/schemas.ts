@@ -6,7 +6,10 @@ export const createDiscussionInputSchema = z.object({
   body: z.string().min(1, "Required"),
 });
 
-export type CreateDiscussionInput = z.infer<
+export type CreateDiscussionFormState = z.input<
+  typeof createDiscussionInputSchema
+>;
+export type CreateDiscussionInput = z.output<
   typeof createDiscussionInputSchema
 >;
 
@@ -16,6 +19,9 @@ export const updateDiscussionInputSchema = z.object({
   body: z.string().min(1, "Required").optional(),
 });
 
-export type UpdateDiscussionInput = z.infer<
+export type UpdateDiscussionFormState = z.input<
+  typeof updateDiscussionInputSchema
+>;
+export type UpdateDiscussionInput = z.output<
   typeof updateDiscussionInputSchema
 >;

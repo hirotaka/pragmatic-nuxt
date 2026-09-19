@@ -143,7 +143,7 @@ Password handling, provider selection, session payloads, redirect validation, se
 
 - [Use Custom Fetchers for Your API](custom-api-fetchers.md)
 - [Use Imperative API Requests for Application Operations](imperative-api-requests.md)
-- [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
+- [Present API Failures from Custom Fetchers](api-error-notifications.md)
 - [Separate Completed Changes from Data Refresh Failures](completed-change-refresh-failures.md)
 - [Store a User ID and Load the Current User When Fetching the Session](../nuxt-auth-utils/store-user-id-and-load-current-user.md)
 - [Load the Current User Record Before Processing a Protected Request](../nuxt-auth-utils/load-current-user-before-protected-request.md)

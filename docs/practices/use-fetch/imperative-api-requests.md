@@ -87,7 +87,7 @@ The action defines and sends the API request. The component starts the operation
 ## App Examples
 
 - [`useCreateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useCreateDiscussion.ts) sends its request through the app-provided `$api` client when the returned function is called.
-- [`UpdateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussion.vue) tracks pending state, waits for the update and data refresh, and then closes the drawer.
+- [`UpdateDiscussionForm`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussionForm.vue) waits for the update request and reports success. [`DiscussionView`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionView.vue) then refreshes the shared discussion and closes the drawer.
 - [`useLogin`](../../../apps/bulletproof-nuxt/layers/auth/app/composables/useLogin.ts) waits for the login request and session refresh before showing its success notification.
 - [`useUpdateProfile`](../../../apps/bulletproof-nuxt/layers/users/app/composables/useUpdateProfile.ts) waits for the profile request and session refresh before it resolves.
 
@@ -97,7 +97,7 @@ An imperative request returns a promise rather than AsyncData. It does not provi
 
 Work that follows the API request, such as refreshing displayed data or the current session, settles separately. A successful API request does not guarantee that this later work will succeed.
 
-Separate Practices define error notifications, mutation and refresh outcomes, and authentication session behavior. This Practice does not define request deadlines, retries, or cancellation behavior.
+Separate Practices define API failure presentation, mutation and refresh outcomes, and authentication session behavior. This Practice does not define request deadlines, retries, or cancellation behavior.
 
 ## Sources
 

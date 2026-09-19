@@ -68,7 +68,7 @@ Because the test mocks `useAPI`, it does not cover shared error hooks, HTTP, the
 - [`usePaginatedData.test.ts`](../../../apps/bulletproof-nuxt/layers/base/app/composables/__tests__/usePaginatedData.test.ts) verifies shared append, replacement, pending-request, stale-result, and disposal behavior with controlled AsyncData-like state. It does not run an API route or browser.
 - The [Discussion detail page test](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/__tests__/[id].test.ts) verifies route-to-read mapping and child composition. The test mocks the read, so it does not cover the production request, server rendering, hydration, or browser navigation.
 - In [`discussions.spec.ts`](../../../apps/bulletproof-nuxt/e2e/discussions.spec.ts), `direct discussion detail is SSR-rendered without a hydration GET` checks server-rendered content and hydration reuse against the built preview.
-- In the same file, `custom fetcher reports each failed initial GET attempt without an inline error` fulfills the request through browser interception. It checks the rendered failure notification without running the intercepted API route or database query.
+- In the same file, `unexpected initial discussion read failures open the error page` fulfills the request through browser interception. It checks the rendered Nuxt error page without running the intercepted API route or database query.
 - [`api-contracts.spec.ts`](../../../apps/bulletproof-nuxt/e2e/api-contracts.spec.ts) sends direct HTTP requests to verify status, response bodies, authorization, serialization, and test-database behavior without presenting those checks as rendered UI coverage.
 
 ## Trade-offs and Limitations

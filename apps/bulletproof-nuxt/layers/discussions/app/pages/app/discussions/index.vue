@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { Plus } from "lucide-vue-next";
+import FormDrawer from "~~/app/components/app/FormDrawer.vue";
+import { Button } from "~~/app/components/ui/button";
+import { useDiscussions } from "~discussions/app/composables/useDiscussions";
+
 definePageMeta({
   middleware: "auth",
   layout: "dashboard",
@@ -7,8 +12,49 @@ definePageMeta({
 useHead({
   title: "Discussions",
 });
+
+const { refreshAfterCreate } = await useDiscussions();
+
+const handleCreateSuccess = async (close: () => void) => {
+  await refreshAfterCreate();
+  close();
+};
 </script>
 
 <template>
-  <DiscussionsCollection />
+  <LayoutsContentLayout
+    title="Discussions"
+    description="Create, update, and moderate team discussions."
+  >
+    <template #actions>
+      <FormDrawer title="Create Discussion">
+        <template #triggerButton>
+          <Button
+            variant="outline"
+            size="sm"
+          >
+            <template #icon>
+              <Plus class="size-4" />
+            </template>
+            Create Discussion
+          </Button>
+        </template>
+
+        <template #default="{ close }">
+          <CreateDiscussionForm @success="handleCreateSuccess(close)" />
+        </template>
+
+        <template #submitButton>
+          <Button
+            type="submit"
+            form="create-discussion"
+            size="sm"
+          >
+            Submit
+          </Button>
+        </template>
+      </FormDrawer>
+    </template>
+    <DiscussionsList />
+  </LayoutsContentLayout>
 </template>

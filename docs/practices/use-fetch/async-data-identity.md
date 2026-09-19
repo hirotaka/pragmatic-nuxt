@@ -19,7 +19,7 @@ Use this practice when:
 - The request URL and query parameters do not change, as with a simple user list.
 - Query parameters such as page number, search text, or sort order determine which results to fetch.
 - The resource ID in the URL determines which resource to fetch.
-- You need to access the fetched data by a known key through `useNuxtData()`.
+- You need to access or refresh the fetched data by a known key through `useNuxtData()` or `refreshNuxtData()`.
 - You need to keep AsyncData state separate for otherwise identical requests.
 
 ## Do Not Apply When
@@ -63,6 +63,7 @@ Nuxt generates the keys for both calls. Changing the value of `page` changes the
 ## App Examples
 
 - [`useDiscussions.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) passes reactive `page` and `limit` values through `query`, leaving key generation to Nuxt.
+- [`useComments.ts`](../../../apps/bulletproof-nuxt/layers/comments/app/composables/useComments.ts) passes the reactive Discussion ID and page through `query`, leaving key generation to Nuxt.
 - [`useDiscussion.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussion.ts) uses a URL getter so the request URL follows changes to the discussion ID.
 - [`useUsers.ts`](../../../apps/bulletproof-nuxt/layers/users/app/composables/useUsers.ts) calls `useAPI` with the fixed `/api/users` URL and leaves key generation to Nuxt.
 
@@ -70,7 +71,7 @@ Nuxt generates the keys for both calls. Changing the value of `page` changes the
 
 Nuxt generates keys from call-site information, the request URL, and selected fetch options. The same URL and query parameters at different call sites may therefore produce different keys.
 
-Generated keys are useful for managing request inputs without a separate naming scheme, but they are not stable names for application code to reference. Use an explicit key when the code needs to identify the data by name, such as with `useNuxtData()`.
+Generated keys are useful for managing request inputs without a separate naming scheme, but they are not stable names for application code to reference. Use an explicit key when the code needs to identify the data by name, such as with `useNuxtData()` or `refreshNuxtData()`.
 
 ## Sources
 

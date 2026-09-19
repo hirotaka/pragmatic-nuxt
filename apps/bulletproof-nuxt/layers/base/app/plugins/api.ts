@@ -1,5 +1,5 @@
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
-import { resolveApiErrorNotification } from "#layers/base/app/utils/apiNotifications";
+import { resolveApiErrorNotification, resolveUnexpectedApiError } from "#layers/base/app/utils/apiNotifications";
 
 type ApiOptions = NonNullable<Parameters<typeof globalThis.$fetch>[1]>;
 type AddNotification = ReturnType<typeof useNotifications>["addNotification"];
@@ -14,11 +14,13 @@ export function createApiNotificationHooks(
         return;
       }
 
-      const notification = resolveApiErrorNotification(
-        error,
-        options.errorNotification,
-      );
+      const unexpectedError = resolveUnexpectedApiError(error);
+      if (unexpectedError) {
+        showError(unexpectedError);
+        return;
+      }
 
+      const notification = resolveApiErrorNotification(error, options.errorNotification);
       if (notification) {
         addNotification(notification);
       }
@@ -28,11 +30,13 @@ export function createApiNotificationHooks(
         return;
       }
 
-      const notification = resolveApiErrorNotification(
-        response._data,
-        options.errorNotification,
-      );
+      const unexpectedError = resolveUnexpectedApiError(response._data);
+      if (unexpectedError) {
+        showError(unexpectedError);
+        return;
+      }
 
+      const notification = resolveApiErrorNotification(response._data, options.errorNotification);
       if (notification) {
         addNotification(notification);
       }

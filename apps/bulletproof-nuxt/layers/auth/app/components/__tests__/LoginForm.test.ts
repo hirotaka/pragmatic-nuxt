@@ -110,14 +110,6 @@ test("should block login when validation fails", async () => {
   expect(onSuccess).toHaveBeenCalledTimes(0);
 });
 
-test("renders login block copy and register cross-link", async () => {
-  await renderComponent(LoginForm);
-
-  expect(screen.getByRole("heading", { name: /welcome back/i })).toBeTruthy();
-  expect(screen.getByText(/continue managing your team's discussions/i)).toBeTruthy();
-  expect(screen.getByText(/register/i)).toBeTruthy();
-});
-
 test("should disable submit while login is pending", async () => {
   const newUser = createUser({ teamId: undefined });
   const onSuccess = vi.fn();

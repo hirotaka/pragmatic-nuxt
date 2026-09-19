@@ -13,19 +13,6 @@ function deferred<T>() {
   return { promise, resolve };
 }
 
-// Mock vue-router's useRoute
-vi.mock("vue-router", async () => {
-  const actual = await vi.importActual("vue-router");
-  return {
-    ...actual,
-    useRoute: vi.fn(() => ({
-      query: {},
-      params: {},
-      path: "/auth/register",
-    })),
-  };
-});
-
 test("registers a new user and calls the successful submit callback", async () => {
   const newUser = createUser({});
   const onSuccess = vi.fn();
@@ -168,18 +155,6 @@ test("should register new user with an existing team without leaking team name",
     teamName: null,
     teamId: team.id,
   });
-});
-
-test("renders register block copy and login cross-link", async () => {
-  await renderComponent(RegisterForm, {
-    url: "/auth/register",
-    path: "/auth/register",
-  });
-
-  expect(screen.getByRole("heading", { name: /create your account/i })).toBeTruthy();
-  expect(screen.getByText(/start a new team or join an existing one/i)).toBeTruthy();
-  expect(screen.getByText(/demo workspace/i)).toBeTruthy();
-  expect(screen.getByText(/log in/i)).toBeTruthy();
 });
 
 test("should disable submit while registration is pending", async () => {

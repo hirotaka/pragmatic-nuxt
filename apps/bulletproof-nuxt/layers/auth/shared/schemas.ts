@@ -6,7 +6,8 @@ export const loginInputSchema = z.object({
   password: z.string().min(5, "Required"),
 });
 
-export type LoginInput = z.infer<typeof loginInputSchema>;
+export type LoginFormState = z.input<typeof loginInputSchema>;
+export type LoginInput = z.output<typeof loginInputSchema>;
 
 // Register schema (discriminated union: teamId XOR teamName)
 export const registerInputSchema = z
@@ -30,4 +31,13 @@ export const registerInputSchema = z
       ),
   );
 
-export type RegisterInput = z.infer<typeof registerInputSchema>;
+type RegisterSchemaInput = z.input<typeof registerInputSchema>;
+
+export type RegisterFormState = Pick<
+  RegisterSchemaInput,
+  "email" | "firstName" | "lastName" | "password"
+> & {
+  teamId: string | null;
+  teamName: string | null;
+};
+export type RegisterInput = z.output<typeof registerInputSchema>;

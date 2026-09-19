@@ -7,9 +7,33 @@ export interface FormError {
   [key: string]: unknown;
 }
 
-export interface FormSubmitEvent<TState = unknown> {
+type ValidSchemaResultData<TResult> = Extract<TResult, { valid: true }> extends {
+  data: infer TData;
+}
+  ? TData
+  : never;
+
+type StandardSchemaOutput<TSchema> = TSchema extends {
+  "~standard": { types?: infer TTypes };
+}
+  ? NonNullable<TTypes> extends { output: infer TOutput }
+    ? TOutput
+    : never
+  : never;
+
+export type FormSchemaOutput<TSchema, TFallback = unknown> = TSchema extends {
+  $validate: (...args: never[]) => Promise<infer TResult>;
+}
+  ? [ValidSchemaResultData<TResult>] extends [never]
+      ? TFallback
+      : ValidSchemaResultData<TResult>
+  : [StandardSchemaOutput<TSchema>] extends [never]
+      ? TFallback
+      : StandardSchemaOutput<TSchema>;
+
+export interface FormSubmitEvent<TData = unknown> {
   originalEvent: SubmitEvent;
-  data: TState;
+  data: TData;
 }
 
 export interface FormErrorEvent<TState = unknown> {
@@ -18,7 +42,10 @@ export interface FormErrorEvent<TState = unknown> {
   data: TState;
 }
 
-export type FormInputEvent = "input" | "change" | "blur";
+export interface FormValidationResult<TData = unknown> {
+  data?: TData;
+  errors: FormError[];
+}
 
 export type FormValidate<TState = unknown> = (state: TState) => FormError[] | Promise<FormError[]>;
 
@@ -26,6 +53,7 @@ export interface FormContextValue<TState = unknown> {
   errors: Ref<FormError[]>;
   disabled: Ref<boolean>;
   getFieldErrors: (name?: string, errorPattern?: RegExp) => FormError[];
+  touchField: (name: string) => void;
   validate: (event?: Event) => Promise<FormError[]>;
   state: Ref<TState | undefined>;
 }

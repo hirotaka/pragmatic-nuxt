@@ -253,7 +253,7 @@ test("discussion detail follows a reactive route identity", { tag: ["@discussion
   await expect(page.getByText(discussionBComment)).toBeVisible();
 });
 
-test("custom fetcher reports each failed initial GET attempt without an inline error", { tag: ["@discussions", "@initial-read"] }, async ({ page }) => {
+test("unexpected initial discussion read failures open the error page", { tag: ["@discussions", "@initial-read"] }, async ({ page }) => {
   await registerIsolatedUser(page, "initial-get");
   await page.goto("/app", { waitUntil: "networkidle" });
   await page.route(/\/api\/discussions(?:\?.*)?$/, async route => route.fulfill({
@@ -264,9 +264,10 @@ test("custom fetcher reports each failed initial GET attempt without an inline e
 
   await page.getByRole("link", { name: "Discussions" }).click();
 
-  await expect(page.getByLabel("Error")).toHaveCount(2);
-  await expect(page.getByText("Initial discussions GET failed")).toHaveCount(2);
-  await expect(page.locator("main").getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
+  await expect(page.getByText("Initial discussions GET failed")).toBeVisible();
+  await expect(page.getByLabel("Error")).toHaveCount(0);
 });
 
 test("rapid discussion page selection keeps the last selected page", { tag: ["@discussions", "@pagination"] }, async ({ page }) => {
@@ -333,7 +334,7 @@ test("rapid discussion page selection keeps the last selected page", { tag: ["@d
   await expect(page.getByText(secondPageTitle)).toHaveCount(0);
 });
 
-test("page-2 last-row deletion keeps the native current-page result", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+test("page-2 last-row deletion returns to the previous page", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
   await registerIsolatedUser(page, "native-current-page");
 
   for (let index = 1; index <= 11; index += 1) {
@@ -368,16 +369,16 @@ test("page-2 last-row deletion keeps the native current-page result", { tag: ["@
   await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
   deletionStarted = true;
-  await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
 
   await expect(page.getByLabel("Discussion Deleted")).toHaveCount(1);
   await expect(page.getByText(deletedTitle)).toHaveCount(0);
-  await expect(page.getByText("No Entries Found")).toBeVisible();
+  await expect(page.getByText("Page 1 of 1")).toBeVisible();
   expect(refreshPages).toContain("2");
-  expect(refreshPages).not.toContain("1");
+  expect(refreshPages).toContain("1");
 });
 
-test("current-page GET failure preserves mutation success", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+test("unexpected post-delete discussion refresh failures open the error page", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
   await registerIsolatedUser(page, "current-page-failure");
 
   for (let index = 1; index <= 11; index += 1) {
@@ -419,20 +420,17 @@ test("current-page GET failure preserves mutation success", { tag: ["@discussion
   await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
   failCurrentPageRefresh = true;
-  await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
 
-  const alerts = page.locator("[aria-live='assertive'] [role='alert']");
-  await expect(alerts).toHaveCount(3);
-  await expect(alerts.nth(0)).toHaveAttribute("aria-label", "Discussion Deleted");
-  await expect(alerts.nth(1)).toHaveAttribute("aria-label", "Error");
-  await expect(alerts.nth(2)).toHaveAttribute("aria-label", "Error");
-  await expect(page.getByText("Current page GET failed")).toHaveCount(2);
-  await expect(page.getByRole("dialog", { name: "Delete Discussion" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
+  await expect(page.getByText("Current page GET failed")).toBeVisible();
+  await expect(page.getByLabel("Error")).toHaveCount(0);
   expect(refreshPages).toContain("2");
   expect(refreshPages).not.toContain("1");
 });
 
-test("mutation failure uses the API notification without an inline form error", { tag: ["@discussions", "@mutation"] }, async ({ page }) => {
+test("unexpected discussion mutation failures open the error page", { tag: ["@discussions", "@mutation"] }, async ({ page }) => {
   await registerIsolatedUser(page, "mutation-failure");
   await page.goto("/app/discussions", { waitUntil: "networkidle" });
   await page.route(/\/api\/discussions$/, async (route) => {
@@ -453,9 +451,8 @@ test("mutation failure uses the API notification without an inline form error", 
   await drawer.getByLabel("Body").fill("This request should fail");
   await drawer.getByRole("button", { name: "Submit" }).click();
 
-  await expect(page.getByLabel("Error")).toHaveCount(1);
-  await expect(page.getByText("Discussion creation failed")).toHaveCount(1);
-  await expect(drawer.getByRole("alert")).toHaveCount(0);
-  await expect(drawer.getByRole("button", { name: "Submit" })).toBeEnabled();
-  await expect(drawer).toBeVisible();
+  await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
+  await expect(page.getByText("Discussion creation failed")).toBeVisible();
+  await expect(page.getByLabel("Error")).toHaveCount(0);
 });

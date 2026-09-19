@@ -1,5 +1,5 @@
 import { useNotifications } from "#layers/base/app/composables/useNotifications";
-import { resolveApiErrorNotification } from "#layers/base/app/utils/apiNotifications";
+import { resolveApiErrorNotification, resolveUnexpectedApiError } from "#layers/base/app/utils/apiNotifications";
 
 export const useAPI = createUseFetch((options) => {
   const { addNotification } = useNotifications();
@@ -7,8 +7,13 @@ export const useAPI = createUseFetch((options) => {
     error: unknown,
     option: Parameters<typeof resolveApiErrorNotification>[1],
   ) => {
-    const notification = resolveApiErrorNotification(error, option);
+    const unexpectedError = resolveUnexpectedApiError(error);
+    if (unexpectedError) {
+      showError(unexpectedError);
+      return;
+    }
 
+    const notification = resolveApiErrorNotification(error, option);
     if (notification) {
       addNotification(notification);
     }

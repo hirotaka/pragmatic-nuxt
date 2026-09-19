@@ -1,6 +1,12 @@
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { waitFor } from "@testing-library/vue";
 import DiscussionsPage from "../index.vue";
+
+const { refreshAfterCreate, useDiscussions } = vi.hoisted(() => ({
+  refreshAfterCreate: vi.fn(),
+  useDiscussions: vi.fn(),
+}));
 
 vi.mock("#imports", async () => {
   const actual = await vi.importActual("#imports");
@@ -11,26 +17,51 @@ vi.mock("#imports", async () => {
   };
 });
 
-describe("Discussions Page", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+vi.mock("~discussions/app/composables/useDiscussions", () => ({
+  useDiscussions,
+}));
 
-  test("delegates data ownership to the discussions collection", async () => {
-    const wrapper = await mountSuspended(DiscussionsPage, {
-      global: {
-        stubs: {
-          LayoutsContentLayout: {
-            template: "<section><slot name='actions' /><slot /></section>",
-            props: ["title", "description"],
-          },
-          DiscussionsCollection: {
-            template: "<div data-testid='discussions-collection' />",
-          },
-        },
+beforeEach(() => {
+  vi.clearAllMocks();
+  refreshAfterCreate.mockReset().mockResolvedValue(undefined);
+  useDiscussions.mockReset().mockResolvedValue({ refreshAfterCreate });
+});
+
+const mountPage = () => mountSuspended(DiscussionsPage, {
+  global: {
+    stubs: {
+      LayoutsContentLayout: {
+        template: "<section><slot name='actions' /><slot /></section>",
       },
-    });
+      CreateDiscussionForm: {
+        name: "CreateDiscussionForm",
+        emits: ["success"],
+        template: "<div />",
+      },
+      DiscussionsList: {
+        name: "DiscussionsList",
+        template: "<div data-testid='discussions-list' />",
+      },
+    },
+  },
+});
 
-    expect(wrapper.html()).toContain("discussions-collection");
-  });
+test("renders the discussions list as the data owner", async () => {
+  const wrapper = await mountPage();
+
+  expect(wrapper.find("[data-testid='discussions-list']").exists()).toBe(true);
+  expect(wrapper.findComponent({ name: "DiscussionsList" }).props()).toEqual({});
+});
+
+test("settles creation and closes the create drawer", async () => {
+  const wrapper = await mountPage();
+  const originalList = wrapper.get("[data-testid='discussions-list']").element;
+  const createTrigger = wrapper.findAll("button").find(button => button.text().includes("Create Discussion"));
+  await createTrigger!.trigger("click");
+
+  wrapper.findComponent({ name: "CreateDiscussionForm" }).vm.$emit("success");
+
+  await waitFor(() => expect(refreshAfterCreate).toHaveBeenCalledOnce());
+  expect(wrapper.get("[data-testid='discussions-list']").element).toBe(originalList);
+  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussionForm" }).exists()).toBe(false));
 });

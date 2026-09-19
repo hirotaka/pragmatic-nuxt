@@ -24,7 +24,7 @@ This collection documents practices for choosing and composing Nuxt data-fetchin
 
 ## Failure and Workflow Outcomes
 
-11. [Handle API Error Notifications in Custom Fetchers](api-error-notifications.md)
+11. [Present API Failures from Custom Fetchers](api-error-notifications.md)
 12. [Separate Completed Changes from Data Refresh Failures](completed-change-refresh-failures.md)
 13. [Orchestrate Auth Session State Outside the Fetch Client](auth-session-orchestration.md)
 
