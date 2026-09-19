@@ -51,7 +51,7 @@ Report the completed change first. If reloading the data fails, use the app's er
 ## Minimal Nuxt Example
 
 ```ts
-// layers/discussions/app/components/UpdateDiscussion.vue
+// app/components/UpdateProjectForm.vue
 const { refresh } = await useProjects();
 const updateProject = useUpdateProject();
 
@@ -77,8 +77,8 @@ The `catch` handles only the update request. The data reload starts after the up
 
 ## App Examples
 
-- [`UpdateDiscussion.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussion.vue) handles the update request in its own `try/catch`, shows `Discussion Updated`, and then calls `refresh()` outside that `try/catch`.
-- [`UsersList.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) shows the `User Deleted` message after a successful deletion and reloads the user list separately. It waits for the reload to finish before closing the deletion confirmation dialog.
+- [`UpdateDiscussionForm.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussionForm.vue) handles the update request in its own `try/catch`, shows `Discussion Updated`, and emits success. [`DiscussionView.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionView.vue) then reloads the shared discussion outside the mutation handler before closing the drawer.
+- [`DeleteUserDialog.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/DeleteUserDialog.vue) shows `User Deleted` and closes after the deletion succeeds. [`UsersList.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) reloads the user list separately after receiving that success event.
 
 ## Trade-offs and Limitations
 

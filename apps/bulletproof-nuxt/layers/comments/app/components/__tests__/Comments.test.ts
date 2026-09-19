@@ -7,11 +7,11 @@ import Comments from "../Comments.vue";
 const {
   createCommentMutate,
   refreshAfterCreate,
-  useComments,
+  useCommentsSettlement,
 } = vi.hoisted(() => ({
   createCommentMutate: vi.fn(),
   refreshAfterCreate: vi.fn(),
-  useComments: vi.fn(),
+  useCommentsSettlement: vi.fn(),
 }));
 
 vi.mock("#layers/base/app/composables/useNotifications", () => ({
@@ -23,8 +23,8 @@ vi.mock("~comments/app/composables/useCreateComment", () => ({
 }));
 
 vi.mock("~comments/app/composables/useComments", () => ({
-  useComments: (discussionId: () => string) => {
-    useComments(discussionId);
+  useCommentsSettlement: (discussionId: () => string) => {
+    useCommentsSettlement(discussionId);
     return { refreshAfterCreate };
   },
 }));
@@ -40,7 +40,7 @@ function deferred() {
 beforeEach(() => {
   createCommentMutate.mockReset().mockResolvedValue(undefined);
   refreshAfterCreate.mockReset().mockResolvedValue(undefined);
-  useComments.mockReset();
+  useCommentsSettlement.mockReset();
 });
 
 afterEach(() => {
@@ -66,8 +66,8 @@ test("renders the list as the comments data owner", async () => {
   const list = wrapper.findComponent({ name: "CommentsList" });
 
   expect(list.props("discussionId")).toBe("discussion-1");
-  expect(useComments).toHaveBeenCalledOnce();
-  expect(useComments.mock.calls[0]![0]()).toBe("discussion-1");
+  expect(useCommentsSettlement).toHaveBeenCalledOnce();
+  expect(useCommentsSettlement.mock.calls[0]![0]()).toBe("discussion-1");
 });
 
 test("discards an open creation draft when discussion identity changes", async () => {

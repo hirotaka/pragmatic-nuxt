@@ -96,7 +96,7 @@ export function useCreateProject() {
 - [`useAPI`](../../../apps/bulletproof-nuxt/layers/base/app/composables/useAPI.ts) defines the custom `useFetch` composable for AsyncData reads. It adds shared `onRequestError` and `onResponseError` notification functions before functions supplied for a specific API call. Its notification functions are not restricted to browser execution.
 - The [API plugin](../../../apps/bulletproof-nuxt/layers/base/app/plugins/api.ts) creates the custom `$fetch` instance and provides it as `$api` for imperative requests. Its error hooks add notifications in the browser and skip notification updates during SSR.
 - [`useDiscussions`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) defines the Discussions collection path and query for `useAPI`. [`useCreateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useCreateDiscussion.ts) defines the path, method, and body for `$api`.
-- [`CreateDiscussion.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CreateDiscussion.vue) manages pending state, adds the success notification, refreshes the collection, and completes the drawer after `useCreateDiscussion` succeeds.
+- [`CreateDiscussionForm.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CreateDiscussionForm.vue) starts `useCreateDiscussion`, while the shared Form manages pending submission and prevents duplicate submits. After the form reports success, the [Discussions page](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/index.vue) refreshes the collection and closes the drawer.
 
 ## Trade-offs and Limitations
 

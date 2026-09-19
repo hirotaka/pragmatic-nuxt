@@ -333,7 +333,7 @@ test("rapid discussion page selection keeps the last selected page", { tag: ["@d
   await expect(page.getByText(secondPageTitle)).toHaveCount(0);
 });
 
-test("page-2 last-row deletion keeps the native current-page result", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
+test("page-2 last-row deletion returns to the previous page", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
   await registerIsolatedUser(page, "native-current-page");
 
   for (let index = 1; index <= 11; index += 1) {
@@ -368,13 +368,13 @@ test("page-2 last-row deletion keeps the native current-page result", { tag: ["@
   await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
   deletionStarted = true;
-  await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
 
   await expect(page.getByLabel("Discussion Deleted")).toHaveCount(1);
   await expect(page.getByText(deletedTitle)).toHaveCount(0);
-  await expect(page.getByText("No Entries Found")).toBeVisible();
+  await expect(page.getByText("Page 1 of 1")).toBeVisible();
   expect(refreshPages).toContain("2");
-  expect(refreshPages).not.toContain("1");
+  expect(refreshPages).toContain("1");
 });
 
 test("current-page GET failure preserves mutation success", { tag: ["@discussions", "@mutation-refresh"] }, async ({ page }) => {
@@ -419,7 +419,7 @@ test("current-page GET failure preserves mutation success", { tag: ["@discussion
   await page.getByRole("button", { name: `Open discussion actions for ${deletedTitle}` }).click();
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
   failCurrentPageRefresh = true;
-  await page.getByRole("button", { name: "Delete Discussion", exact: true }).click();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
 
   const alerts = page.locator("[aria-live='assertive'] [role='alert']");
   await expect(alerts).toHaveCount(3);

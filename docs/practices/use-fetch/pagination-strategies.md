@@ -104,7 +104,7 @@ The first composable replaces its current result when the selected page changes.
 ## App Examples
 
 - [`useDiscussions.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) passes the reactive page and limit values to its collection request and returns the AsyncData state used for page replacement.
-- [`DiscussionsCollection.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsCollection.vue) displays the returned page and updates the page value after the user selects another page.
+- [`DiscussionsList.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsList.vue) displays the returned page and updates the shared page value after the user selects another page.
 - [`useComments.ts`](../../../apps/bulletproof-nuxt/layers/comments/app/composables/useComments.ts) uses append pagination for comments and associates the accumulated items with the current discussion ID.
 - [`usePaginatedData.ts`](../../../apps/bulletproof-nuxt/layers/base/app/composables/usePaginatedData.ts) replaces page one, appends later pages, preserves accumulated items after a later-page failure, and ignores obsolete work.
 - [`comments/index.get.ts`](../../../apps/bulletproof-nuxt/layers/comments/server/api/comments/index.get.ts) returns serialized comment items with page metadata.

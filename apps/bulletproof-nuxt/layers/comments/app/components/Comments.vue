@@ -4,14 +4,14 @@ import { Plus } from "lucide-vue-next";
 import FormDrawer from "~~/app/components/app/FormDrawer.vue";
 import { Button } from "~~/app/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
-import { useComments } from "~comments/app/composables/useComments";
+import { useCommentsSettlement } from "~comments/app/composables/useComments";
 
 interface CommentsProps {
   discussionId: string;
 }
 
 const props = defineProps<CommentsProps>();
-const { refreshAfterCreate } = await useComments(() => props.discussionId);
+const { refreshAfterCreate } = useCommentsSettlement(() => props.discussionId);
 
 const handleCreateSuccess = async (close: () => void) => {
   await refreshAfterCreate();

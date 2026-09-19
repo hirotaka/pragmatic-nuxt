@@ -88,8 +88,10 @@ With the same project ID, both components use the same `useFetch` call site and 
 
 - [`useDiscussion.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussion.ts) centralizes the discussion detail request through `useAPI` for the page, `DiscussionView`, and `UpdateDiscussion`.
 - [`[id].vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/%5Bid%5D.vue) calls `useDiscussion()` with the route ID and passes the fetched `discussion.id` to `DiscussionView`.
-- [`DiscussionView.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionView.vue) reads the discussion through the same composable and passes its ID to `UpdateDiscussion`. It passes the discussion body to [`MarkdownPreview.vue`](../../../apps/bulletproof-nuxt/app/components/app/MarkdownPreview.vue) as a prop, keeping Markdown rendering independent of data fetching.
-- [`UpdateDiscussion.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussion.vue) copies the shared title and body into local form state and obtains `refresh()` from `useDiscussion()`. It calls `refresh()` after the update succeeds, without receiving a refresh callback through props.
+- [`DiscussionView.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionView.vue) reads the discussion through the same composable and passes its current values to `UpdateDiscussionForm`. It passes the discussion body to [`MarkdownPreview.vue`](../../../apps/bulletproof-nuxt/app/components/app/MarkdownPreview.vue) as a prop, keeping Markdown rendering independent of data fetching.
+- [`UpdateDiscussionForm.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/UpdateDiscussionForm.vue) owns the update request and emits success without receiving a refresh function. `DiscussionView` obtains `refresh()` from `useDiscussion()` and refreshes the shared data before closing the form drawer.
+- [`useDiscussions.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) gives each list page a stable key. The Discussions page can refresh that keyed AsyncData after creation without starting a second list read during setup.
+- [`useComments.ts`](../../../apps/bulletproof-nuxt/layers/comments/app/composables/useComments.ts) includes the Discussion ID and page in its reactive key so creation refreshes the matching Comment list.
 
 ## Trade-offs and Limitations
 

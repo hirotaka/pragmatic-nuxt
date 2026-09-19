@@ -105,31 +105,19 @@ test("discussion content waits for the initial comments response", { tag: ["@com
   await expect(page.getByRole("button", { name: "Create Comment" })).toBeEnabled();
 });
 
-test("failed initial comments provide persistent recovery and retry to success", { tag: ["@comments", "@initial-read"] }, async ({ page }) => {
+test("failed initial comments use the shared notification and keep creation available", { tag: ["@comments", "@initial-read"] }, async ({ page }) => {
   await registerIsolatedUser(page, "comments-failure");
   const discussion = await createDiscussion(page, `Comments failure ${Date.now()}`);
   await page.goto("/app/discussions", { waitUntil: "networkidle" });
 
-  let failCommentsRead = true;
-  const retryStarted = deferred();
-  const retryRelease = deferred();
   await page.route((url) => {
     return url.pathname === "/api/comments"
       && url.searchParams.get("discussionId") === discussion.id;
-  }, async (route) => {
-    if (failCommentsRead) {
-      await route.fulfill({
-        status: 500,
-        contentType: "application/json",
-        body: JSON.stringify({ message: "Initial comments GET failed" }),
-      });
-      return;
-    }
-
-    retryStarted.resolve();
-    await retryRelease.promise;
-    await route.continue();
-  });
+  }, async route => route.fulfill({
+    status: 500,
+    contentType: "application/json",
+    body: JSON.stringify({ message: "Initial comments GET failed" }),
+  }));
 
   const row = page.getByRole("row").filter({ hasText: discussion.title });
   await row.getByRole("link", { name: "View" }).click();
@@ -138,23 +126,8 @@ test("failed initial comments provide persistent recovery and retry to success",
   await expect(page.getByRole("heading", { name: discussion.title })).toBeVisible();
   await expect(page.getByLabel("Error").first()).toBeVisible();
   await expect(page.getByText("Initial comments GET failed").first()).toBeVisible();
-  await expect(page.getByRole("alert", { name: "Comments unavailable" })).toBeVisible();
-  await expect(page.getByRole("status", { name: "Loading comments" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "No Comments Found" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Create Comment" })).toBeDisabled();
-
-  failCommentsRead = false;
-  await page.getByRole("button", { name: "Retry comments" }).click();
-  await retryStarted.promise;
-
-  await expect(page.getByRole("alert", { name: "Comments unavailable" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Retry comments" })).toBeDisabled();
-  await expect(page.getByRole("button", { name: "Create Comment" })).toBeDisabled();
-
-  retryRelease.resolve();
-
-  await expect(page.getByRole("alert", { name: "Comments unavailable" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "No Comments Found" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Retry comments" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Create Comment" })).toBeEnabled();
 });
 

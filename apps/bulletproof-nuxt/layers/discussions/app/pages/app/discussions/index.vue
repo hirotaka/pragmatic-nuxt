@@ -2,7 +2,7 @@
 import { Plus } from "lucide-vue-next";
 import FormDrawer from "~~/app/components/app/FormDrawer.vue";
 import { Button } from "~~/app/components/ui/button";
-import { useDiscussions } from "~discussions/app/composables/useDiscussions";
+import { useDiscussionsSettlement } from "~discussions/app/composables/useDiscussions";
 
 definePageMeta({
   middleware: "auth",
@@ -13,7 +13,7 @@ useHead({
   title: "Discussions",
 });
 
-const { refreshAfterCreate } = await useDiscussions();
+const { refreshAfterCreate } = useDiscussionsSettlement();
 
 const handleCreateSuccess = async (close: () => void) => {
   await refreshAfterCreate();

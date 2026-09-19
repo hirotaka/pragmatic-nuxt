@@ -98,10 +98,10 @@ async function handleCreate(name: string) {
 ## App Examples
 
 - [`useDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussion.ts) builds the detail URL from a reactive Discussion ID and returns the resulting `AsyncData`.
-- [`useDiscussions`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) keeps the collection URL and reactive page and limit options together and returns `AsyncData`.
-- [`DiscussionsCollection`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsCollection.vue) stores the current page and uses the returned data, status, and refresh function. [`DiscussionsList`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsList.vue) receives the values it needs as props and emits page changes without defining the request.
+- [`useDiscussions`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) keeps the collection URL, reactive page and limit options, and create and delete pagination settlement together while exposing the native data, status, and refresh state.
+- [`DiscussionsList`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsList.vue) reads and renders the collection, changes the shared current page, and starts delete settlement after a successful deletion.
 - [`useCreateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useCreateDiscussion.ts) and [`useDeleteDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDeleteDiscussion.ts) keep each request's URL, method, and input together and return functions for later execution.
-- [`CreateDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CreateDiscussion.vue) and [`DeleteDiscussion`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DeleteDiscussion.vue) invoke those functions after form submission or deletion confirmation and decide pending feedback, success notifications, refresh timing, and when the drawer or dialog closes.
+- [`CreateDiscussionForm`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CreateDiscussionForm.vue) runs the create request and reports success. The [Discussions page](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/index.vue) then settles the collection before closing the drawer. [`DeleteDiscussionDialog`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DeleteDiscussionDialog.vue) owns deletion feedback and dialog closure, while `DiscussionsList` owns the resulting collection settlement.
 
 ## Trade-offs and Limitations
 

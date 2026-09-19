@@ -26,10 +26,11 @@ test("registers the Discussions endpoint with shared pagination state", async ()
   expect(useAPI).toHaveBeenCalledOnce();
   expect(useAPI.mock.calls[0]?.[0]).toBe("/api/discussions");
   const options = useAPI.mock.calls[0]?.[1];
-  expect(options).not.toHaveProperty("key");
+  expect(options.key.value).toBe("discussions:1");
   expect(options.query.page).toBe(result.currentPage);
   expect(options.query.limit).toBe(10);
   result.currentPage.value = 3;
+  expect(options.key.value).toBe("discussions:3");
   expect(options.query.page.value).toBe(3);
   expect(result).toEqual({
     currentPage: result.currentPage,

@@ -16,7 +16,6 @@ import { useNotifications } from "#layers/base/app/composables/useNotifications"
 interface UpdateDiscussionFormProps {
   body: string;
   discussionId: string;
-  refresh: () => Promise<void>;
   title: string;
 }
 
@@ -55,7 +54,6 @@ const handleSubmit = async (event: FormSubmitEvent<UpdateDiscussionInput>) => {
     type: "success",
     title: "Discussion Updated",
   });
-  await props.refresh().catch(() => undefined);
   emit("success");
 };
 </script>

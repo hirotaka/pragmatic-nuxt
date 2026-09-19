@@ -23,7 +23,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <DropdownRoot>
+  <DropdownRoot :modal="false">
     <DropdownTrigger as-child>
       <Button
         variant="ghost"

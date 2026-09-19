@@ -17,6 +17,11 @@ const props = defineProps<DiscussionViewProps>();
 const { isAdmin } = useUser();
 
 const { data: discussion, refresh } = await useDiscussion(() => props.discussionId);
+
+const handleUpdateSuccess = async (close: () => void) => {
+  await refresh().catch(() => undefined);
+  close();
+};
 </script>
 
 <template>
@@ -49,9 +54,8 @@ const { data: discussion, refresh } = await useDiscussion(() => props.discussion
             <UpdateDiscussionForm
               :body="discussion.body"
               :discussion-id="discussion.id"
-              :refresh="refresh"
               :title="discussion.title"
-              @success="close"
+              @success="handleUpdateSuccess(close)"
             />
           </template>
 

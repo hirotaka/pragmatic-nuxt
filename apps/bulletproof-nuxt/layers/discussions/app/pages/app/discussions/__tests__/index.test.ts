@@ -3,9 +3,9 @@ import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { waitFor } from "@testing-library/vue";
 import DiscussionsPage from "../index.vue";
 
-const { refreshAfterCreate, useDiscussions } = vi.hoisted(() => ({
+const { refreshAfterCreate, useDiscussionsSettlement } = vi.hoisted(() => ({
   refreshAfterCreate: vi.fn(),
-  useDiscussions: vi.fn(),
+  useDiscussionsSettlement: vi.fn(),
 }));
 
 vi.mock("#imports", async () => {
@@ -18,13 +18,13 @@ vi.mock("#imports", async () => {
 });
 
 vi.mock("~discussions/app/composables/useDiscussions", () => ({
-  useDiscussions,
+  useDiscussionsSettlement,
 }));
 
 beforeEach(() => {
   vi.clearAllMocks();
   refreshAfterCreate.mockReset().mockResolvedValue(undefined);
-  useDiscussions.mockReset().mockResolvedValue({ refreshAfterCreate });
+  useDiscussionsSettlement.mockReset().mockReturnValue({ refreshAfterCreate });
 });
 
 const mountPage = () => mountSuspended(DiscussionsPage, {

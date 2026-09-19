@@ -3,9 +3,8 @@ import { cleanup, waitFor } from "@testing-library/vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import UpdateDiscussionForm from "../UpdateDiscussionForm.vue";
 
-const { addNotification, discussionRefresh, updateDiscussionMutate } = vi.hoisted(() => ({
+const { addNotification, updateDiscussionMutate } = vi.hoisted(() => ({
   addNotification: vi.fn(),
-  discussionRefresh: vi.fn(),
   updateDiscussionMutate: vi.fn(),
 }));
 
@@ -19,7 +18,6 @@ vi.mock("~discussions/app/composables/useUpdateDiscussion", () => ({
 
 beforeEach(() => {
   addNotification.mockClear();
-  discussionRefresh.mockReset().mockResolvedValue(undefined);
   updateDiscussionMutate.mockReset().mockResolvedValue(undefined);
 });
 
@@ -29,7 +27,6 @@ const mountForm = () => mountSuspended(UpdateDiscussionForm, {
   props: {
     body: "Existing body",
     discussionId: "discussion-1",
-    refresh: discussionRefresh,
     title: "Existing title",
   },
 });
@@ -51,23 +48,10 @@ test("UpdateDiscussionForm preloads current values and submits changed data", as
       body: "Existing body",
     },
   ));
-  expect(discussionRefresh).toHaveBeenCalledOnce();
   expect(addNotification).toHaveBeenCalledWith({
     type: "success",
     title: "Discussion Updated",
   });
-  expect(wrapper.emitted("success")).toHaveLength(1);
-});
-
-test("UpdateDiscussionForm keeps mutation success when its refresh rejects", async () => {
-  discussionRefresh.mockRejectedValueOnce(new Error("Refresh failed"));
-  const wrapper = await mountForm();
-
-  await wrapper.get("form").trigger("submit");
-
-  await waitFor(() => expect(discussionRefresh).toHaveBeenCalledOnce());
-  expect(updateDiscussionMutate).toHaveBeenCalledOnce();
-  expect(addNotification).toHaveBeenCalledWith({ type: "success", title: "Discussion Updated" });
   expect(wrapper.emitted("success")).toHaveLength(1);
 });
 
@@ -78,11 +62,9 @@ test("UpdateDiscussionForm remains retryable after mutation failure", async () =
   await wrapper.get("form").trigger("submit");
 
   await waitFor(() => expect(wrapper.get("input[name='title']").attributes("disabled")).toBeUndefined());
-  expect(discussionRefresh).not.toHaveBeenCalled();
   expect(addNotification).not.toHaveBeenCalled();
   expect(wrapper.emitted("success")).toBeUndefined();
 
   await wrapper.get("form").trigger("submit");
   await waitFor(() => expect(updateDiscussionMutate).toHaveBeenCalledTimes(2));
-  expect(discussionRefresh).toHaveBeenCalledOnce();
 });

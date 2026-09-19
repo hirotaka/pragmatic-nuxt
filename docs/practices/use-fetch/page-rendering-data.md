@@ -72,7 +72,7 @@ The `status` and `refresh` values let the list show refresh progress and request
 
 ## App Examples
 
-- The [discussion collection](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsCollection.vue) awaits a [feature composable](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) that returns `AsyncData` with reactive pagination inputs.
+- The [discussion list](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionsList.vue) awaits a [feature composable](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussions.ts) that exposes native AsyncData state with reactive pagination inputs.
 - The [discussion detail page](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/%5Bid%5D.vue) awaits one discussion before rendering the UI that uses it.
 - The [user directory](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) awaits an array of users and renders a successful empty array separately from unavailable data.
 - The [registration page](../../../apps/bulletproof-nuxt/layers/auth/app/pages/auth/register.vue) awaits the teams before passing them to the registration form.
