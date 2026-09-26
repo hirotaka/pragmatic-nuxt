@@ -1,11 +1,11 @@
-import type { Discussion } from "~discussions/shared/types";
+import type { Discussion } from "#layers/discussions/shared/types/discussion";
 import { expect, expectTypeOf, test } from "vitest";
 import { serializeDiscussion } from "../serializeDiscussion";
 
 expectTypeOf<Discussion["createdAt"]>().toEqualTypeOf<string>();
 expectTypeOf<Discussion["updatedAt"]>().toEqualTypeOf<string>();
 
-test("serializes a repository discussion into the exact public DTO with ISO datetimes", () => {
+test("serializes a repository discussion into the public shape with ISO datetimes", () => {
   const createdAt = new Date("2026-07-10T01:02:03.456Z");
   const updatedAt = new Date("2026-07-10T02:03:04.567Z");
   const discussion = {

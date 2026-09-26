@@ -20,7 +20,7 @@ Good Application State Solutions for Vue/Nuxt:
 - [Pinia](https://pinia.vuejs.org/) - Official Vue state management library
 - [VueUse](https://vueuse.org/) - Collection of Vue composition utilities
 
-[Application State Example Code](../../apps/bulletproof-nuxt/layers/base/app/composables/useNotifications.ts)
+[Application State Example Code](../../apps/bulletproof-nuxt/app/composables/useNotifications.ts)
 
 ## Server Cache State
 
@@ -56,7 +56,7 @@ Validation libraries:
 - [zod](https://github.com/colinhacks/zod) - Used in this project
 - [yup](https://github.com/jquense/yup)
 
-[Form Example Code](../../apps/bulletproof-nuxt/app/components/form/Form.vue)
+[Regle Setup Example](../../apps/bulletproof-nuxt/app/composables/useFormSchema.ts) and [Field Integration Example](../../apps/bulletproof-nuxt/layers/auth/app/components/LoginForm.vue)
 
 ## URL State
 

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { MessageSquare, ShieldCheck, UserRoundCog } from "lucide-vue-next";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const { user } = useUser();
 
@@ -19,7 +17,6 @@ const capabilities = computed(() => user.value?.role === "ADMIN"
 
 definePageMeta({
   middleware: "auth",
-  layout: "dashboard",
 });
 
 useHead({
@@ -28,7 +25,7 @@ useHead({
 </script>
 
 <template>
-  <LayoutsContentLayout
+  <PageContent
     title="Dashboard"
     description="Workspace overview for discussions, moderation, and team access."
   >
@@ -101,5 +98,5 @@ useHead({
         </CardContent>
       </Card>
     </div>
-  </LayoutsContentLayout>
+  </PageContent>
 </template>

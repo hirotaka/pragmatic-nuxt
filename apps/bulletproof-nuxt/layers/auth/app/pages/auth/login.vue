@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useRouter, useRoute } from "vue-router";
-
 definePageMeta({
   layout: "auth",
   title: "Log in to your account",

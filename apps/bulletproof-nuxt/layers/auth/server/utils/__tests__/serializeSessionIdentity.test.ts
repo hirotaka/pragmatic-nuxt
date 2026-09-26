@@ -1,4 +1,4 @@
-import type { SessionIdentity } from "~auth/shared/types";
+import type { SessionIdentity } from "#layers/auth/shared/types/session-identity";
 import { expect, expectTypeOf, test } from "vitest";
 import { serializeSessionIdentity } from "../serializeSessionIdentity";
 

@@ -137,7 +137,7 @@ test("SSR detail failure hydrates the configured read notification", { tag: ["@d
   const response = await goto(`/app/discussions/${discussionId}`, { waitUntil: "hydration" });
   expect(response).not.toBeNull();
 
-  await expect(page.getByLabel("Error")).toHaveCount(1);
+  await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(1);
   await expect(page.getByText("Discussion not found")).toHaveCount(1);
   expect(browserDiscussionGets).toBe(0);
 });
@@ -267,7 +267,7 @@ test("unexpected initial discussion read failures open the error page", { tag: [
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
   await expect(page.getByText("Initial discussions GET failed")).toBeVisible();
-  await expect(page.getByLabel("Error")).toHaveCount(0);
+  await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(0);
 });
 
 test("rapid discussion page selection keeps the last selected page", { tag: ["@discussions", "@pagination"] }, async ({ page }) => {
@@ -371,7 +371,7 @@ test("page-2 last-row deletion returns to the previous page", { tag: ["@discussi
   deletionStarted = true;
   await page.getByRole("button", { name: "Delete", exact: true }).click();
 
-  await expect(page.getByLabel("Discussion Deleted")).toHaveCount(1);
+  await expect(page.locator("[data-sonner-toast][data-type=success]", { hasText: "Discussion Deleted" })).toHaveCount(1);
   await expect(page.getByText(deletedTitle)).toHaveCount(0);
   await expect(page.getByText("Page 1 of 1")).toBeVisible();
   expect(refreshPages).toContain("2");
@@ -425,7 +425,7 @@ test("unexpected post-delete discussion refresh failures open the error page", {
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
   await expect(page.getByText("Current page GET failed")).toBeVisible();
-  await expect(page.getByLabel("Error")).toHaveCount(0);
+  await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(0);
   expect(refreshPages).toContain("2");
   expect(refreshPages).not.toContain("1");
 });
@@ -454,5 +454,5 @@ test("unexpected discussion mutation failures open the error page", { tag: ["@di
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
   await expect(page.getByText("Discussion creation failed")).toBeVisible();
-  await expect(page.getByLabel("Error")).toHaveCount(0);
+  await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(0);
 });

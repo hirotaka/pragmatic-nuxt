@@ -14,11 +14,11 @@ const {
   usePaginatedData: vi.fn(),
 }));
 
-vi.mock("#layers/base/app/composables/useAPI", () => ({
+vi.mock("~~/app/composables/useAPI", () => ({
   useAPI,
 }));
 
-vi.mock("#layers/base/app/composables/usePaginatedData", () => ({
+vi.mock("~~/app/composables/usePaginatedData", () => ({
   usePaginatedData,
 }));
 

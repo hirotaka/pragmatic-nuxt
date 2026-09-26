@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cleanup, waitFor } from "@testing-library/vue";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import CreateDiscussionForm from "../CreateDiscussionForm.vue";
 
 const { addNotification, createDiscussionMutate } = vi.hoisted(() => ({
@@ -8,13 +8,11 @@ const { addNotification, createDiscussionMutate } = vi.hoisted(() => ({
   createDiscussionMutate: vi.fn(),
 }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: addNotification },
 }));
 
-vi.mock("~discussions/app/composables/useCreateDiscussion", () => ({
-  useCreateDiscussion: () => async (input: unknown) => createDiscussionMutate(input),
-}));
+mockNuxtImport("useCreateDiscussion", () => () => async (input: unknown) => createDiscussionMutate(input));
 
 beforeEach(() => {
   addNotification.mockClear();
@@ -48,7 +46,7 @@ test("CreateDiscussionForm blocks invalid submit and sends a valid payload", asy
     title: "New discussion",
     body: "Discussion body",
   }));
-  expect(addNotification).toHaveBeenCalledWith({ type: "success", title: "Discussion Created" });
+  expect(addNotification).toHaveBeenCalledWith("Discussion Created");
   expect(wrapper.emitted("success")).toHaveLength(1);
 });
 

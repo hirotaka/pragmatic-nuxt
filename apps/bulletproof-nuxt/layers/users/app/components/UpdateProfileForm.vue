@@ -1,17 +1,5 @@
 <script setup lang="ts">
-import { reactive, watch } from "vue";
-import { Form, type FormSubmitEvent } from "~~/app/components/form";
-import { useFormSchema } from "~~/app/composables/useFormSchema";
-import { FormField } from "~~/app/components/form-field";
-import { Input } from "~~/app/components/ui/input";
-import { Textarea } from "~~/app/components/ui/textarea";
-import { useUpdateProfile } from "~users/app/composables/useUpdateProfile";
-import {
-  updateProfileInputSchema,
-  type UpdateProfileFormState,
-  type UpdateProfileInput,
-} from "~users/shared/schemas";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 const props = defineProps<{
   profile: UpdateProfileInput;
@@ -19,14 +7,18 @@ const props = defineProps<{
 const emit = defineEmits<{
   success: [];
 }>();
-const { addNotification } = useNotifications();
 const updateProfile = useUpdateProfile();
+const isSubmitting = ref(false);
 
 const state = reactive<UpdateProfileFormState>({
   ...props.profile,
   bio: props.profile.bio ?? "",
 });
 const { r$ } = useFormSchema(state, updateProfileInputSchema);
+const firstNameField = r$.$fields.firstName;
+const lastNameField = r$.$fields.lastName;
+const emailField = r$.$fields.email;
+const bioField = r$.$fields.bio!;
 
 watch(
   () => props.profile,
@@ -39,74 +31,120 @@ watch(
   { deep: true },
 );
 
-const handleSubmit = async (event: FormSubmitEvent<UpdateProfileInput>) => {
-  const values = event.data;
+const handleSubmit = async () => {
+  if (isSubmitting.value) return;
 
+  isSubmitting.value = true;
   try {
-    await updateProfile(values);
+    const result = await r$.$validate();
+    if (!result.valid) return;
+
+    await updateProfile(result.data as UpdateProfileInput);
   }
   catch {
     // The request or session owner reports the failure.
     return;
   }
+  finally {
+    isSubmitting.value = false;
+  }
 
-  addNotification({
-    type: "success",
-    title: "Profile Updated",
-  });
+  toast.success("Profile Updated");
   emit("success");
 };
 </script>
 
 <template>
-  <Form
+  <form
     id="update-profile"
-    :schema="r$"
-    :state="r$.$value"
+    novalidate
     class="space-y-6"
-    @submit="handleSubmit"
+    @submit.prevent="handleSubmit"
   >
-    <FormField
-      v-slot="field"
-      name="firstName"
-      label="First Name"
-    >
+    <Field :data-invalid="firstNameField.$error ? 'true' : undefined">
+      <FieldLabel for="first-name">
+        First Name
+      </FieldLabel>
       <Input
-        v-model="r$.$value.firstName"
-        v-bind="field"
+        id="first-name"
+        v-model="firstNameField.$value"
+        name="firstName"
+        :disabled="isSubmitting"
+        :aria-invalid="firstNameField.$error ? 'true' : undefined"
+        :aria-describedby="firstNameField.$error ? 'first-name-error' : undefined"
+        @blur="firstNameField.$touch()"
+        @change="firstNameField.$touch()"
       />
-    </FormField>
-    <FormField
-      v-slot="field"
-      name="lastName"
-      label="Last Name"
-    >
-      <Input
-        v-model="r$.$value.lastName"
-        v-bind="field"
+      <FieldError
+        v-if="firstNameField.$error"
+        id="first-name-error"
+        :errors="firstNameField.$errors"
       />
-    </FormField>
-    <FormField
-      v-slot="field"
-      name="email"
-      label="Email"
-    >
+    </Field>
+
+    <Field :data-invalid="lastNameField.$error ? 'true' : undefined">
+      <FieldLabel for="last-name">
+        Last Name
+      </FieldLabel>
       <Input
-        v-model="r$.$value.email"
-        v-bind="field"
+        id="last-name"
+        v-model="lastNameField.$value"
+        name="lastName"
+        :disabled="isSubmitting"
+        :aria-invalid="lastNameField.$error ? 'true' : undefined"
+        :aria-describedby="lastNameField.$error ? 'last-name-error' : undefined"
+        @blur="lastNameField.$touch()"
+        @change="lastNameField.$touch()"
+      />
+      <FieldError
+        v-if="lastNameField.$error"
+        id="last-name-error"
+        :errors="lastNameField.$errors"
+      />
+    </Field>
+
+    <Field :data-invalid="emailField.$error ? 'true' : undefined">
+      <FieldLabel for="email">
+        Email
+      </FieldLabel>
+      <Input
+        id="email"
+        v-model="emailField.$value"
+        name="email"
         type="email"
+        :disabled="isSubmitting"
+        :aria-invalid="emailField.$error ? 'true' : undefined"
+        :aria-describedby="emailField.$error ? 'email-error' : undefined"
+        @blur="emailField.$touch()"
+        @change="emailField.$touch()"
       />
-    </FormField>
-    <FormField
-      v-slot="field"
-      name="bio"
-      label="Bio"
-    >
+      <FieldError
+        v-if="emailField.$error"
+        id="email-error"
+        :errors="emailField.$errors"
+      />
+    </Field>
+
+    <Field :data-invalid="bioField.$error ? 'true' : undefined">
+      <FieldLabel for="bio">
+        Bio
+      </FieldLabel>
       <Textarea
-        v-model="r$.$value.bio"
-        v-bind="field"
+        id="bio"
+        v-model="bioField.$value"
+        name="bio"
         :rows="4"
+        :disabled="isSubmitting"
+        :aria-invalid="bioField.$error ? 'true' : undefined"
+        :aria-describedby="bioField.$error ? 'bio-error' : undefined"
+        @blur="bioField.$touch()"
+        @change="bioField.$touch()"
       />
-    </FormField>
-  </Form>
+      <FieldError
+        v-if="bioField.$error"
+        id="bio-error"
+        :errors="bioField.$errors"
+      />
+    </Field>
+  </form>
 </template>

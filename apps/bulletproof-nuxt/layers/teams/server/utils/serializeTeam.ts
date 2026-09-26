@@ -1,7 +1,6 @@
-import type { Team as TeamDto } from "#layers/auth/shared/types";
-import type { Team as TeamRecord } from "~teams/server/repository/teamRepository";
+import type { TeamRecord } from "../repository/teamRepository";
 
-export function serializeTeam(team: TeamRecord): TeamDto {
+export function serializeTeam(team: TeamRecord): Team {
   return {
     id: team.id,
     name: team.name,

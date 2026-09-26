@@ -1,6 +1,4 @@
-import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
-import { serializeDiscussion } from "~discussions/server/utils/serializeDiscussion";
-import { parsePagination } from "~base/server/utils/parsePagination";
+import { createDiscussionRepository } from "../../repository/discussionRepository";
 
 export default defineProtectedEventHandler(async (event, sessionUser) => {
   if (!sessionUser.teamId) {

@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
-import { useDeleteUser } from "~users/app/composables/useDeleteUser";
-import type { User } from "~users/shared/types";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 interface DeleteUserDialogProps {
   user: User;
@@ -15,7 +11,6 @@ const emit = defineEmits<{
   success: [];
 }>();
 
-const { addNotification } = useNotifications();
 const deleteUser = useDeleteUser();
 const isOpen = ref(false);
 const isPending = ref(false);
@@ -33,10 +28,7 @@ const handleConfirm = async () => {
     return;
   }
 
-  addNotification({
-    type: "success",
-    title: "User Deleted",
-  });
+  toast.success("User Deleted");
   emit("success");
   isPending.value = false;
   isOpen.value = false;

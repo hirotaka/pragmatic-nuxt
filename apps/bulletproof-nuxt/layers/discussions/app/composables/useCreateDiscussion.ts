@@ -1,5 +1,3 @@
-import type { CreateDiscussionInput } from "~discussions/shared/schemas";
-
 export const useCreateDiscussion = () => {
   const { $api } = useNuxtApp();
 

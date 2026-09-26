@@ -1,14 +1,5 @@
 <script setup lang="ts">
 import { MoreHorizontal, Trash } from "lucide-vue-next";
-import { Button } from "~~/app/components/ui/button";
-import {
-  DropdownContent,
-  DropdownItem,
-  DropdownRoot,
-  DropdownTrigger,
-} from "~~/app/components/ui/dropdown";
-import type { Discussion } from "~discussions/shared/types";
-import DeleteDiscussionDialog from "./DeleteDiscussionDialog.vue";
 
 interface DiscussionActionsMenuProps {
   actionLabel: string;

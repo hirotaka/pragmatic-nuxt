@@ -1,4 +1,4 @@
-import type { User } from "~auth/shared/types";
+import type { User } from "#layers/users/shared/types/user";
 import { expect, expectTypeOf, test } from "vitest";
 import { serializeUser } from "../serializeUser";
 

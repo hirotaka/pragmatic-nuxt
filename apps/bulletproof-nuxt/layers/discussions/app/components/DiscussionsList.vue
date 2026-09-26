@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import DataTable from "~~/app/components/app/DataTable.vue";
-import { formatDate } from "#layers/base/app/utils/format";
-import type { Discussion } from "~discussions/shared/types";
-import type { TableColumn } from "~~/app/components/app/data-table";
-import DiscussionActionsMenu from "./DiscussionActionsMenu.vue";
-import { useDiscussions } from "~discussions/app/composables/useDiscussions";
+import type { TableColumn } from "~~/app/components/DataTable.vue";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 const emit = defineEmits<{

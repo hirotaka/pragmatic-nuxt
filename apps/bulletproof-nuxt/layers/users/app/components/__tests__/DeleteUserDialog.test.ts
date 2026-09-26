@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cleanup, waitFor, within } from "@testing-library/vue";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
 import UserActionsMenu from "../UserActionsMenu.vue";
 
@@ -19,13 +19,11 @@ const { addNotification, deleteUserMutate, user } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: addNotification },
 }));
 
-vi.mock("~users/app/composables/useDeleteUser", () => ({
-  useDeleteUser: () => deleteUserMutate,
-}));
+mockNuxtImport("useDeleteUser", () => () => deleteUserMutate);
 
 async function confirmDelete() {
   const wrapper = await mountSuspended(UserActionsMenu, {
@@ -60,10 +58,7 @@ test("reports successful deletion after its action dropdown closes", async () =>
 
   await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
   expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
-  expect(addNotification).toHaveBeenCalledWith({
-    type: "success",
-    title: "User Deleted",
-  });
+  expect(addNotification).toHaveBeenCalledWith("User Deleted");
   await waitFor(() => {
     expect(bodyScreen.queryByRole("dialog", { name: /delete user/i })).toBeNull();
   });

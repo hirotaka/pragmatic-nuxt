@@ -1,16 +1,14 @@
 import { beforeEach, expect, test, vi } from "vitest";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick, ref, type Component, type Ref } from "vue";
-import type { Discussion, PaginatedDiscussions } from "~discussions/shared/types";
+import type { Discussion, PaginatedDiscussions } from "#layers/discussions/shared/types/discussion";
 import DiscussionsList from "../DiscussionsList.vue";
 
 const { useDiscussions } = vi.hoisted(() => ({
   useDiscussions: vi.fn(),
 }));
 
-vi.mock("~discussions/app/composables/useDiscussions", () => ({
-  useDiscussions,
-}));
+mockNuxtImport("useDiscussions", () => useDiscussions);
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({ isAdmin: { value: true } }),

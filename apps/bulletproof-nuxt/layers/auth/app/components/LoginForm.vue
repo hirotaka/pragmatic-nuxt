@@ -1,78 +1,95 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import { Form, type FormSubmitEvent } from "~~/app/components/form";
-import { useFormSchema } from "~~/app/composables/useFormSchema";
-import { FormField } from "~~/app/components/form-field";
-import { Input } from "~~/app/components/ui/input";
-import { Button } from "~~/app/components/ui/button";
-import { useLogin } from "~auth/app/composables/useLogin";
-import {
-  loginInputSchema,
-  type LoginFormState,
-  type LoginInput,
-} from "~auth/shared/schemas";
-
 const emit = defineEmits<{
   success: [];
 }>();
 
 const login = useLogin();
+const isSubmitting = ref(false);
 
 const state = reactive<LoginFormState>({
   email: "",
   password: "",
 });
 const { r$ } = useFormSchema(state, loginInputSchema);
+const emailField = r$.$fields.email;
+const passwordField = r$.$fields.password;
 
-const handleSubmit = async (event: FormSubmitEvent<LoginInput>) => {
-  const values = event.data;
+const handleSubmit = async () => {
+  if (isSubmitting.value) return;
 
+  isSubmitting.value = true;
   try {
-    await login(values);
+    const result = await r$.$validate();
+    if (!result.valid) return;
+
+    await login(result.data as LoginInput);
     emit("success");
   }
   catch {
     // The request or session owner reports the failure.
   }
+  finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
 <template>
-  <Form
-    v-slot="{ loading }"
-    :schema="r$"
-    :state="r$.$value"
+  <form
+    novalidate
     class="space-y-6"
-    @submit="handleSubmit"
+    @submit.prevent="handleSubmit"
   >
-    <FormField
-      v-slot="field"
-      name="email"
-      label="Email Address"
-    >
+    <Field :data-invalid="emailField.$error ? 'true' : undefined">
+      <FieldLabel for="email">
+        Email Address
+      </FieldLabel>
       <Input
-        v-model="r$.$value.email"
-        v-bind="field"
+        id="email"
+        v-model="emailField.$value"
+        name="email"
         type="email"
+        :disabled="isSubmitting"
+        :aria-invalid="emailField.$error ? 'true' : undefined"
+        :aria-describedby="emailField.$error ? 'email-error' : undefined"
+        @blur="emailField.$touch()"
+        @change="emailField.$touch()"
       />
-    </FormField>
-    <FormField
-      v-slot="field"
-      name="password"
-      label="Password"
-    >
+      <FieldError
+        v-if="emailField.$error"
+        id="email-error"
+        :errors="emailField.$errors"
+      />
+    </Field>
+
+    <Field :data-invalid="passwordField.$error ? 'true' : undefined">
+      <FieldLabel for="password">
+        Password
+      </FieldLabel>
       <Input
-        v-model="r$.$value.password"
-        v-bind="field"
+        id="password"
+        v-model="passwordField.$value"
+        name="password"
         type="password"
+        :disabled="isSubmitting"
+        :aria-invalid="passwordField.$error ? 'true' : undefined"
+        :aria-describedby="passwordField.$error ? 'password-error' : undefined"
+        @blur="passwordField.$touch()"
+        @change="passwordField.$touch()"
       />
-    </FormField>
+      <FieldError
+        v-if="passwordField.$error"
+        id="password-error"
+        :errors="passwordField.$errors"
+      />
+    </Field>
+
     <Button
-      :is-loading="loading"
+      :is-loading="isSubmitting"
       type="submit"
       class="w-full"
     >
       Log in
     </Button>
-  </Form>
+  </form>
 </template>

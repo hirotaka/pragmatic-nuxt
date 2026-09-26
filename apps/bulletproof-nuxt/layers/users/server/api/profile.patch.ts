@@ -1,5 +1,4 @@
-import { createUserRepository } from "~users/server/repository/userRepository";
-import { updateProfileInputSchema } from "~users/shared/schemas";
+import { createUserRepository } from "../repository/userRepository";
 
 export default defineProtectedEventHandler(async (event, sessionUser) => {
   const body = await readBody(event);

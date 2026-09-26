@@ -1,4 +1,4 @@
-import type { UpdateProfileInput } from "~users/shared/schemas";
+import { useRequiredUserSessionRefresh } from "#layers/auth/app/composables/useRequiredUserSessionRefresh";
 
 export const useUpdateProfile = () => {
   const { $api } = useNuxtApp();

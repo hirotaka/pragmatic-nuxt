@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import { Pen } from "lucide-vue-next";
-import FormDrawer from "~~/app/components/app/FormDrawer.vue";
-import MarkdownPreview from "~~/app/components/app/MarkdownPreview.vue";
-import { Button } from "~~/app/components/ui/button";
-import { Card, CardContent, CardHeader } from "~~/app/components/ui/card";
-import UpdateDiscussionForm from "./UpdateDiscussionForm.vue";
-import { formatDate } from "#layers/base/app/utils/format";
-import { useDiscussion } from "~discussions/app/composables/useDiscussion";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 interface DiscussionViewProps {

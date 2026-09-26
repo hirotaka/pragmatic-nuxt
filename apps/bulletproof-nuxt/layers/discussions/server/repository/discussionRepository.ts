@@ -1,9 +1,8 @@
 import { db } from "@nuxthub/db";
 import { discussions } from "@nuxthub/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
-import type { PaginatedResult } from "#layers/base/shared/types/pagination";
 
-export type DiscussionWithAuthor = Pick<
+export type DiscussionWithAuthorRecord = Pick<
   typeof discussions.$inferSelect,
   "id" | "title" | "body" | "authorId" | "teamId" | "createdAt" | "updatedAt"
 > & {
@@ -19,7 +18,7 @@ export const createDiscussionRepository = () => {
     teamId: string;
     page: number;
     limit: number;
-  }): Promise<PaginatedResult<DiscussionWithAuthor>> => {
+  }): Promise<PaginatedResult<DiscussionWithAuthorRecord>> => {
     const { teamId, page, limit } = params;
     const offset = (page - 1) * limit;
 
@@ -69,7 +68,7 @@ export const createDiscussionRepository = () => {
     };
   };
 
-  const findById = async (id: string): Promise<DiscussionWithAuthor | null> => {
+  const findById = async (id: string): Promise<DiscussionWithAuthorRecord | null> => {
     const result = await db.query.discussions.findFirst({
       where: eq(discussions.id, id),
       with: {
@@ -100,7 +99,7 @@ export const createDiscussionRepository = () => {
   const findByIdAndTeam = async (
     id: string,
     teamId: string,
-  ): Promise<DiscussionWithAuthor | null> => {
+  ): Promise<DiscussionWithAuthorRecord | null> => {
     const result = await db.query.discussions.findFirst({
       where: and(eq(discussions.id, id), eq(discussions.teamId, teamId)),
       with: {

@@ -1,21 +1,21 @@
 # 🗄️ Project Structure
 
-This project uses Nuxt 4's **Layers architecture** for feature-based modular organization. Most of the code lives in the `app` and `layers` folders:
+This project uses Nuxt 4 Layers to organize feature domains. The root `app`, `server`, and `shared` directories own application-wide code; feature-specific code lives in `layers/`.
 
 ```sh
 apps/bulletproof-nuxt
 |
 +-- app                    # Nuxt 4 application layer
 |   +-- assets             # CSS, images, fonts
-|   +-- components         # shared Vue components
-|   +-- composables        # shared composables (hooks)
+|   +-- components         # app-wide Vue components
+|   +-- composables        # app-wide composables
+|   +-- layouts            # application layouts
 |   +-- lib                # shadcn-vue utilities used through explicit imports
 |   +-- pages              # file-based routing
-|   +-- stores             # Pinia stores
-|   +-- utils              # shared utility functions
+|   +-- plugins            # application plugins
+|   +-- utils              # app-wide utility functions
 |
 +-- layers                 # feature-based layers
-|   +-- base               # base layer (shared server utilities)
 |   +-- auth               # authentication feature
 |   +-- discussions        # discussions feature
 |   +-- comments           # comments feature
@@ -32,9 +32,15 @@ apps/bulletproof-nuxt
 |           +-- postgresql # PostgreSQL migration SQL and Drizzle metadata
 |   +-- tasks
 |       +-- db/seed.ts             # discoverable `db:seed` Nitro Task entry point
+|   +-- utils              # root server-only utilities
+|
++-- shared                 # code shared by app and server
+|   +-- types
 |
 +-- e2e                    # Playwright E2E tests
 ```
+
+The root `app/` directory owns cross-feature application code. Nuxt auto-imports root-app and feature-layer components, composables, and utilities into the app. Use `#layers/<name>/...` for explicit imports between feature layers. Server-only shared utilities belong under root `server/`; code shared by the app and server belongs under root `shared/`.
 
 ## Layers Architecture
 
@@ -90,7 +96,6 @@ Layers are registered in the main `nuxt.config.ts`:
 ```typescript
 export default defineNuxtConfig({
   extends: [
-    "./layers/base",
     "./layers/auth",
     "./layers/discussions",
     "./layers/comments",

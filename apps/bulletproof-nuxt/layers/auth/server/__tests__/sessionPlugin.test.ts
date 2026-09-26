@@ -1,5 +1,6 @@
 import { createError } from "h3";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { serializeUser } from "../utils/serializeUser";
 
 const { createUserRepository, findById, hook } = vi.hoisted(() => ({
   createUserRepository: vi.fn(),
@@ -30,6 +31,7 @@ beforeEach(() => {
   vi.stubGlobal("createError", createError);
   vi.stubGlobal("defineNitroPlugin", <T>(plugin: T) => plugin);
   vi.stubGlobal("sessionHooks", { hook });
+  vi.stubGlobal("serializeUser", serializeUser);
 });
 
 afterEach(() => {

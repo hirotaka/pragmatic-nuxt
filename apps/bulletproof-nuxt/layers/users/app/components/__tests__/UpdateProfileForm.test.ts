@@ -24,8 +24,8 @@ mockNuxtImport("useUserSession", () => () => ({
   fetch: refreshSession,
 }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: addNotification, error: addNotification },
 }));
 
 beforeEach(() => {
@@ -57,7 +57,7 @@ test("UpdateProfileForm populates values and submits normalized payload", async 
   await waitFor(() => expect(capturedBody).toBeDefined());
   expect(capturedBody).toMatchObject({ ...profile, bio: "Updated bio" });
   await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
-  expect(addNotification).toHaveBeenCalledWith({ type: "success", title: "Profile Updated" });
+  expect(addNotification).toHaveBeenCalledWith("Profile Updated");
 });
 
 test("UpdateProfileForm does not emit success when session refresh settles empty", async () => {
@@ -75,10 +75,8 @@ test("UpdateProfileForm does not emit success when session refresh settles empty
   await waitFor(() => expect(refreshSession).toHaveBeenCalledOnce());
   expect(session.value).toBeNull();
   expect(wrapper.emitted("success")).toBeUndefined();
-  expect(addNotification).toHaveBeenCalledWith({
-    type: "error",
-    title: "Session Unavailable",
-    message: "The request completed, but the session could not be refreshed. Please try again.",
+  expect(addNotification).toHaveBeenCalledWith("Session Unavailable", {
+    description: "The request completed, but the session could not be refreshed. Please try again.",
   });
 });
 

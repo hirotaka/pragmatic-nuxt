@@ -125,7 +125,7 @@ test("unexpected initial comment read failures open the error page", { tag: ["@c
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
   await expect(page.getByText("Initial comments GET failed")).toBeVisible();
-  await expect(page.getByLabel("Error")).toHaveCount(0);
+  await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(0);
 });
 
 test("unexpected later comment page failures open the error page", { tag: ["@comments", "@pagination"] }, async ({ page }) => {
@@ -189,14 +189,42 @@ test("comment create closes after its comments refresh settles", { tag: ["@comme
     await route.continue();
   });
 
-  await page.getByRole("button", { name: "Create Comment" }).click();
+  const trigger = page.getByRole("button", { name: "Create Comment" });
   const drawer = page.getByRole("dialog", { name: "Create Comment" });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await trigger.click();
+  await expect(drawer).toBeVisible();
+  await expect.poll(() => drawer.evaluate(element => element.contains(document.activeElement))).toBe(true);
+  await expect.poll(async () => {
+    const box = await drawer.boundingBox();
+    return box ? Math.round(box.x + box.width) : -1;
+  }).toBe(390);
+
+  const narrowSheet = await drawer.boundingBox();
+  expect(narrowSheet?.width).toBeGreaterThan(0);
+  expect(narrowSheet?.width).toBeLessThan(390);
+  await drawer.getByRole("button", { name: "Close", exact: true }).click();
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await trigger.click();
+  await expect(drawer).toBeVisible();
+  await expect.poll(async () => {
+    const box = await drawer.boundingBox();
+    return box ? Math.round(box.x + box.width) : -1;
+  }).toBe(1280);
+  const wideSheet = await drawer.boundingBox();
+  expect(wideSheet?.width).toBeGreaterThan(0);
+  expect(wideSheet?.width).toBeLessThanOrEqual(540);
+
   await drawer.getByLabel("Body").fill(commentBody);
   delayRefresh = true;
   await drawer.getByRole("button", { name: "Submit" }).click();
 
   await expect.poll(() => refreshGetCount).toBe(1);
-  await expect(page.getByLabel("Comment Created")).toHaveCount(1);
+  await expect(page.locator("[data-sonner-toast][data-type=success]", { hasText: "Comment Created" })).toHaveCount(1);
   await expect(drawer).toBeVisible();
 
   refresh.resolve();
@@ -239,7 +267,7 @@ test("unexpected post-delete comment refresh failures open the error page", { ta
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
   await expect(page.getByText("Comments refresh failed")).toBeVisible();
-  await expect(page.getByLabel("Error")).toHaveCount(0);
+  await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(0);
 
   const persisted = await expectJson(await page.request.get(
     new URL(`/api/comments?discussionId=${discussionId}`, page.url()).href,

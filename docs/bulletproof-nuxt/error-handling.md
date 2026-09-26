@@ -10,7 +10,7 @@ See [Use a Custom `$fetch` Instance in Pinia Colada Queries and Mutations](../pr
 
 [API Plugin](../../apps/reference/bulletproof-nuxt-pinia-colada/layers/base/app/plugins/api.ts)
 
-[Notification State](../../apps/bulletproof-nuxt/layers/base/app/composables/useNotifications.ts)
+[Notification State](../../apps/bulletproof-nuxt/app/composables/useNotifications.ts)
 
 [Server-Side Error Example Code](../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/[id].get.ts)
 
@@ -34,7 +34,7 @@ for the reusable timing and failure boundary.
 
 Nuxt provides a built-in error handling system with the `error.vue` page for fatal errors. For component-level errors, Vue's `onErrorCaptured` lifecycle hook can be used to catch and handle errors locally without disrupting the entire application.
 
-Feature components render the Query state supplied by their Pinia Colada owners. Common notification presentation is owned by the base notification center and coordinated by the shared Colada error hooks.
+Feature components render the Query state supplied by their Pinia Colada owners. Common notification presentation is owned by the app notification center and coordinated by the shared Colada error hooks.
 
 A failed Discussion detail prefetch does not create a global notification while its Query entry remains inactive. Once the Query becomes active, failures retain the normal error presentation and recovery behavior. See [Use Query Prefetching to Reduce Waiting for Data](../practices/pinia-colada/use-query-prefetching-to-reduce-waiting-for-data.md) for the reusable prefetch boundary.
 

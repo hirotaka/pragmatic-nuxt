@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { Pen } from "lucide-vue-next";
-import FormDrawer from "~~/app/components/app/FormDrawer.vue";
-import { Button } from "~~/app/components/ui/button";
-import UpdateProfileForm from "~users/app/components/UpdateProfileForm.vue";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 definePageMeta({
   middleware: "auth",
-  layout: "dashboard",
 });
 
 useHead({
@@ -26,7 +20,7 @@ const profile = computed(() => ({
 </script>
 
 <template>
-  <LayoutsContentLayout
+  <PageContent
     v-if="user"
     title="Profile"
     description="Manage the account details used across this workspace."
@@ -117,5 +111,5 @@ const profile = computed(() => ({
         </dl>
       </CardContent>
     </Card>
-  </LayoutsContentLayout>
+  </PageContent>
 </template>

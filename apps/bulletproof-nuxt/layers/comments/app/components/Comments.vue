@@ -1,10 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { Plus } from "lucide-vue-next";
-import FormDrawer from "~~/app/components/app/FormDrawer.vue";
-import { Button } from "~~/app/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~~/app/components/ui/card";
-import { useComments } from "~comments/app/composables/useComments";
 
 interface CommentsProps {
   discussionId: string;

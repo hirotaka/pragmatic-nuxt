@@ -1,5 +1,3 @@
-import type { CreateCommentInput } from "~comments/shared/schemas";
-
 export const useCreateComment = () => {
   const { $api } = useNuxtApp();
 

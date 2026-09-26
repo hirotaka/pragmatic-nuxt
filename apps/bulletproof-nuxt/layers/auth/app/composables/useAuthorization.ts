@@ -1,5 +1,5 @@
-import type { User } from "~auth/shared/types";
-import type { Comment } from "#layers/comments/shared/types";
+import type { Comment } from "#layers/comments/shared/types/comment";
+import type { User } from "#layers/users/shared/types/user";
 
 export enum ROLES {
   ADMIN = "ADMIN",

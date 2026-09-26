@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useUser } from "~auth/app/composables/useUser";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 const { user, isAuthenticated } = useUser();
 const route = useRoute();
 const router = useRouter();
-const { addNotification } = useNotifications();
 
 const { clear: clearSession } = useUserSession();
 const isPending = ref(false);
@@ -18,16 +15,10 @@ const handleLogout = async () => {
 
   try {
     await clearSession();
-    addNotification({
-      type: "success",
-      title: "Logged Out",
-    });
+    toast.success("Logged Out");
   }
   catch {
-    addNotification({
-      type: "error",
-      title: "Logout Failed",
-    });
+    toast.error("Logout Failed");
     isPending.value = false;
     return;
   }
@@ -36,10 +27,8 @@ const handleLogout = async () => {
     await router.push(`/auth/login?redirectTo=${encodeURIComponent(currentPath)}`);
   }
   catch {
-    addNotification({
-      type: "error",
-      title: "Navigation Failed",
-      message: "You are logged out, but the login page could not be opened.",
+    toast.error("Navigation Failed", {
+      description: "You are logged out, but the login page could not be opened.",
     });
   }
   finally {

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { ref, toValue } from "vue";
-import type { Discussion } from "~discussions/shared/types";
+import type { Discussion } from "#layers/discussions/shared/types/discussion";
 import DiscussionPage from "../[id].vue";
 
 const {
@@ -52,20 +52,18 @@ vi.mock("#imports", async () => {
   };
 });
 
-vi.mock("~discussions/app/composables/useDiscussion", () => ({
-  useDiscussion: async (id: MaybeRefOrGetter<string>) => {
-    useDiscussionMock(toValue(id));
-    return {
-      data: ref(discussionState.data),
-      execute: discussionExecute,
-    };
-  },
-}));
+mockNuxtImport("useDiscussion", () => async (id: MaybeRefOrGetter<string>) => {
+  useDiscussionMock(toValue(id));
+  return {
+    data: ref(discussionState.data),
+    execute: discussionExecute,
+  };
+});
 
 const mountDiscussionPage = () => mountSuspended(DiscussionPage, {
   global: {
     stubs: {
-      LayoutsContentLayout: {
+      PageContent: {
         template: "<section><slot /></section>",
         props: ["title", "description"],
       },

@@ -1,7 +1,6 @@
-import type { Discussion as DiscussionDto } from "~discussions/shared/types";
-import type { DiscussionWithAuthor } from "~discussions/server/repository/discussionRepository";
+import type { DiscussionWithAuthorRecord } from "../repository/discussionRepository";
 
-export function serializeDiscussion(discussion: DiscussionWithAuthor): DiscussionDto {
+export function serializeDiscussion(discussion: DiscussionWithAuthorRecord): Discussion {
   return {
     id: discussion.id,
     title: discussion.title,

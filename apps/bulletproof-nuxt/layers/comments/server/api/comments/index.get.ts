@@ -1,7 +1,4 @@
-import { createCommentRepository } from "~comments/server/repository/commentRepository";
-import type { PaginatedComments } from "~comments/shared/types";
-import { serializeComment } from "~comments/server/utils/serializeComment";
-import { parsePagination } from "~base/server/utils/parsePagination";
+import { createCommentRepository } from "../../repository/commentRepository";
 
 export default defineProtectedEventHandler(async (event): Promise<PaginatedComments> => {
   const query = getQuery(event);

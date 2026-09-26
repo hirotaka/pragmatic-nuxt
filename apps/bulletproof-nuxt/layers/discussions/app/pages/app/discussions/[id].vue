@@ -1,16 +1,25 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useDiscussion } from "~discussions/app/composables/useDiscussion";
+import { toast } from "vue-sonner";
 
 definePageMeta({
   middleware: "auth",
-  layout: "dashboard",
 });
 
 const route = useRoute();
 
 const discussionId = computed(() => route.params.id as string);
-const { data: discussion } = await useDiscussion(discussionId);
+const isHydrating = import.meta.client && useNuxtApp().isHydrating;
+const { data: discussion, error } = await useDiscussion(discussionId);
+
+// An SSR read error is in the hydrated fetch result; its server-side hook cannot show a client toast.
+if (isHydrating && error.value) {
+  onMounted(() => {
+    const notification = resolveApiErrorNotification(error.value);
+    if (notification) {
+      toast.error(notification.title, { description: notification.message });
+    }
+  });
+}
 
 useHead({
   title: computed(() => discussion.value?.title || "Discussion"),
@@ -18,7 +27,7 @@ useHead({
 </script>
 
 <template>
-  <LayoutsContentLayout
+  <PageContent
     :title="discussion?.title || 'Discussion'"
     description="Read, update, and discuss this team topic."
   >
@@ -28,5 +37,5 @@ useHead({
         <Comments :discussion-id="discussion.id" />
       </div>
     </template>
-  </LayoutsContentLayout>
+  </PageContent>
 </template>
