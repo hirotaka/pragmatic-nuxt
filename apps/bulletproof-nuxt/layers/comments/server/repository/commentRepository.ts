@@ -1,7 +1,6 @@
 import { db } from "@nuxthub/db";
 import { comments } from "@nuxthub/db/schema";
 import { eq, desc, sql } from "drizzle-orm";
-import type { PaginatedResult } from "#layers/base/shared/types/pagination";
 
 export interface CommentRecord {
   id: string;
@@ -17,14 +16,12 @@ export interface CommentRecord {
   };
 }
 
-export type PaginatedCommentRecords = PaginatedResult<CommentRecord>;
-
 export const createCommentRepository = () => {
   const findByDiscussionId = async (params: {
     discussionId: string;
     page: number;
     limit: number;
-  }): Promise<PaginatedCommentRecords> => {
+  }): Promise<PaginatedResult<CommentRecord>> => {
     const { discussionId, page, limit } = params;
     const offset = (page - 1) * limit;
 

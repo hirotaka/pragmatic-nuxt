@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NotificationCenter from "@/components/app/NotificationCenter.vue";
+import "vue-sonner/style.css";
 
 useHead({
   titleTemplate: (titleChunk) => {
@@ -18,6 +18,9 @@ useHead({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <NotificationCenter />
+    <Toaster
+      close-button
+      position="top-right"
+    />
   </div>
 </template>

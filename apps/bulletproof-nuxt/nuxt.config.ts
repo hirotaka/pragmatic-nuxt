@@ -9,7 +9,6 @@ const isCloudflarePostgresBuild = isCloudflareBuild && isPostgresBuild;
 export default defineNuxtConfig({
   // Layers configuration
   extends: [
-    "./layers/base",
     "./layers/auth",
     "./layers/discussions",
     "./layers/comments",
@@ -25,7 +24,6 @@ export default defineNuxtConfig({
     "@regle/nuxt",
     "shadcn-nuxt",
   ],
-  components: [],
   devtools: { enabled: true },
   app: {
     head: {

@@ -1,6 +1,4 @@
 import { createUserRepository } from "#layers/users/server/repository/userRepository";
-import { loginInputSchema } from "~auth/shared/schemas";
-import { serializeSessionIdentity } from "~auth/server/utils/serializeSessionIdentity";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

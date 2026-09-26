@@ -1,14 +1,6 @@
 <script setup lang="ts">
-import DataTable from "~~/app/components/app/DataTable.vue";
-import { computed, unref } from "vue";
-import { Badge } from "~~/app/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "~~/app/components/ui/card";
-import { useUsers } from "~users/app/composables/useUsers";
 import { useUser } from "#layers/auth/app/composables/useUser";
-import UserActionsMenu from "./UserActionsMenu.vue";
-import { formatDate } from "#layers/base/app/utils/format";
-import type { User } from "~auth/shared/types";
-import type { TableColumn } from "~~/app/components/app/data-table";
+import type { TableColumn } from "~~/app/components/DataTable.vue";
 
 const { data, refresh } = await useUsers();
 const { user } = useUser();

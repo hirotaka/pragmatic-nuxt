@@ -1,6 +1,4 @@
-import type { Comment } from "~comments/shared/types";
-import { useAPI } from "#layers/base/app/composables/useAPI";
-import { usePaginatedData } from "#layers/base/app/composables/usePaginatedData";
+import type { Comment } from "../../shared/types/comment";
 
 export async function useComments(discussionId: MaybeRefOrGetter<string>) {
   const page = useState("comments-current-page", () => 1);

@@ -5,7 +5,7 @@ import { within } from "@testing-library/vue";
 import Authorization from "../Authorization.vue";
 import { ROLES } from "#layers/auth/app/composables/useAuthorization";
 import { createUser } from "~~/test/data-generators";
-import type { User } from "#layers/auth/shared/types";
+import type { User } from "#layers/users/shared/types/user";
 
 // Mock useUser composable using @nuxt/test-utils
 const mockUserRef = ref<User | null>(null);

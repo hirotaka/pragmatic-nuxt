@@ -53,11 +53,10 @@ Available aliases in this project:
 | `~comments` | `layers/comments/` |
 | `~users` | `layers/users/` |
 | `~teams` | `layers/teams/` |
-| `~base` | `layers/base/` |
 
-Nuxt provides the `@`, `~`, and `~~` aliases. Named layer aliases are configured by each layer and work with TypeScript and IDE autocompletion.
+Nuxt provides the `@`, `~`, and `~~` aliases. Named feature-layer aliases are configured by each layer and work with TypeScript and IDE autocompletion.
 
-App-owned shared components use explicit imports and are not globally scanned by Nuxt. `shadcn-nuxt` owns UI component registration from the generated `app/components/ui/**/index.ts` barrels, while feature layers retain Nuxt's default component auto-registration.
+Nuxt auto-imports components from the root app and feature layers. `shadcn-nuxt` registers UI component exports from the generated `app/components/ui/**/index.ts` barrels. Use explicit `#layers/<name>/...` imports for references between feature layers; auto-import registration itself remains app-wide.
 
 #### Database ownership
 

@@ -1,10 +1,8 @@
-import type { RegisterInput } from "~auth/shared/schemas";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 export const useRegister = () => {
   const { $api } = useNuxtApp();
   const refreshSession = useRequiredUserSessionRefresh();
-  const { addNotification } = useNotifications();
 
   return async (input: RegisterInput): Promise<void> => {
     await $api("/api/auth/register", {
@@ -14,9 +12,6 @@ export const useRegister = () => {
 
     await refreshSession();
 
-    addNotification({
-      type: "success",
-      title: "Account Created",
-    });
+    toast.success("Account Created");
   };
 };

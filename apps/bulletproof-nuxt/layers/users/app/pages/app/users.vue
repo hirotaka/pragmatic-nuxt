@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import UsersList from "~users/app/components/UsersList.vue";
-import ContentLayout from "#layers/base/app/components/layouts/ContentLayout.vue";
 import { ROLES } from "#layers/auth/app/composables/useAuthorization";
 
 definePageMeta({
   middleware: "auth",
-  layout: "dashboard",
 });
 
 useHead({
@@ -14,7 +11,7 @@ useHead({
 </script>
 
 <template>
-  <ContentLayout
+  <PageContent
     title="Users"
     description="Review registered users and manage administrative access."
   >
@@ -26,5 +23,5 @@ useHead({
       </template>
       <UsersList />
     </Authorization>
-  </ContentLayout>
+  </PageContent>
 </template>

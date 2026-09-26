@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { ArchiveX } from "lucide-vue-next";
-import MarkdownPreview from "~~/app/components/app/MarkdownPreview.vue";
-import { Button } from "~~/app/components/ui/button";
-import { Spinner } from "~~/app/components/ui/spinner";
-import CommentActionsMenu from "./CommentActionsMenu.vue";
-import { formatDate } from "#layers/base/app/utils/format";
 import { POLICIES } from "#layers/auth/app/composables/useAuthorization";
-import { useComments } from "~comments/app/composables/useComments";
 
 interface CommentsListProps {
   discussionId: string;

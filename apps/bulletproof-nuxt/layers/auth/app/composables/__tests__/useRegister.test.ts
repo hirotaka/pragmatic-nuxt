@@ -1,4 +1,4 @@
-import type { RegisterInput } from "~auth/shared/schemas";
+import type { RegisterInput } from "#layers/auth/shared/utils/schemas";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, expect, test, vi } from "vitest";
 import { useRegister } from "../useRegister";
@@ -15,8 +15,8 @@ mockNuxtImport<typeof useNuxtApp>("useNuxtApp", original => (...args) => new Pro
     : Reflect.get(target, property, receiver),
 }));
 mockNuxtImport("useRequiredUserSessionRefresh", () => () => refreshSession);
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: addNotification },
 }));
 
 beforeEach(() => {
@@ -73,8 +73,5 @@ test("refreshes the user session before reporting success", async () => {
 
   expect(settled).toBe(true);
   expect(events).toEqual(["request", "refresh", "notification"]);
-  expect(addNotification).toHaveBeenCalledWith({
-    type: "success",
-    title: "Account Created",
-  });
+  expect(addNotification).toHaveBeenCalledWith("Account Created");
 });

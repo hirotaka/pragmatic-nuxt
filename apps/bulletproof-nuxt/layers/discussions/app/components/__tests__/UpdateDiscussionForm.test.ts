@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cleanup, waitFor } from "@testing-library/vue";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import UpdateDiscussionForm from "../UpdateDiscussionForm.vue";
 
 const { addNotification, updateDiscussionMutate } = vi.hoisted(() => ({
@@ -8,13 +8,11 @@ const { addNotification, updateDiscussionMutate } = vi.hoisted(() => ({
   updateDiscussionMutate: vi.fn(),
 }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: addNotification },
 }));
 
-vi.mock("~discussions/app/composables/useUpdateDiscussion", () => ({
-  useUpdateDiscussion: (id: () => string) => async (input: unknown) => updateDiscussionMutate(id(), input),
-}));
+mockNuxtImport("useUpdateDiscussion", () => (id: () => string) => async (input: unknown) => updateDiscussionMutate(id(), input));
 
 beforeEach(() => {
   addNotification.mockClear();
@@ -48,10 +46,7 @@ test("UpdateDiscussionForm preloads current values and submits changed data", as
       body: "Existing body",
     },
   ));
-  expect(addNotification).toHaveBeenCalledWith({
-    type: "success",
-    title: "Discussion Updated",
-  });
+  expect(addNotification).toHaveBeenCalledWith("Discussion Updated");
   expect(wrapper.emitted("success")).toHaveLength(1);
 });
 

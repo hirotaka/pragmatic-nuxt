@@ -142,7 +142,7 @@ test("user delete closes after mutation while its users refresh settles", { tag:
 
   await expect.poll(() => refreshGetCount).toBe(1);
   await expect(page.locator("table").getByText(member.email)).toBeVisible();
-  await expect(page.getByLabel("User Deleted")).toHaveCount(1);
+  await expect(page.locator("[data-sonner-toast][data-type=success]", { hasText: "User Deleted" })).toHaveCount(1);
   await expect(dialog).toBeHidden();
 
   refresh.resolve();

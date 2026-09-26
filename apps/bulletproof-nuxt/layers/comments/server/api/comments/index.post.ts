@@ -1,5 +1,4 @@
-import { createCommentInputSchema } from "~comments/shared/schemas";
-import { createCommentRepository } from "~comments/server/repository/commentRepository";
+import { createCommentRepository } from "../../repository/commentRepository";
 
 export default defineProtectedEventHandler(async (event, sessionUser) => {
   const body = await readBody(event);

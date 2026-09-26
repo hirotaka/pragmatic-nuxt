@@ -1,16 +1,5 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import { Form, type FormSubmitEvent } from "~~/app/components/form";
-import { useFormSchema } from "~~/app/composables/useFormSchema";
-import { FormField } from "~~/app/components/form-field";
-import { Textarea } from "~~/app/components/ui/textarea";
-import { useCreateComment } from "~comments/app/composables/useCreateComment";
-import {
-  createCommentInputSchema,
-  type CreateCommentFormState,
-  type CreateCommentInput,
-} from "~comments/shared/schemas";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 interface CreateCommentFormProps {
   disabled?: boolean;
@@ -21,53 +10,65 @@ const props = defineProps<CreateCommentFormProps>();
 const emit = defineEmits<{
   success: [];
 }>();
-const { addNotification } = useNotifications();
 const createComment = useCreateComment();
+const isSubmitting = ref(false);
+const isDisabled = computed(() => props.disabled || isSubmitting.value);
 
 const state = reactive<CreateCommentFormState>({
   body: "",
   discussionId: props.discussionId,
 });
 const { r$ } = useFormSchema(state, createCommentInputSchema);
+const bodyField = r$.$fields.body;
 
-const handleSubmit = async (event: FormSubmitEvent<CreateCommentInput>) => {
-  if (props.disabled) return;
+const handleSubmit = async () => {
+  if (props.disabled || isSubmitting.value) return;
 
-  const values = event.data;
-
+  isSubmitting.value = true;
   try {
-    await createComment(values);
+    const result = await r$.$validate();
+    if (!result.valid) return;
+
+    await createComment(result.data as CreateCommentInput);
   }
   catch {
     return;
   }
+  finally {
+    isSubmitting.value = false;
+  }
 
-  addNotification({
-    type: "success",
-    title: "Comment Created",
-  });
+  toast.success("Comment Created");
   emit("success");
 };
 </script>
 
 <template>
-  <Form
+  <form
     id="create-comment"
-    :schema="r$"
-    :state="r$.$value"
-    :disabled="props.disabled"
+    novalidate
     class="space-y-6"
-    @submit="handleSubmit"
+    @submit.prevent="handleSubmit"
   >
-    <FormField
-      v-slot="field"
-      name="body"
-      label="Body"
-    >
+    <Field :data-invalid="bodyField.$error ? 'true' : undefined">
+      <FieldLabel for="body">
+        Body
+      </FieldLabel>
       <Textarea
-        v-model="r$.$value.body"
-        v-bind="field"
+        id="body"
+        v-model="bodyField.$value"
+        name="body"
+        :disabled="isDisabled"
+        :aria-invalid="bodyField.$error ? 'true' : undefined"
+        :aria-describedby="bodyField.$error ? 'body-error' : undefined"
+        @blur="bodyField.$touch()"
+        @change="bodyField.$touch()"
       />
-    </FormField>
-  </Form>
+      <FieldError
+        v-if="bodyField.$error"
+        id="body-error"
+        :errors="bodyField.$errors"
+      />
+    </Field>
+  </form>
 </template>

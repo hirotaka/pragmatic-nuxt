@@ -2,7 +2,7 @@ import { db } from "@nuxthub/db";
 import { users } from "@nuxthub/db/schema";
 import { and, desc, eq, ne } from "drizzle-orm";
 
-export interface User {
+export interface UserRecord {
   id: string;
   email: string;
   firstName: string;
@@ -13,12 +13,12 @@ export interface User {
   createdAt: Date;
 }
 
-export interface UserWithPassword extends User {
+export interface UserWithPasswordRecord extends UserRecord {
   password: string;
 }
 
 export const createUserRepository = () => {
-  const findByEmail = async (email: string): Promise<UserWithPassword | null> => {
+  const findByEmail = async (email: string): Promise<UserWithPasswordRecord | null> => {
     const result = await db.query.users.findFirst({
       where: eq(users.email, email),
     });
@@ -38,7 +38,7 @@ export const createUserRepository = () => {
     };
   };
 
-  const findById = async (id: string): Promise<User | null> => {
+  const findById = async (id: string): Promise<UserRecord | null> => {
     const result = await db.query.users.findFirst({
       where: eq(users.id, id),
     });
@@ -66,7 +66,7 @@ export const createUserRepository = () => {
     return Boolean(result);
   };
 
-  const findAll = async (teamId: string): Promise<User[]> => {
+  const findAll = async (teamId: string): Promise<UserRecord[]> => {
     const results = await db.query.users.findMany({
       where: eq(users.teamId, teamId),
       orderBy: [desc(users.createdAt)],
@@ -91,7 +91,7 @@ export const createUserRepository = () => {
     password: string;
     teamId: string;
     role?: "ADMIN" | "USER";
-  }): Promise<User> => {
+  }): Promise<UserRecord> => {
     const [user] = await db
       .insert(users)
       .values({
@@ -128,7 +128,7 @@ export const createUserRepository = () => {
       lastName?: string;
       bio?: string;
     },
-  ): Promise<User> => {
+  ): Promise<UserRecord> => {
     const [user] = await db
       .update(users)
       .set(data)

@@ -89,6 +89,24 @@ test("keeps the form retryable when session refresh settles logged out", async (
   expect(onSuccess).not.toHaveBeenCalled();
 });
 
+test("validates lazily on blur and updates the field error while editing", async () => {
+  await renderComponent(LoginForm, { props: { onSuccess: vi.fn() } });
+
+  const email = screen.getByLabelText(/email address/i);
+  const password = screen.getByLabelText(/password/i);
+
+  await userEvent.type(email, "not-an-email");
+  expect(email.hasAttribute("aria-invalid")).toBe(false);
+
+  await userEvent.tab();
+  await waitFor(() => expect(email.getAttribute("aria-invalid")).toBe("true"));
+  expect(password.hasAttribute("aria-invalid")).toBe(false);
+
+  await userEvent.clear(email);
+  await userEvent.type(email, "user@example.com");
+  await waitFor(() => expect(email.hasAttribute("aria-invalid")).toBe(false));
+});
+
 test("should block login when validation fails", async () => {
   const onSuccess = vi.fn();
   const loginHandler = vi.fn();

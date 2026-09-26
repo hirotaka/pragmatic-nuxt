@@ -1,6 +1,3 @@
-import { nextTick } from "vue";
-import { useAPI } from "#layers/base/app/composables/useAPI";
-
 export async function useDiscussions() {
   const currentPage = useState("discussions-current-page", () => 1);
   const limit = 10;

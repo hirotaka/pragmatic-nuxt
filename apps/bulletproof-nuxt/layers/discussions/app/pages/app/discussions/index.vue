@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { Plus } from "lucide-vue-next";
-import FormDrawer from "~~/app/components/app/FormDrawer.vue";
-import { Button } from "~~/app/components/ui/button";
-import { useDiscussions } from "~discussions/app/composables/useDiscussions";
 
 definePageMeta({
   middleware: "auth",
-  layout: "dashboard",
 });
 
 useHead({
@@ -22,7 +18,7 @@ const handleCreateSuccess = async (close: () => void) => {
 </script>
 
 <template>
-  <LayoutsContentLayout
+  <PageContent
     title="Discussions"
     description="Create, update, and moderate team discussions."
   >
@@ -56,5 +52,5 @@ const handleCreateSuccess = async (close: () => void) => {
       </FormDrawer>
     </template>
     <DiscussionsList />
-  </LayoutsContentLayout>
+  </PageContent>
 </template>

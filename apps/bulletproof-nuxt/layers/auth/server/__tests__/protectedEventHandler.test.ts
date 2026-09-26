@@ -16,8 +16,6 @@ const { currentUser, requireCurrentUser } = vi.hoisted(() => ({
   requireCurrentUser: vi.fn(),
 }));
 
-vi.mock("../utils/requireCurrentUser", () => ({ requireCurrentUser }));
-
 async function collectRouteFiles(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true }).catch((error: NodeJS.ErrnoException) => {
     if (error.code === "ENOENT") return [];
@@ -40,6 +38,7 @@ describe("defineProtectedEventHandler", () => {
   beforeEach(() => {
     requireCurrentUser.mockReset().mockResolvedValue(currentUser);
     vi.stubGlobal("defineEventHandler", <T>(handler: T) => handler);
+    vi.stubGlobal("requireCurrentUser", requireCurrentUser);
   });
 
   afterEach(() => {

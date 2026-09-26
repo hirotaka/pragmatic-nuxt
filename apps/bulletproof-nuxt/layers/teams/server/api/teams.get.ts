@@ -1,5 +1,4 @@
-import { createTeamRepository } from "~teams/server/repository/teamRepository";
-import { serializeTeam } from "~teams/server/utils/serializeTeam";
+import { createTeamRepository } from "../repository/teamRepository";
 
 export default defineEventHandler(async () => {
   const teamRepository = createTeamRepository();

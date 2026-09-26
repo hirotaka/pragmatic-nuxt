@@ -2,7 +2,7 @@ import { db } from "@nuxthub/db";
 import { teams } from "@nuxthub/db/schema";
 import { eq, desc } from "drizzle-orm";
 
-export interface Team {
+export interface TeamRecord {
   id: string;
   name: string;
   createdAt: Date;
@@ -10,7 +10,7 @@ export interface Team {
 }
 
 export const createTeamRepository = () => {
-  const create = async (name: string): Promise<Team> => {
+  const create = async (name: string): Promise<TeamRecord> => {
     const [team] = await db
       .insert(teams)
       .values({ name })
@@ -28,7 +28,7 @@ export const createTeamRepository = () => {
     };
   };
 
-  const findById = async (id: string): Promise<Team | null> => {
+  const findById = async (id: string): Promise<TeamRecord | null> => {
     const result = await db.query.teams.findFirst({
       where: eq(teams.id, id),
     });
@@ -43,7 +43,7 @@ export const createTeamRepository = () => {
     };
   };
 
-  const findAll = async (): Promise<Team[]> => {
+  const findAll = async (): Promise<TeamRecord[]> => {
     const results = await db.query.teams.findMany({
       orderBy: [desc(teams.createdAt)],
     });

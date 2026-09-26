@@ -29,9 +29,12 @@ test("smoke", async ({ page, goto }) => {
 
   await registerIsolatedUser(page);
   await goto("/", { waitUntil: "hydration" });
+  await expect(page.locator("meta[name=\"description\"]")).toHaveAttribute("content", "Welcome to bulletproof nuxt");
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toHaveCount(0);
   await page.getByRole("button", { name: "Get started" }).click();
   await page.waitForURL("/app");
   await waitForNuxtHydration(page);
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
 
   // create discussion:
   await page.getByRole("link", { name: "Discussions" }).click();
@@ -48,8 +51,8 @@ test("smoke", async ({ page, goto }) => {
   await createDiscussionDrawer.getByLabel("Body").fill(discussion.body);
   await createDiscussionDrawer.getByRole("button", { name: "Submit" }).click();
   await page
-    .getByLabel("Discussion Created")
-    .getByRole("button", { name: "Close" })
+    .locator("[data-sonner-toast][data-type=success]", { hasText: "Discussion Created" })
+    .getByRole("button", { name: "Close toast" })
     .click();
   await expect(page.getByText(discussion.title)).toBeVisible();
   await page.reload();
@@ -75,8 +78,8 @@ test("smoke", async ({ page, goto }) => {
   await updateDiscussionDrawer.getByLabel("Body").fill(`${discussion.body} - updated`);
   await updateDiscussionDrawer.getByRole("button", { name: "Submit" }).click();
   await page
-    .getByLabel("Discussion Updated")
-    .getByRole("button", { name: "Close" })
+    .locator("[data-sonner-toast][data-type=success]", { hasText: "Discussion Updated" })
+    .getByRole("button", { name: "Close toast" })
     .click();
 
   await expect(page.getByText(`${discussion.body} - updated`)).toBeVisible();
@@ -93,8 +96,8 @@ test("smoke", async ({ page, goto }) => {
   await createCommentDrawer.getByRole("button", { name: "Submit" }).click();
   await expect(page.getByText(comment.body)).toBeVisible();
   await page
-    .getByLabel("Comment Created")
-    .getByRole("button", { name: "Close" })
+    .locator("[data-sonner-toast][data-type=success]", { hasText: "Comment Created" })
+    .getByRole("button", { name: "Close toast" })
     .click();
   await page.reload();
   await waitForNuxtHydration(page);
@@ -108,8 +111,8 @@ test("smoke", async ({ page, goto }) => {
   ).toBeVisible();
   await page.getByRole("button", { name: "Delete Comment" }).click();
   await page
-    .getByLabel("Comment Deleted")
-    .getByRole("button", { name: "Close" })
+    .locator("[data-sonner-toast][data-type=success]", { hasText: "Comment Deleted" })
+    .getByRole("button", { name: "Close toast" })
     .click();
   await expect(
     page.getByRole("heading", { name: "No Comments Found" }),
@@ -137,8 +140,8 @@ test("smoke", async ({ page, goto }) => {
   await page.getByRole("menuitem", { name: "Delete Discussion" }).click();
   await page.getByRole("button", { name: "Delete", exact: true }).click();
   await page
-    .getByLabel("Discussion Deleted")
-    .getByRole("button", { name: "Close" })
+    .locator("[data-sonner-toast][data-type=success]", { hasText: "Discussion Deleted" })
+    .getByRole("button", { name: "Close toast" })
     .click();
   await expect(
     page.getByRole("heading", { name: "No Entries Found" }),

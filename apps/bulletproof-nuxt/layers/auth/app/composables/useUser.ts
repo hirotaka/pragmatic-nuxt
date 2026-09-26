@@ -1,5 +1,4 @@
-import { computed } from "vue";
-import type { User } from "~auth/shared/types";
+import type { User } from "#layers/users/shared/types/user";
 
 export const useUser = () => {
   const { user: sessionUser, loggedIn, fetch } = useUserSession();

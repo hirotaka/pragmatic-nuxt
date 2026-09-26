@@ -1,6 +1,8 @@
 import type { H3Event } from "h3";
 import { createError } from "h3";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { registerInputSchema } from "#layers/auth/shared/utils/schemas";
+import { serializeSessionIdentity } from "../utils/serializeSessionIdentity";
 
 const {
   createTeamRepository,
@@ -63,6 +65,8 @@ beforeEach(() => {
   vi.stubGlobal("hashPassword", hashPassword);
   vi.stubGlobal("readBody", readBody);
   vi.stubGlobal("replaceUserSession", replaceUserSession);
+  vi.stubGlobal("registerInputSchema", registerInputSchema);
+  vi.stubGlobal("serializeSessionIdentity", serializeSessionIdentity);
 });
 
 afterEach(() => {

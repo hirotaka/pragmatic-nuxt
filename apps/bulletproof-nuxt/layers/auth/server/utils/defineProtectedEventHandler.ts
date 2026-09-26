@@ -1,11 +1,10 @@
 import type { EventHandler, EventHandlerRequest, H3Event } from "h3";
-import type { User } from "#layers/users/server/repository/userRepository";
-import { requireCurrentUser } from "./requireCurrentUser";
+import type { UserRecord } from "#layers/users/server/repository/userRepository";
 
 type ProtectedEventHandler<
   Request extends EventHandlerRequest,
   Response,
-> = (event: H3Event<Request>, currentUser: User) => Response | Promise<Response>;
+> = (event: H3Event<Request>, currentUser: UserRecord) => Response | Promise<Response>;
 
 export function defineProtectedEventHandler<
   Request extends EventHandlerRequest = EventHandlerRequest,

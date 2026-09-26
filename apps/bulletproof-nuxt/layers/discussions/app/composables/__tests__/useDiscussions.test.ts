@@ -6,7 +6,7 @@ const { useAPI } = vi.hoisted(() => ({
   useAPI: vi.fn(),
 }));
 
-vi.mock("#layers/base/app/composables/useAPI", () => ({
+vi.mock("~~/app/composables/useAPI", () => ({
   useAPI,
 }));
 

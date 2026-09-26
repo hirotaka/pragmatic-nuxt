@@ -1,4 +1,4 @@
-import type { Comment } from "~comments/shared/types";
+import type { Comment } from "#layers/comments/shared/types/comment";
 import { expect, expectTypeOf, test } from "vitest";
 import { serializeComment } from "../serializeComment";
 

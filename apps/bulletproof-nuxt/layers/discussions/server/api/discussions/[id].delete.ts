@@ -1,4 +1,4 @@
-import { createDiscussionRepository } from "~discussions/server/repository/discussionRepository";
+import { createDiscussionRepository } from "../../repository/discussionRepository";
 
 export default defineProtectedEventHandler(async (event, sessionUser) => {
   if (!sessionUser.teamId) {

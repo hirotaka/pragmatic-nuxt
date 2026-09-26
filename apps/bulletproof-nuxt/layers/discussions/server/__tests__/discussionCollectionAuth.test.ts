@@ -7,7 +7,7 @@ const { createDiscussionRepository, requireCurrentUser } = vi.hoisted(() => ({
   requireCurrentUser: vi.fn(),
 }));
 
-vi.mock("~discussions/server/repository/discussionRepository", () => ({
+vi.mock("../repository/discussionRepository", () => ({
   createDiscussionRepository,
 }));
 

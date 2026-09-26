@@ -66,7 +66,7 @@ With the rise of headless component libraries, there is another tier of componen
 - [shadcn-vue](https://www.shadcn-vue.com/)
 - [Inspira UI](https://inspira-ui.com/)
 
-This project keeps shadcn-vue UI source under `app/components/ui/`. The `shadcn-nuxt` module reads each generated `index.ts` barrel and registers its uppercase component exports with an empty prefix. Application consumers continue to use explicit barrel imports such as `@/components/ui/button`.
+This project keeps shadcn-vue UI source under `app/components/ui/`. The `shadcn-nuxt` module reads each generated `index.ts` barrel and registers its uppercase component exports with an empty prefix, so components such as `Button` are auto-imported throughout the app and its feature layers. Root-app and feature-layer components are also auto-imported by Nuxt. Use explicit `#layers/<name>/...` imports when referencing another feature layer.
 
 ## Storybook
 

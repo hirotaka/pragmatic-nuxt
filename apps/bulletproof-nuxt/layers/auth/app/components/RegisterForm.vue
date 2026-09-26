@@ -1,19 +1,6 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from "vue";
 import type { RegleSchemaStatus } from "@regle/schemas";
-import { Form, type FormSubmitEvent } from "~~/app/components/form";
-import { useFormSchema } from "~~/app/composables/useFormSchema";
-import { FormField } from "~~/app/components/form-field";
-import { Input } from "~~/app/components/ui/input";
-import { NativeSelect } from "~~/app/components/ui/select";
-import { Button } from "~~/app/components/ui/button";
-import { useRegister } from "~auth/app/composables/useRegister";
-import {
-  registerInputSchema,
-  type RegisterFormState,
-  type RegisterInput,
-} from "~auth/shared/schemas";
-import type { Team } from "~auth/shared/types";
+import type { Team } from "#layers/teams/shared/types/team";
 
 type RegisterRegle = RegleSchemaStatus<
   RegisterFormState,
@@ -27,12 +14,12 @@ interface RegisterFormProps {
 }
 
 const props = defineProps<RegisterFormProps>();
-
 const emit = defineEmits<{
   success: [];
 }>();
 
 const chooseTeam = ref(false);
+const isSubmitting = ref(false);
 const register = useRegister();
 
 const state = reactive<RegisterFormState>({
@@ -48,6 +35,12 @@ const { r$: registerRegle } = useFormSchema(
   registerInputSchema as never,
 );
 const r$ = registerRegle as unknown as RegisterRegle;
+const firstNameField = r$.$fields.firstName;
+const lastNameField = r$.$fields.lastName;
+const emailField = r$.$fields.email;
+const passwordField = r$.$fields.password;
+const teamIdField = r$.$fields.teamId;
+const teamNameField = r$.$fields.teamName;
 
 watch(chooseTeam, (nextChooseTeam) => {
   if (nextChooseTeam) {
@@ -60,15 +53,22 @@ watch(chooseTeam, (nextChooseTeam) => {
   }
 });
 
-const handleSubmit = async (event: FormSubmitEvent<RegisterInput>) => {
-  const values = event.data;
+const handleSubmit = async () => {
+  if (isSubmitting.value) return;
 
+  isSubmitting.value = true;
   try {
-    await register(values);
+    const result = await r$.$validate();
+    if (!result.valid) return;
+
+    await register(result.data as RegisterInput);
     emit("success");
   }
   catch {
     // The request or session owner reports the failure.
+  }
+  finally {
+    isSubmitting.value = false;
   }
 };
 
@@ -82,57 +82,98 @@ const teamOptions = computed(
 </script>
 
 <template>
-  <Form
-    v-slot="{ loading }"
-    :schema="r$"
-    :state="r$.$value"
+  <form
+    novalidate
     class="space-y-3"
-    @submit="handleSubmit"
+    @submit.prevent="handleSubmit"
   >
     <div class="grid gap-3 sm:grid-cols-2">
-      <FormField
-        v-slot="field"
-        name="firstName"
-        label="First Name"
-      >
+      <Field :data-invalid="firstNameField.$error ? 'true' : undefined">
+        <FieldLabel for="first-name">
+          First Name
+        </FieldLabel>
         <Input
-          v-model="r$.$value.firstName"
-          v-bind="field"
+          id="first-name"
+          v-model="firstNameField.$value"
+          name="firstName"
+          :disabled="isSubmitting"
+          :aria-invalid="firstNameField.$error ? 'true' : undefined"
+          :aria-describedby="firstNameField.$error ? 'first-name-error' : undefined"
+          @blur="firstNameField.$touch()"
+          @change="firstNameField.$touch()"
         />
-      </FormField>
-      <FormField
-        v-slot="field"
-        name="lastName"
-        label="Last Name"
-      >
+        <FieldError
+          v-if="firstNameField.$error"
+          id="first-name-error"
+          :errors="firstNameField.$errors"
+        />
+      </Field>
+
+      <Field :data-invalid="lastNameField.$error ? 'true' : undefined">
+        <FieldLabel for="last-name">
+          Last Name
+        </FieldLabel>
         <Input
-          v-model="r$.$value.lastName"
-          v-bind="field"
+          id="last-name"
+          v-model="lastNameField.$value"
+          name="lastName"
+          :disabled="isSubmitting"
+          :aria-invalid="lastNameField.$error ? 'true' : undefined"
+          :aria-describedby="lastNameField.$error ? 'last-name-error' : undefined"
+          @blur="lastNameField.$touch()"
+          @change="lastNameField.$touch()"
         />
-      </FormField>
+        <FieldError
+          v-if="lastNameField.$error"
+          id="last-name-error"
+          :errors="lastNameField.$errors"
+        />
+      </Field>
     </div>
-    <FormField
-      v-slot="field"
-      name="email"
-      label="Email Address"
-    >
+
+    <Field :data-invalid="emailField.$error ? 'true' : undefined">
+      <FieldLabel for="email">
+        Email Address
+      </FieldLabel>
       <Input
-        v-model="r$.$value.email"
-        v-bind="field"
+        id="email"
+        v-model="emailField.$value"
+        name="email"
         type="email"
+        :disabled="isSubmitting"
+        :aria-invalid="emailField.$error ? 'true' : undefined"
+        :aria-describedby="emailField.$error ? 'email-error' : undefined"
+        @blur="emailField.$touch()"
+        @change="emailField.$touch()"
       />
-    </FormField>
-    <FormField
-      v-slot="field"
-      name="password"
-      label="Password"
-    >
+      <FieldError
+        v-if="emailField.$error"
+        id="email-error"
+        :errors="emailField.$errors"
+      />
+    </Field>
+
+    <Field :data-invalid="passwordField.$error ? 'true' : undefined">
+      <FieldLabel for="password">
+        Password
+      </FieldLabel>
       <Input
-        v-model="r$.$value.password"
-        v-bind="field"
+        id="password"
+        v-model="passwordField.$value"
+        name="password"
         type="password"
+        :disabled="isSubmitting"
+        :aria-invalid="passwordField.$error ? 'true' : undefined"
+        :aria-describedby="passwordField.$error ? 'password-error' : undefined"
+        @blur="passwordField.$touch()"
+        @change="passwordField.$touch()"
       />
-    </FormField>
+      <FieldError
+        v-if="passwordField.$error"
+        id="password-error"
+        :errors="passwordField.$errors"
+      />
+    </Field>
 
     <div class="rounded-lg border bg-muted/40 p-2">
       <div class="flex items-start space-x-3">
@@ -142,6 +183,7 @@ const teamOptions = computed(
           type="checkbox"
           aria-label="Join existing team"
           class="mt-1 size-4 rounded border-input"
+          :disabled="isSubmitting"
         >
         <div class="grid gap-1.5 leading-none">
           <label
@@ -157,37 +199,62 @@ const teamOptions = computed(
       </div>
     </div>
 
-    <FormField
+    <Field
       v-if="chooseTeam"
-      v-slot="field"
-      name="teamId"
-      label="Team"
+      :data-invalid="teamIdField.$error ? 'true' : undefined"
     >
+      <FieldLabel for="team-id">
+        Team
+      </FieldLabel>
       <NativeSelect
-        v-model="r$.$value.teamId"
-        v-bind="field"
+        id="team-id"
+        v-model="teamIdField.$value"
+        name="teamId"
+        :disabled="isSubmitting"
         :options="teamOptions"
         placeholder="Select team"
+        :aria-invalid="teamIdField.$error ? 'true' : undefined"
+        :aria-describedby="teamIdField.$error ? 'team-id-error' : undefined"
+        @blur="teamIdField.$touch()"
+        @change="teamIdField.$touch()"
       />
-    </FormField>
-    <FormField
+      <FieldError
+        v-if="teamIdField.$error"
+        id="team-id-error"
+        :errors="teamIdField.$errors"
+      />
+    </Field>
+
+    <Field
       v-else
-      v-slot="field"
-      name="teamName"
-      label="Team Name"
+      :data-invalid="teamNameField.$error ? 'true' : undefined"
     >
+      <FieldLabel for="team-name">
+        Team Name
+      </FieldLabel>
       <Input
-        v-model="r$.$value.teamName"
-        v-bind="field"
+        id="team-name"
+        v-model="teamNameField.$value"
+        name="teamName"
+        :disabled="isSubmitting"
+        :aria-invalid="teamNameField.$error ? 'true' : undefined"
+        :aria-describedby="teamNameField.$error ? 'team-name-error' : undefined"
+        @blur="teamNameField.$touch()"
+        @change="teamNameField.$touch()"
       />
-    </FormField>
+      <FieldError
+        v-if="teamNameField.$error"
+        id="team-name-error"
+        :errors="teamNameField.$errors"
+      />
+    </Field>
 
     <Button
-      :is-loading="loading"
+      :is-loading="isSubmitting"
       type="submit"
       class="w-full"
     >
       Register
     </Button>
-  </Form>
+  </form>
 </template>

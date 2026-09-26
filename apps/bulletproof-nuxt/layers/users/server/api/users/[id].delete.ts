@@ -1,4 +1,4 @@
-import { createUserRepository } from "~users/server/repository/userRepository";
+import { createUserRepository } from "../../repository/userRepository";
 
 export default defineProtectedEventHandler(async (event, sessionUser) => {
   if (sessionUser.role !== "ADMIN") {

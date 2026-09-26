@@ -1,9 +1,9 @@
 import { beforeEach, expect, test, vi } from "vitest";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { ref, type Ref } from "vue";
 import { within } from "@testing-library/vue";
-import type { Comment } from "~comments/shared/types";
-import type { PaginatedResult } from "#layers/base/shared/types/pagination";
+import type { Comment } from "#layers/comments/shared/types/comment";
+import type { PaginatedResult } from "~~/shared/types/pagination";
 import CommentsList from "../CommentsList.vue";
 
 const {
@@ -16,9 +16,7 @@ const {
   useComments: vi.fn(),
 }));
 
-vi.mock("~comments/app/composables/useComments", () => ({
-  useComments,
-}));
+mockNuxtImport("useComments", () => useComments);
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({ user: { value: null } }),

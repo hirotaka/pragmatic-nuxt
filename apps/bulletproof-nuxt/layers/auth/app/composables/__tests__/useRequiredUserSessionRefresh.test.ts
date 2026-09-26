@@ -10,8 +10,8 @@ const { addNotification, fetchSession, loggedIn } = vi.hoisted(() => ({
 
 mockNuxtImport("useUserSession", () => () => ({ fetch: fetchSession, loggedIn }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { error: addNotification },
 }));
 
 beforeEach(() => {
@@ -32,10 +32,8 @@ test("settles only after the refreshed session is authenticated", async () => {
 test("reports one session error when refresh settles logged out", async () => {
   await expect(useRequiredUserSessionRefresh()()).rejects.toBeInstanceOf(UserSessionRefreshError);
   expect(addNotification).toHaveBeenCalledOnce();
-  expect(addNotification).toHaveBeenCalledWith({
-    type: "error",
-    title: "Session Unavailable",
-    message: "The request completed, but the session could not be refreshed. Please try again.",
+  expect(addNotification).toHaveBeenCalledWith("Session Unavailable", {
+    description: "The request completed, but the session could not be refreshed. Please try again.",
   });
 });
 

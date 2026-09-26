@@ -1,8 +1,8 @@
-import type { Discussion } from "~discussions/shared/types";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import type { Discussion } from "#layers/discussions/shared/types/discussion";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { defineComponent, ref } from "vue";
 import { beforeEach, expect, test, vi } from "vitest";
-import { formatDate } from "#layers/base/app/utils/format";
+import { formatDate } from "~~/app/utils/format";
 import DiscussionView from "../DiscussionView.vue";
 
 const discussion: Discussion = {
@@ -25,12 +25,10 @@ const { discussionRefresh, useDiscussionMock } = vi.hoisted(() => ({
   useDiscussionMock: vi.fn(),
 }));
 
-vi.mock("~discussions/app/composables/useDiscussion", () => ({
-  useDiscussion: async (id: MaybeRefOrGetter<string>) => {
-    useDiscussionMock(toValue(id));
-    return { data: ref(discussion), refresh: discussionRefresh };
-  },
-}));
+mockNuxtImport("useDiscussion", () => async (id: MaybeRefOrGetter<string>) => {
+  useDiscussionMock(toValue(id));
+  return { data: ref(discussion), refresh: discussionRefresh };
+});
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({ isAdmin: { value: true } }),

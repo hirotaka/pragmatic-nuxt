@@ -1,10 +1,8 @@
-import type { LoginInput } from "~auth/shared/schemas";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 export const useLogin = () => {
   const { $api } = useNuxtApp();
   const refreshSession = useRequiredUserSessionRefresh();
-  const { addNotification } = useNotifications();
 
   return async (input: LoginInput): Promise<void> => {
     await $api("/api/auth/login", {
@@ -14,9 +12,6 @@ export const useLogin = () => {
 
     await refreshSession();
 
-    addNotification({
-      type: "success",
-      title: "Logged In",
-    });
+    toast.success("Logged In");
   };
 };

@@ -10,8 +10,8 @@ test("profile", async ({ page, goto }) => {
   await page.getByLabel("Bio").fill("My bio");
   await page.getByRole("button", { name: "Submit" }).click();
   await page
-    .getByLabel("Profile Updated")
-    .getByRole("button", { name: "Close" })
+    .locator("[data-sonner-toast][data-type=success]", { hasText: "Profile Updated" })
+    .getByRole("button", { name: "Close toast" })
     .click();
   await expect(page.getByText("My bio")).toBeVisible();
 

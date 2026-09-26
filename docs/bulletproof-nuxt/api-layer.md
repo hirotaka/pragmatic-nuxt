@@ -8,9 +8,9 @@ The Main app uses `useAPI`, a custom `useFetch` composable, for page-rendering d
 
 Nuxt Auth Utils continues to own authentication session requests in both apps rather than routing them through the shared fetchers.
 
-[Main App `useAPI`](../../apps/bulletproof-nuxt/layers/base/app/composables/useAPI.ts)
+[Main App `useAPI`](../../apps/bulletproof-nuxt/app/composables/useAPI.ts)
 
-[Main App `$api` Plugin](../../apps/bulletproof-nuxt/layers/base/app/plugins/api.ts)
+[Main App `$api` Plugin](../../apps/bulletproof-nuxt/app/plugins/api.ts)
 
 [Pinia Colada Reference `$api` Plugin](../../apps/reference/bulletproof-nuxt-pinia-colada/layers/base/app/plugins/api.ts)
 

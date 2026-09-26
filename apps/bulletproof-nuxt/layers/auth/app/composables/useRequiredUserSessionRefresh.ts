@@ -1,9 +1,8 @@
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 const sessionUnavailableNotification = {
-  type: "error" as const,
   title: "Session Unavailable",
-  message: "The request completed, but the session could not be refreshed. Please try again.",
+  description: "The request completed, but the session could not be refreshed. Please try again.",
 };
 
 export class UserSessionRefreshError extends Error {
@@ -15,9 +14,10 @@ export class UserSessionRefreshError extends Error {
 
 export function useRequiredUserSessionRefresh() {
   const { fetch, loggedIn } = useUserSession();
-  const { addNotification } = useNotifications();
   const throwSessionUnavailable = () => {
-    addNotification(sessionUnavailableNotification);
+    toast.error(sessionUnavailableNotification.title, {
+      description: sessionUnavailableNotification.description,
+    });
     throw new UserSessionRefreshError();
   };
 

@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import ConfirmationDialog from "~~/app/components/app/ConfirmationDialog.vue";
-import { useDeleteComment } from "~comments/app/composables/useDeleteComment";
-import { useNotifications } from "#layers/base/app/composables/useNotifications";
+import { toast } from "vue-sonner";
 
 interface DeleteCommentDialogProps {
   commentId: string;
@@ -14,7 +11,6 @@ const emit = defineEmits<{
   success: [];
 }>();
 
-const { addNotification } = useNotifications();
 const deleteComment = useDeleteComment();
 const isOpen = ref(false);
 const isPending = ref(false);
@@ -38,10 +34,7 @@ const handleConfirm = async () => {
     return;
   }
 
-  addNotification({
-    type: "success",
-    title: "Comment Deleted",
-  });
+  toast.success("Comment Deleted");
   emit("success");
   isPending.value = false;
   isOpen.value = false;

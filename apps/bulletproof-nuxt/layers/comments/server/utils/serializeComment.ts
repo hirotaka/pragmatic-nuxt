@@ -1,7 +1,7 @@
-import type { Comment as CommentDto } from "~comments/shared/types";
-import type { CommentRecord } from "~comments/server/repository/commentRepository";
+import type { Comment } from "../../shared/types/comment";
+import type { CommentRecord } from "../repository/commentRepository";
 
-export function serializeComment(comment: CommentRecord): CommentDto {
+export function serializeComment(comment: CommentRecord): Comment {
   return {
     id: comment.id,
     body: comment.body,

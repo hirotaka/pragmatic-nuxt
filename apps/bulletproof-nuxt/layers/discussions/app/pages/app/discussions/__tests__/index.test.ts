@@ -1,5 +1,5 @@
 import { beforeEach, expect, test, vi } from "vitest";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { waitFor } from "@testing-library/vue";
 import DiscussionsPage from "../index.vue";
 
@@ -17,9 +17,7 @@ vi.mock("#imports", async () => {
   };
 });
 
-vi.mock("~discussions/app/composables/useDiscussions", () => ({
-  useDiscussions,
-}));
+mockNuxtImport("useDiscussions", () => useDiscussions);
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -30,7 +28,7 @@ beforeEach(() => {
 const mountPage = () => mountSuspended(DiscussionsPage, {
   global: {
     stubs: {
-      LayoutsContentLayout: {
+      PageContent: {
         template: "<section><slot name='actions' /><slot /></section>",
       },
       CreateDiscussionForm: {

@@ -1,5 +1,4 @@
 import type { FetchResult, UseFetchOptions } from "#app";
-import { useAPI } from "#layers/base/app/composables/useAPI";
 
 type DiscussionRoute = `/api/discussions/${string}`;
 

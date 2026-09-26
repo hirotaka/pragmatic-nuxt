@@ -1,5 +1,4 @@
 import { createUserRepository } from "#layers/users/server/repository/userRepository";
-import { serializeUser } from "~auth/server/utils/serializeUser";
 
 export default defineNitroPlugin(() => {
   sessionHooks.hook("fetch", async (session) => {

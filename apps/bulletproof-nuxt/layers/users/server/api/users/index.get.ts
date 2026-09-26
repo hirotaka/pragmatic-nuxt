@@ -1,4 +1,4 @@
-import { createUserRepository } from "~users/server/repository/userRepository";
+import { createUserRepository } from "../../repository/userRepository";
 import { serializeUser } from "#layers/auth/server/utils/serializeUser";
 
 export default defineProtectedEventHandler(async (event, sessionUser) => {

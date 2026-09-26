@@ -20,6 +20,26 @@ test("login validation is lazy until blur and updates while editing", async ({ p
   await expect(email).not.toHaveAttribute("aria-invalid", "true");
 });
 
+test("failed login shows a styled Sonner toast that can be dismissed", async ({ page, goto }) => {
+  await page.context().clearCookies();
+  await goto("/auth/login", { waitUntil: "hydration" });
+
+  await page.getByLabel("Email Address").fill("missing@example.com");
+  await page.getByLabel("Password").fill("MissingPassword123!");
+  await page.getByRole("button", { name: "Log in" }).click();
+
+  const toast = page.locator("[data-sonner-toast][data-type=error]");
+  await expect(toast).toContainText("Invalid email or password");
+  const toaster = page.locator("[data-sonner-toaster]");
+  await expect(toaster).toHaveAttribute("data-y-position", "top");
+  await expect(toaster).toHaveAttribute("data-x-position", "right");
+  await expect.poll(() => toast.evaluate(element => getComputedStyle(element).backgroundColor))
+    .not.toBe("rgba(0, 0, 0, 0)");
+
+  await toast.getByRole("button", { name: "Close toast" }).click();
+  await expect(toast).toHaveCount(0);
+});
+
 test("an authenticated session survives a cold protected deep link", async ({ page, goto }) => {
   await goto("/app/discussions?page=2", { waitUntil: "hydration" });
   await waitForNuxtHydration(page);

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cleanup, waitFor } from "@testing-library/vue";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import CreateCommentForm from "../CreateCommentForm.vue";
 
 const { addNotification, createCommentMutate } = vi.hoisted(() => ({
@@ -8,13 +8,11 @@ const { addNotification, createCommentMutate } = vi.hoisted(() => ({
   createCommentMutate: vi.fn(),
 }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: addNotification },
 }));
 
-vi.mock("~comments/app/composables/useCreateComment", () => ({
-  useCreateComment: () => createCommentMutate,
-}));
+mockNuxtImport("useCreateComment", () => () => createCommentMutate);
 
 beforeEach(() => {
   addNotification.mockReset();
@@ -43,7 +41,7 @@ test("emits success after creating a comment", async () => {
     body: "New comment",
     discussionId: "discussion-1",
   });
-  expect(addNotification).toHaveBeenCalledWith({ type: "success", title: "Comment Created" });
+  expect(addNotification).toHaveBeenCalledWith("Comment Created");
 });
 
 test("recovers from mutation failure with the draft available", async () => {

@@ -1,8 +1,5 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { computed } from "vue";
-import type { RoleTypes } from "~auth/app/composables/useAuthorization";
-
 type AuthorizationProps = {
   allowedRoles?: RoleTypes[];
   policyCheck?: boolean;

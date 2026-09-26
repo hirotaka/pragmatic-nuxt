@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cleanup, waitFor, within } from "@testing-library/vue";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
 import Comments from "../Comments.vue";
 
@@ -14,20 +14,16 @@ const {
   useComments: vi.fn(),
 }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification: vi.fn() }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: vi.fn() },
 }));
 
-vi.mock("~comments/app/composables/useCreateComment", () => ({
-  useCreateComment: () => createCommentMutate,
-}));
+mockNuxtImport("useCreateComment", () => () => createCommentMutate);
 
-vi.mock("~comments/app/composables/useComments", () => ({
-  useComments: (discussionId: () => string) => {
-    useComments(discussionId);
-    return { refreshAfterCreate };
-  },
-}));
+mockNuxtImport("useComments", () => (discussionId: () => string) => {
+  useComments(discussionId);
+  return { refreshAfterCreate };
+});
 
 function deferred() {
   let resolve!: () => void;

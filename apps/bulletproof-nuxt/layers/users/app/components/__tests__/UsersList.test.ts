@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { cleanup, waitFor, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import type { User } from "~users/shared/types";
+import { toast } from "vue-sonner";
+import type { User } from "#layers/users/shared/types/user";
 import UsersList from "../UsersList.vue";
 
 const {
@@ -34,24 +35,20 @@ const {
 
 usersState.data = users;
 
-vi.mock("~users/app/composables/useUsers", () => ({
-  useUsers: async () => ({
-    data: usersState.data,
-    refresh,
-  }),
+mockNuxtImport("useUsers", () => async () => ({
+  data: usersState.data,
+  refresh,
 }));
 
-vi.mock("#layers/base/app/composables/useNotifications", () => ({
-  useNotifications: () => ({ addNotification }),
+vi.mock("vue-sonner", () => ({
+  toast: { success: addNotification, error: addNotification },
 }));
 
 vi.mock("#layers/auth/app/composables/useUser", () => ({
   useUser: () => ({ user: { value: { id: "current-user" } } }),
 }));
 
-vi.mock("~users/app/composables/useDeleteUser", () => ({
-  useDeleteUser: () => deleteUserMutate,
-}));
+mockNuxtImport("useDeleteUser", () => () => deleteUserMutate);
 
 function deferred() {
   let resolve!: () => void;
@@ -163,7 +160,7 @@ test("closes the dialog without waiting for the owner refresh", async () => {
 
 test("keeps deletion success when the users refresh reports an error", async () => {
   refresh.mockImplementationOnce(async () => {
-    addNotification({ type: "error", title: "Error", message: "Users refresh failed" });
+    toast.error("Error", { description: "Users refresh failed" });
     throw new Error("Users refresh failed");
   });
   const wrapper = await mountUsersList();
@@ -174,8 +171,8 @@ test("keeps deletion success when the users refresh reports an error", async () 
   await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
   expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
   expect(addNotification.mock.calls).toEqual([
-    [{ type: "success", title: "User Deleted" }],
-    [{ type: "error", title: "Error", message: "Users refresh failed" }],
+    ["User Deleted"],
+    ["Error", { description: "Users refresh failed" }],
   ]);
 });
 
@@ -194,10 +191,7 @@ test("does not refresh a remounted users owner when an earlier deletion settles"
   await mountUsersList();
   finishDelete();
   await confirmation;
-  await waitFor(() => expect(addNotification).toHaveBeenCalledWith({
-    type: "success",
-    title: "User Deleted",
-  }));
+  await waitFor(() => expect(addNotification).toHaveBeenCalledWith("User Deleted"));
 
   expect(refresh).not.toHaveBeenCalled();
 });
