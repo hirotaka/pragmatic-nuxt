@@ -11,7 +11,7 @@ overrides:
   '@prisma/client': npm:empty-npm-package@1.0.0
   basic-ftp: ^6.0.0
   editorconfig: ^3.0.0
-  dompurify: 3.4.12
+  dompurify: 3.4.13
   defu: 6.1.7
   fast-uri: 3.1.5
   brace-expansion: 5.0.12
@@ -6402,8 +6402,8 @@ packages:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
 
-  dompurify@3.4.12:
-    resolution: {integrity: sha512-zQvGet8Z2sWbQhCmfFz/T5QWH2oBmjnqK3qvOjaqaNLrLEF912WamU+ohnTp0TCep/MFVHpdJuCZEdFOdTnEFg==}
+  dompurify@3.4.13:
+    resolution: {integrity: sha512-2vmYIoqjze2d+kakP8S/nS5shfsl587kzwEjcGlTdiksUVgFHnFCsLYDVj/JNqJVOQZGSYBTmuycv0PodwmnMQ==}
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
@@ -16718,7 +16718,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.4.12:
+  dompurify@3.4.13:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -21920,7 +21920,7 @@ snapshots:
 
   vue-dompurify-html@5.3.0(vue@3.5.40(typescript@6.0.3)):
     dependencies:
-      dompurify: 3.4.12
+      dompurify: 3.4.13
       vue: 3.5.40(typescript@6.0.3)
 
   vue-eslint-parser@10.4.0(eslint@10.3.0(jiti@2.6.1)(supports-color@10.2.2))(supports-color@10.2.2):
