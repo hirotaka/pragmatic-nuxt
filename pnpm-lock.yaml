@@ -741,7 +741,7 @@ importers:
         version: 0.11.3(magicast@0.5.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
       '@tanstack/vue-form':
         specifier: ^1.0.0
-        version: 1.29.3(vue@3.5.40(typescript@6.0.3))
+        version: 1.33.5(vue@3.5.40(typescript@6.0.3))
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -2873,6 +2873,7 @@ packages:
   '@mswjs/http-middleware@0.10.3':
     resolution: {integrity: sha512-6CoX9IivDF7hggORdA4vX6uz+pkY1urGQMhmviHmYya/0b4EXwmhaXlGLQG3G29heqb3qdjp61V0+E2xRtyR5A==}
     engines: {node: '>=18'}
+    deprecated: This package has been deprecated in favor of @msw/serve.
     peerDependencies:
       msw: '>=2.0.0'
 
@@ -4580,13 +4581,13 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
 
-  '@tanstack/devtools-event-client@0.4.3':
-    resolution: {integrity: sha512-OZI6QyULw0FI0wjgmeYzCIfbgPsOEzwJtCpa69XrfLMtNXLGnz3d/dIabk7frg0TmHo+Ah49w5I4KC7Tufwsvw==}
+  '@tanstack/devtools-event-client@0.4.4':
+    resolution: {integrity: sha512-6T5Yop/793YI+H+5J8Hsyj4kCih9sl4t3ElLgKioW5hk3ocn+ZdSJ94tT7vL7uabxSugWYBZlOTMPzEw2puvQw==}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@tanstack/form-core@1.29.3':
-    resolution: {integrity: sha512-NNluDFsF/wjtOuhbqRJokVmR3GNuWQDeLeykcfDaEiod6mQ+/iwaXkLGVdlzXXLBOd+cb34KWP8seVaPhh5N6A==}
+  '@tanstack/form-core@1.33.5':
+    resolution: {integrity: sha512-3dfx9MBP0aq5sXKteikG629X9oviptrQj0IFRk9YGcb+lB7Kv5x8S17oOSk1wUWgjQZ4xVJEMbKwOAODymocgA==}
 
   '@tanstack/match-sorter-utils@8.19.4':
     resolution: {integrity: sha512-Wo1iKt2b9OT7d+YGhvEPD3DXvPv2etTusIMhMUoG7fbhmxcXCtIjJDEygy91Y2JFlwGyjqiBPRozme7UD8hoqg==}
@@ -4605,14 +4606,14 @@ packages:
   '@tanstack/query-devtools@5.100.9':
     resolution: {integrity: sha512-gqiptrTIhbK2PuCaPRHmWXfJG1NGYVFpAr0HqogEqiSBNB5xDz6fmesQt7w4WgMOqOQPnPHJ3ZDMuhDaXvNO8g==}
 
-  '@tanstack/store@0.9.3':
-    resolution: {integrity: sha512-8reSzl/qGWGGVKhBoxXPMWzATSbZLZFWhwBAFO9NAyp0TxzfBP0mIrGb8CP8KrQTmvzXlR/vFPPUrHTLBGyFyw==}
+  '@tanstack/store@0.11.2':
+    resolution: {integrity: sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q==}
 
   '@tanstack/virtual-core@3.14.0':
     resolution: {integrity: sha512-JLANqGy/D6k4Ujmh8Tr25lGimuOXNiaVyXaCAZS0W+1390sADdGnyUdSWNIfd49gebtIxGMij4IktRVzrdr12Q==}
 
-  '@tanstack/vue-form@1.29.3':
-    resolution: {integrity: sha512-A7dIdTFVfttQ6Kr86Naf68BBoCovQNJujE9Cl3E6ndrCy2SnVAXdLBR9BIqRoyz8JwrWM7cqG7ZIzqENvjlz0Q==}
+  '@tanstack/vue-form@1.33.5':
+    resolution: {integrity: sha512-IvNlJ1LGFqt2pkwwCM+ltMWeBpF/qUeP9vlQwknMJphrIjJtZfmVr+VaN4BsOEbZQVK2vDkglqT+u64LTTjyoA==}
     peerDependencies:
       vue: 3.5.40
 
@@ -4640,8 +4641,8 @@ packages:
       '@vue/composition-api':
         optional: true
 
-  '@tanstack/vue-store@0.9.3':
-    resolution: {integrity: sha512-YZb5SAR3f2kLt58Ip6gig2+z8vRAfSkJK30Bq7enZ7cG4epyygmRsbrrDMxvmoYSJu33CY5uJ6MvI74KGP0ZvQ==}
+  '@tanstack/vue-store@0.11.2':
+    resolution: {integrity: sha512-wZmkfsvc0dNvOg/Xb/a7uTPKejleI0dR3HHi0t3ZyVM/23MJ7AC0bH6C7rp2seSY4mIYo0pLLbGJGZ/UpO93Zw==}
     peerDependencies:
       '@vue/composition-api': ^1.2.1
       vue: 3.5.40
@@ -10566,8 +10567,8 @@ packages:
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
-  vue-component-type-helpers@3.3.11:
-    resolution: {integrity: sha512-LwcxzeliO9fkQcpJG0PoX8X5kmAhKmH9wkpDLxNabwzkQ9Zeib2YVHwFV4pcWmMLfXVfjr/dSV+DaJ3cIPgSNA==}
+  vue-component-type-helpers@3.3.12:
+    resolution: {integrity: sha512-HwCqmgTfLFskQc4P5TRnbduCMyPat2Ezu0elLWOGn0dD/6BKHP15B5bxce6aDi+E4kblPtru8amIBQzu0Di3qQ==}
 
   vue-component-type-helpers@3.3.8:
     resolution: {integrity: sha512-troqCMmQodQDqUqn63NQaFi+CDSclSe7sc8VEBFqf5GFLqmGR2Ph3P2WEC7qwpRVyEWsTi/aAr4vyOe/B1hU3g==}
@@ -14410,7 +14411,7 @@ snapshots:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.5.40(typescript@6.0.3)
-      vue-component-type-helpers: 3.3.11
+      vue-component-type-helpers: 3.3.12
 
   '@stylistic/eslint-plugin@5.9.0(eslint@10.3.0(jiti@2.6.1)(supports-color@10.2.2))':
     dependencies:
@@ -14574,13 +14575,13 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.2.0(@types/node@24.12.3)(esbuild@0.28.1)(jiti@2.6.1)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4)
 
-  '@tanstack/devtools-event-client@0.4.3': {}
+  '@tanstack/devtools-event-client@0.4.4': {}
 
-  '@tanstack/form-core@1.29.3':
+  '@tanstack/form-core@1.33.5':
     dependencies:
-      '@tanstack/devtools-event-client': 0.4.3
+      '@tanstack/devtools-event-client': 0.4.4
       '@tanstack/pacer-lite': 0.1.1
-      '@tanstack/store': 0.9.3
+      '@tanstack/store': 0.11.2
 
   '@tanstack/match-sorter-utils@8.19.4':
     dependencies:
@@ -14594,14 +14595,14 @@ snapshots:
 
   '@tanstack/query-devtools@5.100.9': {}
 
-  '@tanstack/store@0.9.3': {}
+  '@tanstack/store@0.11.2': {}
 
   '@tanstack/virtual-core@3.14.0': {}
 
-  '@tanstack/vue-form@1.29.3(vue@3.5.40(typescript@6.0.3))':
+  '@tanstack/vue-form@1.33.5(vue@3.5.40(typescript@6.0.3))':
     dependencies:
-      '@tanstack/form-core': 1.29.3
-      '@tanstack/vue-store': 0.9.3(vue@3.5.40(typescript@6.0.3))
+      '@tanstack/form-core': 1.33.5
+      '@tanstack/vue-store': 0.11.2(vue@3.5.40(typescript@6.0.3))
       vue: 3.5.40(typescript@6.0.3)
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -14628,9 +14629,9 @@ snapshots:
       vue: 3.5.40(typescript@6.0.3)
       vue-demi: 0.14.10(vue@3.5.40(typescript@6.0.3))
 
-  '@tanstack/vue-store@0.9.3(vue@3.5.40(typescript@6.0.3))':
+  '@tanstack/vue-store@0.11.2(vue@3.5.40(typescript@6.0.3))':
     dependencies:
-      '@tanstack/store': 0.9.3
+      '@tanstack/store': 0.11.2
       vue: 3.5.40(typescript@6.0.3)
       vue-demi: 0.14.10(vue@3.5.40(typescript@6.0.3))
 
@@ -21892,7 +21893,7 @@ snapshots:
 
   vue-component-type-helpers@2.2.12: {}
 
-  vue-component-type-helpers@3.3.11: {}
+  vue-component-type-helpers@3.3.12: {}
 
   vue-component-type-helpers@3.3.8: {}
 
