@@ -122,7 +122,7 @@ importers:
         version: 2.8.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(magicast@0.5.4)
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -276,7 +276,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -445,7 +445,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -632,7 +632,7 @@ importers:
         version: 2.8.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(magicast@0.5.4)
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -783,7 +783,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -967,7 +967,7 @@ importers:
         version: 2.8.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(magicast@0.5.4)
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)
@@ -1118,7 +1118,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       vee-validate:
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.40(typescript@6.0.3))
@@ -1269,7 +1269,7 @@ importers:
         version: 2.9.7(vue@3.5.40(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.0.0
-        version: 3.5.0
+        version: 3.7.0
       unhead:
         specifier: ^3.0.0
         version: 3.1.0(vite@7.3.6(@types/node@24.12.3)(jiti@2.6.1)(lightningcss@1.33.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))
@@ -2873,6 +2873,7 @@ packages:
   '@mswjs/http-middleware@0.10.3':
     resolution: {integrity: sha512-6CoX9IivDF7hggORdA4vX6uz+pkY1urGQMhmviHmYya/0b4EXwmhaXlGLQG3G29heqb3qdjp61V0+E2xRtyR5A==}
     engines: {node: '>=18'}
+    deprecated: This package has been deprecated in favor of @msw/serve.
     peerDependencies:
       msw: '>=2.0.0'
 
@@ -9783,8 +9784,8 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tailwind-merge@3.5.0:
-    resolution: {integrity: sha512-I8K9wewnVDkL1NTGoqWmVEIlUcB9gFriAEkXkfCjX5ib8ezGxtR3xD7iZIxrfArjEsH7F1CHD4RFUtxefdqV/A==}
+  tailwind-merge@3.7.0:
+    resolution: {integrity: sha512-XPPUyAc+cvspz3lHTcR/QgPfW2A0lv/xQNIjX3HGhLR+Nq2lHaLq5MtTesHn8GUr3W3DguT2KT5x3NVgRtYwmA==}
 
   tailwindcss@4.2.4:
     resolution: {integrity: sha512-HhKppgO81FQof5m6TEnuBWCZGgfRAWbaeOaGT00KOy/Pf/j6oUihdvBpA7ltCeAvZpFhW3j0PTclkxsd4IXYDA==}
@@ -10566,8 +10567,8 @@ packages:
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
-  vue-component-type-helpers@3.3.11:
-    resolution: {integrity: sha512-LwcxzeliO9fkQcpJG0PoX8X5kmAhKmH9wkpDLxNabwzkQ9Zeib2YVHwFV4pcWmMLfXVfjr/dSV+DaJ3cIPgSNA==}
+  vue-component-type-helpers@3.3.12:
+    resolution: {integrity: sha512-HwCqmgTfLFskQc4P5TRnbduCMyPat2Ezu0elLWOGn0dD/6BKHP15B5bxce6aDi+E4kblPtru8amIBQzu0Di3qQ==}
 
   vue-component-type-helpers@3.3.8:
     resolution: {integrity: sha512-troqCMmQodQDqUqn63NQaFi+CDSclSe7sc8VEBFqf5GFLqmGR2Ph3P2WEC7qwpRVyEWsTi/aAr4vyOe/B1hU3g==}
@@ -14410,7 +14411,7 @@ snapshots:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.5.40(typescript@6.0.3)
-      vue-component-type-helpers: 3.3.11
+      vue-component-type-helpers: 3.3.12
 
   '@stylistic/eslint-plugin@5.9.0(eslint@10.3.0(jiti@2.6.1)(supports-color@10.2.2))':
     dependencies:
@@ -20851,7 +20852,7 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tailwind-merge@3.5.0: {}
+  tailwind-merge@3.7.0: {}
 
   tailwindcss@4.2.4: {}
 
@@ -21892,7 +21893,7 @@ snapshots:
 
   vue-component-type-helpers@2.2.12: {}
 
-  vue-component-type-helpers@3.3.11: {}
+  vue-component-type-helpers@3.3.12: {}
 
   vue-component-type-helpers@3.3.8: {}
 
