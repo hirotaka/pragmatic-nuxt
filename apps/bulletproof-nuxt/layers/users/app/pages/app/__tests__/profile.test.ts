@@ -43,5 +43,7 @@ describe("Profile page", () => {
     expect(wrapper.text()).toContain("user@example.com");
     expect(wrapper.text()).toContain("Existing bio");
     expect(wrapper.text()).toContain("Update Profile");
+    const updateButton = wrapper.findAll("button").find(button => button.text().includes("Update Profile"));
+    expect(updateButton!.find("svg").exists()).toBe(true);
   });
 });

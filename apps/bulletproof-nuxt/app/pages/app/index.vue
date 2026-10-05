@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MessageSquare, ShieldCheck, UserRoundCog } from "lucide-vue-next";
+import { MessageSquare, ShieldCheck, UserRoundCog } from "@lucide/vue";
 
 const { user } = useUser();
 

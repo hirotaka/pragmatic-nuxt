@@ -36,11 +36,11 @@ async function confirmDelete() {
   const bodyScreen = within(document.body);
 
   await userEvent.click(componentScreen.getByRole("button", { name: "Open user actions" }));
-  await userEvent.click(await componentScreen.findByRole("menuitem", { name: /delete user/i }));
-  const dialog = await bodyScreen.findByRole("dialog", { name: /delete user/i });
+  await userEvent.click(await bodyScreen.findByRole("menuitem", { name: /delete user/i }));
+  const dialog = await bodyScreen.findByRole("alertdialog", { name: /delete user/i });
   await userEvent.click(within(dialog).getByRole("button", { name: /delete user/i }));
 
-  return { bodyScreen, componentScreen, wrapper };
+  return { bodyScreen, wrapper };
 }
 
 beforeEach(() => {
@@ -54,15 +54,15 @@ afterEach(() => {
 });
 
 test("reports successful deletion after its action dropdown closes", async () => {
-  const { bodyScreen, componentScreen, wrapper } = await confirmDelete();
+  const { bodyScreen, wrapper } = await confirmDelete();
 
   await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
   expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
   expect(addNotification).toHaveBeenCalledWith("User Deleted");
   await waitFor(() => {
-    expect(bodyScreen.queryByRole("dialog", { name: /delete user/i })).toBeNull();
+    expect(bodyScreen.queryByRole("alertdialog", { name: /delete user/i })).toBeNull();
   });
-  expect(componentScreen.getByRole("menu").getAttribute("data-state")).toBe("closed");
+  expect(bodyScreen.getByRole("menu", { hidden: true }).getAttribute("data-state")).toBe("closed");
 });
 
 test("releases dialog controls and stays open when mutation fails", async () => {
@@ -72,7 +72,7 @@ test("releases dialog controls and stays open when mutation fails", async () => 
   await waitFor(() => expect(deleteUserMutate).toHaveBeenCalledOnce());
   expect(addNotification).not.toHaveBeenCalled();
   expect(wrapper.emitted("success")).toBeUndefined();
-  const dialog = bodyScreen.getByRole("dialog", { name: /delete user/i });
+  const dialog = bodyScreen.getByRole("alertdialog", { name: /delete user/i });
   expect(within(dialog).getByRole("button", { name: /delete user/i }).hasAttribute("disabled")).toBe(false);
   expect(within(dialog).getByRole("button", { name: /cancel/i }).hasAttribute("disabled")).toBe(false);
 });

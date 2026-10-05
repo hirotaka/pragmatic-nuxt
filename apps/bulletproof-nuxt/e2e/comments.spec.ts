@@ -204,7 +204,7 @@ test("comment create closes after its comments refresh settles", { tag: ["@comme
   const narrowSheet = await drawer.boundingBox();
   expect(narrowSheet?.width).toBeGreaterThan(0);
   expect(narrowSheet?.width).toBeLessThan(390);
-  await drawer.getByRole("button", { name: "Close", exact: true }).click();
+  await drawer.locator("[data-slot='sheet-footer']").getByRole("button", { name: "Close", exact: true }).click();
   await expect(drawer).toBeHidden();
   await expect(trigger).toBeFocused();
 
@@ -259,7 +259,7 @@ test("unexpected post-delete comment refresh failures open the error page", { ta
 
   await page.getByRole("button", { name: "Open comment actions for comment 1" }).click();
   await page.getByRole("menuitem", { name: "Delete Comment" }).click();
-  const dialog = page.getByRole("dialog", { name: "Delete Comment" });
+  const dialog = page.getByRole("alertdialog", { name: "Delete Comment" });
   failRefresh = true;
   await dialog.getByRole("button", { name: "Delete Comment" }).click();
 

@@ -64,6 +64,7 @@ test("renders the list as the comments data owner", async () => {
   expect(list.props("discussionId")).toBe("discussion-1");
   expect(useComments).toHaveBeenCalledOnce();
   expect(useComments.mock.calls[0]![0]()).toBe("discussion-1");
+  expect(within(wrapper.element as HTMLElement).getByRole("button", { name: /create comment/i }).querySelector("svg")).toBeTruthy();
 });
 
 test("discards an open creation draft when discussion identity changes", async () => {

@@ -11,4 +11,6 @@ test("MarkdownPreview renders markdown content", async () => {
 
   expect(wrapper.text()).toContain("Hello markdown");
   expect(wrapper.html()).toContain("<strong>Hello</strong>");
+  expect(wrapper.attributes("class")).toContain("typeset");
+  expect(wrapper.attributes("class")).not.toContain("prose");
 });

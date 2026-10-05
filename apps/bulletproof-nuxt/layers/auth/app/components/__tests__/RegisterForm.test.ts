@@ -142,7 +142,9 @@ test("should register new user with an existing team without leaking team name",
   await userEvent.type(screen.getByLabelText(/email address/i), newUser.email);
   await userEvent.type(screen.getByLabelText(/password/i), newUser.password);
   await userEvent.type(screen.getByLabelText(/team name/i), "Stale Team Name");
-  await userEvent.click(screen.getByLabelText(/join existing team/i));
+  const chooseTeamCheckbox = screen.getByRole("checkbox", { name: /join existing team/i });
+  await userEvent.click(chooseTeamCheckbox);
+  expect(chooseTeamCheckbox.getAttribute("data-state")).toBe("checked");
   await userEvent.selectOptions(screen.getByLabelText(/^team$/i), team.id);
   await userEvent.click(screen.getByRole("button", { name: /register/i }));
 

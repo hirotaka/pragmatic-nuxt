@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { DialogTrigger, type DialogTriggerProps } from "reka-ui";
+import type { DialogTriggerProps } from "reka-ui";
+import { DialogTrigger } from "reka-ui";
 
-// Extend RadixVue props for potential future customization
-type Props = DialogTriggerProps;
-
-defineOptions({ inheritAttrs: false });
-
-const props = defineProps<Props>();
+const props = defineProps<DialogTriggerProps>();
 </script>
 
 <template>
   <DialogTrigger
-    v-bind="{ ...props, ...$attrs }"
-    as-child
+    data-slot="dialog-trigger"
+    v-bind="props"
   >
     <slot />
   </DialogTrigger>

@@ -23,6 +23,7 @@ export default defineNuxtConfig({
     "@nuxt/test-utils/module",
     "@regle/nuxt",
     "shadcn-nuxt",
+    "@nuxt/icon",
   ],
   devtools: { enabled: true },
   app: {
@@ -32,7 +33,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/css/tailwind.css"],
   // Nuxt 4 compatibility
   future: {
     compatibilityVersion: 4,
@@ -83,6 +84,15 @@ export default defineNuxtConfig({
         quotes: "double",
         semi: true,
       },
+    },
+  },
+  icon: {
+    provider: "none",
+    serverBundle: false,
+    fallbackToApi: false,
+    clientBundle: {
+      icons: ["uil:github"],
+      scan: false,
     },
   },
   shadcn: {

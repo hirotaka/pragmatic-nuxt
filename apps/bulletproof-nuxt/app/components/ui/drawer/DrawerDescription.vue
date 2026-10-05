@@ -1,17 +1,21 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import type { DrawerDescriptionProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
-import { DialogDescription, type DialogDescriptionProps } from "reka-ui";
+import { reactiveOmit } from "@vueuse/core";
+import { DrawerDescription } from "reka-ui";
 import { cn } from "@/lib/utils";
 
-interface Props extends DialogDescriptionProps {
-  class?: HTMLAttributes["class"];
-}
+const props = defineProps<DrawerDescriptionProps & { class?: HTMLAttributes["class"] }>();
 
-const props = defineProps<Props>();
+const delegatedProps = reactiveOmit(props, "class");
 </script>
 
 <template>
-  <DialogDescription :class="cn('text-sm text-muted-foreground', props.class)">
+  <DrawerDescription
+    data-slot="drawer-description"
+    v-bind="delegatedProps"
+    :class="cn('text-muted-foreground text-sm', props.class)"
+  >
     <slot />
-  </DialogDescription>
+  </DrawerDescription>
 </template>

@@ -1,56 +1,48 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import type { DrawerContentEmits, DrawerContentProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
+import { reactiveOmit } from "@vueuse/core";
 import {
-  DialogContent,
-  type DialogContentProps,
-  DialogClose,
+  DrawerContent,
+  DrawerHandle,
+  DrawerPortal,
+  useForwardPropsEmits,
 } from "reka-ui";
-import { X } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
-import DrawerPortal from "./DrawerPortal.vue";
 import DrawerOverlay from "./DrawerOverlay.vue";
 
-interface Props extends DialogContentProps {
-  class?: HTMLAttributes["class"];
-  side?: "left" | "right" | "top" | "bottom";
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  side: "right",
-  class: undefined,
+defineOptions({
+  inheritAttrs: false,
 });
 
-const sideClasses = {
-  left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
-  right:
-    "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
-  top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
-  bottom:
-    "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-};
+const props = defineProps<DrawerContentProps & { class?: HTMLAttributes["class"] }>();
+const emits = defineEmits<DrawerContentEmits>();
+
+const delegatedProps = reactiveOmit(props, "class");
+
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 
 <template>
   <DrawerPortal>
     <DrawerOverlay />
-    <DialogContent
-      :class="
-        cn(
-          'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
-          sideClasses[side],
-          props.class,
-        )
-      "
-      v-bind="props"
+    <DrawerContent
+      data-slot="drawer-content"
+      v-bind="{ ...$attrs, ...forwarded }"
+      :class="cn(
+        'group/drawer-content bg-background fixed z-50 flex h-auto flex-col',
+        'will-change-transform transform-[translate3d(var(--drawer-swipe-movement-x,0px),var(--drawer-swipe-movement-y,0px),0)]',
+        'transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0 data-swiping:select-none',
+        'data-[state=open]:animate-in data-[state=closed]:animate-out',
+        'data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80vh] data-[swipe-direction=up]:rounded-b-lg data-[swipe-direction=up]:data-[state=open]:slide-in-from-top data-[swipe-direction=up]:data-[state=closed]:slide-out-to-top',
+        'data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-lg data-[swipe-direction=down]:data-[state=open]:slide-in-from-bottom data-[swipe-direction=down]:data-[state=closed]:slide-out-to-bottom',
+        'data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:sm:max-w-sm data-[swipe-direction=right]:data-[state=open]:slide-in-from-right data-[swipe-direction=right]:data-[state=closed]:slide-out-to-right',
+        'data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:sm:max-w-sm data-[swipe-direction=left]:data-[state=open]:slide-in-from-left data-[swipe-direction=left]:data-[state=closed]:slide-out-to-left',
+        props.class,
+      )"
     >
+      <DrawerHandle class="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[swipe-direction=down]/drawer-content:block" />
       <slot />
-
-      <DialogClose
-        class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
-      >
-        <X class="h-4 w-4" />
-        <span class="sr-only">Close</span>
-      </DialogClose>
-    </DialogContent>
+    </DrawerContent>
   </DrawerPortal>
 </template>

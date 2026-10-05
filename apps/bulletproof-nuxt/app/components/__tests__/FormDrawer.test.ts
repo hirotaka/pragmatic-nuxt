@@ -1,86 +1,48 @@
-import { expect, test } from "vitest";
+import { afterEach, expect, test } from "vitest";
+import { cleanup, waitFor, within } from "@testing-library/vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { defineComponent, h, inject, provide, type InjectionKey } from "vue";
+import userEvent from "@testing-library/user-event";
+import { h } from "vue";
 import FormDrawer from "../FormDrawer.vue";
 
-const updateSheetOpenKey: InjectionKey<(open: boolean) => void> = Symbol("update-sheet-open");
-
-const SheetRootStub = defineComponent({
-  name: "SheetRootStub",
-  props: {
-    open: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ["update:open"],
-  setup(props, { emit, slots }) {
-    provide(updateSheetOpenKey, open => emit("update:open", open));
-
-    return () => h("section", {
-      "data-testid": "sheet-root",
-      "data-open": String(props.open),
-    }, slots.default?.());
-  },
+afterEach(() => {
+  cleanup();
+  document.body.innerHTML = "";
 });
 
-const SheetTriggerStub = defineComponent({
-  name: "SheetTriggerStub",
-  props: { asChild: Boolean },
-  setup(_, { slots }) {
-    const updateOpen = inject(updateSheetOpenKey);
-
-    return () => h("div", {
-      onClick: () => updateOpen?.(true),
-    }, slots.default?.());
-  },
-});
-
-const SheetCloseStub = defineComponent({
-  name: "SheetCloseStub",
-  props: { asChild: Boolean },
-  setup(_, { slots }) {
-    const updateOpen = inject(updateSheetOpenKey);
-
-    return () => h("div", {
-      onClick: () => updateOpen?.(false),
-    }, slots.default?.());
-  },
-});
-
-const stubs = {
-  Sheet: SheetRootStub,
-  SheetTrigger: SheetTriggerStub,
-  SheetContent: { template: "<div><slot /></div>" },
-  SheetHeader: { template: "<header><slot /></header>" },
-  SheetTitle: { template: "<h2><slot /></h2>" },
-  SheetDescription: { template: "<p><slot /></p>" },
-  SheetFooter: { template: "<footer><slot /></footer>" },
-  SheetClose: SheetCloseStub,
-};
-
-test("FormDrawer opens and closes while rendering presentation slots", async () => {
+test("FormDrawer opens and closes with the Sheet slot while rendering presentation slots", async () => {
   const wrapper = await mountSuspended(FormDrawer, {
     props: { title: "Create Item" },
     slots: {
       triggerButton: "<button>Open drawer</button>",
-      default: "Drawer body",
-      submitButton: "Submit drawer",
+      default: ({ close }: { close: () => void }) => h("div", [
+        h("span", "Drawer body"),
+        h("button", { type: "button", onClick: close }, "Finish"),
+      ]),
+      submitButton: "<button type='submit'>Submit drawer</button>",
     },
-    global: { stubs },
   });
+  const bodyScreen = within(document.body);
+  const trigger = within(wrapper.element as HTMLElement).getByRole("button", { name: "Open drawer" });
 
-  const sheetRoot = wrapper.findComponent(SheetRootStub);
-  await wrapper.get("button").trigger("click");
+  await userEvent.click(trigger);
+  const drawer = await bodyScreen.findByRole("dialog", { name: "Create Item" });
+  expect(within(drawer).getByText("Drawer body")).toBeDefined();
+  expect(within(drawer).getByRole("button", { name: "Submit drawer" })).toBeDefined();
+  expect(drawer.classList.contains("justify-between")).toBe(false);
+  const body = drawer.querySelector("[data-slot='form-drawer-body']");
+  expect(body).not.toBeNull();
+  expect(Array.from(body?.classList ?? [])).toEqual(
+    expect.arrayContaining(["grid", "flex-1", "auto-rows-min", "px-4"]),
+  );
 
-  expect(sheetRoot.props("open")).toBe(true);
-  expect(wrapper.text()).toContain("Create Item");
-  expect(wrapper.text()).toContain("Open drawer");
-  expect(wrapper.text()).toContain("Drawer body");
-  expect(wrapper.text()).toContain("Submit drawer");
+  await userEvent.click(within(drawer).getByRole("button", { name: "Finish" }));
+  await waitFor(() => expect(bodyScreen.queryByRole("dialog", { name: "Create Item" })).toBeNull());
 
-  const closeButton = wrapper.findAll("button").find(button => button.text() === "Close");
-  await closeButton!.trigger("click");
-
-  expect(sheetRoot.props("open")).toBe(false);
+  await userEvent.click(trigger);
+  const reopened = await bodyScreen.findByRole("dialog", { name: "Create Item" });
+  const footer = reopened.querySelector("[data-slot='sheet-footer']");
+  expect(footer).not.toBeNull();
+  await userEvent.click(within(footer as HTMLElement).getByRole("button", { name: "Close" }));
+  await waitFor(() => expect(bodyScreen.queryByRole("dialog", { name: "Create Item" })).toBeNull());
 });

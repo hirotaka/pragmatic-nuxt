@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronsUpDown, LogOut, User2 } from "lucide-vue-next";
+import { ChevronsUpDown, LogOut, User2 } from "@lucide/vue";
 import { cn } from "@/lib/utils";
 
 defineProps<{
@@ -15,8 +15,8 @@ const { user } = useUser();
 </script>
 
 <template>
-  <DropdownRoot>
-    <DropdownTrigger as-child>
+  <DropdownMenu>
+    <DropdownMenuTrigger as-child>
       <button
         type="button"
         :class="cn(
@@ -44,43 +44,45 @@ const { user } = useUser();
         />
         <span class="sr-only">Open user menu</span>
       </button>
-    </DropdownTrigger>
-    <DropdownContent
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
       side="right"
       align="end"
-      class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+      class="w-(--reka-dropdown-menu-trigger-width) min-w-56 rounded-lg"
     >
-      <DropdownLabel class="p-0 font-normal">
-        <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-          <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <User2 class="size-4" />
-          </span>
-          <span class="grid min-w-0 flex-1 text-left text-sm leading-tight">
-            <span class="truncate font-semibold">
-              {{ user ? `${user.firstName} ${user.lastName}` : "Account" }}
+      <DropdownMenuGroup>
+        <DropdownMenuLabel class="p-0 font-normal">
+          <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+            <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <User2 />
             </span>
-            <span class="truncate text-xs text-muted-foreground">
-              {{ user?.email ?? "Manage workspace" }}
+            <span class="grid min-w-0 flex-1 text-left text-sm leading-tight">
+              <span class="truncate font-semibold">
+                {{ user ? `${user.firstName} ${user.lastName}` : "Account" }}
+              </span>
+              <span class="truncate text-xs text-muted-foreground">
+                {{ user?.email ?? "Manage workspace" }}
+              </span>
             </span>
-          </span>
-        </div>
-      </DropdownLabel>
-      <DropdownSeparator />
-      <DropdownItem
-        class="gap-2"
-        @click="emit('profile')"
-      >
-        <User2 class="size-4" />
-        Your Profile
-      </DropdownItem>
-      <DropdownSeparator />
-      <DropdownItem
-        class="gap-2"
-        @click="emit('logout')"
-      >
-        <LogOut class="size-4" />
-        Sign Out
-      </DropdownItem>
-    </DropdownContent>
-  </DropdownRoot>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          class="gap-2"
+          @click="emit('profile')"
+        >
+          <User2 />
+          Your Profile
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          class="gap-2"
+          @click="emit('logout')"
+        >
+          <LogOut />
+          Sign Out
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+    </DropdownMenuContent>
+  </DropdownMenu>
 </template>

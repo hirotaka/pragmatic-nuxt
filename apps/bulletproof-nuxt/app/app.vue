@@ -11,8 +11,8 @@ useHead({
 <template>
   <div>
     <NuxtLoadingIndicator
-      color="var(--color-primary)"
-      error-color="var(--color-destructive)"
+      color="var(--primary)"
+      error-color="var(--destructive)"
     />
     <NuxtRouteAnnouncer />
     <NuxtLayout>

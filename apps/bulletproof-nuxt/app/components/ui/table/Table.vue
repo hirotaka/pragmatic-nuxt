@@ -1,18 +1,19 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
-interface Props {
+const props = defineProps<{
   class?: HTMLAttributes["class"];
-}
-
-const props = defineProps<Props>();
+}>();
 </script>
 
 <template>
-  <div class="relative w-full overflow-auto">
+  <div
+    data-slot="table-container"
+    class="relative w-full overflow-auto"
+  >
     <table
+      data-slot="table"
       :class="cn('w-full caption-bottom text-sm', props.class)"
     >
       <slot />

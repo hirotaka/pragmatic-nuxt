@@ -9,6 +9,6 @@ defineProps<{
 <template>
   <div
     v-dompurify-html="parse(value)"
-    class="prose prose-slate w-full max-w-none rounded-lg border bg-card p-4 text-card-foreground"
+    class="typeset w-full rounded-lg border bg-card p-4 text-card-foreground"
   />
 </template>

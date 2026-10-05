@@ -1,10 +1,10 @@
 {
   "$schema": "https://shadcn-vue.com/schema.json",
-  "style": "vega",
+  "style": "new-york",
   "typescript": true,
   "tailwind": {
     "config": "",
-    "css": "app/assets/css/main.css",
+    "css": "app/assets/css/tailwind.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
@@ -15,5 +15,6 @@
     "lib": "@/lib",
     "utils": "@/lib/utils",
     "composables": "@/composables"
-  }
+  },
+  "iconLibrary": "lucide"
 }

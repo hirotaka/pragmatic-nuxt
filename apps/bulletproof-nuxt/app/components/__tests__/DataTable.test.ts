@@ -19,7 +19,7 @@ const rows: DiscussionRow[] = [
 ];
 
 test("DataTable renders an empty state", () => {
-  render(DiscussionDataTable, {
+  const { container } = render(DiscussionDataTable, {
     props: {
       data: [],
       columns,
@@ -28,6 +28,7 @@ test("DataTable renders an empty state", () => {
     },
   });
 
+  expect(container.querySelector("[data-slot='empty']")).toBeTruthy();
   expect(screen.getByRole("heading", { name: "No discussions found" })).toBeTruthy();
   expect(screen.getByText("Create your first discussion.")).toBeTruthy();
 });

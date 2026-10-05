@@ -1,19 +1,21 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import type { DrawerTitleProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
-import { DialogTitle, type DialogTitleProps } from "reka-ui";
+import { reactiveOmit } from "@vueuse/core";
+import { DrawerTitle } from "reka-ui";
 import { cn } from "@/lib/utils";
 
-interface Props extends DialogTitleProps {
-  class?: HTMLAttributes["class"];
-}
+const props = defineProps<DrawerTitleProps & { class?: HTMLAttributes["class"] }>();
 
-const props = defineProps<Props>();
+const delegatedProps = reactiveOmit(props, "class");
 </script>
 
 <template>
-  <DialogTitle
-    :class="cn('text-lg font-semibold text-foreground', props.class)"
+  <DrawerTitle
+    data-slot="drawer-title"
+    v-bind="delegatedProps"
+    :class="cn('text-foreground font-semibold', props.class)"
   >
     <slot />
-  </DialogTitle>
+  </DrawerTitle>
 </template>

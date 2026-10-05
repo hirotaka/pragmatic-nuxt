@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus } from "lucide-vue-next";
+import { Plus } from "@lucide/vue";
 
 definePageMeta({
   middleware: "auth",
@@ -29,9 +29,10 @@ const handleCreateSuccess = async (close: () => void) => {
             variant="outline"
             size="sm"
           >
-            <template #icon>
-              <Plus class="size-4" />
-            </template>
+            <Plus
+              data-icon="inline-start"
+              aria-hidden="true"
+            />
             Create Discussion
           </Button>
         </template>

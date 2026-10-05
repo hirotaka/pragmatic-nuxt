@@ -41,51 +41,58 @@ const handleSubmit = async () => {
   <form
     id="create-discussion"
     novalidate
-    class="space-y-6"
     @submit.prevent="handleSubmit"
   >
-    <Field :data-invalid="titleField.$error ? 'true' : undefined">
-      <FieldLabel for="title">
-        Title
-      </FieldLabel>
-      <Input
-        id="title"
-        v-model="titleField.$value"
-        name="title"
-        type="text"
-        :disabled="isSubmitting"
-        :aria-invalid="titleField.$error ? 'true' : undefined"
-        :aria-describedby="titleField.$error ? 'title-error' : undefined"
-        @blur="titleField.$touch()"
-        @change="titleField.$touch()"
-      />
-      <FieldError
-        v-if="titleField.$error"
-        id="title-error"
-        :errors="titleField.$errors"
-      />
-    </Field>
+    <FieldGroup class="gap-6">
+      <Field
+        :data-invalid="titleField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="title">
+          Title
+        </FieldLabel>
+        <Input
+          id="title"
+          v-model="titleField.$value"
+          name="title"
+          type="text"
+          :disabled="isSubmitting"
+          :aria-invalid="titleField.$error ? 'true' : undefined"
+          :aria-describedby="titleField.$error ? 'title-error' : undefined"
+          @blur="titleField.$touch()"
+          @change="titleField.$touch()"
+        />
+        <FieldError
+          v-if="titleField.$error"
+          id="title-error"
+          :errors="titleField.$errors"
+        />
+      </Field>
 
-    <Field :data-invalid="bodyField.$error ? 'true' : undefined">
-      <FieldLabel for="body">
-        Body
-      </FieldLabel>
-      <Textarea
-        id="body"
-        v-model="bodyField.$value"
-        name="body"
-        :disabled="isSubmitting"
-        :rows="5"
-        :aria-invalid="bodyField.$error ? 'true' : undefined"
-        :aria-describedby="bodyField.$error ? 'body-error' : undefined"
-        @blur="bodyField.$touch()"
-        @change="bodyField.$touch()"
-      />
-      <FieldError
-        v-if="bodyField.$error"
-        id="body-error"
-        :errors="bodyField.$errors"
-      />
-    </Field>
+      <Field
+        :data-invalid="bodyField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="body">
+          Body
+        </FieldLabel>
+        <Textarea
+          id="body"
+          v-model="bodyField.$value"
+          name="body"
+          :disabled="isSubmitting"
+          :rows="5"
+          :aria-invalid="bodyField.$error ? 'true' : undefined"
+          :aria-describedby="bodyField.$error ? 'body-error' : undefined"
+          @blur="bodyField.$touch()"
+          @change="bodyField.$touch()"
+        />
+        <FieldError
+          v-if="bodyField.$error"
+          id="body-error"
+          :errors="bodyField.$errors"
+        />
+      </Field>
+    </FieldGroup>
   </form>
 </template>

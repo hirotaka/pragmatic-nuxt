@@ -1,15 +1,13 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
+import type { FieldVariants } from ".";
 import { cn } from "@/lib/utils";
+import { fieldVariants } from ".";
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   class?: HTMLAttributes["class"];
-  orientation?: "vertical" | "horizontal" | "responsive";
-}>(), {
-  orientation: "vertical",
-  class: undefined,
-});
+  orientation?: FieldVariants["orientation"];
+}>();
 </script>
 
 <template>
@@ -17,7 +15,10 @@ const props = withDefaults(defineProps<{
     role="group"
     data-slot="field"
     :data-orientation="orientation"
-    :class="cn('group/field flex w-full gap-3 data-[invalid=true]:text-destructive', orientation === 'horizontal' ? 'flex-row items-center' : 'flex-col', props.class)"
+    :class="cn(
+      fieldVariants({ orientation }),
+      props.class,
+    )"
   >
     <slot />
   </div>

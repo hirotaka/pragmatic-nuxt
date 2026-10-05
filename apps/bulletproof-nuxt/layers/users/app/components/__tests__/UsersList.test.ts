@@ -63,13 +63,13 @@ async function confirmDelete(region: HTMLElement) {
 
   let menu!: HTMLElement;
   await waitFor(() => {
-    menu = region.querySelector<HTMLElement>("[role='menu'][data-state='open']")!;
+    menu = document.body.querySelector<HTMLElement>("[role='menu'][data-state='open']")!;
     expect(menu).toBeTruthy();
   });
   await userEvent.click(within(menu).getByRole("menuitem", { name: /delete user/i }));
 
   const bodyScreen = within(document.body);
-  const dialog = await bodyScreen.findByRole("dialog", { name: /delete user/i });
+  const dialog = await bodyScreen.findByRole("alertdialog", { name: /delete user/i });
   await userEvent.click(within(dialog).getByRole("button", { name: /delete user/i }));
 
   return { bodyScreen, dialog };
@@ -152,7 +152,7 @@ test("closes the dialog without waiting for the owner refresh", async () => {
   await waitFor(() => expect(refresh).toHaveBeenCalledOnce());
   expect(deleteUserMutate).toHaveBeenCalledWith("user-1");
   await waitFor(() => {
-    expect(bodyScreen.queryByRole("dialog", { name: /delete user/i })).toBeNull();
+    expect(bodyScreen.queryByRole("alertdialog", { name: /delete user/i })).toBeNull();
   });
 
   refreshSettlement.resolve();

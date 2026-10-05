@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends { id: string }">
-import { ArchiveX } from "lucide-vue-next";
+import { ArchiveX } from "@lucide/vue";
 import { useSlots } from "vue";
 
 export type TableColumn<Entry> = {
@@ -62,32 +62,36 @@ const handlePageChange = (page: number) => {
         </CardDescription>
       </div>
       <div class="flex min-w-0 items-center gap-3">
-        <p
+        <Badge
           v-if="summary"
-          class="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground"
+          variant="secondary"
+          class="shrink-0"
         >
           {{ summary }}
-        </p>
+        </Badge>
         <slot name="actions" />
       </div>
     </CardHeader>
     <CardContent class="p-0">
-      <div
+      <Empty
         v-if="!data?.length"
-        class="flex min-h-80 flex-col items-center justify-center gap-3 p-8 text-center text-muted-foreground"
+        class="min-h-80 gap-3 p-8"
       >
-        <div class="flex size-16 items-center justify-center rounded-full bg-muted">
-          <ArchiveX class="size-8" />
-        </div>
-        <div class="space-y-1">
-          <h3 class="text-base font-semibold text-foreground">
-            {{ emptyTitle }}
-          </h3>
-          <p class="text-sm">
-            {{ emptyDescription }}
-          </p>
-        </div>
-      </div>
+        <EmptyHeader>
+          <EmptyMedia
+            variant="icon"
+            class="size-16 rounded-full"
+          >
+            <ArchiveX />
+          </EmptyMedia>
+          <EmptyTitle>
+            <h3 class="text-base font-semibold">
+              {{ emptyTitle }}
+            </h3>
+          </EmptyTitle>
+          <EmptyDescription>{{ emptyDescription }}</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
       <template v-else>
         <div class="overflow-hidden rounded-xl">
           <Table>
@@ -133,10 +137,29 @@ const handlePageChange = (page: number) => {
             Page {{ pagination.currentPage }} of {{ pagination.totalPages }}
           </p>
           <Pagination
-            :current-page="pagination.currentPage"
-            :total-pages="pagination.totalPages"
-            @update:current-page="handlePageChange"
-          />
+            :page="pagination.currentPage"
+            :total="pagination.totalPages"
+            :items-per-page="1"
+            @update:page="handlePageChange"
+          >
+            <PaginationContent v-slot="{ items }">
+              <PaginationPrevious />
+              <template
+                v-for="(item, index) in items"
+                :key="index"
+              >
+                <PaginationItem
+                  v-if="item.type === 'page'"
+                  :value="item.value"
+                  :is-active="item.value === pagination.currentPage"
+                >
+                  {{ item.value }}
+                </PaginationItem>
+                <PaginationEllipsis v-else />
+              </template>
+              <PaginationNext />
+            </PaginationContent>
+          </Pagination>
         </div>
       </template>
     </CardContent>
