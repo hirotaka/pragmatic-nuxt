@@ -38,16 +38,16 @@ test("closes its menu when the delete dialog opens", async () => {
   });
 
   await userEvent.click(trigger);
-  await userEvent.click(await componentScreen.findByRole("menuitem", { name: /delete discussion/i }));
+  await userEvent.click(await bodyScreen.findByRole("menuitem", { name: /delete discussion/i }));
 
-  const dialog = await bodyScreen.findByRole("dialog", { name: /delete discussion/i });
+  const dialog = await bodyScreen.findByRole("alertdialog", { name: /delete discussion/i });
   expect(dialog).toBeTruthy();
   await waitFor(() => {
-    expect(componentScreen.getByRole("menu").getAttribute("data-state")).toBe("closed");
+    expect(bodyScreen.getByRole("menu", { hidden: true }).getAttribute("data-state")).toBe("closed");
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
   });
 
   await userEvent.click(within(dialog).getByRole("button", { name: /cancel/i }));
-  await waitFor(() => expect(bodyScreen.queryByRole("dialog", { name: /delete discussion/i })).toBeNull());
-  expect(componentScreen.getByRole("menu").getAttribute("data-state")).toBe("closed");
+  await waitFor(() => expect(bodyScreen.queryByRole("alertdialog", { name: /delete discussion/i })).toBeNull());
+  expect(bodyScreen.getByRole("menu", { hidden: true }).getAttribute("data-state")).toBe("closed");
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArchiveX } from "lucide-vue-next";
+import { ArchiveX } from "@lucide/vue";
 import { POLICIES } from "#layers/auth/app/composables/useAuthorization";
 
 interface CommentsListProps {
@@ -19,19 +19,25 @@ const { user } = useUser();
 
 <template>
   <template v-if="comments">
-    <div
+    <Empty
       v-if="!comments.data.length"
       aria-label="comments"
-      class="flex h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-muted/30 text-muted-foreground"
+      class="min-h-40 border bg-muted/30 p-4"
     >
-      <ArchiveX class="size-10" />
-      <h4>No Comments Found</h4>
-    </div>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <ArchiveX />
+        </EmptyMedia>
+        <EmptyTitle>
+          <h4>No Comments Found</h4>
+        </EmptyTitle>
+      </EmptyHeader>
+    </Empty>
 
     <template v-else>
       <ul
         aria-label="comments"
-        class="flex flex-col space-y-3"
+        class="flex flex-col gap-3"
       >
         <li
           v-for="(comment, index) in comments.data"
@@ -72,7 +78,11 @@ const { user } = useUser();
           variant="outline"
           @click="loadMore"
         >
-          <Spinner v-if="isLoading && comments.meta.page > 1" />
+          <Spinner
+            v-if="isLoading && comments.meta.page > 1"
+            data-icon="inline-start"
+            aria-hidden="true"
+          />
           <template v-else>
             Load More Comments
           </template>

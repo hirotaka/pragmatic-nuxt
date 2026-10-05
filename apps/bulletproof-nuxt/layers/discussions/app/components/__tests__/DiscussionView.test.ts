@@ -73,6 +73,7 @@ test("renders discussion metadata and the update control", async () => {
   expect(wrapper.text()).toContain(formatDate(discussion.createdAt));
   expect(wrapper.text()).toContain("Test User");
   expect(wrapper.text()).toContain("Update Discussion");
+  expect(wrapper.get("button").find("svg").exists()).toBe(true);
   await wrapper.get("button").trigger("click");
   expect(wrapper.getComponent(UpdateDiscussionFormStub).props("discussionId")).toBe(discussion.id);
   expect(wrapper.getComponent(UpdateDiscussionFormStub).props("title")).toBe(discussion.title);

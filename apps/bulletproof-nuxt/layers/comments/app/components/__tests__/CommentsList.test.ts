@@ -105,8 +105,8 @@ test("shows successful empty only after initial comments settle", async () => {
   const wrapper = await mountCommentsList();
   const screen = within(wrapper.element as HTMLElement);
 
-  expect(wrapper.find("[aria-label='comments']").exists()).toBe(true);
-  expect(screen.getByText("No Comments Found")).toBeTruthy();
+  expect(wrapper.find("[data-slot='empty'][aria-label='comments']").exists()).toBe(true);
+  expect(screen.getByRole("heading", { name: "No Comments Found" })).toBeTruthy();
 });
 
 test("loads the next page from its data owner", async () => {

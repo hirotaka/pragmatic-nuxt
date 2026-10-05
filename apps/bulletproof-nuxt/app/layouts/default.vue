@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Folder, Home, Users } from "lucide-vue-next";
+import { Folder, Home, Users } from "@lucide/vue";
 import { toast } from "vue-sonner";
 import { computed, ref, type Component } from "vue";
 import { ROLES } from "#layers/auth/app/composables/useAuthorization";

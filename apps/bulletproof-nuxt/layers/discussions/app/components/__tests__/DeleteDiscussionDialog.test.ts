@@ -44,11 +44,11 @@ async function confirmDelete() {
   const bodyScreen = within(document.body);
 
   await userEvent.click(componentScreen.getByRole("button", { name: "Open discussion actions" }));
-  await userEvent.click(await componentScreen.findByRole("menuitem", { name: /delete discussion/i }));
-  const dialog = await bodyScreen.findByRole("dialog", { name: /delete discussion/i });
+  await userEvent.click(await bodyScreen.findByRole("menuitem", { name: /delete discussion/i }));
+  const dialog = await bodyScreen.findByRole("alertdialog", { name: /delete discussion/i });
   await userEvent.click(within(dialog).getByRole("button", { name: "Delete" }));
 
-  return { bodyScreen, componentScreen, wrapper };
+  return { bodyScreen, wrapper };
 }
 
 beforeEach(() => {
@@ -62,15 +62,15 @@ afterEach(() => {
 });
 
 test("reports successful deletion after its action dropdown closes", async () => {
-  const { bodyScreen, componentScreen, wrapper } = await confirmDelete();
+  const { bodyScreen, wrapper } = await confirmDelete();
 
   await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
   expect(deleteDiscussionMutate).toHaveBeenCalledWith("discussion-1");
   expect(addNotification).toHaveBeenCalledWith("Discussion Deleted");
   await waitFor(() => {
-    expect(bodyScreen.queryByRole("dialog", { name: /delete discussion/i })).toBeNull();
+    expect(bodyScreen.queryByRole("alertdialog", { name: /delete discussion/i })).toBeNull();
   });
-  expect(componentScreen.getByRole("menu").getAttribute("data-state")).toBe("closed");
+  expect(bodyScreen.getByRole("menu", { hidden: true }).getAttribute("data-state")).toBe("closed");
 });
 
 test("releases dialog controls and stays open when mutation fails", async () => {
@@ -80,7 +80,32 @@ test("releases dialog controls and stays open when mutation fails", async () => 
   await waitFor(() => expect(deleteDiscussionMutate).toHaveBeenCalledOnce());
   expect(addNotification).not.toHaveBeenCalled();
   expect(wrapper.emitted("success")).toBeUndefined();
-  const dialog = bodyScreen.getByRole("dialog", { name: /delete discussion/i });
+  const dialog = bodyScreen.getByRole("alertdialog", { name: /delete discussion/i });
   expect(within(dialog).getByRole("button", { name: "Delete" }).hasAttribute("disabled")).toBe(false);
   expect(within(dialog).getByRole("button", { name: /cancel/i }).hasAttribute("disabled")).toBe(false);
+  await userEvent.click(within(dialog).getByRole("button", { name: /cancel/i }));
+  await waitFor(() => expect(bodyScreen.queryByRole("alertdialog", { name: /delete discussion/i })).toBeNull());
+});
+
+test("keeps the alert dialog open and its controls disabled while deletion is pending", async () => {
+  let finishDeletion!: () => void;
+  deleteDiscussionMutate.mockImplementationOnce(() => new Promise<void>((resolve) => {
+    finishDeletion = resolve;
+  }));
+  const { bodyScreen, wrapper } = await confirmDelete();
+  const dialog = bodyScreen.getByRole("alertdialog", { name: /delete discussion/i });
+
+  await waitFor(() => {
+    const deleteButton = within(dialog).getByRole("button", { name: "Delete" });
+    expect(deleteButton.hasAttribute("disabled")).toBe(true);
+    expect(deleteButton.getAttribute("aria-busy")).toBe("true");
+    expect(within(dialog).getByRole("button", { name: /cancel/i }).hasAttribute("disabled")).toBe(true);
+  });
+  await userEvent.keyboard("{Escape}");
+  expect(dialog.getAttribute("data-state")).toBe("open");
+  expect(wrapper.emitted("success")).toBeUndefined();
+
+  finishDeletion();
+  await waitFor(() => expect(wrapper.emitted("success")).toHaveLength(1));
+  await waitFor(() => expect(bodyScreen.queryByRole("alertdialog", { name: /delete discussion/i })).toBeNull());
 });

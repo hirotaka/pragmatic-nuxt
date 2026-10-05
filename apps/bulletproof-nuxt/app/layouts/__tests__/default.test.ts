@@ -138,7 +138,7 @@ test("default layout opens account menu with user identity and actions", async (
 
   await userEvent.click(screen.getByRole("button", { name: /open user menu/i }));
 
-  const menu = await screen.findByRole("menu");
+  const menu = await within(document.body).findByRole("menu");
   const menuScreen = within(menu);
 
   expect(menuScreen.getByText("Ada Lovelace")).toBeTruthy();
@@ -154,7 +154,7 @@ test("default layout logs out before redirecting to login", async () => {
   const screen = within(wrapper.element as HTMLElement);
 
   await userEvent.click(screen.getByRole("button", { name: /open user menu/i }));
-  const menu = await screen.findByRole("menu");
+  const menu = await within(document.body).findByRole("menu");
   await userEvent.click(within(menu).getByRole("menuitem", { name: /sign out/i }));
 
   await waitFor(() => {
@@ -203,7 +203,7 @@ test("default layout releases failed logout and allows retry without redirecting
 
   const signOut = async () => {
     await userEvent.click(screen.getByRole("button", { name: /open user menu/i }));
-    const menu = await screen.findByRole("menu");
+    const menu = await within(document.body).findByRole("menu");
     await userEvent.click(within(menu).getByRole("menuitem", { name: /sign out/i }));
   };
 
@@ -226,7 +226,7 @@ test("default layout reports navigation failure separately after logout", async 
   const screen = within(wrapper.element as HTMLElement);
 
   await userEvent.click(screen.getByRole("button", { name: /open user menu/i }));
-  const menu = await screen.findByRole("menu");
+  const menu = await within(document.body).findByRole("menu");
   await userEvent.click(within(menu).getByRole("menuitem", { name: /sign out/i }));
 
   await waitFor(() => expect(clearSession).toHaveBeenCalledOnce());
@@ -237,28 +237,6 @@ test("default layout reports navigation failure separately after logout", async 
 
 test("default layout opens mobile navigation and closes it after route click", async () => {
   vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({
-    matches: false,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  }));
-
-  const wrapper = await mountDefaultLayout("/app");
-  const screen = within(wrapper.element as HTMLElement);
-  const bodyScreen = within(document.body);
-
-  await userEvent.click(screen.getByRole("button", { name: /toggle menu/i }));
-
-  const mobileNav = await bodyScreen.findByRole("navigation", { name: /mobile navigation/i });
-  const mobileScreen = within(mobileNav);
-  await userEvent.click(mobileScreen.getByRole("link", { name: /discussions/i }));
-
-  await waitFor(() => {
-    expect(bodyScreen.queryByRole("navigation", { name: /mobile navigation/i })).toBeNull();
-  });
-});
-
-test("default layout collapses desktop sidebar without opening mobile navigation", async () => {
-  vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({
     matches: true,
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
@@ -268,12 +246,35 @@ test("default layout collapses desktop sidebar without opening mobile navigation
   const screen = within(wrapper.element as HTMLElement);
   const bodyScreen = within(document.body);
 
-  expect(wrapper.element.getAttribute("data-sidebar-open")).toBe("true");
+  await userEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
 
-  await userEvent.click(screen.getByRole("button", { name: /toggle menu/i }));
+  const mobileNav = await bodyScreen.findByRole("navigation", { name: /primary navigation/i });
+  const mobileScreen = within(mobileNav);
+  await userEvent.click(mobileScreen.getByRole("link", { name: /discussions/i }));
 
   await waitFor(() => {
-    expect(wrapper.element.getAttribute("data-sidebar-open")).toBe("false");
+    expect(bodyScreen.queryByRole("navigation", { name: /primary navigation/i })).toBeNull();
   });
-  expect(bodyScreen.queryByRole("navigation", { name: /mobile navigation/i })).toBeNull();
+});
+
+test("default layout collapses desktop sidebar without opening mobile navigation", async () => {
+  vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({
+    matches: false,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
+
+  const wrapper = await mountDefaultLayout("/app");
+  const screen = within(wrapper.element as HTMLElement);
+  const bodyScreen = within(document.body);
+
+  const sidebar = wrapper.element.querySelector("[data-slot='sidebar'][data-state]");
+  expect(sidebar?.getAttribute("data-state")).toBe("expanded");
+
+  await userEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
+
+  await waitFor(() => {
+    expect(sidebar?.getAttribute("data-state")).toBe("collapsed");
+  });
+  expect(bodyScreen.queryByRole("dialog", { name: /sidebar/i })).toBeNull();
 });

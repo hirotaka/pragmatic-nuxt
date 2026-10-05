@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MoreHorizontal, Trash } from "lucide-vue-next";
+import { MoreHorizontal, Trash } from "@lucide/vue";
 
 interface UserActionsMenuProps {
   actionLabel: string;
@@ -14,33 +14,34 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <DropdownRoot :modal="false">
-    <DropdownTrigger as-child>
+  <DropdownMenu :modal="false">
+    <DropdownMenuTrigger as-child>
       <Button
         variant="ghost"
-        size="icon"
-        class="size-8"
+        size="icon-sm"
         :aria-label="actionLabel"
       >
-        <MoreHorizontal class="size-4" />
+        <MoreHorizontal data-icon="inline-start" />
       </Button>
-    </DropdownTrigger>
-    <DropdownContent
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
       align="end"
       force-mount
       class="data-[state=closed]:hidden"
     >
-      <DeleteUserDialog
-        :user="user"
-        @success="emit('success')"
-      >
-        <template #triggerButton>
-          <DropdownItem class="text-destructive focus:text-destructive">
-            <Trash class="mr-2 size-4" />
-            Delete User
-          </DropdownItem>
-        </template>
-      </DeleteUserDialog>
-    </DropdownContent>
-  </DropdownRoot>
+      <DropdownMenuGroup>
+        <DeleteUserDialog
+          :user="user"
+          @success="emit('success')"
+        >
+          <template #triggerButton>
+            <DropdownMenuItem variant="destructive">
+              <Trash />
+              Delete User
+            </DropdownMenuItem>
+          </template>
+        </DeleteUserDialog>
+      </DropdownMenuGroup>
+    </DropdownMenuContent>
+  </DropdownMenu>
 </template>

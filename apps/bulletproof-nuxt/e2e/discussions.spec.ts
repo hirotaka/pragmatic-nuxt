@@ -123,6 +123,22 @@ test("direct discussion detail is SSR-rendered without a hydration GET", { tag: 
   expect(browserCommentGets).toBe(0);
 });
 
+test("discussion markdown uses Typeset and sanitizes unsafe attributes", { tag: ["@discussions", "@markdown"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "typeset-markdown");
+  const title = `Typeset markdown ${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  await expectCreatedResponse(await page.request.post(new URL("/api/discussions", page.url()).href, {
+    data: { title, body: `<img src="x" onerror="window.__unsafeMarkdown = true"> **Safe**` },
+  }));
+  const discussion = await findDiscussionByTitle(page, title);
+
+  await page.goto(`/app/discussions/${discussion.id}`, { waitUntil: "domcontentloaded" });
+  const preview = page.locator(".typeset");
+  await expect(preview.locator("strong")).toHaveText("Safe");
+  await expect(preview.locator("img")).toHaveCount(1);
+  expect(await preview.locator("img").getAttribute("onerror")).toBeNull();
+  expect(await page.evaluate(() => (window as Window & { __unsafeMarkdown?: boolean }).__unsafeMarkdown)).toBeUndefined();
+});
+
 test("SSR detail failure hydrates the configured read notification", { tag: ["@discussions", "@ssr"] }, async ({ page, goto }) => {
   await registerIsolatedUser(page, "ssr-detail-failure");
   const discussionId = `missing-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -320,9 +336,9 @@ test("rapid discussion page selection keeps the last selected page", { tag: ["@d
     await route.continue();
   });
 
-  await page.getByRole("button", { name: "2", exact: true }).click();
+  await page.getByRole("button", { name: "Page 2", exact: true }).click();
   await secondPageStarted.promise;
-  await page.getByRole("button", { name: "3", exact: true }).click();
+  await page.getByRole("button", { name: "Page 3", exact: true }).click();
 
   await expect(page.getByText("Page 3 of 3")).toBeVisible();
   await expect(page.getByText(thirdPageTitle)).toBeVisible();
@@ -353,7 +369,7 @@ test("page-2 last-row deletion returns to the previous page", { tag: ["@discussi
   const deletedTitle = secondPage.data[0].title as string;
 
   await page.goto("/app/discussions", { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "2", exact: true }).click();
+  await page.getByRole("button", { name: "Page 2", exact: true }).click();
   await expect(page.getByText("Page 2 of 2")).toBeVisible();
   await expect(page.getByText(deletedTitle)).toBeVisible();
 
@@ -395,7 +411,7 @@ test("unexpected post-delete discussion refresh failures open the error page", {
   const deletedTitle = secondPage.data[0].title as string;
 
   await page.goto("/app/discussions", { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "2", exact: true }).click();
+  await page.getByRole("button", { name: "Page 2", exact: true }).click();
   await expect(page.getByText("Page 2 of 2")).toBeVisible();
   await expect(page.getByText(deletedTitle)).toBeVisible();
 

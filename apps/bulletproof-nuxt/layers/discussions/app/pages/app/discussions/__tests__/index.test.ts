@@ -55,6 +55,7 @@ test("settles creation and closes the create drawer", async () => {
   const wrapper = await mountPage();
   const originalList = wrapper.get("[data-testid='discussions-list']").element;
   const createTrigger = wrapper.findAll("button").find(button => button.text().includes("Create Discussion"));
+  expect(createTrigger!.find("svg").exists()).toBe(true);
   await createTrigger!.trigger("click");
 
   wrapper.findComponent({ name: "CreateDiscussionForm" }).vm.$emit("success");

@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { Plus } from "lucide-vue-next";
+import { Plus } from "@lucide/vue";
 
 interface CommentsProps {
   discussionId: string;
@@ -32,9 +32,10 @@ const handleCreateSuccess = async (close: () => void) => {
               variant="outline"
               size="sm"
             >
-              <template #icon>
-                <Plus class="size-4" />
-              </template>
+              <Plus
+                data-icon="inline-start"
+                aria-hidden="true"
+              />
               Create Comment
             </Button>
           </template>

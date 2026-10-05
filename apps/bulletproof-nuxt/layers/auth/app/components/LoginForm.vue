@@ -37,58 +37,72 @@ const handleSubmit = async () => {
 <template>
   <form
     novalidate
-    class="space-y-6"
+    class="flex flex-col gap-6"
     @submit.prevent="handleSubmit"
   >
-    <Field :data-invalid="emailField.$error ? 'true' : undefined">
-      <FieldLabel for="email">
-        Email Address
-      </FieldLabel>
-      <Input
-        id="email"
-        v-model="emailField.$value"
-        name="email"
-        type="email"
-        :disabled="isSubmitting"
-        :aria-invalid="emailField.$error ? 'true' : undefined"
-        :aria-describedby="emailField.$error ? 'email-error' : undefined"
-        @blur="emailField.$touch()"
-        @change="emailField.$touch()"
-      />
-      <FieldError
-        v-if="emailField.$error"
-        id="email-error"
-        :errors="emailField.$errors"
-      />
-    </Field>
+    <FieldGroup class="gap-6">
+      <Field
+        :data-invalid="emailField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="email">
+          Email Address
+        </FieldLabel>
+        <Input
+          id="email"
+          v-model="emailField.$value"
+          name="email"
+          type="email"
+          :disabled="isSubmitting"
+          :aria-invalid="emailField.$error ? 'true' : undefined"
+          :aria-describedby="emailField.$error ? 'email-error' : undefined"
+          @blur="emailField.$touch()"
+          @change="emailField.$touch()"
+        />
+        <FieldError
+          v-if="emailField.$error"
+          id="email-error"
+          :errors="emailField.$errors"
+        />
+      </Field>
 
-    <Field :data-invalid="passwordField.$error ? 'true' : undefined">
-      <FieldLabel for="password">
-        Password
-      </FieldLabel>
-      <Input
-        id="password"
-        v-model="passwordField.$value"
-        name="password"
-        type="password"
-        :disabled="isSubmitting"
-        :aria-invalid="passwordField.$error ? 'true' : undefined"
-        :aria-describedby="passwordField.$error ? 'password-error' : undefined"
-        @blur="passwordField.$touch()"
-        @change="passwordField.$touch()"
-      />
-      <FieldError
-        v-if="passwordField.$error"
-        id="password-error"
-        :errors="passwordField.$errors"
-      />
-    </Field>
+      <Field
+        :data-invalid="passwordField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="password">
+          Password
+        </FieldLabel>
+        <Input
+          id="password"
+          v-model="passwordField.$value"
+          name="password"
+          type="password"
+          :disabled="isSubmitting"
+          :aria-invalid="passwordField.$error ? 'true' : undefined"
+          :aria-describedby="passwordField.$error ? 'password-error' : undefined"
+          @blur="passwordField.$touch()"
+          @change="passwordField.$touch()"
+        />
+        <FieldError
+          v-if="passwordField.$error"
+          id="password-error"
+          :errors="passwordField.$errors"
+        />
+      </Field>
+    </FieldGroup>
 
     <Button
-      :is-loading="isSubmitting"
+      :disabled="isSubmitting"
+      :aria-busy="isSubmitting"
       type="submit"
       class="w-full"
     >
+      <Spinner
+        v-if="isSubmitting"
+        data-icon="inline-start"
+        aria-hidden="true"
+      />
       Log in
     </Button>
   </form>

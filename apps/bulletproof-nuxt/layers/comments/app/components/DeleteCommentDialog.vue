@@ -12,16 +12,13 @@ const emit = defineEmits<{
 }>();
 
 const deleteComment = useDeleteComment();
-const isOpen = ref(false);
 const isPending = ref(false);
 
-const handleOpenChange = (value: boolean) => {
-  if (!value && isPending.value) return;
-
-  isOpen.value = value;
+const handleEscapeKeyDown = (event: KeyboardEvent) => {
+  if (isPending.value) event.preventDefault();
 };
 
-const handleConfirm = async () => {
+const handleConfirm = async (close: () => void) => {
   if (isPending.value) return;
 
   isPending.value = true;
@@ -35,25 +32,47 @@ const handleConfirm = async () => {
   }
 
   toast.success("Comment Deleted");
-  emit("success");
   isPending.value = false;
-  isOpen.value = false;
+  close();
+  emit("success");
 };
 </script>
 
 <template>
-  <ConfirmationDialog
-    :open="isOpen"
-    variant="danger"
-    title="Delete Comment"
-    body="Are you sure you want to delete this comment?"
-    confirm-text="Delete Comment"
-    :is-loading="isPending"
-    @confirm="handleConfirm"
-    @update:open="handleOpenChange"
-  >
-    <template #triggerButton>
+  <AlertDialog v-slot="{ open, close }">
+    <AlertDialogTrigger
+      v-if="$slots.triggerButton"
+      as-child
+      :aria-hidden="open ? 'true' : undefined"
+    >
       <slot name="triggerButton" />
-    </template>
-  </ConfirmationDialog>
+    </AlertDialogTrigger>
+    <AlertDialogContent @escape-key-down="handleEscapeKeyDown">
+      <AlertDialogHeader>
+        <AlertDialogTitle>Delete Comment</AlertDialogTitle>
+        <AlertDialogDescription>
+          Are you sure you want to delete this comment?
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel :disabled="isPending">
+          Cancel
+        </AlertDialogCancel>
+        <Button
+          type="button"
+          variant="destructive"
+          :disabled="isPending"
+          :aria-busy="isPending"
+          @click="handleConfirm(close)"
+        >
+          <Spinner
+            v-if="isPending"
+            data-icon="inline-start"
+            aria-hidden="true"
+          />
+          Delete Comment
+        </Button>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>

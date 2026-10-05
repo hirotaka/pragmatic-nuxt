@@ -46,17 +46,17 @@ const handleLogout = async () => {
       <p class="font-medium">
         {{ user?.firstName }} {{ user?.lastName }}
       </p>
-      <p class="text-gray-600">
+      <p class="text-muted-foreground">
         {{ user?.email }}
       </p>
     </div>
-    <button
+    <Button
+      variant="destructive"
       :disabled="isPending"
-      class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
       @click="handleLogout"
     >
       {{ isPending ? 'Logging out...' : 'Logout' }}
-    </button>
+    </Button>
   </div>
   <div
     v-else
@@ -64,7 +64,7 @@ const handleLogout = async () => {
   >
     <NuxtLink
       to="/auth/login"
-      class="text-blue-600 hover:underline"
+      class="text-primary hover:underline"
     >Log In</NuxtLink>
   </div>
 </template>

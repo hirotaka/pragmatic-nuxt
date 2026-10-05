@@ -82,18 +82,24 @@ const refreshUsers = async () => {
             Monitor team access, roles, and account creation activity.
           </p>
         </div>
-        <p class="shrink-0 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+        <Badge
+          variant="secondary"
+          class="shrink-0"
+        >
           {{ users.length }} users
-        </p>
+        </Badge>
       </div>
     </CardHeader>
     <CardContent class="p-0">
-      <div
+      <Empty
         v-if="!users.length"
-        class="p-6 text-sm text-muted-foreground"
+        class="p-6"
       >
-        No users found. Users will appear here after registration.
-      </div>
+        <EmptyHeader>
+          <EmptyTitle>No users found</EmptyTitle>
+          <EmptyDescription>Users will appear here after registration.</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
       <ul
         v-else
         class="divide-y"

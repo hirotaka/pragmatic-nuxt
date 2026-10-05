@@ -58,93 +58,106 @@ const handleSubmit = async () => {
   <form
     id="update-profile"
     novalidate
-    class="space-y-6"
     @submit.prevent="handleSubmit"
   >
-    <Field :data-invalid="firstNameField.$error ? 'true' : undefined">
-      <FieldLabel for="first-name">
-        First Name
-      </FieldLabel>
-      <Input
-        id="first-name"
-        v-model="firstNameField.$value"
-        name="firstName"
-        :disabled="isSubmitting"
-        :aria-invalid="firstNameField.$error ? 'true' : undefined"
-        :aria-describedby="firstNameField.$error ? 'first-name-error' : undefined"
-        @blur="firstNameField.$touch()"
-        @change="firstNameField.$touch()"
-      />
-      <FieldError
-        v-if="firstNameField.$error"
-        id="first-name-error"
-        :errors="firstNameField.$errors"
-      />
-    </Field>
+    <FieldGroup class="gap-6">
+      <Field
+        :data-invalid="firstNameField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="first-name">
+          First Name
+        </FieldLabel>
+        <Input
+          id="first-name"
+          v-model="firstNameField.$value"
+          name="firstName"
+          :disabled="isSubmitting"
+          :aria-invalid="firstNameField.$error ? 'true' : undefined"
+          :aria-describedby="firstNameField.$error ? 'first-name-error' : undefined"
+          @blur="firstNameField.$touch()"
+          @change="firstNameField.$touch()"
+        />
+        <FieldError
+          v-if="firstNameField.$error"
+          id="first-name-error"
+          :errors="firstNameField.$errors"
+        />
+      </Field>
 
-    <Field :data-invalid="lastNameField.$error ? 'true' : undefined">
-      <FieldLabel for="last-name">
-        Last Name
-      </FieldLabel>
-      <Input
-        id="last-name"
-        v-model="lastNameField.$value"
-        name="lastName"
-        :disabled="isSubmitting"
-        :aria-invalid="lastNameField.$error ? 'true' : undefined"
-        :aria-describedby="lastNameField.$error ? 'last-name-error' : undefined"
-        @blur="lastNameField.$touch()"
-        @change="lastNameField.$touch()"
-      />
-      <FieldError
-        v-if="lastNameField.$error"
-        id="last-name-error"
-        :errors="lastNameField.$errors"
-      />
-    </Field>
+      <Field
+        :data-invalid="lastNameField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="last-name">
+          Last Name
+        </FieldLabel>
+        <Input
+          id="last-name"
+          v-model="lastNameField.$value"
+          name="lastName"
+          :disabled="isSubmitting"
+          :aria-invalid="lastNameField.$error ? 'true' : undefined"
+          :aria-describedby="lastNameField.$error ? 'last-name-error' : undefined"
+          @blur="lastNameField.$touch()"
+          @change="lastNameField.$touch()"
+        />
+        <FieldError
+          v-if="lastNameField.$error"
+          id="last-name-error"
+          :errors="lastNameField.$errors"
+        />
+      </Field>
 
-    <Field :data-invalid="emailField.$error ? 'true' : undefined">
-      <FieldLabel for="email">
-        Email
-      </FieldLabel>
-      <Input
-        id="email"
-        v-model="emailField.$value"
-        name="email"
-        type="email"
-        :disabled="isSubmitting"
-        :aria-invalid="emailField.$error ? 'true' : undefined"
-        :aria-describedby="emailField.$error ? 'email-error' : undefined"
-        @blur="emailField.$touch()"
-        @change="emailField.$touch()"
-      />
-      <FieldError
-        v-if="emailField.$error"
-        id="email-error"
-        :errors="emailField.$errors"
-      />
-    </Field>
+      <Field
+        :data-invalid="emailField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="email">
+          Email
+        </FieldLabel>
+        <Input
+          id="email"
+          v-model="emailField.$value"
+          name="email"
+          type="email"
+          :disabled="isSubmitting"
+          :aria-invalid="emailField.$error ? 'true' : undefined"
+          :aria-describedby="emailField.$error ? 'email-error' : undefined"
+          @blur="emailField.$touch()"
+          @change="emailField.$touch()"
+        />
+        <FieldError
+          v-if="emailField.$error"
+          id="email-error"
+          :errors="emailField.$errors"
+        />
+      </Field>
 
-    <Field :data-invalid="bioField.$error ? 'true' : undefined">
-      <FieldLabel for="bio">
-        Bio
-      </FieldLabel>
-      <Textarea
-        id="bio"
-        v-model="bioField.$value"
-        name="bio"
-        :rows="4"
-        :disabled="isSubmitting"
-        :aria-invalid="bioField.$error ? 'true' : undefined"
-        :aria-describedby="bioField.$error ? 'bio-error' : undefined"
-        @blur="bioField.$touch()"
-        @change="bioField.$touch()"
-      />
-      <FieldError
-        v-if="bioField.$error"
-        id="bio-error"
-        :errors="bioField.$errors"
-      />
-    </Field>
+      <Field
+        :data-invalid="bioField.$error ? 'true' : undefined"
+        :data-disabled="isSubmitting ? 'true' : undefined"
+      >
+        <FieldLabel for="bio">
+          Bio
+        </FieldLabel>
+        <Textarea
+          id="bio"
+          v-model="bioField.$value"
+          name="bio"
+          :rows="4"
+          :disabled="isSubmitting"
+          :aria-invalid="bioField.$error ? 'true' : undefined"
+          :aria-describedby="bioField.$error ? 'bio-error' : undefined"
+          @blur="bioField.$touch()"
+          @change="bioField.$touch()"
+        />
+        <FieldError
+          v-if="bioField.$error"
+          id="bio-error"
+          :errors="bioField.$errors"
+        />
+      </Field>
+    </FieldGroup>
   </form>
 </template>

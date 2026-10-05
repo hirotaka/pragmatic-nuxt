@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Pen } from "lucide-vue-next";
+import { Pen } from "@lucide/vue";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 interface DiscussionViewProps {
@@ -21,7 +21,7 @@ const handleUpdateSuccess = async (close: () => void) => {
   <Card v-if="discussion">
     <CardHeader>
       <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div class="space-y-1 text-sm text-muted-foreground">
+        <div class="flex flex-col gap-1 text-sm text-muted-foreground">
           <span>{{ formatDate(discussion.createdAt) }}</span>
           <span v-if="discussion.author">
             by {{ discussion.author.firstName }} {{ discussion.author.lastName }}
@@ -36,9 +36,10 @@ const handleUpdateSuccess = async (close: () => void) => {
               variant="outline"
               size="sm"
             >
-              <template #icon>
-                <Pen class="size-4" />
-              </template>
+              <Pen
+                data-icon="inline-start"
+                aria-hidden="true"
+              />
               Update Discussion
             </Button>
           </template>
@@ -65,9 +66,10 @@ const handleUpdateSuccess = async (close: () => void) => {
       </div>
     </CardHeader>
     <CardContent>
-      <div class="prose prose-neutral max-w-none text-sm dark:prose-invert">
-        <MarkdownPreview :value="discussion.body" />
-      </div>
+      <MarkdownPreview
+        :value="discussion.body"
+        class="text-sm"
+      />
     </CardContent>
   </Card>
 </template>

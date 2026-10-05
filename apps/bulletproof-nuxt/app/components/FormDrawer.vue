@@ -2,34 +2,25 @@
 defineProps<{
   title: string;
 }>();
-
-const { isOpen, open, close } = useDisclosure();
-
-const handleOpenChange = (value: boolean) => {
-  if (value) open();
-  else close();
-};
 </script>
 
 <template>
-  <Sheet
-    :open="isOpen"
-    @update:open="handleOpenChange"
-  >
+  <Sheet v-slot="{ close }">
     <SheetTrigger as-child>
       <slot name="triggerButton" />
     </SheetTrigger>
-    <SheetContent class="flex max-w-200 flex-col justify-between sm:max-w-135">
-      <div class="flex flex-col gap-6">
-        <SheetHeader>
-          <SheetTitle>{{ title }}</SheetTitle>
-          <SheetDescription class="sr-only">
-            {{ title }} form
-          </SheetDescription>
-        </SheetHeader>
-        <div>
-          <slot :close="close" />
-        </div>
+    <SheetContent class="max-w-200 sm:max-w-135">
+      <SheetHeader>
+        <SheetTitle>{{ title }}</SheetTitle>
+        <SheetDescription class="sr-only">
+          {{ title }} form
+        </SheetDescription>
+      </SheetHeader>
+      <div
+        data-slot="form-drawer-body"
+        class="grid flex-1 auto-rows-min gap-6 px-4"
+      >
+        <slot :close="close" />
       </div>
       <SheetFooter>
         <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">

@@ -47,28 +47,32 @@ const handleSubmit = async () => {
   <form
     id="create-comment"
     novalidate
-    class="space-y-6"
     @submit.prevent="handleSubmit"
   >
-    <Field :data-invalid="bodyField.$error ? 'true' : undefined">
-      <FieldLabel for="body">
-        Body
-      </FieldLabel>
-      <Textarea
-        id="body"
-        v-model="bodyField.$value"
-        name="body"
-        :disabled="isDisabled"
-        :aria-invalid="bodyField.$error ? 'true' : undefined"
-        :aria-describedby="bodyField.$error ? 'body-error' : undefined"
-        @blur="bodyField.$touch()"
-        @change="bodyField.$touch()"
-      />
-      <FieldError
-        v-if="bodyField.$error"
-        id="body-error"
-        :errors="bodyField.$errors"
-      />
-    </Field>
+    <FieldGroup>
+      <Field
+        :data-invalid="bodyField.$error ? 'true' : undefined"
+        :data-disabled="isDisabled ? 'true' : undefined"
+      >
+        <FieldLabel for="body">
+          Body
+        </FieldLabel>
+        <Textarea
+          id="body"
+          v-model="bodyField.$value"
+          name="body"
+          :disabled="isDisabled"
+          :aria-invalid="bodyField.$error ? 'true' : undefined"
+          :aria-describedby="bodyField.$error ? 'body-error' : undefined"
+          @blur="bodyField.$touch()"
+          @change="bodyField.$touch()"
+        />
+        <FieldError
+          v-if="bodyField.$error"
+          id="body-error"
+          :errors="bodyField.$errors"
+        />
+      </Field>
+    </FieldGroup>
   </form>
 </template>

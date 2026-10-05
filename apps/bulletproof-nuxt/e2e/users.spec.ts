@@ -85,7 +85,7 @@ async function openUserDeleteDialog(page: Page, email: string) {
   const row = page.getByRole("row").filter({ hasText: email });
   await row.getByRole("button", { name: /Open user actions for/ }).click();
   await page.getByRole("menuitem", { name: "Delete User" }).click();
-  return page.getByRole("dialog", { name: "Delete User" });
+  return page.getByRole("alertdialog", { name: "Delete User" });
 }
 
 test("direct users collection is SSR-rendered without a hydration GET", { tag: ["@users", "@ssr"] }, async ({ page }) => {

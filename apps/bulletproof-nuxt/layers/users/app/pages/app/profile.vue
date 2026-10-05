@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Pen } from "lucide-vue-next";
+import { Pen } from "@lucide/vue";
 import { useUser } from "#layers/auth/app/composables/useUser";
 
 definePageMeta({
@@ -32,9 +32,10 @@ const profile = computed(() => ({
             variant="outline"
             size="sm"
           >
-            <template #icon>
-              <Pen class="size-4" />
-            </template>
+            <Pen
+              data-icon="inline-start"
+              aria-hidden="true"
+            />
             Update Profile
           </Button>
         </template>

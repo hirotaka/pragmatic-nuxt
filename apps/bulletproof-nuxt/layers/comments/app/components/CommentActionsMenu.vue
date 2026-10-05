@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MoreHorizontal, Trash } from "lucide-vue-next";
+import { MoreHorizontal, Trash } from "@lucide/vue";
 
 interface CommentActionsMenuProps {
   actionLabel: string;
@@ -14,33 +14,35 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <DropdownRoot :modal="false">
-    <DropdownTrigger as-child>
+  <DropdownMenu :modal="false">
+    <DropdownMenuTrigger as-child>
       <Button
         variant="ghost"
-        size="icon"
-        class="size-8 shrink-0"
+        size="icon-sm"
+        class="shrink-0"
         :aria-label="actionLabel"
       >
-        <MoreHorizontal class="size-4" />
+        <MoreHorizontal data-icon="inline-start" />
       </Button>
-    </DropdownTrigger>
-    <DropdownContent
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
       align="end"
       force-mount
       class="data-[state=closed]:hidden"
     >
-      <DeleteCommentDialog
-        :comment-id="commentId"
-        @success="emit('success')"
-      >
-        <template #triggerButton>
-          <DropdownItem class="text-destructive focus:text-destructive">
-            <Trash class="mr-2 size-4" />
-            Delete Comment
-          </DropdownItem>
-        </template>
-      </DeleteCommentDialog>
-    </DropdownContent>
-  </DropdownRoot>
+      <DropdownMenuGroup>
+        <DeleteCommentDialog
+          :comment-id="commentId"
+          @success="emit('success')"
+        >
+          <template #triggerButton>
+            <DropdownMenuItem variant="destructive">
+              <Trash />
+              Delete Comment
+            </DropdownMenuItem>
+          </template>
+        </DeleteCommentDialog>
+      </DropdownMenuGroup>
+    </DropdownMenuContent>
+  </DropdownMenu>
 </template>

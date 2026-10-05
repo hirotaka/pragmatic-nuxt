@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Github, Home } from "lucide-vue-next";
+import { Home } from "@lucide/vue";
 
 definePageMeta({ layout: false });
 
@@ -24,14 +24,14 @@ const handleStart = () => {
       <Card class="w-full overflow-hidden">
         <CardContent class="grid gap-0 p-0 md:grid-cols-[1fr_0.8fr]">
           <div class="flex flex-col justify-center gap-8 p-8 md:p-12">
-            <div class="space-y-4">
+            <div class="flex flex-col gap-4">
               <Badge
                 variant="secondary"
                 class="w-fit"
               >
                 Practical Nuxt application
               </Badge>
-              <div class="space-y-3">
+              <div class="flex flex-col gap-3">
                 <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">
                   Bulletproof Nuxt
                 </h1>
@@ -43,9 +43,10 @@ const handleStart = () => {
             </div>
             <div class="flex flex-col gap-3 sm:flex-row">
               <Button @click="handleStart">
-                <template #icon>
-                  <Home class="size-4" />
-                </template>
+                <Home
+                  data-icon="inline-start"
+                  aria-hidden="true"
+                />
                 Get started
               </Button>
               <a
@@ -57,9 +58,12 @@ const handleStart = () => {
                   variant="outline"
                   class="w-full sm:w-auto"
                 >
-                  <template #icon>
-                    <Github class="size-4" />
-                  </template>
+                  <Icon
+                    name="uil:github"
+                    mode="svg"
+                    data-icon="inline-start"
+                    aria-hidden="true"
+                  />
                   Github Repo
                 </Button>
               </a>

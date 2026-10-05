@@ -12,10 +12,9 @@ const emit = defineEmits<{
 }>();
 
 const deleteUser = useDeleteUser();
-const isOpen = ref(false);
 const isPending = ref(false);
 
-const handleConfirm = async () => {
+const handleConfirm = async (close: () => void) => {
   if (isPending.value) return;
 
   isPending.value = true;
@@ -29,31 +28,51 @@ const handleConfirm = async () => {
   }
 
   toast.success("User Deleted");
-  emit("success");
   isPending.value = false;
-  isOpen.value = false;
+  close();
+  emit("success");
 };
 
-const handleOpenChange = (value: boolean) => {
-  if (!value && isPending.value) return;
-
-  isOpen.value = value;
+const handleEscapeKeyDown = (event: KeyboardEvent) => {
+  if (isPending.value) event.preventDefault();
 };
 </script>
 
 <template>
-  <ConfirmationDialog
-    :open="isOpen"
-    variant="danger"
-    title="Delete User"
-    :body="`Are you sure you want to delete ${user.firstName} ${user.lastName}?`"
-    confirm-text="Delete User"
-    :is-loading="isPending"
-    @confirm="handleConfirm"
-    @update:open="handleOpenChange"
-  >
-    <template #triggerButton>
+  <AlertDialog v-slot="{ open, close }">
+    <AlertDialogTrigger
+      v-if="$slots.triggerButton"
+      as-child
+      :aria-hidden="open ? 'true' : undefined"
+    >
       <slot name="triggerButton" />
-    </template>
-  </ConfirmationDialog>
+    </AlertDialogTrigger>
+    <AlertDialogContent @escape-key-down="handleEscapeKeyDown">
+      <AlertDialogHeader>
+        <AlertDialogTitle>Delete User</AlertDialogTitle>
+        <AlertDialogDescription>
+          Are you sure you want to delete {{ user.firstName }} {{ user.lastName }}?
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel :disabled="isPending">
+          Cancel
+        </AlertDialogCancel>
+        <Button
+          type="button"
+          variant="destructive"
+          :disabled="isPending"
+          :aria-busy="isPending"
+          @click="handleConfirm(close)"
+        >
+          <Spinner
+            v-if="isPending"
+            data-icon="inline-start"
+            aria-hidden="true"
+          />
+          Delete User
+        </Button>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>

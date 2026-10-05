@@ -17,6 +17,7 @@
 ## Commands agents guess wrong
 
 - Root `package.json` has no workspace lint/test/typecheck scripts; run checks inside each app directory.
+- When using the project-installed shadcn-vue skill for the default app, run its CLI from `apps/bulletproof-nuxt` (or pass that path as `--cwd`); the repository root does not contain its `components.json`.
 - Default Nuxt app (`apps/bulletproof-nuxt`) verified local lifecycle and structural checks:
   - `pnpm test:unit`
   - `pnpm lint`
