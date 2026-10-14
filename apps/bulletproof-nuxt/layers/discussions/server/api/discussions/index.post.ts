@@ -1,12 +1,7 @@
-import { createDiscussionRepository } from "../../repository/discussionRepository";
+import { createDiscussionRepository } from "#layers/discussions/server/repository/discussionRepository";
 
-export default defineProtectedEventHandler(async (event, sessionUser) => {
-  if (!sessionUser.teamId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Team membership required",
-    });
-  }
+export default defineAuthenticatedEventHandler(async (event, sessionUser) => {
+  assertDiscussionTeamMember(sessionUser);
 
   const body = await readBody(event);
 

@@ -196,12 +196,12 @@ test("does not notify intentional request cancellation", async () => {
   const controller = new AbortController();
   if (!result?.provide) throw new Error("API plugin did not provide a client");
 
-  const request = result.provide.api("/api/comments", { signal: controller.signal });
+  const request = result.provide.api("/api/discussions/discussion-1/comments", { signal: controller.signal });
   controller.abort();
 
   await expect(request).rejects.toMatchObject({ name: "AbortError" });
   expect(api).toHaveBeenCalledWith(
-    "/api/comments",
+    "/api/discussions/discussion-1/comments",
     expect.objectContaining({ signal: controller.signal }),
   );
   expect(addNotification).not.toHaveBeenCalled();

@@ -6,7 +6,7 @@ definePageMeta({ layout: false });
 useSeoMeta({ description: "Welcome to bulletproof nuxt" });
 
 const router = useRouter();
-const { user } = useUser();
+const { user } = useCurrentUser();
 
 const handleStart = () => {
   if (user.value) {
@@ -19,7 +19,7 @@ const handleStart = () => {
 </script>
 
 <template>
-  <div class="min-h-svh bg-muted">
+  <main class="min-h-svh bg-muted">
     <div class="mx-auto flex min-h-svh max-w-5xl items-center px-6 py-12 md:px-10">
       <Card class="w-full overflow-hidden">
         <CardContent class="grid gap-0 p-0 md:grid-cols-[1fr_0.8fr]">
@@ -79,5 +79,5 @@ const handleStart = () => {
         </CardContent>
       </Card>
     </div>
-  </div>
+  </main>
 </template>

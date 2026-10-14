@@ -38,7 +38,7 @@ Shadcn-vue updates its distributed components, including fixes and changes to th
 - [`Dialog.vue`](../../../apps/bulletproof-nuxt/app/components/ui/dialog/Dialog.vue) delegates dialog behavior to Reka UI within the installed component source.
 - [`AppSidebar.vue`](../../../apps/bulletproof-nuxt/app/components/AppSidebar.vue) composes navigation with installed Sidebar components.
 - [`FormDrawer.vue`](../../../apps/bulletproof-nuxt/app/components/FormDrawer.vue) composes form layout with installed Sheet components.
-- [`DeleteDiscussionDialog.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DeleteDiscussionDialog.vue) owns asynchronous deletion and success-only closing around installed AlertDialog components.
+- [`DiscussionDeleteDialog.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionDeleteDialog.vue) owns asynchronous deletion and success-only closing around installed AlertDialog components.
 
 ## Trade-offs and Limitations
 

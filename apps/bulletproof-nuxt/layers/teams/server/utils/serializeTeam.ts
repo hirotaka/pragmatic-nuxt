@@ -1,4 +1,4 @@
-import type { TeamRecord } from "../repository/teamRepository";
+import type { TeamRecord } from "#layers/teams/server/repository/teamRepository";
 
 export function serializeTeam(team: TeamRecord): Team {
   return {

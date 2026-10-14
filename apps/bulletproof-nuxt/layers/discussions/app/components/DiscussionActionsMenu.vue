@@ -30,7 +30,7 @@ const emit = defineEmits<{
       class="data-[state=closed]:hidden"
     >
       <DropdownMenuGroup>
-        <DeleteDiscussionDialog
+        <DiscussionDeleteDialog
           :discussion="discussion"
           @success="emit('success')"
         >
@@ -40,7 +40,7 @@ const emit = defineEmits<{
               Delete Discussion
             </DropdownMenuItem>
           </template>
-        </DeleteDiscussionDialog>
+        </DiscussionDeleteDialog>
       </DropdownMenuGroup>
     </DropdownMenuContent>
   </DropdownMenu>

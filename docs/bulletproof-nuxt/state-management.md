@@ -1,68 +1,29 @@
 # 🗃️ State Management
 
-Managing state effectively is crucial for optimizing your application's performance. Instead of storing all state information in a single centralized repository, consider dividing it into various categories based on their usage. By categorizing your state, you can streamline your state management process and enhance your application's overall efficiency.
+Choose state ownership by how the data is used rather than putting everything in one global store.
 
 ## Component State
 
-Component state is specific to individual components and should not be shared globally. It can be passed down to child components as props when necessary. Typically, you should begin by defining state within the component itself and consider elevating it to a higher level if it's required elsewhere in the application. When managing component state, you can use the following Vue APIs:
-
-- [ref](https://vuejs.org/api/reactivity-core.html#ref) - for simple reactive values
-- [reactive](https://vuejs.org/api/reactivity-core.html#reactive) - for reactive objects
-- [computed](https://vuejs.org/api/reactivity-core.html#computed) - for derived state
+Use Vue's `ref`, `reactive`, and `computed` for local and derived state. Lift state only when other components need it.
 
 ## Application State
 
-Application state manages global parts of an application, such as controlling global modals, notifications, and toggling color modes. To ensure optimal performance and ease of maintenance, it is advisable to localize the state as closely as possible to the components that require it. Avoid unnecessarily globalizing all state variables from the outset.
-
-Good Application State Solutions for Vue/Nuxt:
-
-- [useState](https://nuxt.com/docs/api/composables/use-state) - Nuxt's SSR-friendly global state
-- [Pinia](https://pinia.vuejs.org/) - Official Vue state management library
-- [VueUse](https://vueuse.org/) - Collection of Vue composition utilities
-
-[Application State Example Code](../../apps/bulletproof-nuxt/app/composables/useNotifications.ts)
+Use Nuxt's SSR-aware `useState` or Pinia for shared application state. Authentication session state remains with Nuxt Auth Utils; see [Security](security.md).
 
 ## Server Cache State
 
-The Server Cache State refers to the data retrieved from the server that is stored locally on the client-side for future use. Nuxt provides built-in data fetching composables that handle caching, deduplication, and SSR automatically.
+Page-rendering data uses `useAPI`, built on Nuxt's `useFetch`. Imperative requests use `$api`; they do not manage AsyncData automatically.
 
-Good Server Cache Solutions for Nuxt:
-
-- [Pinia Colada](https://pinia-colada.esm.dev/) - Query and Mutation server state used in the Pinia Colada Reference
-- [TanStack Query](https://tanstack.com/query/latest) - Query and Mutation server state used in the TanStack Query Reference
-- [useFetch](https://nuxt.com/docs/api/composables/use-fetch) - Nuxt's built-in data fetching with caching
-- [$fetch](https://nuxt.com/docs/api/utils/dollarfetch) - Underlying requests without managed Query state
-- [useAsyncData](https://nuxt.com/docs/api/composables/use-async-data) - Custom async operations
-
-The [Pinia Colada Reference](../../apps/reference/bulletproof-nuxt-pinia-colada/README.md) uses Pinia Colada for its server-state variant. Its implementation examples are Reference-specific; see the [Pinia Colada Practices](../practices/pinia-colada/index.md) for reusable guidance and limitations.
-
-The [TanStack Query Reference](../../apps/reference/bulletproof-nuxt-tanstack-query/README.md) uses Nuxt Query and TanStack Query for its server-state variant. Its implementation examples are Reference-specific; see the [TanStack Query Practices](../practices/tanstack-query/index.md) for reusable guidance and limitations.
+See the [Nuxt Data Fetching Practices](../practices/nuxt-use-fetch/index.md) for request selection, shared data, and refresh behavior.
 
 ## Form State
 
-Forms are a crucial part of any application, and managing form state effectively is essential for a seamless user experience. This project uses Regle with Zod v4 for type-safe form validation.
+The app uses Regle with Zod for form state and validation.
 
-Good Form Libraries for Vue:
-
-- [Regle](https://reglejs.dev/) - Used in this project
-- [VeeValidate](https://vee-validate.logaretm.com/v4/) - See [apps/reference/bulletproof-nuxt-veevalidate](../../apps/reference/bulletproof-nuxt-veevalidate/README.md)
-- [TanStack Form](https://tanstack.com/form/) - See [apps/reference/bulletproof-nuxt-tanstack-form](../../apps/reference/bulletproof-nuxt-tanstack-form/README.md)
-- [Formwerk](https://formwerk.dev/) - See [apps/reference/bulletproof-nuxt-formwerk](../../apps/reference/bulletproof-nuxt-formwerk/README.md)
-- [FormKit](https://formkit.com/)
-- [vuelidate](https://vuelidate-next.netlify.app/)
-
-Validation libraries:
-
-- [zod](https://github.com/colinhacks/zod) - Used in this project
-- [yup](https://github.com/jquense/yup)
-
-[Regle Setup Example](../../apps/bulletproof-nuxt/app/composables/useFormSchema.ts) and [Field Integration Example](../../apps/bulletproof-nuxt/layers/auth/app/components/LoginForm.vue)
+See the [Regle Practices](../practices/regle/index.md) and [Regle Validation in shadcn-vue Forms](../practices/shadcn-vue/regle-validation-in-shadcn-vue-forms.md).
 
 ## URL State
 
-URL state refers to the data stored and manipulated within the address bar of the browser. This state is commonly managed through URL parameters (e.g., /app/${dynamicParam}) or query parameters (e.g., /app?page=1). Nuxt's built-in router (based on Vue Router) provides composables to access and control the URL state.
+Use route parameters and query parameters for state that should survive navigation or be shareable, such as the selected page.
 
-- [useRoute](https://nuxt.com/docs/api/composables/use-route) - Access current route params and query
-- [useRouter](https://nuxt.com/docs/api/composables/use-router) - Navigate and manipulate URL
-
-[Pinia Colada Reference URL State Example](../../apps/reference/bulletproof-nuxt-pinia-colada/layers/discussions/app/pages/app/discussions/[id].vue)
+See [Keep Pagination State in the URL](../practices/nuxt/keep-pagination-state-in-the-url.md).

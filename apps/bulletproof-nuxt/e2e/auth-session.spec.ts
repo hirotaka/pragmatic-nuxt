@@ -4,6 +4,9 @@ import { waitForNuxtHydration } from "./support/nuxt-navigation";
 test("login validation is lazy until blur and updates while editing", async ({ page, goto }) => {
   await page.context().clearCookies();
   await goto("/auth/login", { waitUntil: "hydration" });
+  await expect(page.getByRole("link", { name: "Bulletproof Nuxt home" })).toBeVisible();
+  await expect(page.getByRole("main")).toHaveCount(1);
+  await expect(page.getByRole("banner").getByRole("link", { name: "Bulletproof Nuxt home" })).toBeVisible();
 
   const email = page.getByLabel("Email Address");
   const password = page.getByLabel("Password");

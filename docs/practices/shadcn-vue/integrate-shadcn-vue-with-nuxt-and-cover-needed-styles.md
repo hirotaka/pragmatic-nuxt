@@ -76,7 +76,7 @@ The CSS entry imports Tailwind. It also imports `tw-animate-css` when installed 
 - [`nuxt.config.ts`](../../../apps/bulletproof-nuxt/nuxt.config.ts) configures Shadcn Nuxt, the Tailwind Vite plugin, and the CSS entry.
 - [`components.json`](../../../apps/bulletproof-nuxt/components.json) points the CLI to the CSS entry and UI component directory.
 - [`tailwind.css`](../../../apps/bulletproof-nuxt/app/assets/css/tailwind.css) owns the app's Tailwind imports and source declarations.
-- [`UsersList.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/UsersList.vue) uses a responsive utility class from a layer that requires production CSS coverage.
+- [`UserList.vue`](../../../apps/bulletproof-nuxt/layers/users/app/components/UserList.vue) uses a responsive utility class from a layer that requires production CSS coverage.
 
 ## Trade-offs and Limitations
 

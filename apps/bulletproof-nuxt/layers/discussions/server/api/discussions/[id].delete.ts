@@ -1,12 +1,7 @@
-import { createDiscussionRepository } from "../../repository/discussionRepository";
+import { createDiscussionRepository } from "#layers/discussions/server/repository/discussionRepository";
 
-export default defineProtectedEventHandler(async (event, sessionUser) => {
-  if (!sessionUser.teamId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Team membership required",
-    });
-  }
+export default defineAuthenticatedEventHandler(async (event, sessionUser) => {
+  assertDiscussionTeamMember(sessionUser);
 
   const id = getRouterParam(event, "id");
 
@@ -19,7 +14,7 @@ export default defineProtectedEventHandler(async (event, sessionUser) => {
 
   const discussionRepository = createDiscussionRepository();
 
-  const existingDiscussion = await discussionRepository.findByIdAndTeam(id, sessionUser.teamId);
+  const existingDiscussion = await discussionRepository.findByIdAndTeamId(id, sessionUser.teamId);
 
   if (!existingDiscussion) {
     throw createError({
@@ -28,14 +23,12 @@ export default defineProtectedEventHandler(async (event, sessionUser) => {
     });
   }
 
-  if (existingDiscussion.authorId !== sessionUser.id) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Discussion delete not allowed",
-    });
-  }
+  assertDiscussionAuthor(sessionUser, existingDiscussion, "delete");
 
-  await discussionRepository.delete(id);
+  const deleted = await discussionRepository.delete(id, sessionUser.teamId);
+  if (!deleted) {
+    throw createError({ statusCode: 404, statusMessage: "Discussion not found" });
+  }
 
   setResponseStatus(event, 204);
 });

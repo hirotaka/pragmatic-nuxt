@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import { ref, toValue } from "vue";
+import { nextTick, ref, toValue } from "vue";
 import type { Discussion } from "#layers/discussions/shared/types/discussion";
 import DiscussionPage from "../[id].vue";
 
@@ -52,10 +52,13 @@ vi.mock("#imports", async () => {
   };
 });
 
+const activeDiscussion = ref<Discussion>();
+
 mockNuxtImport("useDiscussion", () => async (id: MaybeRefOrGetter<string>) => {
   useDiscussionMock(toValue(id));
+  activeDiscussion.value = discussionState.data;
   return {
-    data: ref(discussionState.data),
+    data: activeDiscussion,
     execute: discussionExecute,
   };
 });
@@ -71,7 +74,8 @@ const mountDiscussionPage = () => mountSuspended(DiscussionPage, {
         template: "<div data-testid='discussion-view'>{{ discussionId }}</div>",
         props: ["discussionId"],
       },
-      Comments: {
+      CommentSection: {
+        name: "CommentSection",
         template: "<div data-testid='comments'>{{ discussionId }}</div>",
         props: ["discussionId"],
       },
@@ -100,6 +104,16 @@ describe("Discussion Page", () => {
 
     expect(wrapper.find("[data-testid='discussion-view']").exists()).toBe(false);
     expect(wrapper.find("[data-testid='comments']").exists()).toBe(false);
+  });
+
+  test("recreates the comments scope when the settled discussion changes", async () => {
+    const wrapper = await mountDiscussionPage();
+    const original = wrapper.findComponent({ name: "CommentSection" }).vm;
+    activeDiscussion.value = { ...mockDiscussion, id: "discussion-2" };
+    await nextTick();
+
+    expect(wrapper.get("[data-testid='comments']").text()).toBe("discussion-2");
+    expect(wrapper.findComponent({ name: "CommentSection" }).vm).not.toBe(original);
   });
 
   test("passes the settled discussion ID to detail children", async () => {

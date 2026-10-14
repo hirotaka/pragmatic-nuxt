@@ -10,11 +10,10 @@ const { createDiscussionRepository, requireCurrentUser } = vi.hoisted(() => ({
 vi.mock("../repository/discussionRepository", () => ({
   createDiscussionRepository,
 }));
-
 beforeEach(() => {
   createDiscussionRepository.mockReset();
   requireCurrentUser.mockReset();
-  vi.stubGlobal("defineProtectedEventHandler", <T extends (event: H3Event, currentUser: unknown) => unknown>(eventHandler: T) =>
+  vi.stubGlobal("defineAuthenticatedEventHandler", <T extends (event: H3Event, currentUser: unknown) => unknown>(eventHandler: T) =>
     async (event: H3Event) => eventHandler(event, await requireCurrentUser(event)));
 });
 

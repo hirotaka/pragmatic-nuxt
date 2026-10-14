@@ -61,6 +61,7 @@ test("the GitHub link renders its bundled brand icon without icon API requests",
 
 test("the user menu uses semantic popover colors in dark mode", async ({ page }) => {
   await page.goto("/app", { waitUntil: "domcontentloaded" });
+  await waitForNuxtHydration(page);
   await page.evaluate(() => document.documentElement.classList.add("dark"));
   await page.getByRole("button", { name: /Open user menu/ }).click();
 

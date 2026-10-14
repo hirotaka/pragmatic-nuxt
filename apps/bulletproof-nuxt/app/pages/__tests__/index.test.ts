@@ -2,7 +2,7 @@ import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { expect, test } from "vitest";
 import HomePage from "../index.vue";
 
-mockNuxtImport("useUser", () => () => ({ user: { value: null } }));
+mockNuxtImport("useCurrentUser", () => () => ({ user: { value: null } }));
 
 test("home actions render Lucide by default and a Nuxt Icon for the GitHub brand", async () => {
   const wrapper = await mountSuspended(HomePage);

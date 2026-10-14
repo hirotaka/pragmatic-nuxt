@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <main
+  <div
     data-slot="sidebar-inset"
     :class="cn(
       'bg-background relative flex w-full flex-1 flex-col',
@@ -17,5 +17,5 @@ const props = defineProps<{
     )"
   >
     <slot />
-  </main>
+  </div>
 </template>

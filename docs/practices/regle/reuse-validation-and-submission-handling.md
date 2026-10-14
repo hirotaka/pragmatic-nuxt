@@ -139,9 +139,9 @@ async function handleCreated() {
 
 ## App Examples
 
-- [`CreateCommentForm.vue`](../../../apps/bulletproof-nuxt/layers/comments/app/components/CreateCommentForm.vue) handles comment creation before emitting success.
-- [`Comments.vue`](../../../apps/bulletproof-nuxt/layers/comments/app/components/Comments.vue) handles the success event by refreshing the list before closing the drawer.
-- [`FormDrawer.vue`](../../../apps/bulletproof-nuxt/app/components/app/FormDrawer.vue) exposes a function for closing the drawer through its default slot.
+- [`CommentCreateForm.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CommentCreateForm.vue) handles comment creation before emitting success.
+- [`CommentSection.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CommentSection.vue) handles the success event by refreshing the list before closing the drawer.
+- [`FormDrawer.vue`](../../../apps/bulletproof-nuxt/app/components/FormDrawer.vue) exposes a function for closing the drawer through its default slot.
 
 ## Trade-offs and Limitations
 

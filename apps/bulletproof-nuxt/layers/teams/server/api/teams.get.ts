@@ -1,4 +1,4 @@
-import { createTeamRepository } from "../repository/teamRepository";
+import { createTeamRepository } from "#layers/teams/server/repository/teamRepository";
 
 export default defineEventHandler(async () => {
   const teamRepository = createTeamRepository();

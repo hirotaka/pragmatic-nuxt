@@ -7,7 +7,7 @@ const password = "Password123!";
 async function registerIsolatedUser(page: Page, label: string) {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   const unique = `${label}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  await expectEmptyResponse(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectEmptyResponse(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {
       email: `${unique}@example.com`,
       firstName: "Data",
@@ -28,11 +28,11 @@ async function findDiscussionByTitle(page: Page, title: string) {
   const result: unknown = await expectJson(await page.request.get(
     new URL("/api/discussions?limit=100", page.url()).href,
   ));
-  if (!isApiRecord(result) || !Array.isArray(result.data)) {
+  if (!isApiRecord(result) || !Array.isArray(result.items)) {
     throw new Error("Test setup failed: discussions response has invalid data");
   }
 
-  const discussion = result.data.find(item => isApiRecord(item) && item.title === title);
+  const discussion = result.items.find(item => isApiRecord(item) && item.title === title);
   if (!isApiRecord(discussion) || typeof discussion.id !== "string") {
     throw new Error(`Test setup failed: discussion not found for title: ${title}`);
   }
@@ -79,8 +79,7 @@ test("discussion content waits for the initial comments response", { tag: ["@com
   const requestStarted = deferred();
   const responseRelease = deferred();
   await page.route((url) => {
-    return url.pathname === "/api/comments"
-      && url.searchParams.get("discussionId") === discussion.id;
+    return url.pathname === `/api/discussions/${discussion.id}/comments`;
   }, async (route) => {
     requestStarted.resolve();
     await responseRelease.promise;
@@ -111,8 +110,7 @@ test("unexpected initial comment read failures open the error page", { tag: ["@c
   await page.goto("/app/discussions", { waitUntil: "networkidle" });
 
   await page.route((url) => {
-    return url.pathname === "/api/comments"
-      && url.searchParams.get("discussionId") === discussion.id;
+    return url.pathname === `/api/discussions/${discussion.id}/comments`;
   }, async route => route.fulfill({
     status: 500,
     contentType: "application/json",
@@ -124,7 +122,8 @@ test("unexpected initial comment read failures open the error page", { tag: ["@c
 
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
-  await expect(page.getByText("Initial comments GET failed")).toBeVisible();
+  await expect(page.getByText("Something went wrong. Please try again.")).toBeVisible();
+  await expect(page.getByText("Initial comments GET failed")).toHaveCount(0);
   await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(0);
 });
 
@@ -136,15 +135,14 @@ test("unexpected later comment page failures open the error page", { tag: ["@com
   );
 
   for (const body of commentBodies) {
-    await expectCreatedResponse(await page.request.post(new URL("/api/comments", page.url()).href, {
-      data: { discussionId, body },
+    await expectCreatedResponse(await page.request.post(new URL(`/api/discussions/${discussionId}/comments`, page.url()).href, {
+      data: { body },
     }));
   }
 
   let laterPageGetCount = 0;
   await page.route((url) => {
-    return url.pathname === "/api/comments"
-      && url.searchParams.get("discussionId") === discussionId
+    return url.pathname === `/api/discussions/${discussionId}/comments`
       && url.searchParams.get("page") === "2";
   }, async (route) => {
     laterPageGetCount += 1;
@@ -168,7 +166,8 @@ test("unexpected later comment page failures open the error page", { tag: ["@com
   await expect.poll(() => laterPageGetCount).toBeGreaterThan(0);
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
-  await expect(page.getByText("Later comments page failed")).toBeVisible();
+  await expect(page.getByText("Something went wrong. Please try again.")).toBeVisible();
+  await expect(page.getByText("Later comments page failed")).toHaveCount(0);
 });
 
 test("comment create closes after its comments refresh settles", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
@@ -181,7 +180,7 @@ test("comment create closes after its comments refresh settles", { tag: ["@comme
   const refresh = deferred();
   let delayRefresh = false;
   let refreshGetCount = 0;
-  await page.route(/\/api\/comments(?:\?.*)?$/, async (route) => {
+  await page.route(url => url.pathname === `/api/discussions/${discussionId}/comments`, async (route) => {
     if (delayRefresh && route.request().method() === "GET") {
       refreshGetCount += 1;
       await refresh.promise;
@@ -235,8 +234,8 @@ test("comment create closes after its comments refresh settles", { tag: ["@comme
 test("unexpected post-delete comment refresh failures open the error page", { tag: ["@comments", "@mutation-refresh"] }, async ({ page }) => {
   const discussionId = await createDiscussionForComments(page, "comment-delete-refresh-failure");
   const commentBody = "Deleted before failed refresh";
-  await expectCreatedResponse(await page.request.post(new URL("/api/comments", page.url()).href, {
-    data: { discussionId, body: commentBody },
+  await expectCreatedResponse(await page.request.post(new URL(`/api/discussions/${discussionId}/comments`, page.url()).href, {
+    data: { body: commentBody },
   }));
 
   await page.goto(`/app/discussions/${discussionId}`, { waitUntil: "networkidle" });
@@ -244,7 +243,7 @@ test("unexpected post-delete comment refresh failures open the error page", { ta
 
   let failRefresh = false;
   let refreshGetCount = 0;
-  await page.route(/\/api\/comments(?:\?.*)?$/, async (route) => {
+  await page.route(url => url.pathname === `/api/discussions/${discussionId}/comments`, async (route) => {
     if (failRefresh && route.request().method() === "GET") {
       refreshGetCount += 1;
       await route.fulfill({
@@ -266,11 +265,12 @@ test("unexpected post-delete comment refresh failures open the error page", { ta
   await expect.poll(() => refreshGetCount).toBeGreaterThan(0);
   await expect(page.getByRole("heading", { name: "500" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Something Went Wrong" })).toBeVisible();
-  await expect(page.getByText("Comments refresh failed")).toBeVisible();
+  await expect(page.getByText("Something went wrong. Please try again.")).toBeVisible();
+  await expect(page.getByText("Comments refresh failed")).toHaveCount(0);
   await expect(page.locator("[data-sonner-toast][data-type=error]")).toHaveCount(0);
 
   const persisted = await expectJson(await page.request.get(
-    new URL(`/api/comments?discussionId=${discussionId}`, page.url()).href,
+    new URL(`/api/discussions/${discussionId}/comments`, page.url()).href,
   ));
-  expect(persisted.data).toHaveLength(0);
+  expect(persisted.items).toHaveLength(0);
 });

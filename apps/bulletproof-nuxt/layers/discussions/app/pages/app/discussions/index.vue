@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { Plus } from "@lucide/vue";
 
-definePageMeta({
-  middleware: "auth",
-});
-
 useHead({
   title: "Discussions",
 });
 
-const { refreshAfterCreate } = await useDiscussions();
+const { refreshAfterCreate } = await useDiscussionList();
 
 const handleCreateSuccess = async (close: () => void) => {
   await refreshAfterCreate();
@@ -38,7 +34,7 @@ const handleCreateSuccess = async (close: () => void) => {
         </template>
 
         <template #default="{ close }">
-          <CreateDiscussionForm @success="handleCreateSuccess(close)" />
+          <DiscussionCreateForm @success="handleCreateSuccess(close)" />
         </template>
 
         <template #submitButton>
@@ -52,6 +48,6 @@ const handleCreateSuccess = async (close: () => void) => {
         </template>
       </FormDrawer>
     </template>
-    <DiscussionsList />
+    <DiscussionList />
   </PageContent>
 </template>

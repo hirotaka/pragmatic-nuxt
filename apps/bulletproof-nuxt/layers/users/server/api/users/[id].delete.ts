@@ -1,12 +1,7 @@
-import { createUserRepository } from "../../repository/userRepository";
+import { createUserRepository } from "#layers/users/server/repository/userRepository";
 
-export default defineProtectedEventHandler(async (event, sessionUser) => {
-  if (sessionUser.role !== "ADMIN") {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Admin access required",
-    });
-  }
+export default defineAuthenticatedEventHandler(async (event, sessionUser) => {
+  assertAdmin(sessionUser);
 
   const userId = getRouterParam(event, "id");
 
@@ -17,12 +12,7 @@ export default defineProtectedEventHandler(async (event, sessionUser) => {
     });
   }
 
-  if (userId === sessionUser.id) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: "Cannot delete your own account",
-    });
-  }
+  assertNotSelfDelete(sessionUser, userId);
 
   const userRepository = createUserRepository();
 

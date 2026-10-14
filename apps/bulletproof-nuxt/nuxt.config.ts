@@ -11,7 +11,6 @@ export default defineNuxtConfig({
   extends: [
     "./layers/auth",
     "./layers/discussions",
-    "./layers/comments",
     "./layers/users",
     "./layers/teams",
   ],
@@ -44,6 +43,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-07-15",
   nitro: {
+    ignore: ["**/__tests__/**", "**/*.test.*", "**/*.spec.*"],
     experimental: {
       tasks: true,
     },

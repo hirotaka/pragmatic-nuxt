@@ -66,7 +66,7 @@ export const createUserRepository = () => {
     return Boolean(result);
   };
 
-  const findAll = async (teamId: string): Promise<UserRecord[]> => {
+  const findAllByTeamId = async (teamId: string): Promise<UserRecord[]> => {
     const results = await db.query.users.findMany({
       where: eq(users.teamId, teamId),
       orderBy: [desc(users.createdAt)],
@@ -128,27 +128,14 @@ export const createUserRepository = () => {
       lastName?: string;
       bio?: string;
     },
-  ): Promise<UserRecord> => {
-    const [user] = await db
+  ): Promise<boolean> => {
+    const [updated] = await db
       .update(users)
       .set(data)
       .where(eq(users.id, id))
-      .returning();
+      .returning({ id: users.id });
 
-    if (!user) {
-      throw new Error("Failed to update user");
-    }
-
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio ?? undefined,
-      role: user.role as "ADMIN" | "USER",
-      teamId: user.teamId,
-      createdAt: user.createdAt,
-    };
+    return Boolean(updated);
   };
 
   const remove = async (id: string, teamId: string): Promise<boolean> => {
@@ -164,7 +151,7 @@ export const createUserRepository = () => {
     findByEmail,
     findById,
     emailExistsForOtherUser,
-    findAll,
+    findAllByTeamId,
     create,
     update,
     delete: remove,

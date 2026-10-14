@@ -13,7 +13,7 @@
 - [Official Documentation](https://nuxt.com/docs)
 - [Nuxt Layers](https://nuxt.com/docs/getting-started/layers)
 - [Nuxt Data Fetching](https://nuxt.com/docs/getting-started/data-fetching)
-- [Nuxt Data Fetching Practices](../practices/use-fetch/index.md)
+- [Nuxt Data Fetching Practices](../practices/nuxt-use-fetch/index.md)
 - [NuxtHub DB Practices](../practices/nuxt-hub-db/index.md)
 - [Nuxt Modules](https://nuxt.com/modules)
 

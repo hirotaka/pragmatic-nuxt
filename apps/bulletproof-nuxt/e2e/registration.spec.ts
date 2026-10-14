@@ -17,7 +17,7 @@ async function registerIsolatedAccount(page: Page, label: string, teamId?: strin
   });
 
   try {
-    await expectCreatedResponse(await request.post("/api/auth/register", {
+    await expectCreatedResponse(await request.post("/api/register", {
       data: {
         email: `${unique}@example.com`,
         firstName: "Boundary",
@@ -64,11 +64,14 @@ test("registration page SSR-renders an existing team and allows selecting it", {
     }
 
     await page.context().clearCookies();
-    const { html, status } = await gotoWithSsrHtml(page, "/auth/register");
+    const { html, status } = await gotoWithSsrHtml(page, "/register");
     expect(status).toBe(200);
     expect(html).toContain(account.teamName);
-    await expect(page).toHaveURL(/\/auth\/register$/);
+    await expect(page).toHaveURL(/\/register$/);
     await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Bulletproof Nuxt home" })).toBeVisible();
+    await expect(page.getByRole("main")).toHaveCount(1);
+    await expect(page.getByRole("banner").getByRole("link", { name: "Bulletproof Nuxt home" })).toBeVisible();
 
     await page.getByLabel("Join existing team").check();
     const teamSelect = page.getByLabel("Team", { exact: true });

@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { Pen } from "@lucide/vue";
-import { useUser } from "#layers/auth/app/composables/useUser";
-
-definePageMeta({
-  middleware: "auth",
-});
 
 useHead({
   title: "Profile",
 });
 
-const { user } = useUser();
+const { user } = useCurrentUser();
 const profile = computed(() => ({
   email: user.value?.email ?? "",
   firstName: user.value?.firstName ?? "",
@@ -41,7 +36,7 @@ const profile = computed(() => ({
         </template>
 
         <template #default="{ close }">
-          <UpdateProfileForm
+          <ProfileUpdateForm
             :profile="profile"
             @success="close"
           />

@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import { ROLES } from "#layers/auth/app/composables/useAuthorization";
-
-definePageMeta({
-  middleware: "auth",
-});
-
 useHead({
   title: "Users",
 });
@@ -21,7 +15,7 @@ useHead({
           Only admin can view this.
         </div>
       </template>
-      <UsersList />
+      <UserList />
     </Authorization>
   </PageContent>
 </template>

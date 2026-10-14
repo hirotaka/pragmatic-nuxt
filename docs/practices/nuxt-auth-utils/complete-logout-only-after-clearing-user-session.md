@@ -74,4 +74,4 @@ Waiting for `clear()` delays logout feedback and navigation until the session re
 
 ## Related Practices
 
-- [Orchestrate Auth Session State Outside the Fetch Client](../use-fetch/auth-session-orchestration.md)
+- [Orchestrate Auth Session State Outside the Fetch Client](../nuxt-use-fetch/auth-session-orchestration.md)

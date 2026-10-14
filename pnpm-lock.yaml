@@ -114,9 +114,6 @@ importers:
       pinia:
         specifier: ^3.0.0
         version: 3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))
-      pinia-plugin-persistedstate:
-        specifier: ^4.7.1
-        version: 4.7.1(@nuxt/kit@4.5.1(magic-string@1.1.0)(magicast@0.5.4)(rolldown@1.2.2)(unplugin@3.3.0(esbuild@0.28.0)(rolldown@1.2.2)(rollup@4.62.3)(vite@8.2.0(@types/node@24.12.3)(esbuild@0.28.0)(jiti@2.6.1)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))))(@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
       reka-ui:
         specifier: ^2.10.5
         version: 2.10.5(vue@3.5.40(typescript@6.0.3))
@@ -19933,14 +19930,6 @@ snapshots:
   picomatch@4.0.5: {}
 
   pidtree@0.6.0: {}
-
-  pinia-plugin-persistedstate@4.7.1(@nuxt/kit@4.5.1(magic-string@1.1.0)(magicast@0.5.4)(rolldown@1.2.2)(unplugin@3.3.0(esbuild@0.28.0)(rolldown@1.2.2)(rollup@4.62.3)(vite@8.2.0(@types/node@24.12.3)(esbuild@0.28.0)(jiti@2.6.1)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))))(@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))):
-    dependencies:
-      defu: 6.1.7
-    optionalDependencies:
-      '@nuxt/kit': 4.5.1(magic-string@1.1.0)(magicast@0.5.4)(rolldown@1.2.2)(unplugin@3.3.0(esbuild@0.28.0)(rolldown@1.2.2)(rollup@4.62.3)(vite@8.2.0(@types/node@24.12.3)(esbuild@0.28.0)(jiti@2.6.1)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4)))
-      '@pinia/nuxt': 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
-      pinia: 3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))
 
   pinia-plugin-persistedstate@4.7.1(@nuxt/kit@4.5.2(magic-string@1.1.0)(magicast@0.5.4)(rolldown@1.2.2)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.2)(rollup@4.62.3)(vite@8.2.0(@types/node@24.12.3)(esbuild@0.28.1)(jiti@2.6.1)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.4))))(@pinia/nuxt@0.11.3(magicast@0.5.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))):
     dependencies:

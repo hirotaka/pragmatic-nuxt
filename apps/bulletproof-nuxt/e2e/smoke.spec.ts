@@ -11,7 +11,7 @@ import { waitForNuxtHydration } from "./support/nuxt-navigation";
 async function registerIsolatedUser(page: Page) {
   const unique = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expectEmptyResponse(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectEmptyResponse(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {
       firstName: "Smoke",
       lastName: "Admin",
@@ -31,10 +31,14 @@ test("smoke", async ({ page, goto }) => {
   await goto("/", { waitUntil: "hydration" });
   await expect(page.locator("meta[name=\"description\"]")).toHaveAttribute("content", "Welcome to bulletproof nuxt");
   await expect(page.getByRole("navigation", { name: "Primary navigation" })).toHaveCount(0);
+  await expect(page.getByRole("main")).toHaveCount(1);
   await page.getByRole("button", { name: "Get started" }).click();
   await page.waitForURL("/app");
   await waitForNuxtHydration(page);
   await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
+  await expect(page.getByRole("main")).toHaveCount(1);
+  await expect(page.locator("[data-slot=sidebar-inset] > header")).toHaveCount(1);
+  await expect(page.locator("[data-slot=sidebar-inset] > main")).toHaveCount(1);
 
   // create discussion:
   await page.getByRole("link", { name: "Discussions" }).click();

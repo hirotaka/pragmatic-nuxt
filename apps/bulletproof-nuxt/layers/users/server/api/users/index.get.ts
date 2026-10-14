@@ -1,17 +1,11 @@
-import { createUserRepository } from "../../repository/userRepository";
-import { serializeUser } from "#layers/auth/server/utils/serializeUser";
+import { createUserRepository } from "#layers/users/server/repository/userRepository";
 
-export default defineProtectedEventHandler(async (event, sessionUser) => {
-  if (sessionUser.role !== "ADMIN") {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Admin access required",
-    });
-  }
+export default defineAuthenticatedEventHandler(async (event, sessionUser) => {
+  assertAdmin(sessionUser);
 
   const userRepository = createUserRepository();
 
-  const users = await userRepository.findAll(sessionUser.teamId as string);
+  const users = await userRepository.findAllByTeamId(sessionUser.teamId as string);
 
   return users.map(serializeUser);
 });

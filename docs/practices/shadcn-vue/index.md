@@ -16,3 +16,4 @@ These Practices describe decisions for using shadcn-vue components in Nuxt appli
 5. [Regle Validation in shadcn-vue Forms](regle-validation-in-shadcn-vue-forms.md)
 6. [Style rendered markdown with shadcn-vue Typeset](style-rendered-markdown-with-shadcn-vue-typeset.md)
 7. [Use Nuxt Icon to Supplement Lucide](use-nuxt-icon-to-supplement-lucide.md)
+8. [Provide an SSR Width for shadcn-vue](provide-ssr-width-for-shadcn-vue.md)
