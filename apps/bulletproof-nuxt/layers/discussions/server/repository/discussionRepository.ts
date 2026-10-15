@@ -2,10 +2,9 @@ import { db } from "@nuxthub/db";
 import { discussions } from "@nuxthub/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 
-export type DiscussionWithAuthorRecord = Pick<
-  typeof discussions.$inferSelect,
-  "id" | "title" | "body" | "authorId" | "teamId" | "createdAt" | "updatedAt"
-> & {
+export type DiscussionRecord = typeof discussions.$inferSelect;
+
+export type DiscussionWithAuthorRecord = DiscussionRecord & {
   author: {
     id: string;
     firstName: string;
@@ -14,7 +13,7 @@ export type DiscussionWithAuthorRecord = Pick<
 };
 
 export const createDiscussionRepository = () => {
-  const findAll = async (params: {
+  const findAllByTeamId = async (params: {
     teamId: string;
     page: number;
     limit: number;
@@ -48,7 +47,7 @@ export const createDiscussionRepository = () => {
     const totalPages = Math.ceil(total / limit);
 
     return {
-      data: results.map((discussion: typeof results[number]) => ({
+      items: results.map((discussion: typeof results[number]) => ({
         id: discussion.id,
         title: discussion.title,
         body: discussion.body,
@@ -96,7 +95,7 @@ export const createDiscussionRepository = () => {
     };
   };
 
-  const findByIdAndTeam = async (
+  const findByIdAndTeamId = async (
     id: string,
     teamId: string,
   ): Promise<DiscussionWithAuthorRecord | null> => {
@@ -132,36 +131,44 @@ export const createDiscussionRepository = () => {
     body: string;
     authorId: string;
     teamId: string;
-  }): Promise<void> => {
-    await db.insert(discussions).values(data);
+  }): Promise<DiscussionRecord> => {
+    const [discussion] = await db.insert(discussions).values(data).returning();
+    if (!discussion) {
+      throw new Error("Failed to create discussion");
+    }
+    return discussion;
   };
 
   const update = async (
     id: string,
+    teamId: string,
     data: {
       title?: string;
       body?: string;
     },
-  ): Promise<void> => {
-    const [discussion] = await db
+  ): Promise<boolean> => {
+    const [updated] = await db
       .update(discussions)
       .set(data)
-      .where(eq(discussions.id, id))
+      .where(and(eq(discussions.id, id), eq(discussions.teamId, teamId)))
       .returning({ id: discussions.id });
 
-    if (!discussion) {
-      throw new Error("Failed to update discussion");
-    }
+    return Boolean(updated);
   };
 
-  const remove = async (id: string): Promise<void> => {
-    await db.delete(discussions).where(eq(discussions.id, id));
+  const remove = async (id: string, teamId: string): Promise<boolean> => {
+    const [deleted] = await db
+      .delete(discussions)
+      .where(and(eq(discussions.id, id), eq(discussions.teamId, teamId)))
+      .returning({ id: discussions.id });
+
+    return Boolean(deleted);
   };
 
   return {
-    findAll,
+    findAllByTeamId,
     findById,
-    findByIdAndTeam,
+    findByIdAndTeamId,
     create,
     update,
     delete: remove,

@@ -3,9 +3,9 @@ import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { waitFor } from "@testing-library/vue";
 import DiscussionsPage from "../index.vue";
 
-const { refreshAfterCreate, useDiscussions } = vi.hoisted(() => ({
+const { refreshAfterCreate, useDiscussionList } = vi.hoisted(() => ({
   refreshAfterCreate: vi.fn(),
-  useDiscussions: vi.fn(),
+  useDiscussionList: vi.fn(),
 }));
 
 vi.mock("#imports", async () => {
@@ -17,12 +17,12 @@ vi.mock("#imports", async () => {
   };
 });
 
-mockNuxtImport("useDiscussions", () => useDiscussions);
+mockNuxtImport("useDiscussionList", () => useDiscussionList);
 
 beforeEach(() => {
   vi.clearAllMocks();
   refreshAfterCreate.mockReset().mockResolvedValue(undefined);
-  useDiscussions.mockReset().mockResolvedValue({ refreshAfterCreate });
+  useDiscussionList.mockReset().mockResolvedValue({ refreshAfterCreate });
 });
 
 const mountPage = () => mountSuspended(DiscussionsPage, {
@@ -31,13 +31,13 @@ const mountPage = () => mountSuspended(DiscussionsPage, {
       PageContent: {
         template: "<section><slot name='actions' /><slot /></section>",
       },
-      CreateDiscussionForm: {
-        name: "CreateDiscussionForm",
+      DiscussionCreateForm: {
+        name: "DiscussionCreateForm",
         emits: ["success"],
         template: "<div />",
       },
-      DiscussionsList: {
-        name: "DiscussionsList",
+      DiscussionList: {
+        name: "DiscussionList",
         template: "<div data-testid='discussions-list' />",
       },
     },
@@ -48,7 +48,7 @@ test("renders the discussions list as the data owner", async () => {
   const wrapper = await mountPage();
 
   expect(wrapper.find("[data-testid='discussions-list']").exists()).toBe(true);
-  expect(wrapper.findComponent({ name: "DiscussionsList" }).props()).toEqual({});
+  expect(wrapper.findComponent({ name: "DiscussionList" }).props()).toEqual({});
 });
 
 test("settles creation and closes the create drawer", async () => {
@@ -58,9 +58,9 @@ test("settles creation and closes the create drawer", async () => {
   expect(createTrigger!.find("svg").exists()).toBe(true);
   await createTrigger!.trigger("click");
 
-  wrapper.findComponent({ name: "CreateDiscussionForm" }).vm.$emit("success");
+  wrapper.findComponent({ name: "DiscussionCreateForm" }).vm.$emit("success");
 
   await waitFor(() => expect(refreshAfterCreate).toHaveBeenCalledOnce());
   expect(wrapper.get("[data-testid='discussions-list']").element).toBe(originalList);
-  await waitFor(() => expect(wrapper.findComponent({ name: "CreateDiscussionForm" }).exists()).toBe(false));
+  await waitFor(() => expect(wrapper.findComponent({ name: "DiscussionCreateForm" }).exists()).toBe(false));
 });

@@ -102,7 +102,7 @@ Calling `useUserSession().fetch()` after login, registration, or a profile updat
 
 ## Related Practices
 
-- [Orchestrate Auth Session State Outside the Fetch Client](../use-fetch/auth-session-orchestration.md) — Keeps session synchronization and interaction outcomes outside the HTTP transport.
+- [Orchestrate Auth Session State Outside the Fetch Client](../nuxt-use-fetch/auth-session-orchestration.md) — Keeps session synchronization and interaction outcomes outside the HTTP transport.
 - [Check Authentication State After a Session Refresh](../nuxt-auth-utils/check-authentication-state-after-session-refresh.md) — Defines the provider-specific completion check after a required refresh.
 - [Complete Logout Only After Clearing the User Session](../nuxt-auth-utils/complete-logout-only-after-clearing-user-session.md) — Defines the provider-specific logout and navigation ordering.
 - [Use a Custom `$fetch` Instance in Pinia Colada Queries and Mutations](shared-custom-fetch.md) — Defines the HTTP transport boundary used by Pinia Colada requests while keeping `useUserSession().fetch()` and `clear()` outside that boundary.

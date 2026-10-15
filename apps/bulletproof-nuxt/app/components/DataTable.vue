@@ -1,12 +1,5 @@
 <script setup lang="ts" generic="T extends { id: string }">
 import { ArchiveX } from "@lucide/vue";
-import { useSlots } from "vue";
-
-export type TableColumn<Entry> = {
-  title: string;
-  field: keyof Entry;
-  name?: string;
-};
 
 export type DataTableProps<Entry extends { id: string }> = {
   data: readonly Entry[];

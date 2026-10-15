@@ -1,19 +1,14 @@
-import { createDiscussionRepository } from "../../repository/discussionRepository";
+import { createDiscussionRepository } from "#layers/discussions/server/repository/discussionRepository";
 
-export default defineProtectedEventHandler(async (event, sessionUser) => {
-  if (!sessionUser.teamId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Team membership required",
-    });
-  }
+export default defineAuthenticatedEventHandler(async (event, sessionUser) => {
+  assertDiscussionTeamMember(sessionUser);
 
   const query = getQuery(event);
   const { page, limit } = parsePagination(query);
 
   const discussionRepository = createDiscussionRepository();
 
-  const discussions = await discussionRepository.findAll({
+  const discussions = await discussionRepository.findAllByTeamId({
     teamId: sessionUser.teamId,
     page,
     limit,
@@ -21,6 +16,6 @@ export default defineProtectedEventHandler(async (event, sessionUser) => {
 
   return {
     ...discussions,
-    data: discussions.data.map(serializeDiscussion),
+    items: discussions.items.map(serializeDiscussion),
   };
 });

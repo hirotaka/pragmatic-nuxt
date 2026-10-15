@@ -44,7 +44,7 @@ async function registerIsolatedAccount(page: Page, label: string, teamId?: strin
   });
 
   try {
-    await expectCreatedResponse(await request.post("/api/auth/register", {
+    await expectCreatedResponse(await request.post("/api/register", {
       data: {
         email: `${unique}@example.com`,
         firstName: "Boundary",

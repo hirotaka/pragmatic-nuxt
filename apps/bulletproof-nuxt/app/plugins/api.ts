@@ -1,5 +1,4 @@
 import { toast } from "vue-sonner";
-import { resolveApiErrorNotification, resolveUnexpectedApiError } from "~~/app/utils/apiNotifications";
 
 type ApiRequest = Parameters<typeof globalThis.$fetch>[0];
 type ApiOptions = NonNullable<Parameters<typeof globalThis.$fetch>[1]>;

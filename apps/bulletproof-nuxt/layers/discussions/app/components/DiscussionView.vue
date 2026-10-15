@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { Pen } from "@lucide/vue";
-import { useUser } from "#layers/auth/app/composables/useUser";
 
 interface DiscussionViewProps {
   discussionId: string;
 }
 
 const props = defineProps<DiscussionViewProps>();
-const { isAdmin } = useUser();
+const { isAdmin } = useCurrentUser();
 
 const { data: discussion, refresh } = await useDiscussion(() => props.discussionId);
 
@@ -45,7 +44,7 @@ const handleUpdateSuccess = async (close: () => void) => {
           </template>
 
           <template #default="{ close }">
-            <UpdateDiscussionForm
+            <DiscussionUpdateForm
               :body="discussion.body"
               :discussion-id="discussion.id"
               :title="discussion.title"

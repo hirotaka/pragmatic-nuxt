@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MessageSquare, ShieldCheck, UserRoundCog } from "@lucide/vue";
 
-const { user } = useUser();
+const { user } = useCurrentUser();
 
 const capabilities = computed(() => user.value?.role === "ADMIN"
   ? [
@@ -14,10 +14,6 @@ const capabilities = computed(() => user.value?.role === "ADMIN"
       "Create comments",
       "Delete your own comments",
     ]);
-
-definePageMeta({
-  middleware: "auth",
-});
 
 useHead({
   title: "Dashboard",

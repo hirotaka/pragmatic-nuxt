@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Folder, Home, Users } from "@lucide/vue";
 import { toast } from "vue-sonner";
-import { computed, ref, type Component } from "vue";
-import { ROLES } from "#layers/auth/app/composables/useAuthorization";
+import type { Component } from "vue";
 
 type SideNavigationItem = {
   name: string;
@@ -17,6 +16,7 @@ const route = useRoute();
 const { checkAccess } = useAuthorization();
 const { clear: clearSession } = useUserSession();
 const isLoggingOut = ref(false);
+const sidebarOpen = useCookie<boolean>("sidebar_state", { default: () => true });
 
 const isActive = (item: SideNavigationItem) => {
   const currentPath = route.path;
@@ -78,7 +78,7 @@ const handleProfileClick = () => {
 </script>
 
 <template>
-  <SidebarProvider>
+  <SidebarProvider :default-open="sidebarOpen">
     <AppSidebar
       :items="navigation"
       @profile="handleProfileClick"
@@ -86,13 +86,13 @@ const handleProfileClick = () => {
     />
     <SidebarInset>
       <AppHeader />
-      <div class="flex flex-1 flex-col">
+      <main class="flex flex-1 flex-col">
         <div class="@container/main flex flex-1 flex-col gap-2">
           <div class="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
             <slot />
           </div>
         </div>
-      </div>
+      </main>
     </SidebarInset>
   </SidebarProvider>
 </template>

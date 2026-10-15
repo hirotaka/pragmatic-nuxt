@@ -81,9 +81,9 @@ This example returns `401` for an invalid user ID or a missing user record. An a
 
 ## App Examples
 
-- [`serializeSessionIdentity.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/utils/serializeSessionIdentity.ts) returns an object containing only the user record ID.
-- [`session.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/plugins/session.ts) loads the current user record and assigns selected public user fields to the fetched session.
-- [`serializeUser.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/utils/serializeUser.ts) defines the fields that can reach the client.
+- [`serializeSessionIdentity.ts`](../../../apps/bulletproof-nuxt/server/utils/serializeSessionIdentity.ts) returns an object containing only the user record ID.
+- [`session.ts`](../../../apps/bulletproof-nuxt/server/plugins/session.ts) loads the current user record and assigns selected public user fields to the fetched session.
+- [`serializeUser.ts`](../../../apps/bulletproof-nuxt/server/utils/serializeUser.ts) defines the fields that can reach the client.
 
 ## Trade-offs and Limitations
 

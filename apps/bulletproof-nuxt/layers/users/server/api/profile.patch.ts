@@ -1,6 +1,6 @@
-import { createUserRepository } from "../repository/userRepository";
+import { createUserRepository } from "#layers/users/server/repository/userRepository";
 
-export default defineProtectedEventHandler(async (event, sessionUser) => {
+export default defineAuthenticatedEventHandler(async (event, sessionUser) => {
   const body = await readBody(event);
   const validationResult = updateProfileInputSchema.safeParse(body);
 
@@ -20,12 +20,15 @@ export default defineProtectedEventHandler(async (event, sessionUser) => {
     });
   }
 
-  await userRepository.update(sessionUser.id, {
+  const updated = await userRepository.update(sessionUser.id, {
     email: validationResult.data.email,
     firstName: validationResult.data.firstName,
     lastName: validationResult.data.lastName,
     bio: validationResult.data.bio,
   });
+  if (!updated) {
+    throw createError({ statusCode: 404, statusMessage: "User not found" });
+  }
 
   setResponseStatus(event, 204);
 });

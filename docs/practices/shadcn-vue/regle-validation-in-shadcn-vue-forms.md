@@ -80,7 +80,7 @@ The form reads the Regle field directly, links its label and error to the contro
 ## App Examples
 
 - [`LoginForm.vue`](../../../apps/bulletproof-nuxt/layers/auth/app/components/LoginForm.vue) binds Regle field values and errors to Field, Input, and FieldError in a native form.
-- [`RegisterForm.vue`](../../../apps/bulletproof-nuxt/layers/auth/app/components/RegisterForm.vue) uses Checkbox to choose which Regle-validated team field is shown.
+- [`RegisterForm.vue`](../../../apps/bulletproof-nuxt/app/components/RegisterForm.vue) uses Checkbox to choose which Regle-validated team field is shown in the app-owned registration form.
 - [`FieldError.vue`](../../../apps/bulletproof-nuxt/app/components/ui/field/FieldError.vue) renders string validation messages passed from Regle.
 
 ## Trade-offs and Limitations

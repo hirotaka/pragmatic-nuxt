@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "auth",
+  layout: "centered-column",
   title: "Log in to your account",
 });
 
@@ -24,7 +24,7 @@ const handleSuccess = () => {
         Welcome back
       </CardTitle>
       <CardDescription>
-        Log in to continue managing your team's discussions.
+        Log in to continue.
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -32,7 +32,7 @@ const handleSuccess = () => {
       <div class="mt-4 text-center text-sm">
         Don&apos;t have an account?
         <NuxtLink
-          to="/auth/register"
+          to="/register"
           class="font-medium underline underline-offset-4"
         >
           Register

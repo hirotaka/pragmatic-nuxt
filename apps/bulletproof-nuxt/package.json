@@ -56,7 +56,6 @@
     "nuxt": "^4.5.1",
     "nuxt-auth-utils": "^0.5.25",
     "pinia": "^3.0.0",
-    "pinia-plugin-persistedstate": "^4.7.1",
     "reka-ui": "^2.10.5",
     "shadcn-nuxt": "^2.8.2",
     "tailwind-merge": "^3.0.0",

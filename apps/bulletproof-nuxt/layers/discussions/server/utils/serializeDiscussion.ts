@@ -1,4 +1,4 @@
-import type { DiscussionWithAuthorRecord } from "../repository/discussionRepository";
+import type { DiscussionWithAuthorRecord } from "#layers/discussions/server/repository/discussionRepository";
 
 export function serializeDiscussion(discussion: DiscussionWithAuthorRecord): Discussion {
   return {

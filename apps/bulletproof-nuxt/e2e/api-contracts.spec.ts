@@ -7,7 +7,7 @@ const password = "Password123!";
 async function registerIsolatedUser(page: Page, label: string) {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   const unique = `${label}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  await expectEmptyResponse(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectEmptyResponse(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {
       email: `${unique}@example.com`,
       firstName: "Data",
@@ -40,11 +40,11 @@ async function findDiscussionByTitle(page: Page, title: string) {
   const result: unknown = await expectJson(await page.request.get(
     new URL("/api/discussions?limit=100", page.url()).href,
   ));
-  if (!isApiRecord(result) || !Array.isArray(result.data)) {
+  if (!isApiRecord(result) || !Array.isArray(result.items)) {
     throw new Error("Test setup failed: discussions response has invalid data");
   }
 
-  const discussion = result.data.find(item => isApiRecord(item) && item.title === title);
+  const discussion = result.items.find(item => isApiRecord(item) && item.title === title);
   if (!isApiRecord(discussion) || typeof discussion.id !== "string") {
     throw new Error(`Test setup failed: discussion not found for title: ${title}`);
   }
@@ -54,13 +54,13 @@ async function findDiscussionByTitle(page: Page, title: string) {
 
 async function findCommentByBody(page: Page, discussionId: string, body: string) {
   const result: unknown = await expectJson(await page.request.get(
-    new URL(`/api/comments?discussionId=${discussionId}&limit=100`, page.url()).href,
+    new URL(`/api/discussions/${discussionId}/comments?limit=100`, page.url()).href,
   ));
-  if (!isApiRecord(result) || !Array.isArray(result.data)) {
+  if (!isApiRecord(result) || !Array.isArray(result.items)) {
     throw new Error("Test setup failed: comments response has invalid data");
   }
 
-  const comment = result.data.find(item => isApiRecord(item) && item.body === body);
+  const comment = result.items.find(item => isApiRecord(item) && item.body === body);
   if (!isApiRecord(comment)) {
     throw new Error(`Test setup failed: comment not found for body: ${body}`);
   }
@@ -96,7 +96,7 @@ async function registerIsolatedAccount(page: Page, label: string, teamId?: strin
   });
 
   try {
-    await expectCreatedResponse(await request.post("/api/auth/register", {
+    await expectCreatedResponse(await request.post("/api/register", {
       data: {
         email: `${unique}@example.com`,
         firstName: "Boundary",
@@ -183,13 +183,13 @@ test("session GET returns the allowlisted current public User projection", { tag
 test("discussion and comment pagination enforce the route contract", { tag: ["@contract", "@discussions", "@comments"] }, async ({ page }) => {
   await registerIsolatedUser(page, "invalid-pagination");
   const discussion = await createDiscussion(page, `Invalid pagination ${Date.now()}`);
-  await expectCreatedResponse(await page.request.post(new URL("/api/comments", page.url()).href, {
-    data: { discussionId: discussion.id, body: "Pagination contract comment" },
+  await expectCreatedResponse(await page.request.post(new URL(`/api/discussions/${discussion.id}/comments`, page.url()).href, {
+    data: { body: "Pagination contract comment" },
   }));
 
   const routes = [
     { path: "/api/discussions", invalid: "page=1suffix" },
-    { path: `/api/comments?discussionId=${discussion.id}`, invalid: "limit=101" },
+    { path: `/api/discussions/${discussion.id}/comments`, invalid: "limit=101" },
   ];
 
   for (const { path, invalid } of routes) {
@@ -198,15 +198,16 @@ test("discussion and comment pagination enforce the route contract", { tag: ["@c
       new URL(`${path}${separator}page=1&limit=10`, page.url()).href,
     ));
     expect(pageOne).toMatchObject({
-      data: expect.any(Array),
+      items: expect.any(Array),
       meta: { page: 1, limit: 10, total: 1, totalPages: 1, hasMore: false },
     });
+    expect(pageOne).not.toHaveProperty("data");
 
     const overflow = await expectJson(await page.request.get(
       new URL(`${path}${separator}page=2&limit=10`, page.url()).href,
     ));
     expect(overflow).toEqual({
-      data: [],
+      items: [],
       meta: { page: 2, limit: 10, total: 1, totalPages: 1, hasMore: false },
     });
 
@@ -221,10 +222,10 @@ test("app errors use native minimal bodies and bounded auth statuses", { tag: ["
   const unique = `native-errors-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const email = `${unique}@example.com`;
 
-  await expectNativeError(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectNativeError(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {},
   }), 400, "Invalid registration");
-  await expectNativeError(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectNativeError(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {
       email,
       firstName: "Missing",
@@ -235,7 +236,7 @@ test("app errors use native minimal bodies and bounded auth statuses", { tag: ["
     },
   }), 404, "Team not found");
 
-  await expectEmptyResponse(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectEmptyResponse(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {
       email,
       firstName: "Native",
@@ -245,7 +246,7 @@ test("app errors use native minimal bodies and bounded auth statuses", { tag: ["
       teamName: `Native ${unique}`,
     },
   }), 201);
-  await expectNativeError(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectNativeError(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {
       email,
       firstName: "Duplicate",
@@ -258,6 +259,38 @@ test("app errors use native minimal bodies and bounded auth statuses", { tag: ["
   await expectNativeError(await page.request.post(new URL("/api/auth/login", page.url()).href, {
     data: { email, password: "WrongPassword123!" },
   }), 401, "Invalid email or password");
+});
+
+test("comment routes require the parent discussion to belong to the current team", { tag: ["@contract", "@comments"] }, async ({ page }) => {
+  await registerIsolatedUser(page, "comment-parent-boundary");
+  const discussion = await createDiscussion(page, `Comment parent ${Date.now()}`);
+  const otherDiscussion = await createDiscussion(page, `Other comment parent ${Date.now()}`);
+  await expectCreatedResponse(await page.request.post(new URL(`/api/discussions/${discussion.id}/comments`, page.url()).href, {
+    data: { body: "Protected comment" },
+  }));
+  const comment = await findCommentByBody(page, discussion.id, "Protected comment");
+  const commentId = comment.id as string;
+  const crossTeam = await registerIsolatedAccount(page, "comment-parent-foreign-team");
+
+  expect((await page.request.get(new URL(`/api/comments?discussionId=${discussion.id}`, page.url()).href)).status()).toBe(404);
+  expect((await page.request.post(new URL("/api/comments", page.url()).href, {
+    data: { discussionId: discussion.id, body: "Legacy request" },
+  })).status()).toBe(404);
+  expect((await page.request.delete(new URL(`/api/comments/${commentId}`, page.url()).href)).status()).toBe(404);
+
+  try {
+    await expectNativeError(await crossTeam.request.get(`/api/discussions/${discussion.id}/comments`), 404, "Discussion not found");
+    await expectNativeError(await crossTeam.request.post(`/api/discussions/${discussion.id}/comments`, {
+      data: { body: "Foreign comment" },
+    }), 404, "Discussion not found");
+    await expectNativeError(await crossTeam.request.delete(`/api/discussions/${discussion.id}/comments/${commentId}`), 404, "Discussion not found");
+    await expectNativeError(await page.request.delete(new URL(`/api/discussions/${otherDiscussion.id}/comments/${commentId}`, page.url()).href), 404, "Comment not found");
+    const persisted = await findCommentByBody(page, discussion.id, "Protected comment");
+    expect(persisted.id).toBe(commentId);
+  }
+  finally {
+    await crossTeam.request.dispose();
+  }
 });
 
 test("duplicate profile email is a conflict and keeps the current profile", { tag: ["@contract", "@profile"] }, async ({ page }) => {
@@ -334,7 +367,7 @@ test("completion-only mutations return explicit status with an empty body", { ta
   const unique = `bodyless-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const email = `${unique}@example.com`;
 
-  await expectEmptyResponse(await page.request.post(new URL("/api/auth/register", page.url()).href, {
+  await expectEmptyResponse(await page.request.post(new URL("/api/register", page.url()).href, {
     data: {
       email,
       firstName: "Bodyless",
@@ -366,8 +399,8 @@ test("completion-only mutations return explicit status with an empty body", { ta
   const discussionId = discussion.id as string;
 
   const commentBody = `Bodyless comment ${unique}`;
-  await expectEmptyResponse(await page.request.post(new URL("/api/comments", page.url()).href, {
-    data: { discussionId, body: commentBody },
+  await expectEmptyResponse(await page.request.post(new URL(`/api/discussions/${discussionId}/comments`, page.url()).href, {
+    data: { body: commentBody },
   }), 201);
   const comment = await findCommentByBody(page, discussionId, commentBody);
   expect(typeof comment.id).toBe("string");
@@ -382,7 +415,7 @@ test("completion-only mutations return explicit status with an empty body", { ta
   expect(updatedDiscussion.title).toBe(`${discussionTitle} updated`);
 
   await expectEmptyResponse(await page.request.delete(
-    new URL(`/api/comments/${comment.id as string}`, page.url()).href,
+    new URL(`/api/discussions/${discussionId}/comments/${comment.id as string}`, page.url()).href,
   ), 204);
 
   await expectEmptyResponse(await page.request.patch(new URL("/api/profile", page.url()).href, {
@@ -448,8 +481,8 @@ test("datetime fields are actual JSON ISO strings across auth, teams, users, dis
 
   const commentBody = `Datetime comment ${unique}`;
   await expectCreatedResponse(await page.request.post(
-    new URL("/api/comments", page.url()).href,
-    { data: { discussionId, body: commentBody } },
+    new URL(`/api/discussions/${discussionId}/comments`, page.url()).href,
+    { data: { body: commentBody } },
   ));
   const listedComment = await findCommentByBody(page, discussionId, commentBody);
   expectIsoString(listedComment.createdAt);

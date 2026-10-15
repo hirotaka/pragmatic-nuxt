@@ -2,7 +2,8 @@ import { expect, test } from "vitest";
 import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import type { DefineComponent } from "vue";
-import type { DataTableProps, TableColumn } from "../DataTable.vue";
+import type { DataTableProps } from "../DataTable.vue";
+import type { TableColumn } from "../../../shared/types/table-column";
 import DataTable from "../DataTable.vue";
 
 type DiscussionRow = { id: string; title: string };

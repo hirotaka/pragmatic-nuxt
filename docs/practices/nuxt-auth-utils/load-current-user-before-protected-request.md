@@ -46,7 +46,7 @@ Protected routes that depend on database-managed user data need the current user
 ## Minimal Nuxt Example
 
 ```ts
-// layers/auth/server/utils/requireCurrentUser.ts
+// server/utils/requireCurrentUser.ts
 export async function requireCurrentUser(event: H3Event) {
   const session = await requireUserSession(event);
   const userId = session.user.id;
@@ -67,8 +67,8 @@ export async function requireCurrentUser(event: H3Event) {
 The helper validates the session user ID before loading the user record. This example returns `401` when the user ID is invalid or the user record does not exist.
 
 ```ts
-// layers/auth/server/utils/defineProtectedEventHandler.ts
-export function defineProtectedEventHandler(handler: ProtectedHandler) {
+// server/utils/defineAuthenticatedEventHandler.ts
+export function defineAuthenticatedEventHandler(handler: AuthenticatedHandler) {
   return defineEventHandler(async (event) => {
     const currentUser = await requireCurrentUser(event);
     return handler(event, currentUser);
@@ -80,8 +80,8 @@ The wrapper does not call the route handler until the current user record has be
 
 ## App Examples
 
-- [`requireCurrentUser.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/utils/requireCurrentUser.ts) validates the session user ID and loads the current user record.
-- [`defineProtectedEventHandler.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/utils/defineProtectedEventHandler.ts) passes the current user record to a protected route handler.
+- [`requireCurrentUser.ts`](../../../apps/bulletproof-nuxt/server/utils/requireCurrentUser.ts) validates the session user ID and loads the current user record.
+- [`defineAuthenticatedEventHandler.ts`](../../../apps/bulletproof-nuxt/server/utils/defineAuthenticatedEventHandler.ts) passes the current user record to a protected route handler.
 
 ## Trade-offs and Limitations
 

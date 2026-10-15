@@ -107,10 +107,11 @@ export default defineEventHandler(async (event) => {
 
 ## App Examples
 
-- [`schemas.ts`](../../../apps/bulletproof-nuxt/layers/auth/shared/schemas.ts) exports the Zod schema and its input and output types.
+- [`schemas.ts`](../../../apps/bulletproof-nuxt/layers/auth/shared/utils/schemas.ts) exports the Zod schema and its input and output types.
 - [`LoginForm.vue`](../../../apps/bulletproof-nuxt/layers/auth/app/components/LoginForm.vue) passes form state and `loginInputSchema` to the Regle schema integration.
 - [`login.post.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/api/auth/login.post.ts) validates the request body with `loginInputSchema`.
-- [`index.post.ts`](../../../apps/bulletproof-nuxt/layers/comments/server/api/comments/index.post.ts) validates comment creation data with `createCommentInputSchema`.
+- [`registration.ts`](../../../apps/bulletproof-nuxt/shared/utils/registration.ts) provides the root-owned schema used by the [registration form](../../../apps/bulletproof-nuxt/app/components/RegisterForm.vue) and [API route](../../../apps/bulletproof-nuxt/server/api/register.post.ts).
+- [`index.post.ts`](../../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/[id]/comments/index.post.ts) validates comment creation data with `createCommentInputSchema`.
 
 ## Trade-offs and Limitations
 

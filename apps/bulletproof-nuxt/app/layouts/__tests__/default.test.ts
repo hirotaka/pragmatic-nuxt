@@ -54,7 +54,7 @@ mockNuxtImport("useRouter", () => () => ({
   replace: vi.fn(),
 }));
 
-vi.mock("#layers/auth/app/composables/useAuthorization", () => ({
+vi.mock("~~/app/composables/useAuthorization", () => ({
   ROLES: { ADMIN: "ADMIN" },
   useAuthorization: () => ({
     checkAccess: () => canAccessAdmin.value,
@@ -63,8 +63,8 @@ vi.mock("#layers/auth/app/composables/useAuthorization", () => ({
 
 mockNuxtImport("useUserSession", () => () => ({ clear: clearSession }));
 
-vi.mock("#layers/auth/app/composables/useUser", () => ({
-  useUser: () => ({
+vi.mock("~~/app/composables/useCurrentUser", () => ({
+  useCurrentUser: () => ({
     user: mockUser,
   }),
 }));

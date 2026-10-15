@@ -100,5 +100,5 @@ The shared rules apply only to requests made through that custom `$fetch` instan
 ## Related Practices
 
 - [Use Nuxt Query to Integrate TanStack Query with Nuxt](use-nuxt-query-to-integrate-tanstack-query-with-nuxt.md)
-- [Use Custom Fetchers for Your API](../use-fetch/custom-api-fetchers.md)
+- [Use Custom Fetchers for Your API](../nuxt-use-fetch/custom-api-fetchers.md)
 - [Keep Query Retries in TanStack Query](keep-query-retries-in-tanstack-query.md)

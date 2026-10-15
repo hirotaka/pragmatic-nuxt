@@ -71,7 +71,7 @@ The shared renderer parses markdown, passes the HTML to the sanitizer directive,
 - [`tailwind.css`](../../../apps/bulletproof-nuxt/app/assets/css/tailwind.css) places `@import "./typeset.css";` after `@import "tailwindcss";`.
 - [`MarkdownPreview.vue`](../../../apps/bulletproof-nuxt/app/components/MarkdownPreview.vue) owns the shared Typeset container for parsed and sanitized markdown.
 - [`DiscussionView.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionView.vue) uses the shared preview for a discussion body.
-- [`CommentsList.vue`](../../../apps/bulletproof-nuxt/layers/comments/app/components/CommentsList.vue) uses the shared preview for comment bodies.
+- [`CommentList.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CommentList.vue) uses the shared preview for comment bodies.
 
 ## Trade-offs and Limitations
 

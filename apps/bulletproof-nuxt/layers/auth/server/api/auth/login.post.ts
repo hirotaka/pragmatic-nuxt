@@ -1,42 +1,27 @@
-import { createUserRepository } from "#layers/users/server/repository/userRepository";
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-
   const validationResult = loginInputSchema.safeParse(body);
   if (!validationResult.success) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Invalid login",
-    });
+    throw createError({ statusCode: 400, statusMessage: "Invalid login" });
   }
 
   const { email, password } = validationResult.data;
-
-  const userRepository = createUserRepository();
-
-  const user = await userRepository.findByEmail(email);
-  if (!user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Invalid email or password",
-    });
+  const account = await getAuthApplication(event).findCredentials(email);
+  if (!account) {
+    throw createError({ statusCode: 401, statusMessage: "Invalid email or password" });
   }
 
   let isPasswordValid = false;
   try {
-    isPasswordValid = await verifyPassword(user.password, password);
+    isPasswordValid = await verifyPassword(account.passwordHash, password);
   }
   catch {
     // Stored hashes that the configured provider cannot verify are invalid credentials.
   }
   if (!isPasswordValid) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Invalid email or password",
-    });
+    throw createError({ statusCode: 401, statusMessage: "Invalid email or password" });
   }
 
-  await replaceUserSession(event, { user: serializeSessionIdentity(user) });
+  await replaceUserSession(event, { user: { id: account.id } });
   setResponseStatus(event, 204);
 });

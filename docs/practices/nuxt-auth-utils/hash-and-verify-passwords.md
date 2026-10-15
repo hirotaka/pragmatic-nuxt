@@ -65,7 +65,7 @@ if (!passwordIsValid) {
 
 ## App Examples
 
-- [`register.post.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/api/auth/register.post.ts) hashes a validated password with `hashPassword()` before storing the new user record.
+- [`register.post.ts`](../../../apps/bulletproof-nuxt/server/api/register.post.ts) hashes a validated password with `hashPassword()` before storing the new user record.
 - [`login.post.ts`](../../../apps/bulletproof-nuxt/layers/auth/server/api/auth/login.post.ts) checks a submitted password with `verifyPassword()` before replacing the user session.
 
 ## Trade-offs and Limitations

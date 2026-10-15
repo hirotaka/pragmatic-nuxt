@@ -2,37 +2,22 @@ import type { H3Event } from "h3";
 import { createError } from "h3";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { loginInputSchema } from "#layers/auth/shared/utils/schemas";
-import { serializeSessionIdentity } from "../utils/serializeSessionIdentity";
 
-const { createUserRepository, findByEmail, readBody, replaceUserSession, verifyPassword } = vi.hoisted(() => ({
-  createUserRepository: vi.fn(),
-  findByEmail: vi.fn(),
+const { findCredentials, getAuthApplication, readBody, replaceUserSession, verifyPassword } = vi.hoisted(() => ({
+  findCredentials: vi.fn(),
+  getAuthApplication: vi.fn(),
   readBody: vi.fn(),
   replaceUserSession: vi.fn(),
   verifyPassword: vi.fn(),
 }));
 
-vi.mock("#layers/users/server/repository/userRepository", () => ({
-  createUserRepository,
-}));
-
-const user = {
-  id: "user-1",
-  email: "ada@example.com",
-  firstName: "Ada",
-  lastName: "Lovelace",
-  bio: undefined,
-  role: "USER" as const,
-  teamId: "team-1",
-  password: "$scrypt$seeded-hash",
-  createdAt: new Date("2026-09-11T00:00:00.000Z"),
-};
+const account = { id: "account-1", passwordHash: "$scrypt$seeded-hash" };
 
 beforeEach(() => {
-  createUserRepository.mockReset().mockReturnValue({ findByEmail });
-  findByEmail.mockReset().mockResolvedValue(user);
+  findCredentials.mockReset().mockResolvedValue(account);
+  getAuthApplication.mockReset().mockReturnValue({ findCredentials });
   readBody.mockReset().mockResolvedValue({
-    email: user.email,
+    email: "ada@example.com",
     password: "Password123!",
   });
   replaceUserSession.mockReset().mockResolvedValue(undefined);
@@ -43,7 +28,7 @@ beforeEach(() => {
   vi.stubGlobal("replaceUserSession", replaceUserSession);
   vi.stubGlobal("verifyPassword", verifyPassword);
   vi.stubGlobal("loginInputSchema", loginInputSchema);
-  vi.stubGlobal("serializeSessionIdentity", serializeSessionIdentity);
+  vi.stubGlobal("getAuthApplication", getAuthApplication);
 });
 
 afterEach(() => {
@@ -53,10 +38,13 @@ afterEach(() => {
 test("uses the official verifier before creating a session for correct credentials", async () => {
   const { default: handler } = await import("../api/auth/login.post");
 
-  await handler({} as H3Event);
+  const event = { context: {} };
+  await handler(event as H3Event);
 
-  expect(verifyPassword).toHaveBeenCalledWith(user.password, "Password123!");
-  expect(replaceUserSession).toHaveBeenCalledWith({}, { user: { id: user.id } });
+  expect(getAuthApplication).toHaveBeenCalledWith(event);
+  expect(findCredentials).toHaveBeenCalledWith("ada@example.com");
+  expect(verifyPassword).toHaveBeenCalledWith(account.passwordHash, "Password123!");
+  expect(replaceUserSession).toHaveBeenCalledWith(event, { user: { id: account.id } });
 });
 
 test.each([
@@ -71,7 +59,7 @@ test.each([
     verifyPassword.mockResolvedValueOnce(verificationResult);
   }
 
-  await expect(handler({} as H3Event)).rejects.toMatchObject({
+  await expect(handler({ context: {} } as H3Event)).rejects.toMatchObject({
     statusCode: 401,
     statusMessage: "Invalid email or password",
   });

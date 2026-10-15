@@ -1,61 +1,35 @@
 # 🔐 Security
 
-## Authentication
+## Auth
 
-NOTE: Since Nuxt is a full-stack framework, authentication should be implemented on both the client and server sides. Server-side protection is essential for securing API routes and resources, while client-side authentication enhances user experience by managing UI state and navigation.
+Client-side navigation and UI checks do not protect server resources. API routes enforce authentication and authorization independently.
 
-Protecting resources comprises two key components:
+### Authentication
 
-### Session-Based Authentication
+The app uses Nuxt Auth Utils for cookie-based sessions. Login belongs to the auth layer; registration and session projection belong to the root app.
 
-This application uses cookie-based session authentication with [nuxt-auth-utils](https://github.com/atinux/nuxt-auth-utils). When a user logs in or registers, a session is created and stored in a secure HttpOnly cookie. This approach is more secure than storing tokens in localStorage, as HttpOnly cookies are inaccessible to client-side JavaScript, reducing the risk of Cross-Site Scripting ([XSS](https://owasp.org/www-community/attacks/xss/)) attacks.
+The sealed cookie stores the user ID. Protected APIs load the current user from the database rather than trusting role or team claims from the cookie.
 
-[Login API Example Code](../../apps/bulletproof-nuxt/layers/auth/server/api/auth/login.post.ts)
+See the [Nuxt Auth Utils Practices](../practices/nuxt-auth-utils/index.md) for password, session, refresh, and logout guidance.
 
-Login and registration replace the session with the stable user ID after
-successful password authentication. Protected API routes validate the session user ID
-and load the current user record from the database before applying
-feature-specific authorization. Profile updates do not rewrite the user ID
-stored in the cookie, but the client refreshes the session response before
-reporting completion.
+#### Handling user data
 
-[Protected API Example Code](../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/index.get.ts)
+`useUserSession` exposes public session data to the app. Server-side session projection selects public user fields; credentials remain server-only.
 
-See the [Nuxt Auth Utils Practices](../practices/nuxt-auth-utils/index.md) for
-reusable password, session, protected-request, refresh, and logout guidance.
+#### XSS Prevention
 
-### Handling User Data
+Sanitize user-generated HTML before rendering it. The app's [DOMPurify integration](../../apps/bulletproof-nuxt/app/plugins/dompurify.ts) handles rendered HTML; HttpOnly cookies alone do not prevent XSS.
 
-Authentication and current user data are available through `useUserSession`.
-The sealed cookie stores only the user ID. The session response loads the user
-record from the database and includes only public user fields. Protected server
-routes load the current user record from the database and never trust role or
-team claims from the cookie.
+See [OWASP](https://owasp.org/www-project-top-10/) for broader security risks.
 
-[Auth Middleware Example Code](../../apps/bulletproof-nuxt/layers/auth/app/middleware/auth.ts)
+### Authorization
 
-### XSS Prevention
+The root app owns shared authorization rules. UI checks control presentation; server checks enforce access.
 
-In addition to securely storing sessions, it's crucial to protect the application from Cross-Site Scripting (XSS) attacks. Sanitize all user inputs before displaying them, especially when rendering user-generated HTML content. Use libraries like DOMPurify to sanitize HTML output.
+#### RBAC (Role-Based Access Control)
 
-[HTML Sanitization Example Code](../../apps/bulletproof-nuxt/app/plugins/dompurify.ts)
+Roles such as `ADMIN` and `USER` determine available operations. The [Authorization component](../../apps/bulletproof-nuxt/app/components/Authorization.vue) applies presentation checks.
 
-For a full list of security risks, check [OWASP](https://owasp.org/www-project-top-10/).
+#### PBAC (Permission-Based Access Control)
 
-## Authorization
-
-Authorization is the process of verifying whether a user has permission to access a specific resource within the application.
-
-### RBAC (Role-Based Access Control)
-
-In a role-based authorization model, access to resources is determined by defining specific roles and associating them with permissions. For example, roles such as `USER` and `ADMIN` can be assigned different levels of access rights within the application. Users are then granted access based on their roles; for instance, restricting certain functionalities to regular users while permitting administrators to access all features.
-
-[Authorization Component Example Code](../../apps/bulletproof-nuxt/layers/auth/app/components/Authorization.vue)
-
-### PBAC (Permission-Based Access Control)
-
-While Role-Based Access Control (RBAC) provides a structured methodology for authorization, there are instances where a more granular approach is necessary. Permission-Based Access Control (PBAC) offers a more flexible solution, particularly in scenarios where access permissions need to be finely tuned based on specific criteria, such as allowing only the owner of a resource to perform certain operations. For example, in the case of a user's comment, PBAC ensures that only the author of the comment has the privilege to delete it.
-
-For RBAC protection, you can use the `Authorization` component by passing allowed roles to it. On the other hand, if you need more strict protection, you can pass a policy check to it.
-
-[PBAC Example Code](../../apps/bulletproof-nuxt/layers/comments/app/components/CommentsList.vue)
+Policies add resource-specific checks, such as comment ownership and team membership. Server routes apply the relevant rules before reading or changing protected resources.

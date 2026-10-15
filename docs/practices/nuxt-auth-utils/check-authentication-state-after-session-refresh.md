@@ -45,7 +45,7 @@ The original request and the session refresh have independent outcomes. Treating
 ## Minimal Nuxt Example
 
 ```ts
-// layers/auth/app/composables/useRequiredUserSessionRefresh.ts
+// app/composables/useRequiredUserSessionRefresh.ts
 const { fetch, loggedIn } = useUserSession();
 
 await fetch();
@@ -59,9 +59,9 @@ Run this code after the original request succeeds and before continuing to UI th
 
 ## App Examples
 
-- [`useRequiredUserSessionRefresh.ts`](../../../apps/bulletproof-nuxt/layers/auth/app/composables/useRequiredUserSessionRefresh.ts) combines `fetch()` with the required `loggedIn` check.
+- [`useRequiredUserSessionRefresh.ts`](../../../apps/bulletproof-nuxt/app/composables/useRequiredUserSessionRefresh.ts) combines `fetch()` with the required `loggedIn` check.
 - [`useLogin.ts`](../../../apps/bulletproof-nuxt/layers/auth/app/composables/useLogin.ts) requires the refreshed session before reporting a successful login.
-- [`useUpdateProfile.ts`](../../../apps/bulletproof-nuxt/layers/users/app/composables/useUpdateProfile.ts) requires the refreshed session before the profile update finishes.
+- [`useProfileUpdate.ts`](../../../apps/bulletproof-nuxt/layers/users/app/composables/useProfileUpdate.ts) requires the refreshed session before the profile update finishes.
 
 ## Trade-offs and Limitations
 
@@ -74,4 +74,4 @@ A required session refresh adds a request, delays UI completion, and makes compl
 ## Related Practices
 
 - [Store a User ID and Load the Current User When Fetching the Session](store-user-id-and-load-current-user.md)
-- [Orchestrate Auth Session State Outside the Fetch Client](../use-fetch/auth-session-orchestration.md)
+- [Orchestrate Auth Session State Outside the Fetch Client](../nuxt-use-fetch/auth-session-orchestration.md)

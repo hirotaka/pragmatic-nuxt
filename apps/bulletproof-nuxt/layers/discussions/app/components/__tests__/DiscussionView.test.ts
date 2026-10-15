@@ -30,8 +30,8 @@ mockNuxtImport("useDiscussion", () => async (id: MaybeRefOrGetter<string>) => {
   return { data: ref(discussion), refresh: discussionRefresh };
 });
 
-vi.mock("#layers/auth/app/composables/useUser", () => ({
-  useUser: () => ({ isAdmin: { value: true } }),
+vi.mock("~~/app/composables/useCurrentUser", () => ({
+  useCurrentUser: () => ({ isAdmin: { value: true } }),
 }));
 
 beforeEach(() => {
@@ -40,7 +40,7 @@ beforeEach(() => {
 });
 
 const UpdateDiscussionFormStub = defineComponent({
-  name: "UpdateDiscussionForm",
+  name: "DiscussionUpdateForm",
   props: ["body", "discussionId", "title"],
   emits: ["success"],
   template: "<div />",
@@ -61,7 +61,7 @@ const mountDiscussionView = () => mountSuspended(DiscussionView, {
   props: { discussionId: discussion.id },
   global: {
     stubs: {
-      UpdateDiscussionForm: UpdateDiscussionFormStub,
+      DiscussionUpdateForm: UpdateDiscussionFormStub,
       MarkdownPreview: MarkdownPreviewStub,
     },
   },

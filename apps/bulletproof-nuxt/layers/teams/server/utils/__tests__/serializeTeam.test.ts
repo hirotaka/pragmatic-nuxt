@@ -1,4 +1,4 @@
-import type { Team } from "#layers/teams/shared/types/team";
+import type { Team } from "../../../shared/types/team";
 import { expect, expectTypeOf, test } from "vitest";
 import { serializeTeam } from "../serializeTeam";
 

@@ -11,7 +11,7 @@ const emit = defineEmits<{
   logout: [];
 }>();
 
-const { user } = useUser();
+const { user } = useCurrentUser();
 </script>
 
 <template>

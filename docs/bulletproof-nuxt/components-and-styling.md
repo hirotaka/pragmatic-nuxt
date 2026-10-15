@@ -1,7 +1,23 @@
 # 🧱 Components and Styling
 
-The root app owns shared shadcn-vue UI source in [`app/components/ui/`](../../apps/bulletproof-nuxt/app/components/ui/) and application-wide compositions such as [`AppSidebar`](../../apps/bulletproof-nuxt/app/components/AppSidebar.vue) and [`DataTable`](../../apps/bulletproof-nuxt/app/components/DataTable.vue). Feature layers compose these components with their own forms, dialogs, and domain behavior; they do not own copies of the shared primitives.
+## Components Best Practices
 
-[`nuxt.config.ts`](../../apps/bulletproof-nuxt/nuxt.config.ts) registers the UI modules and stylesheet. [`components.json`](../../apps/bulletproof-nuxt/components.json) configures the app-scoped shadcn-vue CLI, while [`tailwind.css`](../../apps/bulletproof-nuxt/app/assets/css/tailwind.css) covers root-app and feature-layer styles. Form components pair shadcn-vue fields with Regle-owned state and validation. [`MarkdownPreview`](../../apps/bulletproof-nuxt/app/components/MarkdownPreview.vue) sanitizes parsed markdown before applying the project-owned Typeset styles.
+Keep feature components near their callers, split large components into smaller units, and use props and slots for composition. Share components when multiple callers need the same behavior.
 
-For reusable decisions and their limits, see the [shadcn-vue Practices](../practices/shadcn-vue/index.md).
+The root app owns shared UI and application-wide compositions. Feature layers compose them rather than copying shared primitives.
+
+## Component libraries
+
+The app uses shadcn-vue components in [app/components/ui/](../../apps/bulletproof-nuxt/app/components/ui/). Keep installed primitives separate from app-specific behavior.
+
+See [Keep Installed shadcn-vue Components Unmodified](../practices/shadcn-vue/keep-installed-shadcn-vue-components-unmodified.md).
+
+## Styling Solutions
+
+The app uses Tailwind CSS and shadcn-vue theme variables. Forms combine shadcn-vue fields with Regle validation.
+
+See the [shadcn-vue Practices](../practices/shadcn-vue/index.md) for integration, theming, form, and rendered-markdown guidance.
+
+## Storybook
+
+Storybook can provide an isolated component catalogue. It is not configured in this app.

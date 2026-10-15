@@ -13,7 +13,7 @@ setup("authenticate", async ({ page, goto }) => {
     teamName: `E2E Team ${Date.now()}`,
   });
 
-  await goto("/auth/register", { waitUntil: "hydration" });
+  await goto("/register", { waitUntil: "hydration" });
 
   // registration:
   await page.getByLabel("First Name").click();

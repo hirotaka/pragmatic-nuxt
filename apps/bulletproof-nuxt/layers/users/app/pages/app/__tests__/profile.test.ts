@@ -15,8 +15,8 @@ const { mockUser } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("#layers/auth/app/composables/useUser", () => ({
-  useUser: () => ({
+vi.mock("~~/app/composables/useCurrentUser", () => ({
+  useCurrentUser: () => ({
     user: { __v_isRef: true, value: mockUser },
   }),
 }));
@@ -26,7 +26,7 @@ describe("Profile page", () => {
     const wrapper = await mountSuspended(ProfilePage, {
       global: {
         stubs: {
-          UpdateProfileForm: {
+          ProfileUpdateForm: {
             props: ["profile"],
             emits: ["success"],
             template: "<div />",

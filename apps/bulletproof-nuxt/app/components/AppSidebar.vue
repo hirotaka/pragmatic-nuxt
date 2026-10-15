@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Component } from "vue";
-import { computed } from "vue";
 import { GalleryVerticalEnd } from "@lucide/vue";
 import { useSidebar } from "@/components/ui/sidebar";
 
