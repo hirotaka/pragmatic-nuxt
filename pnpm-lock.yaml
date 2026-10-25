@@ -572,7 +572,7 @@ importers:
         version: 0.2.1(@pinia/colada@1.4.2(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))
       '@pinia/colada-plugin-retry':
         specifier: ^1.0.2
-        version: 1.0.2(@pinia/colada@1.4.2(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))
+        version: 1.0.3(@pinia/colada@1.4.2(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))
       '@pinia/nuxt':
         specifier: ^0.11.3
         version: 0.11.3(magicast@0.5.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
@@ -3785,10 +3785,10 @@ packages:
     peerDependencies:
       '@pinia/colada': '>=1.1.0'
 
-  '@pinia/colada-plugin-retry@1.0.2':
-    resolution: {integrity: sha512-hghwdqz3LjRHzDza6H+KyP1AdsoWoJrAfaz7wWk7Xzzg5DcYQZkvTwO/729IIlShXNZk7FG6bMl31KFF6hZiBw==}
+  '@pinia/colada-plugin-retry@1.0.3':
+    resolution: {integrity: sha512-kyPJv8BQ++yXNoBC9SMYokvOB7KRqLp62lnQlXuVBBP5fpVQL3UCjKfjdMUz2+e9s8f6X9UIvaEluwHair0jGA==}
     peerDependencies:
-      '@pinia/colada': '>=1.3.1'
+      '@pinia/colada': '>=1.4.6'
 
   '@pinia/colada@1.4.2':
     resolution: {integrity: sha512-HDCFSBd+Uxzuw/BEdl7Kwsm4uccWwkX5uSxpZhc4/MhfFASU+t+DmjByyzNoAG9EK3SGJ7uf6pNR7bJg+dX80w==}
@@ -14211,7 +14211,7 @@ snapshots:
     dependencies:
       '@pinia/colada': 1.4.2(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
 
-  '@pinia/colada-plugin-retry@1.0.2(@pinia/colada@1.4.2(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))':
+  '@pinia/colada-plugin-retry@1.0.3(@pinia/colada@1.4.2(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3)))':
     dependencies:
       '@pinia/colada': 1.4.2(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
 
