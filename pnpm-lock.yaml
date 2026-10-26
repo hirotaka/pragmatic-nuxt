@@ -95,7 +95,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -246,7 +246,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -415,7 +415,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -599,7 +599,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -753,7 +753,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -934,7 +934,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -1088,7 +1088,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -1248,7 +1248,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: ^1.11.18
-        version: 1.11.21
+        version: 1.11.23
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.8
@@ -6481,8 +6481,8 @@ packages:
   dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
 
-  dayjs@1.11.21:
-    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
+  dayjs@1.11.23:
+    resolution: {integrity: sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ==}
 
   db0@0.3.4:
     resolution: {integrity: sha512-RiXXi4WaNzPTHEOu8UPQKMooIbqOEyqA1t7Z6MsdxSCeb8iUC9ko3LcmsLmeUt2SM5bctfArZKkRQggKZz7JNw==}
@@ -14937,7 +14937,7 @@ snapshots:
   '@stylistic/eslint-plugin@5.9.0(eslint@10.3.0(jiti@2.6.1)(supports-color@10.2.2))':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.3.0(jiti@2.6.1)(supports-color@10.2.2))
-      '@typescript-eslint/types': 8.58.0
+      '@typescript-eslint/types': 8.72.0
       eslint: 10.3.0(jiti@2.6.1)(supports-color@10.2.2)
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
@@ -15415,8 +15415,8 @@ snapshots:
 
   '@typescript-eslint/project-service@8.56.1(supports-color@10.2.2)(typescript@6.0.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.58.0(typescript@6.0.3)
-      '@typescript-eslint/types': 8.58.0
+      '@typescript-eslint/tsconfig-utils': 8.72.0(typescript@6.0.3)
+      '@typescript-eslint/types': 8.72.0
       debug: 4.4.3(supports-color@10.2.2)
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -17186,7 +17186,7 @@ snapshots:
 
   dateformat@4.6.3: {}
 
-  dayjs@1.11.21: {}
+  dayjs@1.11.23: {}
 
   db0@0.3.4(@electric-sql/pglite@0.5.11)(@libsql/client@0.17.4)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260702.1)(@electric-sql/pglite@0.5.11)(@libsql/client@0.17.4)(@neondatabase/serverless@1.1.0)):
     optionalDependencies:
