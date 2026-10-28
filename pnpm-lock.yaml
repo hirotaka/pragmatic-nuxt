@@ -30,7 +30,7 @@ overrides:
   systeminformation: ^5.30.8
   esbuild: '>=0.25.0'
   '@types/node': ^24.10.3
-  uuid: 14.0.0
+  uuid: 14.0.3
 
 importers:
 
@@ -10543,8 +10543,8 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  uuid@14.0.0:
-    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
+  uuid@14.0.3:
+    resolution: {integrity: sha512-Sc5u1VVln93y1Xnz4R+CunOZc7R9LUcTmhj7Rc7Eg3HVcf7rVn2FOoa812fe0W8p3jD7xeoGSYbfqCGGH2B6xw==}
     hasBin: true
 
   v8flags@4.0.1:
@@ -12464,7 +12464,7 @@ snapshots:
       outvariant: 1.4.3
       pluralize: 8.0.0
       strict-event-emitter: 0.5.1
-      uuid: 14.0.0
+      uuid: 14.0.3
     optionalDependencies:
       msw: 2.14.5(@types/node@24.12.3)(typescript@6.0.3)
     transitivePeerDependencies:
@@ -12526,7 +12526,7 @@ snapshots:
   '@ngneat/falso@8.0.2':
     dependencies:
       seedrandom: 3.0.5
-      uuid: 14.0.0
+      uuid: 14.0.3
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -14931,7 +14931,7 @@ snapshots:
       dequal: 2.0.3
       polished: 4.3.1
       storybook: 8.6.19(prettier@3.8.3)(supports-color@10.2.2)
-      uuid: 14.0.0
+      uuid: 14.0.3
 
   '@storybook/addon-backgrounds@8.6.14(storybook@8.6.19(prettier@3.8.3)(supports-color@10.2.2))':
     dependencies:
@@ -22574,7 +22574,7 @@ snapshots:
 
   utils-merge@1.0.1: {}
 
-  uuid@14.0.0: {}
+  uuid@14.0.3: {}
 
   v8flags@4.0.1: {}
 

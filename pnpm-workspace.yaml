@@ -38,4 +38,4 @@ overrides:
   systeminformation: "^5.30.8"
   esbuild: ">=0.25.0"
   "@types/node": "^24.10.3"
-  uuid: "14.0.0"
+  uuid: "14.0.3"
