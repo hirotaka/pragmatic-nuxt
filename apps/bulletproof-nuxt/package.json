@@ -40,7 +40,7 @@
     "@lucide/vue": "^1.48.0",
     "@neondatabase/serverless": "^1.0.0",
     "@nuxt/icon": "^2.5.1",
-    "@nuxthub/core": "0.10.8",
+    "@nuxthub/core": "0.10.11",
     "@pinia/nuxt": "^0.11.3",
     "@regle/core": "^1.0.0",
     "@regle/nuxt": "^1.0.0",
