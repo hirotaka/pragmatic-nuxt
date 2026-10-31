@@ -74,7 +74,7 @@ importers:
         version: 0.11.3(magicast@0.5.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
       '@regle/core':
         specifier: ^1.0.0
-        version: 1.24.3(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
+        version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
         version: 1.24.3(magicast@0.5.4)(typescript@6.0.3)(valibot@1.3.1(typescript@6.0.3))(vue@3.5.40(typescript@6.0.3))(zod@4.4.3)
@@ -394,7 +394,7 @@ importers:
         version: 0.11.3(magicast@0.5.5)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
       '@regle/core':
         specifier: ^1.0.0
-        version: 1.24.3(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
+        version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
         version: 1.24.3(magicast@0.5.5)(typescript@6.0.3)(valibot@1.3.1(typescript@6.0.3))(vue@3.5.40(typescript@6.0.3))(zod@4.4.3)
@@ -578,7 +578,7 @@ importers:
         version: 0.11.3(magicast@0.5.5)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
       '@regle/core':
         specifier: ^1.0.0
-        version: 1.24.3(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
+        version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
         version: 1.24.3(magicast@0.5.5)(typescript@6.0.3)(valibot@1.3.1(typescript@6.0.3))(vue@3.5.40(typescript@6.0.3))(zod@4.4.3)
@@ -913,7 +913,7 @@ importers:
         version: 0.11.3(magicast@0.5.5)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))
       '@regle/core':
         specifier: ^1.0.0
-        version: 1.24.3(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
+        version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
         version: 1.24.3(magicast@0.5.5)(typescript@6.0.3)(valibot@1.3.1(typescript@6.0.3))(vue@3.5.40(typescript@6.0.3))(zod@4.4.3)
@@ -3601,6 +3601,15 @@ packages:
       pinia:
         optional: true
 
+  '@regle/core@1.29.5':
+    resolution: {integrity: sha512-DIh8SMm2PWAofvs0/R2YKNz8TLALVK0cLAJHqVRDj4EutiNnvj2shtlVMTXeCh6DDm1QcsEdKROMc/+UMSYkFg==}
+    peerDependencies:
+      pinia: '>=2.2.5'
+      vue: 3.5.40
+    peerDependenciesMeta:
+      pinia:
+        optional: true
+
   '@regle/nuxt@1.24.3':
     resolution: {integrity: sha512-c6qZmd957WMYPMEknxV8v31UInX8UZfAQNo8J6bdmAuD1JjPzupr4poETLT+ZLpvfEZADTZnaUnZ++DzDsqDIQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -5464,9 +5473,6 @@ packages:
 
   '@vue/devtools-api@7.7.9':
     resolution: {integrity: sha512-kIE8wvwlcZ6TJTbNeU2HQNtaxLx3a84aotTITUuL/4bzfPxzajGBOoqjMhwZJ8L9qFYDU/lAYMEEm11dnZOD6g==}
-
-  '@vue/devtools-api@8.1.2':
-    resolution: {integrity: sha512-vA0O112YqyDuNA1s7Yb2gCgToQ/OxOWiFDO5ThLCcDy0ldHnSd1dUTaSYhOldbqoNgumE4dxtGAoAaSUKUD1Zg==}
 
   '@vue/devtools-api@8.2.1':
     resolution: {integrity: sha512-6u4vXBlIBAC1wMplIZgpyPn7uh/s4Bf6F5bMzvLv+EdJ0aHs/+4B7Ygv864EStQSjRbsRzTko/kUG1A1IejQ3A==}
@@ -10264,6 +10270,10 @@ packages:
     resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
     engines: {node: '>=16'}
 
+  type-fest@5.10.0:
+    resolution: {integrity: sha512-NoSdpq/WEiAg5sjmBkmV/hfxv6HJH4NqPNrqjtSO5CwRmpsDfaf4begxW34KdJykH/l1yHtwBWQkCRdoXO8mPA==}
+    engines: {node: '>=20'}
+
   type-fest@5.6.0:
     resolution: {integrity: sha512-8ZiHFm91orbSAe2PSAiSVBVko18pbhbiB3U9GglSzF/zCGkR+rxpHx6sEMCUm4kxY4LjDIUGgCfUMtwfZfjfUA==}
     engines: {node: '>=20'}
@@ -12132,7 +12142,7 @@ snapshots:
 
   '@formwerk/devtools@0.14.4':
     dependencies:
-      '@vue/devtools-api': 8.1.2
+      '@vue/devtools-api': 8.2.1
       '@vue/devtools-kit': 8.1.2
 
   '@hapi/address@5.1.1':
@@ -13218,7 +13228,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.2.2
-      exsolve: 1.1.3
+      exsolve: 1.2.0
       ignore: 7.0.14
       klona: 2.0.6
       microdiff: 1.6.0
@@ -13250,7 +13260,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.2.2
-      exsolve: 1.1.3
+      exsolve: 1.2.0
       ignore: 7.0.14
       klona: 2.0.6
       microdiff: 1.6.0
@@ -13282,7 +13292,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.2.2
-      exsolve: 1.1.3
+      exsolve: 1.2.0
       ignore: 7.0.14
       klona: 2.0.6
       microdiff: 1.6.0
@@ -13314,7 +13324,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.2.2
-      exsolve: 1.1.3
+      exsolve: 1.2.0
       ignore: 7.0.14
       klona: 2.0.6
       microdiff: 1.6.0
@@ -13348,7 +13358,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.2.2
-      exsolve: 1.1.3
+      exsolve: 1.2.0
       ignore: 7.0.14
       klona: 2.0.6
       microdiff: 1.6.0
@@ -14576,6 +14586,15 @@ snapshots:
       '@standard-schema/spec': 1.1.0
       '@vue/devtools-api': 7.7.9
       type-fest: 5.6.0
+      vue: 3.5.40(typescript@6.0.3)
+    optionalDependencies:
+      pinia: 3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))
+
+  '@regle/core@1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))':
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      '@vue/devtools-api': 8.2.1
+      type-fest: 5.10.0
       vue: 3.5.40(typescript@6.0.3)
     optionalDependencies:
       pinia: 3.0.4(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))
@@ -16506,10 +16525,6 @@ snapshots:
   '@vue/devtools-api@7.7.9':
     dependencies:
       '@vue/devtools-kit': 7.7.9
-
-  '@vue/devtools-api@8.1.2':
-    dependencies:
-      '@vue/devtools-kit': 8.1.2
 
   '@vue/devtools-api@8.2.1':
     dependencies:
@@ -20723,7 +20738,7 @@ snapshots:
   pkg-types@2.4.0:
     dependencies:
       confbox: 0.3.1
-      exsolve: 1.1.3
+      exsolve: 1.2.0
       pathe: 2.0.3
 
   playwright-core@1.59.1: {}
@@ -22089,6 +22104,10 @@ snapshots:
   type-fest@2.19.0: {}
 
   type-fest@4.41.0: {}
+
+  type-fest@5.10.0:
+    dependencies:
+      tagged-tag: 1.0.0
 
   type-fest@5.6.0:
     dependencies:
