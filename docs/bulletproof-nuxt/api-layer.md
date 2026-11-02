@@ -10,6 +10,8 @@ See [Use Custom Fetchers for Your API](../practices/nuxt-use-fetch/custom-api-fe
 
 Keep API paths, request inputs, and response types in feature composables rather than repeating requests in components. Components own view-specific feedback, dialogs, and navigation.
 
+For numbered lists, [`usePaginatedAPI`](../../apps/bulletproof-nuxt/app/composables/usePaginatedAPI.ts) owns URL page state and refresh settlement after creation or deletion. [`useDiscussionList`](../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussionList.ts) supplies the endpoint, page query, page size, and empty-page predicate. Components keep the same list-facing interface.
+
 See [Define Domain and Feature API Calls in Composables](../practices/nuxt-use-fetch/domain-feature-api-calls.md). Related guidance:
 
 - [Design API Responses for useFetch](../practices/nuxt/design-api-responses-for-usefetch.md)

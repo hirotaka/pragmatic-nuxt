@@ -21,7 +21,8 @@ const PORT = process.env.NUXT_PORT ? Number(process.env.NUXT_PORT) : 3000;
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig<ConfigOptions>({
-  testDir: "./e2e",
+  testDir: ".",
+  testIgnore: "**/.agents/**",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Maximum time one test can run for. */
@@ -35,6 +36,8 @@ export default defineConfig<ConfigOptions>({
   },
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  /* Keep retries for diagnosis, but do not let a retried success pass CI. */
+  failOnFlakyTests: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Run tests simultaneously on a single worker */
@@ -49,21 +52,28 @@ export default defineConfig<ConfigOptions>({
       rootDir: fileURLToPath(new URL(".", import.meta.url)),
       host: `http://localhost:${PORT}`,
     },
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    /* Retain initial failures on CI; preserve local retry-based tracing. */
+    trace: process.env.CI ? "retain-on-failure" : "on-first-retry",
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: "setup",
-      testMatch: /.*\.setup\.ts$/,
+      testDir: "./test/e2e",
+      testMatch: "**/*.setup.ts",
+      teardown: "cleanup",
+    },
+    {
+      name: "cleanup",
+      testDir: "./test/e2e",
+      testMatch: "**/*.teardown.ts",
     },
     {
       name: "chromium",
+      testMatch: "**/test/e2e/**/*.{test,spec}.ts",
       use: {
         ...devices["Desktop Chrome"],
-        storageState: "e2e/.auth/user.json",
       },
       dependencies: ["setup"],
     },

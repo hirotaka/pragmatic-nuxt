@@ -139,10 +139,35 @@ test("Load More appends the next comments page", { tag: ["@comments", "@infinite
     }));
   }
 
+  // POST order does not define page membership under createdAt DESC.
+  const readPageBodies = async (pageNumber: number) => {
+    const response: unknown = await expectJson(await page.request.get(
+      new URL(`/api/comments?discussionId=${discussionId}&page=${pageNumber}&limit=10`, page.url()).href,
+    ));
+    if (!isApiRecord(response) || !Array.isArray(response.data)) {
+      throw new Error("Test setup failed: comments response has invalid data");
+    }
+    return response.data.map((comment: unknown) => {
+      if (!isApiRecord(comment) || typeof comment.body !== "string") {
+        throw new Error("Test setup failed: comment has invalid body");
+      }
+      return comment.body;
+    });
+  };
+  const firstPageBodies = await readPageBodies(1);
+  const nextPageBodies = await readPageBodies(2);
+  expect(firstPageBodies).toHaveLength(10);
+  expect(nextPageBodies).toHaveLength(1);
+  expect(new Set([...firstPageBodies, ...nextPageBodies]).size).toBe(11);
+
   await page.goto(`/app/discussions/${discussionId}`, { waitUntil: "networkidle" });
 
-  await expect(page.getByText("Load More comment 1", { exact: true })).toBeVisible();
-  await expect(page.getByText("Load More comment 11", { exact: true })).toHaveCount(0);
+  for (const body of firstPageBodies) {
+    await expect(page.getByText(body, { exact: true })).toBeVisible();
+  }
+  for (const body of nextPageBodies) {
+    await expect(page.getByText(body, { exact: true })).toHaveCount(0);
+  }
 
   const nextPageRequestStarted = deferred();
   const nextPageResponseRelease = deferred();
@@ -159,12 +184,16 @@ test("Load More appends the next comments page", { tag: ["@comments", "@infinite
   await page.getByRole("button", { name: "Load More Comments" }).click();
 
   await nextPageRequestStarted.promise;
-  await expect(page.getByText("Load More comment 1", { exact: true })).toBeVisible();
+  for (const body of firstPageBodies) {
+    await expect(page.getByText(body, { exact: true })).toBeVisible();
+  }
   await expect(page.getByText("Loading more comments", { exact: true })).toBeVisible();
 
   nextPageResponseRelease.resolve();
 
-  await expect(page.getByText("Load More comment 11", { exact: true })).toBeVisible();
+  for (const body of [...firstPageBodies, ...nextPageBodies]) {
+    await expect(page.getByText(body, { exact: true })).toBeVisible();
+  }
   await expect(page.getByRole("button", { name: "Load More Comments" })).toHaveCount(0);
 });
 

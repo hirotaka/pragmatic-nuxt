@@ -1,4 +1,4 @@
-import { seedDatabase } from "#server/db/seed";
+import { seedDatabase } from "#server/db/seed/seed";
 
 export default defineTask({
   meta: {

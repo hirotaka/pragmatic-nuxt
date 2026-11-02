@@ -38,7 +38,7 @@ playwright/playwright-report
 playwright/test-results
 
 # Playwright auth
-e2e/.auth/*.json
+test/e2e/.auth/*.json
 
 # Wrangler / Cloudflare
 .wrangler

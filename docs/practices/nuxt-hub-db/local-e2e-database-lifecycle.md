@@ -81,7 +81,7 @@ The example illustrates the lifecycle boundary. The exact preview command, envir
 - [`nuxt.config.ts`](../../../apps/bulletproof-nuxt/nuxt.config.ts) selects NuxtHub SQLite and resolves the database directory through `hub.dir`.
 - [`package.json`](../../../apps/bulletproof-nuxt/package.json) discards `.data/e2e` before the E2E build, applies migrations through NuxtHub, and reuses `start-server-and-test` for preview and Playwright.
 - [`server/db/migrations/sqlite/`](../../../apps/bulletproof-nuxt/server/db/migrations/sqlite/) is the committed SQLite migration source.
-- [`e2e/`](../../../apps/bulletproof-nuxt/e2e/) contains the existing DB-backed browser journeys.
+- [`registration.spec.ts`](../../../apps/bulletproof-nuxt/test/e2e/registration.spec.ts) and [`discussions.spec.ts`](../../../apps/bulletproof-nuxt/layers/discussions/test/e2e/discussions.spec.ts) contain existing DB-backed browser journeys.
 
 ## Verified Lifecycle Evidence
 
@@ -114,7 +114,7 @@ This Practice covers fresh Local and isolated production-like E2E SQLite behavio
 
 - [Use NuxtHub's Drizzle-Powered Database Integration](runtime-schema-ownership.md)
 - [Seed a NuxtHub Database with a Nitro Task](database-seed-task.md)
-- [Run Real Full-Stack E2E on a Minimal Hosted Database Lifecycle](hosted-ci-database-lifecycle.md)
+- [Run CI E2E Tests Through the Real Nuxt Application](hosted-ci-database-lifecycle.md)
 - [Verify a Nuxt Application Through Cloudflare Local D1 Emulation](cloudflare-local-d1-emulation.md)
 - [Deploy Nuxt Applications with Cloudflare Workers Builds](cloudflare-workers-deployment.md)
 - [Use PostgreSQL with NuxtHub](postgresql-dialect-portability.md)

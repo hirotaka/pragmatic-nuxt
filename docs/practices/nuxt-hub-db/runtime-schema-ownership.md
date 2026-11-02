@@ -103,7 +103,7 @@ The example demonstrates the Drizzle and NuxtHub integration boundary. Deploymen
 ## App Examples
 
 - [`nuxt.config.ts`](../../../apps/bulletproof-nuxt/nuxt.config.ts) enables `@nuxthub/core` and configures the SQLite database path.
-- [`server/db/schema.sqlite.ts`](../../../apps/bulletproof-nuxt/server/db/schema.sqlite.ts) defines the application's SQLite schema with Drizzle ORM.
+- [`server/db/schema.sqlite.ts`](../../../apps/bulletproof-nuxt/server/db/schema/schema.sqlite.ts) defines the application's SQLite schema with Drizzle ORM.
 - [`server/db/migrations/sqlite/`](../../../apps/bulletproof-nuxt/server/db/migrations/sqlite/) contains the generated SQLite migration output.
 - [`package.json`](../../../apps/bulletproof-nuxt/package.json) exposes `db:generate` through NuxtHub's database CLI.
 - The application imports the generated `@nuxthub/db` and `@nuxthub/db/schema` surfaces for database access.
@@ -129,7 +129,7 @@ This Practice covers the application's SQLite baseline. PostgreSQL, PGlite, Neon
 ## Related Practices
 
 - [Use Separate NuxtHub SQLite Lifecycles for Local and E2E](local-e2e-database-lifecycle.md)
-- [Run Real Full-Stack E2E on a Minimal Hosted Database Lifecycle](hosted-ci-database-lifecycle.md)
+- [Run CI E2E Tests Through the Real Nuxt Application](hosted-ci-database-lifecycle.md)
 - [Verify a Nuxt Application Through Cloudflare Local D1 Emulation](cloudflare-local-d1-emulation.md)
 - [Deploy Nuxt Applications with Cloudflare Workers Builds](cloudflare-workers-deployment.md)
 - [Seed a NuxtHub Database with a Nitro Task](database-seed-task.md)

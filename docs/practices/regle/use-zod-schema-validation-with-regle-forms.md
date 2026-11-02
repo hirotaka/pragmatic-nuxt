@@ -129,7 +129,7 @@ async function handleSubmit() {
 ## App Examples
 
 - [`useFormSchema.ts`](../../../apps/bulletproof-nuxt/app/composables/useFormSchema.ts) creates the schema-specific composable used by the forms and disables `autoDirty`.
-- [`comment-schemas.ts`](../../../apps/bulletproof-nuxt/layers/discussions/shared/utils/comment-schemas.ts) defines a Zod schema shared by the form and server route.
+- [`comment.ts`](../../../apps/bulletproof-nuxt/layers/discussions/shared/utils/comment.ts) defines a Zod schema shared by the form and server route.
 - [`CommentCreateForm.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/CommentCreateForm.vue) passes its form state and the shared Zod schema to the schema-specific composable.
 - [`comments/index.post.ts`](../../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/[id]/comments/index.post.ts) validates the request body with the same Zod schema.
 

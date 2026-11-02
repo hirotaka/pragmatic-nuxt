@@ -109,5 +109,5 @@ The release scripts depend on the Wrangler configuration and directory layout ge
 ## Related Practices
 
 - [Verify a Nuxt Application Through Cloudflare Local D1 Emulation](cloudflare-local-d1-emulation.md)
-- [Run Real Full-Stack E2E on a Minimal Hosted Database Lifecycle](hosted-ci-database-lifecycle.md)
+- [Run CI E2E Tests Through the Real Nuxt Application](hosted-ci-database-lifecycle.md)
 - [Use NuxtHub's Drizzle-Powered Database Integration](runtime-schema-ownership.md)

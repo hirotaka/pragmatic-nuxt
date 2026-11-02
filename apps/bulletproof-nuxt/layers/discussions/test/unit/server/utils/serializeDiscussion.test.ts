@@ -1,0 +1,41 @@
+import type { Discussion } from "#layers/discussions/shared/types/discussion";
+import { expect, expectTypeOf, test } from "vitest";
+import { serializeDiscussion } from "../../../../server/utils/serializeDiscussion";
+
+expectTypeOf<Discussion["createdAt"]>().toEqualTypeOf<string>();
+expectTypeOf<Discussion["updatedAt"]>().toEqualTypeOf<string>();
+
+test("serializes a repository discussion into the public shape with ISO datetimes", () => {
+  const createdAt = new Date("2026-07-10T01:02:03.456Z");
+  const updatedAt = new Date("2026-07-10T02:03:04.567Z");
+  const discussion = {
+    id: "discussion-1",
+    title: "A discussion",
+    body: "Discussion body",
+    authorId: "user-1",
+    teamId: "team-1",
+    createdAt,
+    updatedAt,
+    author: {
+      id: "user-1",
+      firstName: "Ada",
+      lastName: "Lovelace",
+    },
+    serverOnly: "not-public",
+  };
+
+  expect(serializeDiscussion(discussion)).toEqual({
+    id: "discussion-1",
+    title: "A discussion",
+    body: "Discussion body",
+    authorId: "user-1",
+    teamId: "team-1",
+    createdAt: "2026-07-10T01:02:03.456Z",
+    updatedAt: "2026-07-10T02:03:04.567Z",
+    author: {
+      id: "user-1",
+      firstName: "Ada",
+      lastName: "Lovelace",
+    },
+  });
+});

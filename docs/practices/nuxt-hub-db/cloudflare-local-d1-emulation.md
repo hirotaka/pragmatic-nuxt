@@ -110,7 +110,7 @@ Each run starts from a disposable local state. This makes the initial migration 
 
 - [Use NuxtHub's Drizzle-Powered Database Integration](runtime-schema-ownership.md)
 - [Use Separate NuxtHub SQLite Lifecycles for Local and E2E](local-e2e-database-lifecycle.md)
-- [Run Real Full-Stack E2E on a Minimal Hosted Database Lifecycle](hosted-ci-database-lifecycle.md)
+- [Run CI E2E Tests Through the Real Nuxt Application](hosted-ci-database-lifecycle.md)
 - [Seed a NuxtHub Database with a Nitro Task](database-seed-task.md)
 - [Deploy Nuxt Applications with Cloudflare Workers Builds](cloudflare-workers-deployment.md)
 - [Use PostgreSQL with NuxtHub](postgresql-dialect-portability.md)

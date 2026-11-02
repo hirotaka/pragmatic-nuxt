@@ -62,7 +62,7 @@ Nuxt generates the keys for both calls. Changing the value of `page` changes the
 
 ## App Examples
 
-- [`useDiscussionList.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussionList.ts) passes the URL-derived reactive `page` and a fixed `limit` through `query`, leaving key generation to Nuxt.
+- [`useDiscussionList.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussionList.ts) supplies the page query and fixed `limit` to [`usePaginatedAPI.ts`](../../../apps/bulletproof-nuxt/app/composables/usePaginatedAPI.ts), which connects the URL-derived page to a reactive `query`, leaving key generation to Nuxt.
 - [`useCommentList.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useCommentList.ts) declares the first page for a fixed Discussion ID through [`useInfiniteAPI.ts`](../../../apps/bulletproof-nuxt/app/composables/useInfiniteAPI.ts), leaving key generation to Nuxt. The common composable keeps additional-page requests and accumulated pages local to each call. The [detail page](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/[id].vue) recreates the comment section when the Discussion ID changes.
 - [`useDiscussion.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussion.ts) uses a URL getter so the request URL follows changes to the discussion ID.
 - [`useUserList.ts`](../../../apps/bulletproof-nuxt/layers/users/app/composables/useUserList.ts) calls `useAPI` with the fixed `/api/users` URL and leaves key generation to Nuxt.

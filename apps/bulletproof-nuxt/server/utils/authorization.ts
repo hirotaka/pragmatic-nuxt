@@ -1,3 +1,4 @@
+import { createError } from "h3";
 import type { User } from "#layers/users/shared/types/user";
 
 export function isAdmin(user: Pick<User, "role">): boolean {
