@@ -142,8 +142,8 @@ its own verification.
   Cloudflare PostgreSQL configuration uses the `neon-http` driver.
 - [`package.json`](../../../apps/bulletproof-nuxt/package.json) provides the
   selected-dialect `db:generate` and `db:migrate` scripts.
-- [`server/db/schema.sqlite.ts`](../../../apps/bulletproof-nuxt/server/db/schema.sqlite.ts)
-  and [`server/db/schema.postgresql.ts`](../../../apps/bulletproof-nuxt/server/db/schema.postgresql.ts)
+- [`server/db/schema.sqlite.ts`](../../../apps/bulletproof-nuxt/server/db/schema/schema.sqlite.ts)
+  and [`server/db/schema.postgresql.ts`](../../../apps/bulletproof-nuxt/server/db/schema/schema.postgresql.ts)
   define dialect-specific schemas.
 - [`server/db/migrations/sqlite/`](../../../apps/bulletproof-nuxt/server/db/migrations/sqlite/)
   and [`server/db/migrations/postgresql/`](../../../apps/bulletproof-nuxt/server/db/migrations/postgresql/)
@@ -180,6 +180,6 @@ not establish Neon connectivity or deployment behavior.
 - [Use NuxtHub's Drizzle-Powered Database Integration](runtime-schema-ownership.md)
 - [Use Separate NuxtHub SQLite Lifecycles for Local and E2E](local-e2e-database-lifecycle.md)
 - [Seed a NuxtHub Database with a Nitro Task](database-seed-task.md)
-- [Run Real Full-Stack E2E on a Minimal Hosted Database Lifecycle](hosted-ci-database-lifecycle.md)
+- [Run CI E2E Tests Through the Real Nuxt Application](hosted-ci-database-lifecycle.md)
 - [Verify a Nuxt Application Through Cloudflare Local D1 Emulation](cloudflare-local-d1-emulation.md)
 - [Deploy Nuxt Applications with Cloudflare Workers Builds](cloudflare-workers-deployment.md)

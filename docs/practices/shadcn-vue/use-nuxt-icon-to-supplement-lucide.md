@@ -77,7 +77,7 @@ The `uil:github` icon demonstrates how to add an icon unavailable from Lucide. T
 - [`components.json`](../../../apps/bulletproof-nuxt/components.json) selects Lucide for shadcn-vue component generation.
 - [`nuxt.config.ts`](../../../apps/bulletproof-nuxt/nuxt.config.ts) bundles the one `uil:github` icon and disables runtime icon fetching.
 - [`index.vue`](../../../apps/bulletproof-nuxt/app/pages/index.vue) uses the bundled icon beside the GitHub link's visible label.
-- [`index.test.ts`](../../../apps/bulletproof-nuxt/app/pages/__tests__/index.test.ts) checks the primary action's SVG and the labeled GitHub link's icon.
+- [`index.test.ts`](../../../apps/bulletproof-nuxt/test/nuxt/app/pages/index.test.ts) checks the primary action's SVG and the labeled GitHub link's icon.
 
 ## Trade-offs and Limitations
 

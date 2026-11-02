@@ -64,12 +64,12 @@ Because the test mocks `useAPI`, it does not cover shared error hooks, HTTP, the
 
 ## App Examples
 
-- [`useAPI.test.ts`](../../../apps/bulletproof-nuxt/layers/base/app/composables/__tests__/useAPI.test.ts) verifies how the configured client combines shared and request-specific error hooks. It mocks Nuxt's `createUseFetch` factory and does not send an HTTP request.
-- [`usePaginatedData.test.ts`](../../../apps/bulletproof-nuxt/layers/base/app/composables/__tests__/usePaginatedData.test.ts) verifies shared append, replacement, pending-request, stale-result, and disposal behavior with controlled AsyncData-like state. It does not run an API route or browser.
-- The [Discussion detail page test](../../../apps/bulletproof-nuxt/layers/discussions/app/pages/app/discussions/__tests__/[id].test.ts) verifies route-to-read mapping and child composition. The test mocks the read, so it does not cover the production request, server rendering, hydration, or browser navigation.
-- In [`discussions.spec.ts`](../../../apps/bulletproof-nuxt/e2e/discussions.spec.ts), `direct discussion detail is SSR-rendered without a hydration GET` checks server-rendered content and hydration reuse against the built preview.
-- In the same file, `unexpected initial discussion read failures open the error page` fulfills the request through browser interception. It checks the rendered Nuxt error page without running the intercepted API route or database query.
-- [`api-contracts.spec.ts`](../../../apps/bulletproof-nuxt/e2e/api-contracts.spec.ts) sends direct HTTP requests to verify status, response bodies, authorization, serialization, and test-database behavior without presenting those checks as rendered UI coverage.
+- [`useAPI.test.ts`](../../../apps/bulletproof-nuxt/test/nuxt/app/composables/useAPI.test.ts) verifies how the configured client combines shared and request-specific error hooks. It mocks Nuxt's `createUseFetch` factory and does not send an HTTP request.
+- [`useInfiniteAPI.test.ts`](../../../apps/bulletproof-nuxt/test/nuxt/app/composables/useInfiniteAPI.test.ts) verifies page accumulation, replacement after refresh, pending requests, stale results, and disposal in the Nuxt runtime with controlled transport responses. It does not run a production API route or browser.
+- The [Discussion detail page test](../../../apps/bulletproof-nuxt/layers/discussions/test/nuxt/app/pages/app/discussions/[id].test.ts) verifies route-to-read mapping and child composition. The test supplies endpoint responses, so it does not cover production server handlers, server rendering, hydration, or browser navigation.
+- In [`discussions.spec.ts`](../../../apps/bulletproof-nuxt/layers/discussions/test/e2e/discussions.spec.ts), `direct discussion detail renders its title on the server and content after hydration` checks the server-rendered discussion title and discussion/comment content displayed after hydration against the built preview.
+- In [`error.spec.ts`](../../../apps/bulletproof-nuxt/test/e2e/error.spec.ts), `an injected API failure shows a safe error page and allows returning to the workspace` fulfills the request through browser interception. It checks the rendered Nuxt error page without running the intercepted API route or database query.
+- The [Discussion list request spec](../../../apps/bulletproof-nuxt/layers/discussions/test/unit/server/api/discussions/index.get.test.ts) verifies status, response bodies, authorization, serialization, and test-database behavior without presenting those checks as rendered UI coverage.
 
 ## Trade-offs and Limitations
 

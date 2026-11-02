@@ -69,7 +69,7 @@ The plugin aligns the viewport-dependent branch, while the cookie read aligns th
 - [`SidebarProvider.vue`](../../../apps/bulletproof-nuxt/app/components/ui/sidebar/SidebarProvider.vue) uses a VueUse media query for its mobile breakpoint.
 - [`Sidebar.vue`](../../../apps/bulletproof-nuxt/app/components/ui/sidebar/Sidebar.vue) selects the mobile Sheet or desktop markup from that breakpoint.
 - [`default.vue`](../../../apps/bulletproof-nuxt/app/layouts/default.vue) supplies this installed Sidebar's cookie-based initial open state separately.
-- [`discussions.spec.ts`](../../../apps/bulletproof-nuxt/e2e/discussions.spec.ts) checks direct-entry SSR and hydration at mobile and desktop widths with both cookie values.
+- [`discussions.spec.ts`](../../../apps/bulletproof-nuxt/layers/discussions/test/e2e/discussions.spec.ts) checks direct-entry SSR and hydration at mobile and desktop widths with both cookie values.
 
 ## Trade-offs and Limitations
 

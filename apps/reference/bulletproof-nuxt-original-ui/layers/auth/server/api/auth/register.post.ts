@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   }
 
   let teamId: string;
-  let role: "ADMIN" | "USER" = "USER";
+  let role: "ADMIN" | "USER";
 
   if (data.teamId) {
     const team = await teamRepository.findById(data.teamId);

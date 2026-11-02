@@ -18,15 +18,8 @@
 
 - Root `package.json` has no workspace lint/test/typecheck scripts; run checks inside each app directory.
 - When using the project-installed shadcn-vue skill for the default app, run its CLI from `apps/bulletproof-nuxt` (or pass that path as `--cwd`); the repository root does not contain its `components.json`.
-- Default Nuxt app (`apps/bulletproof-nuxt`) verified local lifecycle and structural checks:
-  - `pnpm test:unit`
-  - `pnpm lint`
-  - `pnpm type-check`
-  - `pnpm exec nuxt prepare`
-  - `pnpm db:generate` (must produce no migration delta)
-  - `NITRO_PRESET=cloudflare_module pnpm build`
-  - `pnpm test:e2e:prepare` (fresh local migration characterization)
-  - `pnpm test:e2e:ci` (fresh local migration/build/preview/Playwright lifecycle)
+- Default app setup and test operation: [app README](apps/bulletproof-nuxt/README.md). Resolve available commands from its [package.json](apps/bulletproof-nuxt/package.json), and test placement and runner boundaries from the [testing guide](docs/bulletproof-nuxt/testing.md).
+- When checking migration generation with `pnpm db:generate`, require no migration delta.
 - Hosted CI uses disposable SQLite verification. Cloudflare D1 lifecycle checks are a separate, explicitly scoped integration surface.
 - Remote reset and deploy commands require explicit operational authorization and are not part of local verification.
 - Vue+Vite reference app (`apps/reference/bulletproof-vue-vite`) uses `pnpm run type-check` and `pnpm run test:e2e`.
@@ -41,14 +34,13 @@
 
 ## CI and commit hooks to mirror locally
 
-- Nuxt CI (`.github/workflows/nuxt-ci.yml`) runs, per Nuxt app: `build` -> `test:unit` -> `lint` -> `nuxi typecheck`, plus a separate `test:e2e:ci` job. Local SQLite, hosted SQLite, and Cloudflare D1 evidence must remain distinct claims.
-- Vue+Vite CI (`.github/workflows/vue-vite-ci.yml`) runs: `build` -> `test:unit` -> `lint` -> `type-check`, plus E2E.
+- Read the workflow itself for current jobs and commands: [default Nuxt app](.github/workflows/nuxt-ci.yml), [Nuxt References](.github/workflows/nuxt-reference-ci.yml), and [Vue+Vite Reference](.github/workflows/vue-vite-ci.yml).
 - Pre-commit (`.husky/pre-commit`) runs `pnpm lint-staged` in every listed app, so commits can fail due to another app.
 - Commit messages are enforced by commitlint conventional config (`.husky/commit-msg`, `commitlint.config.js`).
 
 ## Architecture facts that affect edits
 
-- The default Nuxt app is layer-based; root `nuxt.config.ts` extends `base`, `auth`, `discussions`, `comments`, `users`, `teams`.
+- Read the default app's [nuxt.config.ts](apps/bulletproof-nuxt/nuxt.config.ts) for its current layer composition; use the [Layers Practice](docs/practices/nuxt/organize-local-nuxt-layers-by-application-responsibility.md) for responsibility and dependency guidance.
 - Cross-feature changes may require edits in both root `nuxt.config.ts` and `layers/*/nuxt.config.ts`.
 - The default app's DB runtime and schema are owned by NuxtHub-generated packages; feature repositories retain domain queries.
 - Reference apps may retain historical custom DB adapters; do not assume they follow the default app's DB architecture.

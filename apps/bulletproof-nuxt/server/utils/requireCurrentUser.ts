@@ -1,4 +1,5 @@
 import type { H3Event } from "h3";
+import { createError } from "h3";
 import { createUserRepository } from "#layers/users/server/repository/userRepository";
 
 export async function requireCurrentUser(event: H3Event) {

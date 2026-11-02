@@ -16,6 +16,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    // Use jsdom's Storage instead of Node's native WebStorage.
+    execArgv: process.allowedNodeEnvironmentFlags.has('--no-experimental-webstorage')
+      ? ['--no-experimental-webstorage']
+      : [],
     exclude: [...configDefaults.exclude, 'e2e/**'],
     root: fileURLToPath(new URL('./', import.meta.url)),
     setupFiles: ['./src/testing/setup-tests.ts'],

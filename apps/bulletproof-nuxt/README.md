@@ -33,8 +33,8 @@ pnpm install
 
 ### Database Architecture
 
-The app-owned Drizzle schema is defined in `server/db/schema.sqlite.ts`, with an
-optional PostgreSQL schema in `server/db/schema.postgresql.ts`. Dialect-specific
+The app-owned Drizzle schema is defined in `server/db/schema/schema.sqlite.ts`, with an
+optional PostgreSQL schema in `server/db/schema/schema.postgresql.ts`. Dialect-specific
 migration sources are stored under `server/db/migrations/{sqlite,postgresql}`.
 NuxtHub discovers the selected sources and generates the `@nuxthub/db` runtime
 and `@nuxthub/db/schema` exports. Feature repositories retain ownership of
@@ -54,6 +54,29 @@ See [Testing](../../docs/bulletproof-nuxt/testing.md),
 [NuxtHub DB Practices](../../docs/practices/nuxt-hub-db/index.md), and the
 [Nuxt Auth Utils Practices](../../docs/practices/nuxt-auth-utils/index.md) for
 environment-specific lifecycle boundaries and reusable guidance.
+
+### Testing
+
+Run `pnpm test:unit` for the Node and Nuxt-runtime tests. API request specs are
+part of the Node project: they initialize this app, skip Vue bundling, build
+Nitro, and call its listener in-process without starting an HTTP server.
+Vue rendering is checked through the separate E2E lifecycle. They use a disposable SQLite
+database initialized from committed migrations, not the development database.
+These checks do not establish Cloudflare D1 behavior. Do not overlap them with
+other Nuxt build or prepare commands.
+
+Run `pnpm test:e2e:ci` for the separate Playwright lifecycle. E2E factories prepare
+rows in the dedicated `.data/e2e` SQLite database and require the local app on
+`localhost:3100`. For a manually started E2E server, use `pnpm test:e2e:dev` and
+run `NUXT_PORT=3100 pnpm test:e2e`; do not point these tests at a remote app or
+the development database.
+
+E2E specs import `test` and `expect` directly from `@nuxt/test-utils/playwright`
+and create their required records explicitly. The setup project prepares the
+database, while the teardown project clears its business data after the browser
+projects finish. Database files and migration history are retained. Cases that
+need an existing session prepare it through the login API; login and registration
+journeys exercise their own UI.
 
 ## 📚 Documentation
 

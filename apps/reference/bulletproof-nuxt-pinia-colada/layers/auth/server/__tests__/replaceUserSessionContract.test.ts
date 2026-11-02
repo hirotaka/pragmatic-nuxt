@@ -1,13 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { createServer } from "node:http";
 import { createApp, eventHandler, toNodeListener, type H3Event } from "h3";
 import { afterEach, expect, test } from "vitest";
 
-const require = createRequire(import.meta.url);
-const nuxtAuthUtilsEntry = require.resolve("nuxt-auth-utils");
+const nuxtAuthUtilsEntry = fileURLToPath(import.meta.resolve("nuxt-auth-utils"));
 const authUtilsRequire = createRequire(nuxtAuthUtilsEntry);
 const h3Entry = authUtilsRequire.resolve("h3");
 const authUtilsSessionPath = join(dirname(nuxtAuthUtilsEntry), "runtime/server/utils/session.js");
@@ -84,13 +83,13 @@ afterEach(async () => {
   await Promise.all(servers.splice(0).map(closeServer));
 });
 
-// Existing cookies can retain stale fields in this locked tuple; compatibility is intentionally not required.
-test("creates an identity-only session for the resolved nuxt-auth-utils 0.5.29 and h3 1.15.11 tuple", async () => {
+// This characterizes new sessions; compatibility with existing cookies is not asserted.
+test("creates an identity-only session for the resolved nuxt-auth-utils 0.5.34 and h3 1.15.11 tuple", async () => {
   const [authUtilsPackage, h3Package] = await Promise.all([
     readFile(authUtilsPackagePath, "utf8").then(JSON.parse) as Promise<{ version: string }>,
     readFile(h3PackagePath, "utf8").then(JSON.parse) as Promise<{ version: string }>,
   ]);
-  expect(authUtilsPackage.version).toBe("0.5.29");
+  expect(authUtilsPackage.version).toBe("0.5.34");
   expect(h3Package.version).toBe("1.15.11");
 
   const sessionUtils = await loadInstalledSessionUtils();

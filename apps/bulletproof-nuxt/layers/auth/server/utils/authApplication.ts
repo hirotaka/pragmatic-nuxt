@@ -1,4 +1,5 @@
 import type { H3Event } from "h3";
+import { createError } from "h3";
 
 export interface AuthApplicationPort {
   findCredentials(email: string): Promise<{ id: string; passwordHash: string } | null>;

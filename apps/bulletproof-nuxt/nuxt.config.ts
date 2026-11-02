@@ -44,6 +44,11 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   nitro: {
     ignore: ["**/__tests__/**", "**/*.test.*", "**/*.spec.*"],
+    typescript: {
+      tsConfig: {
+        include: ["../test/support/requestRuntime.ts"],
+      },
+    },
     experimental: {
       tasks: true,
     },
@@ -77,6 +82,13 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
     typeCheck: true,
+    tsConfig: {
+      include: ["../test/unit/**/*", "../test/e2e/**/*", "../layers/*/test/**/*"],
+      exclude: ["../**/.agents/**"],
+    },
+    nodeTsConfig: {
+      include: ["../playwright.config.ts"],
+    },
   },
   eslint: {
     config: {

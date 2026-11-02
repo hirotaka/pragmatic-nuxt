@@ -1,0 +1,16 @@
+import { expect, test } from "vitest";
+import { mountSuspended } from "@nuxt/test-utils/runtime";
+import MarkdownPreview from "~~/app/components/MarkdownPreview.vue";
+
+test("MarkdownPreview renders markdown content", async () => {
+  const wrapper = await mountSuspended(MarkdownPreview, {
+    props: {
+      value: "**Hello** markdown",
+    },
+  });
+
+  expect(wrapper.text()).toContain("Hello markdown");
+  expect(wrapper.html()).toContain("<strong>Hello</strong>");
+  expect(wrapper.attributes("class")).toContain("typeset");
+  expect(wrapper.attributes("class")).not.toContain("prose");
+});

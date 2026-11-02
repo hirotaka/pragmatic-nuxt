@@ -84,7 +84,7 @@ For Local development, the manual sequence is:
 
 - [`nuxt.config.ts`](../../../apps/bulletproof-nuxt/nuxt.config.ts) enables Nitro Tasks in the application.
 - [`server/tasks/db/seed.ts`](../../../apps/bulletproof-nuxt/server/tasks/db/seed.ts) exposes the `db:seed` task and calls the database seed implementation.
-- [`server/db/seed.ts`](../../../apps/bulletproof-nuxt/server/db/seed.ts) uses NuxtHub's generated database integration and schema to create the dataset, check existing records, and handle collisions.
+- [`server/db/seed.ts`](../../../apps/bulletproof-nuxt/server/db/seed/seed.ts) uses NuxtHub's generated database integration and schema to create the dataset, check existing records, and handle collisions.
 
 This application seeds Team/User demo data for Local development. It uses stable identities, preserves compatible records on rerun, and returns a failure for incompatible collisions. These are application-specific choices rather than general NuxtHub requirements.
 
@@ -108,7 +108,7 @@ The verified app's Local-only policy, Team/User dataset, stable identities, and 
 
 - [Use NuxtHub's Drizzle-Powered Database Integration](runtime-schema-ownership.md)
 - [Use Separate NuxtHub SQLite Lifecycles for Local and E2E](local-e2e-database-lifecycle.md)
-- [Run Real Full-Stack E2E on a Minimal Hosted Database Lifecycle](hosted-ci-database-lifecycle.md)
+- [Run CI E2E Tests Through the Real Nuxt Application](hosted-ci-database-lifecycle.md)
 - [Verify a Nuxt Application Through Cloudflare Local D1 Emulation](cloudflare-local-d1-emulation.md)
 - [Deploy Nuxt Applications with Cloudflare Workers Builds](cloudflare-workers-deployment.md)
 - [Use PostgreSQL with NuxtHub](postgresql-dialect-portability.md)

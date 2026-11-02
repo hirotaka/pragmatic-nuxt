@@ -71,7 +71,7 @@ The computed value normalizes the URL parameter without storing another page num
 
 ## App Examples
 
-- [`useDiscussionList.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussionList.ts) derives the selected page from the route query and updates the URL when another page is selected.
+- [`usePaginatedAPI.ts`](../../../apps/bulletproof-nuxt/app/composables/usePaginatedAPI.ts) derives the selected page from the route query and updates the URL when another page is selected. [`useDiscussionList.ts`](../../../apps/bulletproof-nuxt/layers/discussions/app/composables/useDiscussionList.ts) supplies the Discussion endpoint and page query.
 - [`DiscussionList.vue`](../../../apps/bulletproof-nuxt/layers/discussions/app/components/DiscussionList.vue) passes the table's page selection to `setPage`.
 
 ## Trade-offs and Limitations

@@ -1,4 +1,5 @@
 import type { H3Event } from "h3";
+import { createError, getRouterParam } from "h3";
 import { createDiscussionRepository } from "#layers/discussions/server/repository/discussionRepository";
 
 export async function requireDiscussionForComments(

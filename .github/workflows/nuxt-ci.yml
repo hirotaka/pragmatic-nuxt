@@ -6,12 +6,6 @@ on:
       - main
     paths:
       - "apps/bulletproof-nuxt/**"
-      - "apps/reference/bulletproof-nuxt-veevalidate/**"
-      - "apps/reference/bulletproof-nuxt-tanstack-form/**"
-      - "apps/reference/bulletproof-nuxt-tanstack-query/**"
-      - "apps/reference/bulletproof-nuxt-formwerk/**"
-      - "apps/reference/bulletproof-nuxt-pinia-colada/**"
-      - "apps/reference/bulletproof-nuxt-original-ui/**"
       - "pnpm-lock.yaml"
       - "package.json"
       - "pnpm-workspace.yaml"
@@ -20,12 +14,6 @@ on:
     branches: [main]
     paths:
       - "apps/bulletproof-nuxt/**"
-      - "apps/reference/bulletproof-nuxt-veevalidate/**"
-      - "apps/reference/bulletproof-nuxt-tanstack-form/**"
-      - "apps/reference/bulletproof-nuxt-tanstack-query/**"
-      - "apps/reference/bulletproof-nuxt-formwerk/**"
-      - "apps/reference/bulletproof-nuxt-pinia-colada/**"
-      - "apps/reference/bulletproof-nuxt-original-ui/**"
       - "pnpm-lock.yaml"
       - "package.json"
       - "pnpm-workspace.yaml"
@@ -42,18 +30,6 @@ jobs:
         include:
           - app: bulletproof-nuxt
             app_slug: bulletproof-nuxt
-          - app: reference/bulletproof-nuxt-veevalidate
-            app_slug: bulletproof-nuxt-veevalidate
-          - app: reference/bulletproof-nuxt-tanstack-form
-            app_slug: bulletproof-nuxt-tanstack-form
-          - app: reference/bulletproof-nuxt-tanstack-query
-            app_slug: bulletproof-nuxt-tanstack-query
-          - app: reference/bulletproof-nuxt-formwerk
-            app_slug: bulletproof-nuxt-formwerk
-          - app: reference/bulletproof-nuxt-pinia-colada
-            app_slug: bulletproof-nuxt-pinia-colada
-          - app: reference/bulletproof-nuxt-original-ui
-            app_slug: bulletproof-nuxt-original-ui
     defaults:
       run:
         working-directory: ./apps/${{ matrix.app }}
@@ -86,18 +62,6 @@ jobs:
         include:
           - app: bulletproof-nuxt
             app_slug: bulletproof-nuxt
-          - app: reference/bulletproof-nuxt-veevalidate
-            app_slug: bulletproof-nuxt-veevalidate
-          - app: reference/bulletproof-nuxt-tanstack-form
-            app_slug: bulletproof-nuxt-tanstack-form
-          - app: reference/bulletproof-nuxt-tanstack-query
-            app_slug: bulletproof-nuxt-tanstack-query
-          - app: reference/bulletproof-nuxt-formwerk
-            app_slug: bulletproof-nuxt-formwerk
-          - app: reference/bulletproof-nuxt-pinia-colada
-            app_slug: bulletproof-nuxt-pinia-colada
-          - app: reference/bulletproof-nuxt-original-ui
-            app_slug: bulletproof-nuxt-original-ui
     defaults:
       run:
         working-directory: ./apps/${{ matrix.app }}

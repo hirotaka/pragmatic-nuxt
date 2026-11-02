@@ -1,3 +1,5 @@
+import { createError } from "h3";
+
 interface PaginationQuery {
   page?: unknown;
   limit?: unknown;

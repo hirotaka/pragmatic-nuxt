@@ -78,7 +78,7 @@ The repository contains the database query and maps its row to a server-side res
 - [`discussionRepository.ts`](../../../apps/bulletproof-nuxt/layers/discussions/server/repository/discussionRepository.ts) contains discussion queries, filters, and database-record mapping.
 - [`[id].get.ts`](../../../apps/bulletproof-nuxt/layers/discussions/server/api/discussions/[id].get.ts) handles a discussion request's authorization and not-found HTTP outcome without querying Drizzle directly.
 - [`serializeDiscussion.ts`](../../../apps/bulletproof-nuxt/layers/discussions/server/utils/serializeDiscussion.ts) converts a server record's dates to client-facing strings at the response boundary.
-- [`seed.ts`](../../../apps/bulletproof-nuxt/server/db/seed.ts) uses the generated NuxtHub Database client in a task outside a server route.
+- [`seed.ts`](../../../apps/bulletproof-nuxt/server/db/seed/seed.ts) uses the generated NuxtHub Database client in a task outside a server route.
 
 In this app, domain repositories live under local Nuxt Layers.
 
