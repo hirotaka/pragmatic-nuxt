@@ -38,7 +38,7 @@
     "@libsql/client": "^0.17.0",
     "@neondatabase/serverless": "^1.0.0",
     "@nuxthub/core": "0.10.12",
-    "@pinia/colada": "1.4.2",
+    "@pinia/colada": "1.4.8",
     "@pinia/colada-nuxt": "1.0.2",
     "@pinia/colada-plugin-delay": "^0.2.1",
     "@pinia/colada-plugin-retry": "^1.0.2",
