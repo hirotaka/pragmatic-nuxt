@@ -14,9 +14,9 @@
       "minimumReleaseAge": "3 days"
     },
     {
-      "description": "Keep zod v3 for bulletproof-nuxt (VeeValidate compatibility)",
+      "description": "Keep zod v3 for VeeValidate reference apps",
       "matchPackageNames": ["zod"],
-      "matchFileNames": ["apps/bulletproof-nuxt/**", "apps/bulletproof-nuxt-pinia-colada/**", "apps/bulletproof-vue-vite/**"],
+      "matchFileNames": ["apps/reference/bulletproof-nuxt-veevalidate/**", "apps/reference/bulletproof-vue-vite/**"],
       "allowedVersions": "<4.0.0"
     }
   ]
