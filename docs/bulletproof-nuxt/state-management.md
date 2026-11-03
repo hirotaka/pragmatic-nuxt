@@ -1,14 +1,14 @@
 # 🗃️ State Management
 
-Choose state ownership by how the data is used rather than putting everything in one global store.
+The app separates component state, authentication sessions, fetched data, forms, and URL pagination.
 
 ## Component State
 
-Use Vue's `ref`, `reactive`, and `computed` for local and derived state. Lift state only when other components need it.
+Forms and dialogs keep input values and pending state in their components.
 
 ## Application State
 
-Use Nuxt's SSR-aware `useState` or Pinia for shared application state. Authentication session state remains with Nuxt Auth Utils; see [Security](security.md).
+Authentication session state belongs to Nuxt Auth Utils and is exposed through `useCurrentUser`; see [Security](security.md).
 
 ## Server Cache State
 
@@ -24,6 +24,6 @@ See the [Regle Practices](../practices/regle/index.md) and [Regle Validation in 
 
 ## URL State
 
-Use route parameters and query parameters for state that should survive navigation or be shareable, such as the selected page.
+The selected discussion page is stored in the route's `page` query through `usePaginatedAPI`.
 
 See [Keep Pagination State in the URL](../practices/nuxt/keep-pagination-state-in-the-url.md).

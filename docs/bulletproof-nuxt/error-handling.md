@@ -8,10 +8,10 @@ See [Present API Failures from Custom Fetchers](../practices/nuxt-use-fetch/api-
 
 ### In-App Errors
 
-Nuxt's [app/error.vue](../../apps/bulletproof-nuxt/app/error.vue) handles full-screen errors and offers a Home recovery action without exposing internal server messages. Vue's `onErrorCaptured` supports component-local error handling.
+Nuxt's [app/error.vue](../../apps/bulletproof-nuxt/app/error.vue) handles full-screen errors and offers a Home recovery action without exposing internal server messages.
 
 See [Provide a Recovery Path from Nuxt Error Pages](../practices/nuxt/provide-a-recovery-path-from-nuxt-error-pages.md).
 
 ### Error Tracking
 
-Production error tracking requires a separately configured service. [Sentry's Nuxt integration](https://docs.sentry.io/platforms/javascript/guides/nuxt/) is one option; source maps help locate errors in the original code.
+No production error-tracking service is configured in this app.

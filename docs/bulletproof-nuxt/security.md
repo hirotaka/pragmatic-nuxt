@@ -18,7 +18,7 @@ See the [Nuxt Auth Utils Practices](../practices/nuxt-auth-utils/index.md) for p
 
 #### XSS Prevention
 
-Sanitize user-generated HTML before rendering it. The app's [DOMPurify integration](../../apps/bulletproof-nuxt/app/plugins/dompurify.ts) handles rendered HTML; HttpOnly cookies alone do not prevent XSS.
+The app's [DOMPurify integration](../../apps/bulletproof-nuxt/app/plugins/dompurify.ts) sanitizes rendered discussion markdown.
 
 See [OWASP](https://owasp.org/www-project-top-10/) for broader security risks.
 
