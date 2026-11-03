@@ -13,19 +13,22 @@ The application contains the following models:
 - User - can have one of these roles:
 
   - `ADMIN` can:
-    - create/edit/delete discussions
-    - create/delete all comments
-    - delete users
+    - create discussions and edit/delete own discussions
+    - create comments and delete comments within their team
+    - delete other users within their team
     - edit own profile
   - `USER` - can:
+    - create discussions and edit/delete own discussions
     - edit own profile
     - create/delete own comments
 
-- Team: represents a team that has 1 admin and many users that can participate in discussions between each other.
+- Team: represents a team whose members participate in discussions.
 
 - Discussion: represents discussions created by team members.
 
 - Comment: represents all the messages in a discussion.
+
+Server-side team and ownership checks are described in [Security](security.md).
 
 ## Get Started
 

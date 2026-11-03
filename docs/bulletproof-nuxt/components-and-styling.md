@@ -2,13 +2,11 @@
 
 ## Components Best Practices
 
-Keep feature components near their callers, split large components into smaller units, and use props and slots for composition. Share components when multiple callers need the same behavior.
-
 The root app owns shared UI and application-wide compositions. Feature layers compose them rather than copying shared primitives.
 
 ## Component libraries
 
-The app uses shadcn-vue components in [app/components/ui/](../../apps/bulletproof-nuxt/app/components/ui/). Keep installed primitives separate from app-specific behavior.
+The app uses shadcn-vue components in [app/components/ui/](../../apps/bulletproof-nuxt/app/components/ui/). App-specific compositions live outside that directory.
 
 See [Keep Installed shadcn-vue Components Unmodified](../practices/shadcn-vue/keep-installed-shadcn-vue-components-unmodified.md).
 
@@ -20,4 +18,4 @@ See the [shadcn-vue Practices](../practices/shadcn-vue/index.md) for integration
 
 ## Storybook
 
-Storybook can provide an isolated component catalogue. It is not configured in this app.
+Storybook is not configured in this app.

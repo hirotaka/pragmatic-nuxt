@@ -9,8 +9,7 @@ apps/bulletproof-nuxt
 +-- layers            # auth, discussions (including comments), users, and teams
 +-- server            # application-wide API, authentication, and database infrastructure
 +-- shared            # contracts used by app and server
-+-- e2e               # browser and HTTP contract tests
-+-- test              # shared test helpers
++-- test              # unit, Nuxt-runtime, and E2E tests, factories, and helpers
 +-- nuxt.config.ts    # application configuration and layer registration
 ```
 

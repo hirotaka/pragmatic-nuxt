@@ -1,22 +1,20 @@
 # 🚄 Performance
 
-Measure before adding optimizations.
-
 ### Code Splitting
 
-Nuxt splits code by route. Lazy components can defer optional UI; avoid adding chunks without a measured benefit.
+The app uses Nuxt's route-based code splitting.
 
 ### Component and State Optimizations
 
-Keep state close to its callers and use `computed` for derived values. See [State Management](state-management.md) for state categories.
+See [State Management](state-management.md) for the app's state ownership.
 
 ### Component Composition
 
-Use Vue slots to separate layout from the content it displays.
+Shared UI uses slots for feature-owned content; see [Components and Styling](components-and-styling.md).
 
 ### Image Optimizations
 
-Lazy-load off-screen images, use suitable image formats, and provide responsive sizes with `srcset`.
+The app does not configure a separate image-optimization module.
 
 ### Web Vitals
 
@@ -24,4 +22,4 @@ Use [Lighthouse](https://web.dev/measure/) and [PageSpeed Insights](https://page
 
 ### Data Prefetching
 
-Prefetching can reduce navigation wait, but also performs work the user may never need. Keep it consistent with the application's data-fetching model; see the [Nuxt Data Fetching Practices](../practices/nuxt-use-fetch/index.md).
+See [API Layer](api-layer.md) for this app's request ownership and the [Nuxt Data Fetching Practices](../practices/nuxt-use-fetch/index.md) for reusable guidance.
