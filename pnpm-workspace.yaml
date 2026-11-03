@@ -28,7 +28,7 @@ overrides:
   node-forge: "1.4.2"
   picomatch: "4.0.7"
   qs: "6.16.1"
-  srvx: "0.11.15"
+  srvx: "1.0.8"
   yaml: "2.8.4"
   "@eslint/config-inspector@1.4.2>h3": "1.15.11"
   "nuxt-auth-utils@0.5.29>h3": "1.15.11"
