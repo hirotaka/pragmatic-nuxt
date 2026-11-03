@@ -4,6 +4,7 @@ import type { Team } from "#layers/teams/shared/types/team";
 
 type RegisterRegle = RegleSchemaStatus<
   RegisterFormState,
+  RegisterInput,
   typeof registerInputSchema,
   Record<string, never>,
   true
