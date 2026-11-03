@@ -177,7 +177,7 @@ importers:
         version: 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       dotenv-cli:
         specifier: ^11.0.0
-        version: 11.0.0
+        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -334,7 +334,7 @@ importers:
         version: 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       dotenv-cli:
         specifier: ^11.0.0
-        version: 11.0.0
+        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -497,7 +497,7 @@ importers:
         version: 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       dotenv-cli:
         specifier: ^11.0.0
-        version: 11.0.0
+        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -684,7 +684,7 @@ importers:
         version: 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       dotenv-cli:
         specifier: ^11.0.0
-        version: 11.0.0
+        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -838,7 +838,7 @@ importers:
         version: 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       dotenv-cli:
         specifier: ^11.0.0
-        version: 11.0.0
+        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -1019,7 +1019,7 @@ importers:
         version: 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       dotenv-cli:
         specifier: ^11.0.0
-        version: 11.0.0
+        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -1176,7 +1176,7 @@ importers:
         version: 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
       dotenv-cli:
         specifier: ^11.0.0
-        version: 11.0.0
+        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -6189,8 +6189,8 @@ packages:
     resolution: {integrity: sha512-BTJ9aZYL3vCfZlZOBLy9v8TUqWGQ0pzFnygKwFZt5udj6viBoFIBviKPUoZLDCPn1FoXffv6McQFDenrm5Krfw==}
     engines: {node: '>=20'}
 
-  dotenv-cli@11.0.0:
-    resolution: {integrity: sha512-r5pA8idbk7GFWuHEU7trSTflWcdBpQEK+Aw17UrSHjS6CReuhrrPcyC3zcQBPQvhArRHnBo/h6eLH1fkCvNlww==}
+  dotenv-cli@11.1.0:
+    resolution: {integrity: sha512-YUBODAS0puvSc9bGdu07o1GSouVn63xDazqZqvT99Hta4nPqZ1jTdBcz12dDdxSC9jYbVlpWlnu0IJaMR8TIEQ==}
     hasBin: true
 
   dotenv-expand@12.0.3:
@@ -16639,7 +16639,7 @@ snapshots:
     dependencies:
       type-fest: 5.10.0
 
-  dotenv-cli@11.0.0:
+  dotenv-cli@11.1.0:
     dependencies:
       cross-spawn: 7.0.6
       dotenv: 17.4.2
