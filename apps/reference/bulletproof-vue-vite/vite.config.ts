@@ -29,19 +29,22 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         output: {
-          manualChunks: {
-            // Vendor chunks - separate large dependencies
-            'vue-vendor': ['vue', 'vue-router', 'pinia'],
-            'query-vendor': ['@tanstack/vue-query'],
-            'ui-vendor': ['reka-ui', 'lucide-vue-next'],
-            // Utility chunks
-            utils: ['axios', 'zod', 'clsx', 'tailwind-merge'],
-            // Form validation chunk
-            form: ['vee-validate', '@vee-validate/zod'],
-            // Content processing
-            content: ['marked', 'vue-dompurify-html', 'dayjs'],
+          codeSplitting: {
+            includeDependenciesRecursively: true,
+            groups: [
+              // Vendor chunks - separate large dependencies
+              { name: 'vue-vendor', test: /[\\/]node_modules[\\/](?:vue|vue-router|pinia)[\\/]/ },
+              { name: 'query-vendor', test: /[\\/]node_modules[\\/]@tanstack[\\/]vue-query[\\/]/ },
+              { name: 'ui-vendor', test: /[\\/]node_modules[\\/](?:reka-ui|lucide-vue-next)[\\/]/ },
+              // Utility chunks
+              { name: 'utils', test: /[\\/]node_modules[\\/](?:axios|zod|clsx|tailwind-merge)[\\/]/ },
+              // Form validation chunk
+              { name: 'form', test: /[\\/]node_modules[\\/](?:vee-validate|@vee-validate[\\/]zod)[\\/]/ },
+              // Content processing
+              { name: 'content', test: /[\\/]node_modules[\\/](?:marked|vue-dompurify-html|dayjs)[\\/]/ },
+            ],
           },
         },
       },
