@@ -136,7 +136,7 @@ importers:
         specifier: ^2.0.9
         version: 2.0.9(@nuxt/kit@4.6.3(@nuxt/schema@4.6.3)(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(rolldown@1.2.16)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.16)(rollup@4.67.4)(vite@8.2.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.8.4))))(@nuxt/schema@4.6.3)(nuxt@4.6.3(347a0cd9be5c546f1f4d8b79d47ccf8f))
       zod:
-        specifier: ^4.0.0
+        specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
       '@cloudflare/workers-types':
@@ -284,7 +284,7 @@ importers:
         specifier: ^4.6.3
         version: 4.6.4(vue@3.5.44(typescript@6.0.3))
       zod:
-        specifier: ^4.0.0
+        specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
       '@cloudflare/workers-types':
@@ -450,7 +450,7 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0(vue@3.5.44(typescript@6.0.3))
       zod:
-        specifier: ^4.0.0
+        specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
       '@cloudflare/workers-types':
@@ -637,7 +637,7 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0(vue@3.5.44(typescript@6.0.3))
       zod:
-        specifier: ^4.0.0
+        specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
       '@cloudflare/workers-types':
@@ -791,7 +791,7 @@ importers:
         specifier: ^4.6.3
         version: 4.6.4(vue@3.5.44(typescript@6.0.3))
       zod:
-        specifier: ^4.0.0
+        specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
       '@cloudflare/workers-types':
@@ -972,7 +972,7 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0(vue@3.5.44(typescript@6.0.3))
       zod:
-        specifier: ^4.0.0
+        specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
       '@cloudflare/workers-types':
@@ -1073,7 +1073,7 @@ importers:
         version: 0.11.3(magicast@0.5.5)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3)))
       '@vee-validate/zod':
         specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@4.6.7)
+        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@3.25.76)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -1130,7 +1130,7 @@ importers:
         version: 4.6.4(vue@3.5.44(typescript@6.0.3))
       zod:
         specifier: ^3.24.0
-        version: 4.6.7
+        version: 3.25.76
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20260124.0
@@ -1233,7 +1233,7 @@ importers:
         version: 3.1.0(esbuild@0.28.2)(lightningcss@1.33.0)(rolldown@1.2.16)(rollup@4.67.4)(typescript@6.0.3)(vite@8.2.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.8.4))(vue@3.5.44(typescript@6.0.3))
       '@vee-validate/zod':
         specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@4.6.7)
+        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@3.25.76)
       axios:
         specifier: ^1.15.0
         version: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
@@ -1284,7 +1284,7 @@ importers:
         version: 4.6.4(vue@3.5.44(typescript@6.0.3))
       zod:
         specifier: ^3.24.0
-        version: 4.6.7
+        version: 3.25.76
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^5.0.0
@@ -10711,6 +10711,9 @@ packages:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
 
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
   zod@4.6.7:
     resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
@@ -15254,11 +15257,11 @@ snapshots:
 
   '@uploadthing/mime-types@0.3.6': {}
 
-  '@vee-validate/zod@4.15.1(vue@3.5.44(typescript@6.0.3))(zod@4.6.7)':
+  '@vee-validate/zod@4.15.1(vue@3.5.44(typescript@6.0.3))(zod@3.25.76)':
     dependencies:
       type-fest: 4.41.0
       vee-validate: 4.15.1(vue@3.5.44(typescript@6.0.3))
-      zod: 4.6.7
+      zod: 3.25.76
     transitivePeerDependencies:
       - vue
 
@@ -22509,5 +22512,7 @@ snapshots:
       archiver-utils: 5.0.2
       compress-commons: 6.0.2
       readable-stream: 4.8.0
+
+  zod@3.25.76: {}
 
   zod@4.6.7: {}
