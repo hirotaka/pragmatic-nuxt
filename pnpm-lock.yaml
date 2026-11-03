@@ -1073,7 +1073,7 @@ importers:
         version: 0.11.3(magicast@0.5.5)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3)))
       '@vee-validate/zod':
         specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@3.25.76)
+        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@4.6.7)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -1129,8 +1129,8 @@ importers:
         specifier: ^4.6.3
         version: 4.6.4(vue@3.5.44(typescript@6.0.3))
       zod:
-        specifier: ^3.24.0
-        version: 3.25.76
+        specifier: ^4.0.0
+        version: 4.6.7
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20260124.0
@@ -1233,7 +1233,7 @@ importers:
         version: 3.1.0(esbuild@0.28.2)(lightningcss@1.33.0)(rolldown@1.2.16)(rollup@4.67.4)(typescript@6.0.3)(vite@8.2.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.8.4))(vue@3.5.44(typescript@6.0.3))
       '@vee-validate/zod':
         specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@3.25.76)
+        version: 4.15.1(vue@3.5.44(typescript@6.0.3))(zod@4.6.7)
       axios:
         specifier: ^1.15.0
         version: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
@@ -1283,8 +1283,8 @@ importers:
         specifier: ^4.5.0
         version: 4.6.4(vue@3.5.44(typescript@6.0.3))
       zod:
-        specifier: ^3.24.0
-        version: 3.25.76
+        specifier: ^4.0.0
+        version: 4.6.7
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^5.0.0
@@ -10751,9 +10751,6 @@ packages:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
 
-  zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
-
   zod@4.6.6:
     resolution: {integrity: sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA==}
 
@@ -15471,11 +15468,11 @@ snapshots:
 
   '@uploadthing/mime-types@0.3.6': {}
 
-  '@vee-validate/zod@4.15.1(vue@3.5.44(typescript@6.0.3))(zod@3.25.76)':
+  '@vee-validate/zod@4.15.1(vue@3.5.44(typescript@6.0.3))(zod@4.6.7)':
     dependencies:
       type-fest: 4.41.0
       vee-validate: 4.15.1(vue@3.5.44(typescript@6.0.3))
-      zod: 3.25.76
+      zod: 4.6.7
     transitivePeerDependencies:
       - vue
 
@@ -22745,8 +22742,6 @@ snapshots:
       archiver-utils: 5.0.2
       compress-commons: 6.0.2
       readable-stream: 4.8.0
-
-  zod@3.25.76: {}
 
   zod@4.6.6: {}
 
