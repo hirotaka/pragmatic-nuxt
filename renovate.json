@@ -14,6 +14,11 @@
       "minimumReleaseAge": "3 days"
     },
     {
+      "description": "Bump zod manifests to preserve mixed major versions during pnpm lockfile generation",
+      "matchPackageNames": ["zod"],
+      "rangeStrategy": "bump"
+    },
+    {
       "description": "Keep zod v3 for VeeValidate reference apps",
       "matchPackageNames": ["zod"],
       "matchFileNames": ["apps/reference/bulletproof-nuxt-veevalidate/**", "apps/reference/bulletproof-vue-vite/**"],
