@@ -17,7 +17,7 @@ overrides:
   brace-expansion: 5.0.12
   h3: 1.15.11
   lodash: 4.18.1
-  node-forge: 1.4.1
+  node-forge: 1.4.2
   picomatch: 4.0.7
   qs: 6.16.1
   srvx: 0.11.15
@@ -8446,8 +8446,8 @@ packages:
       encoding:
         optional: true
 
-  node-forge@1.4.1:
-    resolution: {integrity: sha512-w5/MfWaeMrpR/5ba6fZyAUTLSuE6aYz7H/3cYrqwZEmf5eQS3IaaLgJt4MBv7HglGFWmV22K8h4U18RJQmw/ow==}
+  node-forge@1.4.2:
+    resolution: {integrity: sha512-rRtAR5XLJ8gCKd9du4qrKAsgCG1ObGP4gLeNJMa4vYSeq4bmBMOJk5IHkrviBV0q7uoAJlVd8HEQYQSVUb4FGQ==}
     engines: {node: '>= 6.13.0'}
 
   node-gyp-build@4.8.4:
@@ -19076,7 +19076,7 @@ snapshots:
       http-shutdown: 1.2.2
       jiti: 2.7.0
       mlly: 1.8.2
-      node-forge: 1.4.1
+      node-forge: 1.4.2
       pathe: 2.0.3
       std-env: 4.3.0
       tinyclip: 0.1.15
@@ -19519,7 +19519,7 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
-  node-forge@1.4.1: {}
+  node-forge@1.4.2: {}
 
   node-gyp-build@4.8.4: {}
 
