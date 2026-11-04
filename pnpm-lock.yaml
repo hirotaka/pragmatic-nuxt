@@ -1387,7 +1387,7 @@ importers:
         version: 4.17.1(@typescript-eslint/utils@8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint-import-resolver-node@0.3.9(supports-color@10.2.2))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
       eslint-plugin-playwright:
         specifier: ^2.2.0
-        version: 2.10.5(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))
+        version: 2.12.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))
       eslint-plugin-storybook:
         specifier: ^0.12.0
         version: 0.12.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
@@ -1399,7 +1399,7 @@ importers:
         version: 10.12.0(@stylistic/eslint-plugin@5.10.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2)))(@typescript-eslint/parser@8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(vue-eslint-parser@10.4.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2))
       eslint-plugin-vuejs-accessibility:
         specifier: ^2.4.1
-        version: 2.5.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(globals@17.8.0)(supports-color@10.2.2)
+        version: 2.5.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(globals@17.14.0)(supports-color@10.2.2)
       express:
         specifier: ^5.1.0
         version: 5.2.1(supports-color@10.2.2)
@@ -6401,8 +6401,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-playwright@2.10.5:
-    resolution: {integrity: sha512-4k+ml4cEd55kePUIW1WsCiOLDwZkAdPZPKMFulR83XpplCaVOTKHF6yvXLYixLtdVbkMjmKV5F3BaGuI3aH8aQ==}
+  eslint-plugin-playwright@2.12.1:
+    resolution: {integrity: sha512-JhavNuYBIq7SE/Zg9Esf9RGHkXoDbzrEKS383cowzMyvZ4JMbmdNCN6CoW+RU1Cjzwcoea1tou0je58uXmT/9A==}
     engines: {node: '>=16.9.0'}
     peerDependencies:
       eslint: '>=8.40.0'
@@ -6887,8 +6887,8 @@ packages:
     resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
     engines: {node: '>=18'}
 
-  globals@17.8.0:
-    resolution: {integrity: sha512-Zz/LMDZScFmkakeL2cTHzf+PbWKdpU3uclqkZT7TjDG58j5WPt0PpA+n9uPI24fZtlw07q0OtEi84K+umsRzqQ==}
+  globals@17.14.0:
+    resolution: {integrity: sha512-UtdkTVyAJePQv0J2M9Xe4L0ruNSDV314XiIJsADI2Zf40bcdAonE/D/OhAU8AT99oij9mhLByb+NvA3QWZYgCg==}
     engines: {node: '>=18'}
 
   globby@16.2.4:
@@ -14520,7 +14520,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.72.1
       debug: 4.4.3(supports-color@10.2.2)
       minimatch: 10.2.6
-      semver: 7.8.5
+      semver: 7.8.6
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
@@ -16427,10 +16427,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-playwright@2.10.5(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2)):
+  eslint-plugin-playwright@2.12.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2)):
     dependencies:
       eslint: 10.14.0(jiti@2.7.0)(supports-color@10.2.2)
-      globals: 17.8.0
+      globals: 17.14.0
 
   eslint-plugin-prettier@5.5.5(eslint-config-prettier@10.1.8(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2)))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(prettier@3.8.3):
     dependencies:
@@ -16509,11 +16509,11 @@ snapshots:
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))
       '@typescript-eslint/parser': 8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
 
-  eslint-plugin-vuejs-accessibility@2.5.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(globals@17.8.0)(supports-color@10.2.2):
+  eslint-plugin-vuejs-accessibility@2.5.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(globals@17.14.0)(supports-color@10.2.2):
     dependencies:
       aria-query: 5.3.2
       eslint: 10.14.0(jiti@2.7.0)(supports-color@10.2.2)
-      globals: 17.8.0
+      globals: 17.14.0
       vue-eslint-parser: 10.4.0(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
@@ -17033,7 +17033,7 @@ snapshots:
 
   globals@17.13.0: {}
 
-  globals@17.8.0: {}
+  globals@17.14.0: {}
 
   globby@16.2.4:
     dependencies:
@@ -21369,7 +21369,7 @@ snapshots:
       eslint-visitor-keys: 5.0.1
       espree: 11.2.0
       esquery: 1.7.0
-      semver: 7.8.5
+      semver: 7.8.6
     transitivePeerDependencies:
       - supports-color
 
