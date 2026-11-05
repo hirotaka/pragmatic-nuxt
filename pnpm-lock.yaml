@@ -107,7 +107,7 @@ importers:
         version: 1.15.11
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nuxt:
         specifier: ^4.5.1
         version: 4.6.3(3a6b565ed7f6e2f30a2ec21ab3521308)
@@ -255,7 +255,7 @@ importers:
         version: 1.0.0(vue@3.5.44(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nuxt:
         specifier: ^4.5.1
         version: 4.6.3(c4b6832b6bd8cd8189344079714fb327)
@@ -424,7 +424,7 @@ importers:
         version: 1.0.0(vue@3.5.44(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nuxt:
         specifier: ^4.5.1
         version: 4.6.3(c4b6832b6bd8cd8189344079714fb327)
@@ -608,7 +608,7 @@ importers:
         version: 1.0.0(vue@3.5.44(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nuxt:
         specifier: ^4.5.1
         version: 4.6.3(3a6b565ed7f6e2f30a2ec21ab3521308)
@@ -762,7 +762,7 @@ importers:
         version: 1.0.0(vue@3.5.44(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nuxt:
         specifier: ^4.5.1
         version: 4.6.3(c4b6832b6bd8cd8189344079714fb327)
@@ -943,7 +943,7 @@ importers:
         version: 1.0.0(vue@3.5.44(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nuxt:
         specifier: ^4.5.1
         version: 4.6.3(3a6b565ed7f6e2f30a2ec21ab3521308)
@@ -1097,7 +1097,7 @@ importers:
         version: 1.0.0(vue@3.5.44(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nuxt:
         specifier: ^4.5.1
         version: 4.6.3(c4b6832b6bd8cd8189344079714fb327)
@@ -1254,7 +1254,7 @@ importers:
         version: 1.0.0(vue@3.5.44(typescript@6.0.3))
       marked:
         specifier: ^18.0.0
-        version: 18.0.7
+        version: 18.1.2
       nanoid:
         specifier: ^5.1.6
         version: 5.1.16
@@ -7762,8 +7762,8 @@ packages:
   map-or-similar@1.5.0:
     resolution: {integrity: sha512-0aF7ZmVon1igznGI4VS30yugpduQW3y3GkcgGJOp7d8x8QrizhigUxjI/m2UojsXXto+jLAH3KSz+xOJTiORjg==}
 
-  marked@18.0.7:
-    resolution: {integrity: sha512-iDVQ5ldaiKXn6b2JroX5kgRfmwgqolW7NpaEzTl1k/2Zh1njIEN9yniyLV/mOvWwtsE8OGgkjsCYvijuPk1dtA==}
+  marked@18.1.2:
+    resolution: {integrity: sha512-DfOnvLAQ6WYeWxWO1u4RyFOeqyHup6dks5PPqnoFiooU7ipRvidO/2j8plhAHIiZg574E9ZlzSjUiPMLAzFkgg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -17862,7 +17862,7 @@ snapshots:
 
   map-or-similar@1.5.0: {}
 
-  marked@18.0.7: {}
+  marked@18.1.2: {}
 
   math-intrinsics@1.1.0: {}
 
