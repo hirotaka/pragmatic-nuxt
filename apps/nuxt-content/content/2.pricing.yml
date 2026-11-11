@@ -1,0 +1,77 @@
+title: A plan for every need
+description: Example pricing content for a SaaS landing page. Replace these plans with your real packaging before launch.
+seo:
+  title: Pricing
+  description: Choose the plan that's right for you.
+navigation.icon: i-lucide-credit-card
+plans:
+  - title: Basic
+    description: A basic plan for individuals.
+    price:
+      month: $9.9
+      year: $99.9
+    button:
+      label: Get Started
+    features:
+      - 1 GB Storage
+      - 1 Email Account
+      - 1 Domain
+      - 1 Website
+      - 1 Database
+      - 1 SSL Certificate
+      - 1 Support Ticket
+  - title: Standard
+    description: A standard plan for small teams.
+    price:
+      month: $19.9
+      year: $199.9
+    highlight: true
+    button:
+      label: Get Started
+    features:
+      - 10 GB Storage
+      - 10 Email Accounts
+      - 10 Domains
+      - 10 Websites
+      - 10 Databases
+      - 10 SSL Certificates
+      - 10 Support Tickets
+  - title: Premium
+    description: A premium plan for large teams.
+    price:
+      month: $29.9
+      year: $299.9
+    button:
+      label: Get Started
+    features:
+      - 100 GB Storage
+      - 100 Email Accounts
+      - 100 Domains
+      - 100 Websites
+      - 100 Databases
+      - 100 SSL Certificates
+      - 100 Support Tickets
+logos:
+  title: Deployable on modern platforms
+  icons:
+    - i-simple-icons-amazonaws
+    - i-simple-icons-heroku
+    - i-simple-icons-netlify
+    - i-simple-icons-vercel
+    - i-simple-icons-cloudflare
+faq:
+  title: Frequently asked questions
+  description: Common questions to adapt before publishing your own SaaS.
+  items:
+    - label: Are these real subscription plans?
+      content: No. They are sample pricing cards that demonstrate the layout. Replace the names, prices, and features with your own offer.
+    - label: Does the template include billing?
+      content: No. Billing providers and checkout flows are intentionally left for your application to integrate.
+    - label: Does the template include backend accounts?
+      content: No. The login and signup pages are front-end UI screens ready to connect to your preferred auth provider.
+    - label: Can I switch plans later?
+      content: This is placeholder FAQ copy. Update it to match your actual billing and account policies.
+    - label: Do you offer refunds?
+      content: This is placeholder FAQ copy. Replace it with your product's refund policy if you offer paid plans.
+    - label: Do you offer support?
+      content: This is placeholder FAQ copy. Replace it with your support channels and response expectations.

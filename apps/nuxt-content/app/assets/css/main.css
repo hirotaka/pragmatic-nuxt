@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.623 0.214 259.815);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.707 0.165 254.624);
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@utility container {
+  @apply mx-auto w-full max-w-6xl px-4 md:px-6;
+}
+
+@utility border-grid {
+  @apply border-border/60;
+}
+
+@utility prose-content {
+  @apply max-w-none text-base/7 text-foreground;
+
+  & h2 {
+    @apply mt-12 scroll-m-20 border-t border-border/60 pt-8 text-2xl/8 font-semibold tracking-tight text-foreground sm:text-3xl/9;
+  }
+
+  & h3 {
+    @apply mt-9 scroll-m-20 text-xl/8 font-semibold tracking-tight text-foreground sm:text-2xl/8;
+  }
+
+  & h4 {
+    @apply mt-8 scroll-m-20 text-lg/7 font-semibold tracking-tight text-foreground;
+  }
+
+  & p {
+    @apply my-4 text-pretty text-muted-foreground;
+  }
+
+  & a {
+    @apply font-medium text-primary underline decoration-primary/35 underline-offset-4 hover:decoration-primary/70;
+  }
+
+  & a.prose-card {
+    @apply text-inherit no-underline decoration-transparent hover:text-inherit hover:decoration-transparent;
+  }
+
+  & .prose-card h3 {
+    @apply mt-3;
+  }
+
+  & h2 a,
+  & h3 a,
+  & h4 a,
+  & h5 a,
+  & h6 a {
+    @apply text-inherit no-underline decoration-transparent hover:text-inherit hover:decoration-transparent;
+  }
+
+  & ul {
+    @apply my-5 ml-6 list-disc space-y-2 text-muted-foreground;
+  }
+
+  & ol {
+    @apply my-5 ml-6 list-decimal space-y-2 text-muted-foreground;
+  }
+
+  & li {
+    @apply pl-1;
+  }
+
+  & blockquote {
+    @apply my-6 border-l-2 border-primary/40 pl-5 text-muted-foreground;
+  }
+
+  & code {
+    @apply rounded-md bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground;
+  }
+
+  & pre {
+    @apply my-6 overflow-x-auto rounded-lg bg-muted/40 p-4 font-mono text-sm leading-6;
+  }
+
+  & pre code {
+    @apply bg-transparent p-0;
+  }
+
+  & .code-surface pre {
+    @apply m-0 rounded-none bg-transparent;
+  }
+
+  & .code-surface pre code {
+    @apply rounded-none bg-transparent p-0;
+  }
+
+  & img {
+    @apply rounded-xl border border-border/60;
+  }
+
+  & table {
+    @apply my-6 w-full overflow-hidden rounded-lg border border-border/60 text-sm;
+  }
+
+  & th {
+    @apply border-b bg-muted/40 px-3 py-2 text-left font-medium text-foreground;
+  }
+
+  & td {
+    @apply border-b px-3 py-2 text-muted-foreground;
+  }
+}

@@ -1,42 +1,30 @@
 # Pragmatic Nuxt
 
-A collection of practical Nuxt showcases exploring different approaches to full-stack web development.
+A collection of working Nuxt applications exploring pragmatic development and simplicity in practice.
 
 ## About
 
-This repository explores practical approaches to Nuxt development. Rather than prescribing a single "correct" way, we try various tools, patterns, and libraries to understand their trade-offs in real-world scenarios.
+We build Nuxt applications and learn from the process. We keep an open mind and test ideas in working code, using what we learn to keep applications easy to understand and change.
 
-What you'll find here:
-
-- **Exploration over dogma** - We try different approaches and share what we learn
-- **Practical examples** - Real applications with tests, not just toy demos
-- **Diverse options** - So many great libraries to choose from, that's what makes it fun
+The showcases combine Nuxt and related libraries in working applications. Developers and AI coding agents can use the code and tests as practical references for their own projects.
 
 > **Note**: This repository was previously named `bulletproof-vue`. The showcases retain the "Bulletproof" branding as they are inspired by [Bulletproof React](https://github.com/alan2207/bulletproof-react).
 
 ## 📦 Showcases
 
-### Start Here
-
-If you want to explore a working Nuxt application, start with:
-
-- [apps/bulletproof-nuxt](apps/bulletproof-nuxt)
-- [Bulletproof Nuxt family documentation](docs/bulletproof-nuxt/application-overview.md)
-
-This repository tries Nuxt application themes and implementation approaches in real applications and accumulates confirmed Practices from that work.
-
 ### Showcase Apps
 
-| Showcase | Description | Key Libraries | Demo |
-|----------|-------------|---------------|------|
+| App | Description | Key Libraries | Demo |
+| ---------- | ------------- | --------------- | ------ |
 | [bulletproof-nuxt](apps/bulletproof-nuxt) | Nuxt full-stack business app | Nuxt Layers, shadcn-vue, Regle, Zod v4, Drizzle ORM | [Live](https://bulletproof-nuxt.pages.dev) |
+| [nuxt-content](apps/nuxt-content) | Content-driven Nuxt app with docs, blog, pricing, and changelog | Nuxt Content, MDC, shadcn-vue | - |
 
 ### Reference Apps
 
-Reference Apps preserve alternative implementations and past experiments for comparison and learning.
+Reference Apps preserve earlier implementations and experiments so we can revisit our decisions and learn from the code.
 
-| Showcase | Description | Key Libraries | Demo |
-|----------|-------------|---------------|------|
+| App | Description | Key Libraries | Demo |
+| ---------- | ------------- | --------------- | ------ |
 | [reference/bulletproof-vue-vite](apps/reference/bulletproof-vue-vite) | Vue SPA (direct port from React) | Vue Router, TanStack Query, Pinia | [Live](https://bulletproof-vue.pages.dev) |
 | [reference/bulletproof-nuxt-veevalidate](apps/reference/bulletproof-nuxt-veevalidate) | Nuxt full-stack VeeValidate legacy reference | VeeValidate, Zod v3 | - |
 | [reference/bulletproof-nuxt-tanstack-form](apps/reference/bulletproof-nuxt-tanstack-form) | Nuxt full-stack TanStack Form comparison | TanStack Form, Zod v4 | - |
@@ -44,16 +32,6 @@ Reference Apps preserve alternative implementations and past experiments for com
 | [reference/bulletproof-nuxt-pinia-colada](apps/reference/bulletproof-nuxt-pinia-colada) | Nuxt full-stack Pinia Colada comparison | Pinia Colada, Nuxt | - |
 | [reference/bulletproof-nuxt-tanstack-query](apps/reference/bulletproof-nuxt-tanstack-query) | Nuxt full-stack TanStack Query reference | Nuxt Query, TanStack Query | - |
 | [reference/bulletproof-nuxt-original-ui](apps/reference/bulletproof-nuxt-original-ui) | Nuxt port of the original Bulletproof React UI composition | Nuxt Layers, Regle, Reka UI | - |
-
-## 🗺️ Roadmap
-
-Ideas we're exploring — suggestions welcome!
-
-- Nuxt + Nuxt UI integration
-- Testing strategies deep-dive
-- Performance optimization guides
-
-Have an idea? [Start a discussion](https://github.com/hirotaka/pragmatic-nuxt/discussions)!
 
 ## 🤝 Contributing
 
