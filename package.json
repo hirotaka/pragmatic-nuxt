@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "A simple, scalable, and powerful architecture for building production ready Vue applications.",
-  "packageManager": "pnpm@11.20.0",
+  "packageManager": "pnpm@11.28.11",
   "engines": {
     "node": ">=22.19.0 <23 || >=24.11.0 <25 || >=26.0.0"
   },
