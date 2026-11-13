@@ -63,7 +63,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260124.0",
+    "@cloudflare/workers-types": "^5.0.0",
     "@iconify-json/uil": "^1.2.3",
     "@nuxt/eslint": "^1.10.0",
     "@nuxt/test-utils": "^4.3.4",
