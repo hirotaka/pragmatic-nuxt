@@ -4,6 +4,7 @@ import {
   DialogContent,
   type DialogContentProps,
   DialogClose,
+  useForwardProps,
 } from "reka-ui";
 import { X } from "lucide-vue-next";
 import { cn } from "~base/app/lib/utils";
@@ -19,6 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
   side: "right",
   class: undefined,
 });
+const forwardedProps = useForwardProps(props);
 
 const sideClasses = {
   left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
@@ -41,7 +43,7 @@ const sideClasses = {
           props.class,
         )
       "
-      v-bind="props"
+      v-bind="forwardedProps"
     >
       <slot />
 
