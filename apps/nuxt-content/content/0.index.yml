@@ -1,0 +1,96 @@
+title: Ship Your [SaaS]{class="text-primary"} at light speed
+description: Start from a polished Nuxt SaaS template with marketing pages, pricing, docs, blog content, changelog, auth page UI, and shadcn-vue components you can own.
+seo:
+  title: Stackhacker UI SaaS Template
+  description: Create a polished SaaS template with Nuxt, shadcn-vue, Tailwind CSS v4, content pages, dark mode, and auth page UI.
+navigation: false
+hero:
+  links:
+    - label: Get started
+      icon: i-lucide-arrow-right
+      to: https://ui.stackhacker.io/docs/getting-started
+      target: _blank
+    - label: Use this template
+      icon: i-simple-icons-github
+      variant: outline
+      to: https://github.com/stackhacker-ui/saas
+      target: _blank
+sections:
+  - title: Powered by Owned Components
+    description: Build on shadcn-vue primitives and local blocks that live in your project, so every page and component can be inspected, changed, and removed.
+    id: features
+    features:
+      - name: SaaS Page Blocks
+        description: Landing, pricing, docs, blog, changelog, login, and signup surfaces are wired as editable Nuxt pages.
+        icon: i-lucide-package
+      - name: Auth Page UI
+        description: Login and signup pages are included as front-end screens ready to connect to your own auth provider.
+        icon: i-lucide-shield
+      - name: TypeScript First
+        description: Nuxt, Vue, and local components are written with TypeScript-friendly conventions.
+        icon: i-lucide-code-2
+  - title: Built for Modern SaaS
+    description: A deployable starting point for evaluating a SaaS idea, publishing content, and replacing template data with your real product model.
+    reverse: true
+    features:
+      - name: Edge Performance
+        description: Uses Nuxt rendering, prerendered public routes, and static content where the template can stay simple.
+        icon: i-lucide-zap
+      - name: Dark Mode Ready
+        description: Includes color mode support and semantic tokens for light and dark themes.
+        icon: i-lucide-moon
+      - name: Content Ready
+        description: Documentation, blog, and changelog routes use Nuxt Content so template content can be replaced directly.
+        icon: i-lucide-globe
+features:
+  title: Everything You Need to Ship
+  description: Start with the public surfaces a SaaS product needs, then connect your own backend, billing, and product workflows when you are ready.
+  items:
+    - title: Beautiful Design System
+      description: Semantic color tokens, CSS variables, and Tailwind CSS v4 utilities keep the design easy to adapt.
+      icon: i-lucide-palette
+    - title: Accessible by Default
+      description: Built on shadcn-vue and Reka UI primitives with accessible interactions where primitives are used.
+      icon: i-lucide-accessibility
+    - title: Developer Experience
+      description: Uses Nuxt auto-imports, hot module replacement, and file-based pages/content.
+      icon: i-lucide-terminal
+    - title: SEO Optimized
+      description: Includes server rendering and page metadata patterns you can extend for your deployment.
+      icon: i-lucide-search
+    - title: Production Ready
+      description: Ships as a buildable Nuxt app scaffold with reusable layout, navigation, and content patterns.
+      icon: i-lucide-check-circle
+    - title: Infinitely Customizable
+      description: Customize components with semantic tokens, CSS variables, and Tailwind classes directly.
+      icon: i-lucide-settings
+highlights:
+  headline: Template Highlights
+  title: Designed for SaaS Starters
+  description: Use the included surfaces as a realistic starting point, then replace the demo content with your product.
+  items:
+    - title: Marketing Surface
+      description: Start from a complete marketing flow instead of stitching together a landing page, pricing page, and CTA sections from scratch.
+      icon: i-lucide-panels-top-left
+    - title: Content Surface
+      description: Documentation, blog, and changelog routes are included so product education can live in the same Nuxt app.
+      icon: i-lucide-files
+    - title: Auth UI Surface
+      description: Login and signup screens are front-end UI only, making it clear where your own auth provider should be connected.
+      icon: i-lucide-lock-keyhole
+    - title: Owned Components
+      description: shadcn-vue primitives live in the project, so teams can customize the source instead of working around a black-box component package.
+      icon: i-lucide-code-2
+cta:
+  title: Ready to build an amazing SaaS?
+  description: Use this template as your SaaS starting point, then connect your real backend, billing, and product flows.
+  links:
+    - label: Start building
+      to: 'https://ui.stackhacker.io/docs/getting-started'
+      target: _blank
+      icon: i-lucide-arrow-right
+    - label: View on GitHub
+      to: 'https://github.com/stackhacker-ui/saas'
+      target: _blank
+      variant: outline
+      icon: i-simple-icons-github

@@ -1,0 +1,51 @@
+{
+  "name": "nuxt-content-app",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=24.11.0 <25"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "lint": "eslint .",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit --project nuxt",
+    "test:e2e": "vitest run --project e2e",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.150",
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.101",
+    "@nuxt/content": "^3.16.2",
+    "@nuxt/icon": "^2.6.2",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vueuse/core": "^14.4.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^1.0.0",
+    "nuxt": "^4.6.3",
+    "reka-ui": "^2.11.0",
+    "shadcn-nuxt": "2.9.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/test-utils": "4.3.4",
+    "@vue/language-core": "^3.3.14",
+    "@vue/test-utils": "2.5.1",
+    "eslint": "^10.14.0",
+    "happy-dom": "21.0.4",
+    "playwright-core": "1.64.1",
+    "typescript": "^5.9.3",
+    "vitest": "4.1.12",
+    "vue-tsc": "^3.3.14"
+  }
+}

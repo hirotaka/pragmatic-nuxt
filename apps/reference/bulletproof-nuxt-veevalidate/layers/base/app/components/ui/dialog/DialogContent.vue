@@ -4,6 +4,7 @@ import {
   DialogContent,
   type DialogContentProps,
   DialogClose,
+  useForwardProps,
 } from "reka-ui";
 import { X } from "lucide-vue-next";
 import { cn } from "~base/app/lib/utils";
@@ -15,6 +16,7 @@ interface Props extends DialogContentProps {
 }
 
 const props = defineProps<Props>();
+const forwardedProps = useForwardProps(props);
 </script>
 
 <template>
@@ -27,7 +29,7 @@ const props = defineProps<Props>();
           props.class,
         )
       "
-      v-bind="props"
+      v-bind="forwardedProps"
     >
       <slot />
 
