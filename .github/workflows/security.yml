@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: google/osv-scanner-action/osv-scanner-action@v2.7.0
+      - uses: google/osv-scanner-action/osv-scanner-action@v2.7.1
         continue-on-error: true
         with:
           scan-args: -r ./
