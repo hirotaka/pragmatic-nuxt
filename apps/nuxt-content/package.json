@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
-    "@nuxt/test-utils": "4.3.4",
+    "@nuxt/test-utils": "4.4.0",
     "@vue/language-core": "^3.3.14",
     "@vue/test-utils": "2.5.1",
     "eslint": "^10.14.0",
