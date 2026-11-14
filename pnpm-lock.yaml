@@ -659,8 +659,8 @@ importers:
         specifier: 1.4.9
         version: 1.4.9(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
       '@pinia/colada-nuxt':
-        specifier: 1.0.2
-        version: 1.0.2(@pinia/colada@1.4.9(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3)))(magic-string@1.4.5)(magicast@0.5.5)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
+        specifier: 1.2.1
+        version: 1.2.1(@nuxt/schema@4.6.4)(@pinia/colada@1.4.9(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3)))(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
       '@pinia/colada-plugin-delay':
         specifier: ^0.2.1
         version: 0.2.1(@pinia/colada@1.4.9(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3)))
@@ -3467,10 +3467,14 @@ packages:
     resolution: {integrity: sha512-m7X9U6BG2+J+R1lSOdCiITLLrxm+cWlNI3HUFA92oLO77ObGNzaKdh8pMLqdZcshtkKuV84olNNXDfMc4FezBQ==}
     engines: {node: '>=10'}
 
-  '@pinia/colada-nuxt@1.0.2':
-    resolution: {integrity: sha512-CqKJLmdfU1VtbP6GHrubykX3n+F0KaP6ekMronJ/7YOgZmwjda6Gc3Ho0oSs7ADyctwefhrKl/sNhboiA3FyIg==}
+  '@pinia/colada-nuxt@1.2.1':
+    resolution: {integrity: sha512-5KLb1HSbVIG+kpr5VdYzudOQPvTkFYX79hDOGzVjDk3JaKX9RyJ4E/PK3oO14R+brcHtWuINjqVyn0pQaSMU1Q==}
     peerDependencies:
-      '@pinia/colada': '>=1.4.0'
+      '@pinia/colada': '>=1.4.9'
+      '@pinia/colada-devtools': ^2.1.0
+    peerDependenciesMeta:
+      '@pinia/colada-devtools':
+        optional: true
 
   '@pinia/colada-plugin-delay@0.2.1':
     resolution: {integrity: sha512-Z6hh4jqJ8EXv4PBlWfRtmv+q6eenUZiS6mYSvnl4lnINAuyHvctAtQztQGunqaMkib/mQmPFfjSyE15YilvkJw==}
@@ -14368,13 +14372,18 @@ snapshots:
 
   '@phc/format@1.0.0': {}
 
-  '@pinia/colada-nuxt@1.0.2(@pinia/colada@1.4.9(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3)))(magic-string@1.4.5)(magicast@0.5.5)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))':
+  '@pinia/colada-nuxt@1.2.1(@nuxt/schema@4.6.4)(@pinia/colada@1.4.9(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3)))(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))':
     dependencies:
-      '@nuxt/kit': 4.5.1(magic-string@1.4.5)(magicast@0.5.5)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
+      '@nuxt/kit': 4.6.4(@nuxt/schema@4.6.4)(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.139.0)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
       '@pinia/colada': 1.4.9(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
     transitivePeerDependencies:
+      - '@nuxt/schema'
+      - confbox
+      - dotenv
+      - giget
+      - jiti
       - magic-string
-      - magicast
+      - mlly
       - oxc-parser
       - rolldown
       - unplugin
