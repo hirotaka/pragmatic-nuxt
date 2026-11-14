@@ -33,7 +33,7 @@
   "dependencies": {
     "@adonisjs/hash": "^9.1.1",
     "@electric-sql/pglite": "^0.5.4",
-    "@libsql/client": "^0.17.0",
+    "@libsql/client": "^0.18.0",
     "@lucide/vue": "^1.48.0",
     "@neondatabase/serverless": "^1.0.0",
     "@nuxt/icon": "^2.5.1",
