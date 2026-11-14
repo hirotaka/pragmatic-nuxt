@@ -38,7 +38,7 @@
   "dependencies": {
     "@adonisjs/hash": "^9.1.1",
     "@electric-sql/pglite": "^0.5.4",
-    "@libsql/client": "^0.17.0",
+    "@libsql/client": "^0.18.0",
     "@neondatabase/serverless": "^1.0.0",
     "@nuxthub/core": "0.10.12",
     "@peterbud/nuxt-query": "1.11.0",
