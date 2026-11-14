@@ -47,7 +47,7 @@
     "@regle/nuxt": "^1.0.0",
     "@regle/rules": "^1.0.0",
     "@regle/schemas": "^1.13.0",
-    "@tanstack/vue-query": "5.102.8",
+    "@tanstack/vue-query": "5.107.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
