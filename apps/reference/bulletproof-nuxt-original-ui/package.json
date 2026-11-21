@@ -47,7 +47,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
-    "dotenv": "^17.2.3",
+    "dotenv": "^18.0.0",
     "drizzle-orm": "^0.45.0",
     "lucide-vue-next": "^1.0.0",
     "marked": "^18.0.0",
