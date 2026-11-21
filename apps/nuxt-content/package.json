@@ -40,7 +40,7 @@
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/test-utils": "4.4.0",
     "@vue/language-core": "^3.3.14",
-    "@vue/test-utils": "2.5.1",
+    "@vue/test-utils": "2.6.0",
     "eslint": "^10.14.0",
     "happy-dom": "21.0.4",
     "playwright-core": "1.65.1",
