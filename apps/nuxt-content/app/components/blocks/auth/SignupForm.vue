@@ -107,10 +107,15 @@ function onSubmit() {
       Submitted
     </p>
     <p class="text-center text-xs/5 text-muted-foreground">
+      Demo UI only. This form does not create an account.
+    </p>
+    <!-- Enable after implementing the terms page and updating the link destination.
+    <p class="text-center text-xs/5 text-muted-foreground">
       By signing up, you agree to our <NuxtLink
         to="/"
         class="font-medium text-primary underline-offset-4 hover:underline"
       >Terms of Service</NuxtLink>.
     </p>
+    -->
   </form>
 </template>

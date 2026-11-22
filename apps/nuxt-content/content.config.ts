@@ -1,4 +1,5 @@
 import { defineCollection, z } from "@nuxt/content";
+import { defineSitemapSchema } from "@nuxtjs/seo/content";
 
 const linkSchema = z.object({
   label: z.string(),
@@ -52,6 +53,9 @@ export const collections = {
   docs: defineCollection({
     source: "1.docs/**/*",
     type: "page",
+    schema: z.object({
+      sitemap: defineSitemapSchema({ name: "docs", z }),
+    }),
   }),
   pricing: defineCollection({
     source: "2.pricing.yml",

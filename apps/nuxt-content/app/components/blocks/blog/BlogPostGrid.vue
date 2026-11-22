@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getBlogImageSrcset } from "~/utils/blog-image";
+
 interface PostItem {
   path: string;
   title?: string;
@@ -31,7 +33,13 @@ function formatDate(date: string | Date) {
       >
         <img
           :src="post.image?.src"
-          :alt="post.title"
+          :srcset="getBlogImageSrcset(post.image?.src)"
+          :sizes="index === 0 ? '(min-width: 1152px) 552px, (min-width: 768px) calc(50vw - 24px), calc(100vw - 32px)' : '(min-width: 1152px) 353px, (min-width: 1024px) calc((100vw - 88px) / 3), (min-width: 768px) calc(50vw - 34px), calc(100vw - 34px)'"
+          alt=""
+          width="640"
+          height="360"
+          :loading="index < 4 ? 'eager' : 'lazy'"
+          :fetchpriority="index === 0 ? 'high' : undefined"
           class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
         >
       </div>
@@ -53,7 +61,10 @@ function formatDate(date: string | Date) {
           >
             <img
               :src="author.avatar?.src"
-              :alt="author.name"
+              alt=""
+              width="24"
+              height="24"
+              :loading="index < 4 ? 'eager' : 'lazy'"
               class="size-6 rounded-full"
             >
             <span class="text-foreground">{{ author.name }}</span>

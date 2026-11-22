@@ -23,6 +23,7 @@
     "@nuxt/content": "^3.16.2",
     "@nuxt/icon": "^2.6.2",
     "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/seo": "^6.0.1",
     "@tailwindcss/vite": "^4.3.3",
     "@vueuse/core": "^14.4.0",
     "class-variance-authority": "^0.7.1",
