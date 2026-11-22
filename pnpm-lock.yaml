@@ -86,7 +86,7 @@ importers:
         version: 1.30.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
-        version: 1.29.5(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.0(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
       '@regle/rules':
         specifier: ^1.0.0
         version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
@@ -491,7 +491,7 @@ importers:
         version: 1.30.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
-        version: 1.29.5(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.0(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
       '@regle/rules':
         specifier: ^1.0.0
         version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
@@ -675,7 +675,7 @@ importers:
         version: 1.30.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
-        version: 1.29.5(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.0(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
       '@regle/rules':
         specifier: ^1.0.0
         version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
@@ -1010,7 +1010,7 @@ importers:
         version: 1.30.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
       '@regle/nuxt':
         specifier: ^1.0.0
-        version: 1.29.5(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.0(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
       '@regle/rules':
         specifier: ^1.0.0
         version: 1.29.5(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
@@ -3562,15 +3562,32 @@ packages:
       pinia:
         optional: true
 
-  '@regle/nuxt@1.29.5':
-    resolution: {integrity: sha512-doBIaii2GVreODOTOYClyZl7OWjiihF2WCKL6SO88COWXSFd/P2QnMVkByQ37zPWiZKsKIFkI8yFG2rZiPgXxA==}
+  '@regle/nuxt@1.30.0':
+    resolution: {integrity: sha512-43WdMhvu3EuysGPOMhnSDdggUcGpRVTwAj7HGQWaJzCQKmNpuBvMU+n88Uo/bX549a9Qmu6RZWAj35NF+iJuRQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   '@regle/rules@1.29.5':
     resolution: {integrity: sha512-AiiV0WJmPgpKozGhj6IyLbtqrkpqYbUNvc+EETyiXsGHDqNNTCLBkKcyymYU+EWckm4H0ID1VjsamiPRiACnFA==}
 
+  '@regle/rules@1.30.0':
+    resolution: {integrity: sha512-amRwmzBWmkJxOLMbFWBX+pXoXUwVF0jlzaI+S+FXqy1/S+mLJvNIcRaHQCGLGfxlIuTO8B9sA0ABSpGUqw0LEA==}
+
   '@regle/schemas@1.29.5':
     resolution: {integrity: sha512-aI/CKI1D0ajjmD9KEuR7YG5PZxZaklbCURHhssvxw8ks0Ona5Y+qEvpBCXLTn6Yrp+Y3xucpm70H4lgbev8DDw==}
+    peerDependencies:
+      arktype: ^2.1.0
+      valibot: ^1.4.2
+      zod: ^3.24.0 || ^4.0.0
+    peerDependenciesMeta:
+      arktype:
+        optional: true
+      valibot:
+        optional: true
+      zod:
+        optional: true
+
+  '@regle/schemas@1.30.0':
+    resolution: {integrity: sha512-DQd+3B4PCCPncZhjAu0ihz7Paprmx4kKvmluJ59bCayEx9pxu7iQfr+ObzfgwQl14nadkMF7G97Qfq/gG5cRlg==}
     peerDependencies:
       arktype: ^2.1.0
       valibot: ^1.4.2
@@ -14067,15 +14084,6 @@ snapshots:
     optionalDependencies:
       pinia: 3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3))
 
-  '@regle/core@1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))':
-    dependencies:
-      '@standard-schema/spec': 1.1.0
-      '@vue/devtools-api': 8.2.1
-      type-fest: 5.10.0
-      vue: 3.5.45(typescript@6.0.3)
-    optionalDependencies:
-      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3))
-
   '@regle/core@1.30.0(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))':
     dependencies:
       '@standard-schema/spec': 1.1.0
@@ -14085,14 +14093,23 @@ snapshots:
     optionalDependencies:
       pinia: 3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3))
 
-  '@regle/nuxt@1.29.5(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)':
+  '@regle/core@1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))':
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      '@vue/devtools-api': 8.2.1
+      type-fest: 5.10.0
+      vue: 3.5.45(typescript@6.0.3)
+    optionalDependencies:
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3))
+
+  '@regle/nuxt@1.30.0(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(typescript@6.0.3)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)':
     dependencies:
       '@nuxt/kit': 4.5.2(magic-string@1.4.5)(magicast@0.5.5)(oxc-parser@0.154.0)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.67.5)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
       '@nuxt/schema': 4.5.2
-      '@regle/core': 1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
-      '@regle/rules': 1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
+      '@regle/core': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
+      '@regle/rules': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
     optionalDependencies:
-      '@regle/schemas': 1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
+      '@regle/schemas': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)
       '@vue/devtools-api': 8.2.1
       pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3))
     transitivePeerDependencies:
@@ -14115,9 +14132,9 @@ snapshots:
       - pinia
       - vue
 
-  '@regle/rules@1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))':
+  '@regle/rules@1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))':
     dependencies:
-      '@regle/core': 1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
+      '@regle/core': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
       type-fest: 5.10.0
     transitivePeerDependencies:
       - pinia
@@ -14135,10 +14152,10 @@ snapshots:
       - pinia
       - vue
 
-  '@regle/schemas@1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)':
+  '@regle/schemas@1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))(zod@4.6.7)':
     dependencies:
-      '@regle/core': 1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
-      '@regle/rules': 1.29.5(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
+      '@regle/core': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
+      '@regle/rules': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(vue@3.5.45(typescript@6.0.3))
       '@standard-schema/spec': 1.1.0
       type-fest: 5.10.0
     optionalDependencies:
