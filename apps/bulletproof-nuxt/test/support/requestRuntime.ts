@@ -2,12 +2,22 @@ import { db, schema } from "@nuxthub/db";
 import { createDiscussionRepository } from "#layers/discussions/server/repository/discussionRepository";
 import { createCommentRepository } from "#layers/discussions/server/repository/commentRepository";
 import { useNitroApp } from "nitropack/runtime";
+import { getSession } from "nuxt/server";
 
 const app = useNitroApp();
 
 export const localFetch = app.localFetch;
 export const hash = (password: string) => hashPassword(password);
 export { db, schema };
+
+export async function readSessionData(cookie: string) {
+  // Read the sealed cookie without running the provider's response enrichment hook.
+  const { data } = await getSession({
+    req: new Request("http://localhost/", { headers: { cookie } }),
+    res: { headers: new Headers() },
+  }, { name: "nuxt-auth-session" });
+  return data;
+}
 
 // Direct persistence tests use the same composed runtime and database as request specs.
 export const repositories = {

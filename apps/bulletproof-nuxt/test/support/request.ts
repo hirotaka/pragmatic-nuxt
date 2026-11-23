@@ -5,7 +5,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createTest } from "@nuxt/test-utils/e2e";
-import { getSession } from "h3";
 import { afterAll, afterEach, beforeAll, beforeEach, test as base } from "vitest";
 
 type Database = typeof import("@nuxthub/db").db;
@@ -14,6 +13,7 @@ type RequestApp = {
   db: Database;
   schema: typeof import("@nuxthub/db/schema");
   hash: (password: string) => Promise<string>;
+  readSessionData: typeof import("./requestRuntime").readSessionData;
   repositories: typeof import("./requestRuntime").repositories;
   close: () => Promise<void>;
 };
@@ -26,8 +26,8 @@ export function setupRequestTests() {
   const rootDir = fileURLToPath(new URL("../../", import.meta.url));
   const buildDir = join(rootDir, ".nuxt/test", randomUUID());
   const directory = join(tmpdir(), `bulletproof-request-${randomUUID()}`);
-  const password = randomBytes(32).toString("hex");
-  const previousPassword = process.env.NUXT_SESSION_PASSWORD;
+  const appSecret = randomBytes(32).toString("base64");
+  const previousAppSecret = process.env.NUXT_APP_SECRET;
   const previousFetch = globalThis.$fetch;
   let app: RequestApp | undefined;
 
@@ -48,13 +48,13 @@ export function setupRequestTests() {
       preset: "node",
       entry: fileURLToPath(new URL("./requestRuntime.ts", import.meta.url)),
     },
-    runtimeConfig: { session: { password } },
+    runtimeConfig: { appSecret },
     hub,
   };
   const lifecycle = createTest({ rootDir, buildDir, browser: false, server: false, build: true, nuxtConfig });
 
   beforeAll(async () => {
-    process.env.NUXT_SESSION_PASSWORD = password;
+    process.env.NUXT_APP_SECRET = appSecret;
     await lifecycle.beforeAll();
     app = await import(/* @vite-ignore */ pathToFileURL(join(buildDir, "output/server/index.mjs")).href);
   }, lifecycle.ctx.options.setupTimeout);
@@ -70,8 +70,8 @@ export function setupRequestTests() {
       }
       finally {
         globalThis.$fetch = previousFetch;
-        if (previousPassword === undefined) delete process.env.NUXT_SESSION_PASSWORD;
-        else process.env.NUXT_SESSION_PASSWORD = previousPassword;
+        if (previousAppSecret === undefined) delete process.env.NUXT_APP_SECRET;
+        else process.env.NUXT_APP_SECRET = previousAppSecret;
         await rm(directory, { recursive: true, force: true });
         await rm(buildDir, { recursive: true, force: true });
       }
@@ -103,14 +103,9 @@ export function setupRequestTests() {
   });
   const request = (path: string, init?: RequestInit) => runtime().localFetch(path, init);
   const post = (path: string, body: unknown) => request(path, json("POST", body));
-  const sessionData = async (response: Response) => {
+  const sessionData = (response: Response) => {
     const cookie = response.headers.getSetCookie().map(value => value.split(";")[0]).join("; ");
-    // Read the actual sealed cookie with H3, without running session-fetch enrichment.
-    const { data } = await getSession(
-      { headers: new Headers({ cookie }), context: {} },
-      { name: "nuxt-session", password },
-    );
-    return data;
+    return runtime().readSessionData(cookie);
   };
 
   const hashPassword = (password: string) => runtime().hash(password);
