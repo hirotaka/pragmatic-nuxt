@@ -184,9 +184,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -432,9 +429,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -595,9 +589,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -782,9 +773,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -936,9 +924,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -1117,9 +1102,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -1274,9 +1256,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.1.0
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.11
@@ -6569,18 +6548,6 @@ packages:
   dot-prop@10.2.0:
     resolution: {integrity: sha512-BTJ9aZYL3vCfZlZOBLy9v8TUqWGQ0pzFnygKwFZt5udj6viBoFIBviKPUoZLDCPn1FoXffv6McQFDenrm5Krfw==}
     engines: {node: '>=20'}
-
-  dotenv-cli@11.1.0:
-    resolution: {integrity: sha512-YUBODAS0puvSc9bGdu07o1GSouVn63xDazqZqvT99Hta4nPqZ1jTdBcz12dDdxSC9jYbVlpWlnu0IJaMR8TIEQ==}
-    hasBin: true
-
-  dotenv-expand@12.0.3:
-    resolution: {integrity: sha512-uc47g4b+4k/M/SeaW1y4OApx+mtLWl92l5LMPP0GNXctZqELk+YGgOPIIC5elYmUH4OuoK3JLhuRUYegeySiFA==}
-    engines: {node: '>=12'}
-
-  dotenv@16.6.1:
-    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
-    engines: {node: '>=12'}
 
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
@@ -17945,19 +17912,6 @@ snapshots:
   dot-prop@10.2.0:
     dependencies:
       type-fest: 5.10.0
-
-  dotenv-cli@11.1.0:
-    dependencies:
-      cross-spawn: 7.0.6
-      dotenv: 17.4.2
-      dotenv-expand: 12.0.3
-      minimist: 1.2.8
-
-  dotenv-expand@12.0.3:
-    dependencies:
-      dotenv: 16.6.1
-
-  dotenv@16.6.1: {}
 
   dotenv@17.4.2: {}
 
