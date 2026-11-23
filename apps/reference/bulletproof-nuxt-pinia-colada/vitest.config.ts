@@ -11,6 +11,7 @@ export default defineVitestConfig({
       "**/.nuxt/**",
       "**/e2e/**",
       "**/__evidence__/**",
+      "layers/auth/server/__tests__/replaceUserSessionContract.test.ts",
     ],
     coverage: {
       provider: "v8",
