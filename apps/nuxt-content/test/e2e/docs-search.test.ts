@@ -3,6 +3,7 @@ import { copyFile, unlink } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { createPage, setup, url, waitForHydration } from "@nuxt/test-utils/e2e";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { e2eNuxtConfig } from "./nuxt-config";
 
 describe("documentation search", async () => {
   const fixture = new URL("../fixtures/content/search-proof.md", import.meta.url);
@@ -17,7 +18,7 @@ describe("documentation search", async () => {
     if (fixtureCreated) await unlink(content);
   });
 
-  await setup({ rootDir: fileURLToPath(new URL("../..", import.meta.url)), browser: true });
+  await setup({ rootDir: fileURLToPath(new URL("../..", import.meta.url)), browser: true, nuxtConfig: e2eNuxtConfig });
 
   let page: Awaited<ReturnType<typeof createPage>>;
   let diagnostics: string[];

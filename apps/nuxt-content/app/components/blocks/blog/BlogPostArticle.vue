@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getBlogImageSrcset } from "~/utils/blog-image";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
@@ -60,7 +61,7 @@ function formatDate(date: string | Date) {
             <Avatar class="size-5">
               <AvatarImage
                 :src="author.avatar?.src || ''"
-                :alt="author.name"
+                alt=""
               />
             </Avatar>
             {{ author.name }}
@@ -70,7 +71,13 @@ function formatDate(date: string | Date) {
       <img
         v-if="post.image?.src"
         :src="post.image.src"
-        :alt="post.title"
+        :srcset="getBlogImageSrcset(post.image.src)"
+        sizes="(min-width: 1152px) 1104px, (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)"
+        alt=""
+        width="640"
+        height="360"
+        loading="eager"
+        fetchpriority="high"
         class="mt-8 aspect-video w-full rounded-2xl border border-border/60 object-cover"
       >
       <div class="grid gap-10 py-10 lg:grid-cols-[minmax(0,1fr)_220px]">

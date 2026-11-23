@@ -17,7 +17,7 @@ function formatDate(date: string | Date) {
 <template>
   <div class="relative mt-8 space-y-8 before:absolute before:bottom-0 before:left-4 before:top-2 before:w-px before:bg-border md:before:left-40">
     <article
-      v-for="version in versions"
+      v-for="(version, index) in versions"
       :key="version.path"
       class="relative grid gap-5 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-8"
     >
@@ -27,7 +27,9 @@ function formatDate(date: string | Date) {
         <img
           v-if="version.image"
           :src="version.image"
-          :alt="version.title"
+          alt=""
+          :loading="index === 0 ? 'eager' : 'lazy'"
+          :fetchpriority="index === 0 ? 'high' : undefined"
           class="mb-5 aspect-video w-full rounded-xl border border-border/60 object-cover"
         >
         <h2 class="text-2xl font-semibold tracking-tight">

@@ -2,7 +2,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxt/eslint", "@nuxt/content", "@nuxt/icon", "@nuxtjs/color-mode", "shadcn-nuxt"],
+  modules: ["@nuxt/eslint", "@nuxtjs/seo", "@nuxt/content", "@nuxt/icon", "@nuxtjs/color-mode", "shadcn-nuxt"],
   components: [
     {
       path: "~/components",
@@ -12,6 +12,11 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
+  site: {
+    name: "Nuxt Content Showcase",
+    description: "A Nuxt Content showcase with documentation, sample blog articles, and editable SaaS pages built with Nuxt and shadcn-vue.",
+    trailingSlash: false,
+  },
   colorMode: {
     classSuffix: "",
   },
@@ -19,7 +24,20 @@ export default defineNuxtConfig({
     experimental: { sqliteConnector: "native" },
   },
   routeRules: {
-    "/docs": { redirect: "/docs/getting-started", prerender: false },
+    "/**": {
+      headers: {
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+      },
+    },
+    // Preserve Nuxt's stricter policy when HTML errors are rendered internally.
+    "/__nuxt_error": {
+      headers: { "Referrer-Policy": "no-referrer" },
+    },
+    "/docs": {
+      redirect: { to: "/docs/getting-started", statusCode: 308 },
+      prerender: false,
+    },
     "/": { prerender: true },
     "/pricing": { prerender: true },
     "/blog": { prerender: true },
@@ -30,6 +48,13 @@ export default defineNuxtConfig({
   },
   future: {
     compatibilityVersion: 4,
+  },
+  experimental: {
+    defaults: {
+      nuxtLink: {
+        trailingSlash: "remove",
+      },
+    },
   },
   compatibilityDate: "2025-07-15",
   nitro: {
@@ -61,6 +86,21 @@ export default defineNuxtConfig({
       include: ["../test/unit/**/*.ts", "../test/e2e/**/*.ts"],
     },
   },
+  aiReady: {
+    llmsTxt: {
+      sections: [{
+        title: "Blog articles",
+        links: [
+          { title: "Exploring the Culinary Wonders of Asia", href: "/blog/asian-cuisine.md" },
+          { title: "Pyrenees: Mountains, culture, and outdoor adventures", href: "/blog/pyrenees.md" },
+          { title: "James Webb Space Telescope: From design to launch", href: "/blog/james-webb.md" },
+          { title: "The Benefits of Meditation", href: "/blog/meditation.md" },
+          { title: "The 10 Most Dangerous Creatures on Earth", href: "/blog/animals.md" },
+          { title: "The Rise of Cryptocurrencies", href: "/blog/cryptocurrencies.md" },
+        ],
+      }],
+    },
+  },
   eslint: {
     config: {
       stylistic: {
@@ -69,8 +109,17 @@ export default defineNuxtConfig({
       },
     },
   },
+  seo: {
+    canonicalQueryWhitelist: [],
+  },
   shadcn: {
     prefix: "Ui",
     componentDir: "./app/components/ui",
+  },
+  skewProtection: {
+    storage: {
+      driver: "fs-lite",
+      base: "node_modules/.cache/nuxt-seo/skew-protection-production",
+    },
   },
 });

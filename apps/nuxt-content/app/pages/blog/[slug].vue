@@ -10,6 +10,17 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => qu
 const title = computed(() => post.value?.seo?.title || post.value?.title || "Blog");
 const description = computed(() => post.value?.seo?.description || post.value?.description || "Blog post");
 useSeoMeta({ title, ogTitle: title, description, ogDescription: description, ogImage: post.value?.image?.src });
+
+useSchemaOrg([
+  defineArticle({
+    "@type": "BlogPosting",
+    "headline": post.value.title,
+    "description": post.value.description,
+    "image": post.value.image.src,
+    "datePublished": post.value.date,
+    "author": post.value.authors.map(author => ({ name: author.name })),
+  }),
+]);
 </script>
 
 <template>
