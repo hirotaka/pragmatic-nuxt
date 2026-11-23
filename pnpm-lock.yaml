@@ -68,7 +68,7 @@ importers:
         version: 0.18.0
       '@lucide/vue':
         specifier: ^1.48.0
-        version: 1.76.0(vue@3.5.45(typescript@6.0.3))
+        version: 1.77.0(vue@3.5.45(typescript@6.0.3))
       '@neondatabase/serverless':
         specifier: ^1.0.0
         version: 1.2.1
@@ -2722,8 +2722,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@lucide/vue@1.76.0':
-    resolution: {integrity: sha512-jipcmtcHPhYgKwXLFjRu8ZBfq1cTb1uD5j7y5s69FMBLcCO9bg/WDwvkAlum/sqqB8xUfkM4Bd/n0bW4rzCBDw==}
+  '@lucide/vue@1.77.0':
+    resolution: {integrity: sha512-B+okr/d8qC2imLzNPJ5tW8Nf7uKC19DgiOafxU0bOMfLnkd5Tkss4GW640+s5FierTJjgl99LpuO40u+yni0qQ==}
     peerDependencies:
       vue: 3.5.45
 
@@ -12652,7 +12652,7 @@ snapshots:
   '@libsql/win32-x64-msvc@0.5.29':
     optional: true
 
-  '@lucide/vue@1.76.0(vue@3.5.45(typescript@6.0.3))':
+  '@lucide/vue@1.77.0(vue@3.5.45(typescript@6.0.3))':
     dependencies:
       vue: 3.5.45(typescript@6.0.3)
 
