@@ -1438,8 +1438,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0(@vue/compiler-dom@3.5.45)(@vue/compiler-sfc@3.5.44)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
       '@tsconfig/node26':
-        specifier: 26.0.0
-        version: 26.0.0
+        specifier: 26.0.2
+        version: 26.0.2
       '@types/cors':
         specifier: ^2.8.19
         version: 2.8.19
@@ -4858,8 +4858,8 @@ packages:
       '@vue/compiler-sfc':
         optional: true
 
-  '@tsconfig/node26@26.0.0':
-    resolution: {integrity: sha512-AlW882moMu/JzvTVjdGqJEsrqD5nSWHiFD7Aeuw6Rb58S4Aig+09mDUFFlXJx/y6/y77NwGYLlqhWxvolcC0sw==}
+  '@tsconfig/node26@26.0.2':
+    resolution: {integrity: sha512-RIBSoNGQxUQ8r4hSrEzS6TrUneoKaCuX6BjL4zF3wqttGq2w06zCea4d8P1gRvM/HZyDT1FQJ8trZSyy/63oMg==}
 
   '@tybys/wasm-util@0.10.4':
     resolution: {integrity: sha512-W3c4gRigFS0T/Ma4qIYF3GDAc5AQdHb1yL5znJT1Zv1YaD9Kitx656wBjvr19qbiosmZT8lWDM5BEMynUqX65A==}
@@ -15875,7 +15875,7 @@ snapshots:
       - '@vue/compiler-dom'
       - '@vue/server-renderer'
 
-  '@tsconfig/node26@26.0.0': {}
+  '@tsconfig/node26@26.0.2': {}
 
   '@tybys/wasm-util@0.10.4':
     dependencies:
