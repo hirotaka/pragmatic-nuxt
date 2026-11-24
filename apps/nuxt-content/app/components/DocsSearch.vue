@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
       <Button
         type="button"
         variant="outline"
-        :class="cn('w-full justify-start', props.collapsed && 'px-2')"
+        :class="cn('w-full justify-start pointer-coarse:min-h-11', props.collapsed && 'px-2')"
         aria-label="Search documentation"
         aria-keyshortcuts="Control+K Meta+K"
       >
@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
         <span v-if="!props.collapsed">Search documentation</span>
         <kbd
           v-if="!props.collapsed"
-          class="ml-auto rounded border px-1.5 py-0.5 text-[10px]"
+          class="ml-auto hidden rounded border px-1.5 py-0.5 text-[10px] pointer-fine:inline"
         >{{ shortcut }}</kbd>
       </Button>
     </DialogTrigger>

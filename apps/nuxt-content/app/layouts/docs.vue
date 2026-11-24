@@ -14,13 +14,19 @@ const navigation = inject<Ref<NavItem[] | null>>("navigation", ref([]));
   <div>
     <AppHeader />
     <main class="border-grid border-y">
-      <div class="container grid gap-10 py-8 lg:grid-cols-[240px_minmax(0,1fr)]">
-        <aside class="hidden lg:block">
-          <div class="sticky top-20 space-y-6">
+      <div class="container grid gap-6 py-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
+        <aside>
+          <div class="flex flex-col gap-6 lg:sticky lg:top-20">
             <ClientOnly>
               <DocsSearch />
+              <template #fallback>
+                <div
+                  aria-hidden="true"
+                  class="h-9 pointer-coarse:h-11"
+                />
+              </template>
             </ClientOnly>
-            <nav class="space-y-4 text-sm">
+            <nav class="hidden space-y-4 text-sm lg:block">
               <div
                 v-for="group in navigation || []"
                 :key="group.path || group.title"

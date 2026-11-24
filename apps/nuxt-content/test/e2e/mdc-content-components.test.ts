@@ -149,6 +149,20 @@ describe("Markdown content components", async () => {
     }
   });
 
+  it("keeps the Markdown syntax tables within the viewport", async () => {
+    page = await createPage();
+    await page.setViewportSize({ width: 360, height: 808 });
+    await page.goto(url("/docs/essentials/markdown-syntax"), { waitUntil: "hydration" });
+    const tables = page.locator(".prose-content").getByRole("table");
+    expect(await tables.count()).toBeGreaterThan(0);
+    expect(await tables.getByRole("cell", { name: "<sup>superscript</sup>", exact: true }).isVisible()).toBe(true);
+    const { clientWidth, scrollWidth } = await page.evaluate(() => ({
+      clientWidth: document.documentElement.clientWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    }));
+    expect(scrollWidth).toBe(clientWidth);
+  });
+
   it("keeps Markdown anchors and Docs navigation client-side and fits mobile content", async () => {
     page = await createPage();
     await page.route("https://images.example.test/**", route => route.fulfill({

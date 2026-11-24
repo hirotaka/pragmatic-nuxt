@@ -169,6 +169,11 @@
     @apply my-6 w-full overflow-hidden rounded-lg border border-border/60 text-sm;
   }
 
+  & th,
+  & td {
+    @apply wrap-anywhere;
+  }
+
   & th {
     @apply border-b bg-muted/40 px-3 py-2 text-left font-medium text-foreground;
   }
