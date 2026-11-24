@@ -17,7 +17,7 @@ The showcases combine Nuxt and related libraries in working applications. Develo
 | App | Description | Key Libraries | Demo |
 | ---------- | ------------- | --------------- | ------ |
 | [bulletproof-nuxt](apps/bulletproof-nuxt) | Nuxt full-stack business app | Nuxt Layers, shadcn-vue, Regle, Zod v4, Drizzle ORM | [Live](https://bulletproof-nuxt.pages.dev) |
-| [nuxt-content](apps/nuxt-content) | Content-driven Nuxt app with docs, blog, pricing, and changelog | Nuxt Content, MDC, shadcn-vue | - |
+| [nuxt-content](apps/nuxt-content) | Content-driven Nuxt app with docs, blog, pricing, and changelog | Nuxt Content, MDC, shadcn-vue | [Live](https://nuxt-content.stackhacker.io/) |
 
 ### Reference Apps
 
