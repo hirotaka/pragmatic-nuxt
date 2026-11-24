@@ -93,6 +93,17 @@ describe("public SEO outputs", async () => {
     }
   });
 
+  it.each(["/docs/getting-started", seoPosts[0].path, "/seo-security-missing-probe"])("protects documents from cross-origin framing (%s)", async (path) => {
+    const response = await fetch(url(path), { headers: { accept: "text/html" } });
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(response.headers.get("x-frame-options")).toBe("SAMEORIGIN");
+    expect(response.headers.get("content-security-policy")?.split("; ")).toEqual(expect.arrayContaining([
+      "frame-ancestors 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+    ]));
+  });
+
   it.each(["text/html", "application/json"])("keeps the stricter error-response referrer policy (%s)", async (accept) => {
     for (const method of ["GET", "HEAD"]) {
       const response = await fetch(url("/seo-security-missing-probe"), { method, headers: { accept }, redirect: "manual" });
