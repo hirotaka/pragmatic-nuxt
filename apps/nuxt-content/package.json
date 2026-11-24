@@ -7,6 +7,7 @@
   },
   "scripts": {
     "build": "nuxt build",
+    "build:cloudflare": "NITRO_PRESET=cloudflare_module nuxt build",
     "dev": "nuxt dev",
     "lint": "eslint .",
     "preview": "nuxt preview",
@@ -47,6 +48,7 @@
     "playwright-core": "1.65.1",
     "typescript": "^5.9.3",
     "vitest": "4.1.12",
-    "vue-tsc": "^3.3.14"
+    "vue-tsc": "^3.3.14",
+    "wrangler": "^4.60.0"
   }
 }

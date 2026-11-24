@@ -3,6 +3,7 @@
 .data
 .nuxt
 .nitro
+.wrangler
 .cache
 dist
 

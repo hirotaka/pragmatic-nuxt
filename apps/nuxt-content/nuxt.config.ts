@@ -1,5 +1,9 @@
 import tailwindcss from "@tailwindcss/vite";
 
+const cloudflare = process.env.NITRO_PRESET === "cloudflare_module";
+const databaseId = process.env.NUXT_CONTENT_D1_DATABASE_ID ?? "";
+const previewDatabaseId = process.env.NUXT_CONTENT_PREVIEW_D1_DATABASE_ID;
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ["@nuxt/eslint", "@nuxtjs/seo", "@nuxt/content", "@nuxt/icon", "@nuxtjs/color-mode", "shadcn-nuxt"],
@@ -58,6 +62,21 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-07-15",
   nitro: {
+    cloudflare: cloudflare
+      ? {
+          deployConfig: true,
+          wrangler: {
+            name: "nuxt-content",
+            d1_databases: [{ binding: "DB", database_name: "nuxt-content", database_id: databaseId }],
+            assets: { html_handling: "drop-trailing-slash" },
+            ...(previewDatabaseId && {
+              previews: {
+                d1_databases: [{ binding: "DB", database_name: "nuxt-content-preview", database_id: previewDatabaseId }],
+              },
+            }),
+          },
+        }
+      : undefined,
     prerender: {
       crawlLinks: true,
       routes: [
@@ -117,9 +136,10 @@ export default defineNuxtConfig({
     componentDir: "./app/components/ui",
   },
   skewProtection: {
+    ...(cloudflare && { bundleAssets: false }),
     storage: {
       driver: "fs-lite",
-      base: "node_modules/.cache/nuxt-seo/skew-protection-production",
+      base: cloudflare ? "node_modules/.cache/nuxt-seo/skew-protection-worker" : "node_modules/.cache/nuxt-seo/skew-protection-production",
     },
   },
 });

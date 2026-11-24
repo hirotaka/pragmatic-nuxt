@@ -317,6 +317,9 @@ importers:
       vue-tsc:
         specifier: ^3.3.14
         version: 3.3.14(typescript@5.9.3)
+      wrangler:
+        specifier: ^4.60.0
+        version: 4.158.0(@cloudflare/workers-types@5.20261120.1)(@types/node@24.19.2)
 
   apps/reference/bulletproof-nuxt-formwerk:
     dependencies:
