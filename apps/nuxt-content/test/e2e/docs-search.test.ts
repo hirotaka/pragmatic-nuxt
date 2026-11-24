@@ -67,6 +67,18 @@ describe("documentation search", async () => {
     expect(fits).toBe(true);
   });
 
+  it("opens Docs search and follows a result from a narrow viewport", async () => {
+    await page.setViewportSize({ width: 360, height: 808 });
+    await page.goto(url("/docs/getting-started"), { waitUntil: "hydration" });
+    const trigger = page.getByRole("button", { name: "Search documentation", exact: true });
+    expect(await trigger.isVisible()).toBe(true);
+    await trigger.click();
+    await page.getByRole("combobox", { name: "Search documentation" }).fill("composables");
+    await page.getByRole("option", { name: /Markdown Syntax/i }).first().click();
+    await page.waitForURL(target => target.pathname === "/docs/essentials/markdown-syntax");
+    await page.getByRole("heading", { level: 1, name: "Markdown Syntax", exact: true }).waitFor();
+  });
+
   it("can close and reopen while the real WASM index is still initializing", async () => {
     const requested = Promise.withResolvers<undefined>();
     const release = Promise.withResolvers<undefined>();
