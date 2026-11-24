@@ -88,6 +88,7 @@ export const collections = {
     type: "page",
     schema: z.object({
       image: imageSchema.extend({
+        shareSrc: z.string().regex(/^\/(?!\/)/).optional(),
         dimensions: z.object({
           width: z.number().int().positive(),
           height: z.number().int().positive(),

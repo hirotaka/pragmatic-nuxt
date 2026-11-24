@@ -9,15 +9,16 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => qu
 
 const title = computed(() => post.value?.seo?.title || post.value?.title || "Blog");
 const description = computed(() => post.value?.seo?.description || post.value?.description || "Blog post");
+const { src, shareSrc, dimensions } = post.value.image;
 useSeoMeta({
   title,
   ogTitle: title,
   description,
   ogDescription: description,
   ogImage: {
-    url: post.value.image.src,
-    width: post.value.image.dimensions?.width,
-    height: post.value.image.dimensions?.height,
+    url: shareSrc ? withSiteUrl(shareSrc, { withBase: true }).value : src,
+    width: dimensions?.width,
+    height: dimensions?.height,
   },
 });
 

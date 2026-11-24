@@ -18,7 +18,7 @@ useSeoMeta({
   titleTemplate: "%s - Stackhacker UI SaaS template",
   twitterCard: "summary_large_image",
   ogImage: {
-    url: "https://ui.stackhacker.io/templates/saas-light.png",
+    url: withSiteUrl("/screenshots/saas-light.png", { withBase: true }).value,
     width: 1660,
     height: 930,
   },

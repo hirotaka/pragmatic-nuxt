@@ -149,7 +149,7 @@ describe("public SEO outputs", async () => {
           "meta[name=description]": description,
           "meta[property='og:title']": title,
           "meta[property='og:description']": description,
-          "meta[property='og:image']": "https://ui.stackhacker.io/templates/saas-light.png",
+          "meta[property='og:image']": `${siteUrl}/screenshots/saas-light.png`,
           "meta[property='og:image:width']": "1660",
           "meta[property='og:image:height']": "930",
           "meta[property='og:url']": `${siteUrl}${fixture.path}`,
@@ -213,7 +213,7 @@ describe("public SEO outputs", async () => {
       const imageMetadata = await page.locator("head meta[property^='og:image']").evaluateAll(tags => tags.map(tag => [tag.getAttribute("property"), tag.getAttribute("content")]));
       const { dimensions } = data.image;
       expect(imageMetadata).toEqual([
-        ["og:image", data.image.src],
+        ["og:image", data.image.shareSrc ? `${siteUrl}${data.image.shareSrc}` : data.image.src],
         ...(dimensions ? [["og:image:width", String(dimensions.width)], ["og:image:height", String(dimensions.height)]] : []),
       ]);
       expect(await page.locator("head link[rel=canonical]").count()).toBe(1);
@@ -245,6 +245,17 @@ describe("public SEO outputs", async () => {
     }
     finally {
       await page.close();
+    }
+  });
+
+  it.each([
+    { path: "/screenshots/saas-light.png", contentType: "image/png" },
+    { path: "/share/blog/asian-cuisine.jpg", contentType: "image/jpeg" },
+  ])("serves the sharing image directly for GET and HEAD ($path)", async ({ path, contentType }) => {
+    for (const method of ["GET", "HEAD"]) {
+      const response = await fetch(url(path), { method, redirect: "manual" });
+      expect(response.status).toBe(200);
+      expect(response.headers.get("content-type")).toBe(contentType);
     }
   });
 
