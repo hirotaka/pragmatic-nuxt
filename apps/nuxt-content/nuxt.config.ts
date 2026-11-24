@@ -30,6 +30,8 @@ export default defineNuxtConfig({
   routeRules: {
     "/**": {
       headers: {
+        "Content-Security-Policy": "frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+        "X-Frame-Options": "SAMEORIGIN",
         "X-Content-Type-Options": "nosniff",
         "Referrer-Policy": "strict-origin-when-cross-origin",
       },
@@ -67,8 +69,11 @@ export default defineNuxtConfig({
           deployConfig: true,
           wrangler: {
             name: "nuxt-content",
+            workers_dev: false,
+            preview_urls: true,
             d1_databases: [{ binding: "DB", database_name: "nuxt-content", database_id: databaseId }],
-            assets: { html_handling: "drop-trailing-slash" },
+            // Let Nitro send a permanent redirect before the asset router sends a 307.
+            assets: { html_handling: "drop-trailing-slash", run_worker_first: ["/*/"] },
             ...(previewDatabaseId && {
               previews: {
                 d1_databases: [{ binding: "DB", database_name: "nuxt-content-preview", database_id: previewDatabaseId }],
