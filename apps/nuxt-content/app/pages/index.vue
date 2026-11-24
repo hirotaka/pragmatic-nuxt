@@ -10,7 +10,6 @@ useSeoMeta({
   ogTitle: title,
   description,
   ogDescription: description,
-  ogImage: "https://ui.stackhacker.io/templates/saas-light.png",
 });
 </script>
 
