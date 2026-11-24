@@ -50,7 +50,12 @@ interface PostFixture {
     title: string;
     description: string;
     seo?: { title: string; description: string };
-    image: { src: string; alt: string; dimensions?: { width: number; height: number } };
+    image: {
+      src: string;
+      alt: string;
+      shareSrc?: string;
+      dimensions?: { width: number; height: number };
+    };
     authors: typeof author[];
     date: string;
     badge: { label: string };
@@ -66,7 +71,12 @@ export const seoPosts: [PostFixture, PostFixture] = [
     data: {
       title: "Fixture article",
       description: "A fixture description with \"quotes\".",
-      image: { src: "https://picsum.photos/id/42/640/360", alt: "", dimensions: { width: 640, height: 360 } },
+      image: {
+        src: "https://picsum.photos/id/42/640/360",
+        alt: "",
+        shareSrc: "/share/blog/asian-cuisine.jpg",
+        dimensions: { width: 640, height: 360 },
+      },
       authors: [author],
       date: "2024-02-03",
       badge: { label: "Fixture" },
