@@ -256,6 +256,24 @@ describe("public SEO outputs", async () => {
     }
   });
 
+  it.each(["/login", "/signup"])("keeps the auth demo public without indexing it (%s)", async (path) => {
+    const response = await fetch(url(path), { redirect: "manual" });
+    expect(response.status).toBe(200);
+    const html = await response.text();
+    expect(html).toContain("<form");
+    expect(html).toMatch(/<meta name="robots" content="noindex\b/);
+
+    const sitemap = await fetch(url("/sitemap.xml"));
+    expect(await sitemap.text()).not.toContain(`<loc>${siteUrl}${path}</loc>`);
+
+    for (const method of ["GET", "HEAD"]) {
+      const markdown = await fetch(url(`${path}.md`), { method, redirect: "manual" });
+      expect(markdown.status).toBe(200);
+      expect(markdown.headers.get("content-type")).toContain("text/markdown");
+      expect(markdown.headers.get("x-robots-tag")).toBe("noindex");
+    }
+  });
+
   it("publishes navigable Content in sitemap and readable Markdown exports", async () => {
     const page = await createPage(undefined, { javaScriptEnabled: false });
     try {
@@ -269,7 +287,12 @@ describe("public SEO outputs", async () => {
       expect(docsPaths.length).toBeGreaterThan(0);
       expect(postPaths.length).toBeGreaterThan(0);
       const contentPaths = [...new Set([...docsPaths, ...postPaths])];
-      const corePaths = ["/", "/pricing", "/blog", "/changelog", "/login", "/signup"];
+      const corePaths = ["/", "/pricing", "/blog", "/changelog"];
+      const demoPaths = ["/login", "/signup"];
+      await page.goto(url("/"), { waitUntil: "domcontentloaded" });
+      for (const path of demoPaths) {
+        expect(await page.locator(`header a[href="${path}"]`).count()).toBeGreaterThan(0);
+      }
       for (const path of [...corePaths, ...contentPaths]) {
         const response = await fetch(url(path), { redirect: "manual" });
         expect(response.status, path).toBe(200);
@@ -280,7 +303,7 @@ describe("public SEO outputs", async () => {
       expect(sitemapResponse.status).toBe(200);
       expect(sitemapResponse.headers.get("content-type")).toContain("xml");
       const sitemap = await sitemapResponse.text();
-      for (const path of contentPaths) expect(sitemap).toContain(`<loc>${siteUrl}${path}</loc>`);
+      for (const path of [...corePaths, ...contentPaths]) expect(sitemap).toContain(`<loc>${siteUrl}${path}</loc>`);
 
       const robotsResponse = await fetch(url("/robots.txt"));
       expect(robotsResponse.status).toBe(200);
@@ -301,6 +324,7 @@ describe("public SEO outputs", async () => {
       const indexedPaths = markdownLinks.map(link => link.pathname);
       expect(new Set(indexedPaths).size).toBe(indexedPaths.length);
       for (const path of expectedPaths) expect(indexedPaths).toContain(path);
+      for (const path of demoPaths) expect(indexedPaths).not.toContain(`${path}.md`);
       for (const link of markdownLinks) {
         expect(link.origin).toBe(siteUrl);
         const response = await fetch(url(link.pathname));
@@ -323,6 +347,7 @@ describe("public SEO outputs", async () => {
     const response = await fetch(url("/docs/getting-started.md"));
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("text/markdown");
+    expect(response.headers.get("x-robots-tag")).toBeNull();
     expect(response.headers.get("vary")?.toLowerCase()).toContain("accept");
     expect(response.headers.get("link")).toContain("rel=\"describedby\"");
     const markdown = await response.text();
