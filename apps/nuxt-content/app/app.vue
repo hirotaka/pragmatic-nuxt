@@ -17,7 +17,11 @@ useHead({
 useSeoMeta({
   titleTemplate: "%s - Stackhacker UI SaaS template",
   twitterCard: "summary_large_image",
-  ogImage: "https://ui.stackhacker.io/templates/saas-light.png",
+  ogImage: {
+    url: "https://ui.stackhacker.io/templates/saas-light.png",
+    width: 1660,
+    height: 930,
+  },
 });
 
 const { data: navigation } = await useAsyncData("navigation", () => queryCollectionNavigation("docs"), {

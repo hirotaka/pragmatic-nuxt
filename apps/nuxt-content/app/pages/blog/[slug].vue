@@ -9,7 +9,17 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => qu
 
 const title = computed(() => post.value?.seo?.title || post.value?.title || "Blog");
 const description = computed(() => post.value?.seo?.description || post.value?.description || "Blog post");
-useSeoMeta({ title, ogTitle: title, description, ogDescription: description, ogImage: post.value?.image?.src });
+useSeoMeta({
+  title,
+  ogTitle: title,
+  description,
+  ogDescription: description,
+  ogImage: {
+    url: post.value.image.src,
+    width: post.value.image.dimensions?.width,
+    height: post.value.image.dimensions?.height,
+  },
+});
 
 useSchemaOrg([
   defineArticle({

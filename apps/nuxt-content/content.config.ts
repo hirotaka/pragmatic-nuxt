@@ -87,7 +87,12 @@ export const collections = {
     source: "3.blog/**/*",
     type: "page",
     schema: z.object({
-      image: imageSchema,
+      image: imageSchema.extend({
+        dimensions: z.object({
+          width: z.number().int().positive(),
+          height: z.number().int().positive(),
+        }).optional(),
+      }),
       authors: z.array(z.object({
         name: z.string(),
         to: z.string(),

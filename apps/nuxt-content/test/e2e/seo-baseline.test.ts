@@ -150,6 +150,8 @@ describe("public SEO outputs", async () => {
           "meta[property='og:title']": title,
           "meta[property='og:description']": description,
           "meta[property='og:image']": "https://ui.stackhacker.io/templates/saas-light.png",
+          "meta[property='og:image:width']": "1660",
+          "meta[property='og:image:height']": "930",
           "meta[property='og:url']": `${siteUrl}${fixture.path}`,
           "meta[name='twitter:card']": "summary_large_image",
         };
@@ -203,12 +205,17 @@ describe("public SEO outputs", async () => {
         "meta[name=description]": description,
         "meta[property='og:title']": title,
         "meta[property='og:description']": description,
-        "meta[property='og:image']": data.image.src,
         "meta[property='og:url']": `${siteUrl}${path}`,
       })) {
         expect(await page.locator(`head ${selector}`).count()).toBe(1);
         expect(await page.locator(`head ${selector}`).getAttribute("content")).toBe(value);
       }
+      const imageMetadata = await page.locator("head meta[property^='og:image']").evaluateAll(tags => tags.map(tag => [tag.getAttribute("property"), tag.getAttribute("content")]));
+      const { dimensions } = data.image;
+      expect(imageMetadata).toEqual([
+        ["og:image", data.image.src],
+        ...(dimensions ? [["og:image:width", String(dimensions.width)], ["og:image:height", String(dimensions.height)]] : []),
+      ]);
       expect(await page.locator("head link[rel=canonical]").count()).toBe(1);
       expect(await page.locator("head link[rel=canonical]").getAttribute("href")).toBe(`${siteUrl}${path}`);
 
