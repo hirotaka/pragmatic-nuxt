@@ -195,7 +195,7 @@ importers:
         version: 21.0.4
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       playwright:
         specifier: ^1.64.1
         version: 1.65.1
@@ -443,7 +443,7 @@ importers:
         version: 21.0.4
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       playwright:
         specifier: ^1.64.1
         version: 1.65.1
@@ -603,7 +603,7 @@ importers:
         version: 21.0.4
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       playwright:
         specifier: ^1.64.1
         version: 1.65.1
@@ -787,7 +787,7 @@ importers:
         version: 21.0.4
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       playwright:
         specifier: ^1.64.1
         version: 1.65.1
@@ -938,7 +938,7 @@ importers:
         version: 21.0.4
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       playwright:
         specifier: ^1.64.1
         version: 1.65.1
@@ -1116,7 +1116,7 @@ importers:
         version: 21.0.4
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       playwright:
         specifier: ^1.64.1
         version: 1.65.1
@@ -1270,7 +1270,7 @@ importers:
         version: 21.0.4
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       playwright:
         specifier: ^1.64.1
         version: 1.65.1
@@ -1490,7 +1490,7 @@ importers:
         version: 29.1.1
       lint-staged:
         specifier: ^17.0.0
-        version: 17.6.1
+        version: 17.6.2
       msw:
         specifier: ^2.11.5
         version: 2.15.0(@types/node@24.19.2)(typescript@6.0.3)
@@ -8241,8 +8241,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  lint-staged@17.6.1:
-    resolution: {integrity: sha512-3MXgVN7BERDR/6CXZs2fDHGc+r0+hlvGAa9wqMlVbIS6RVRuaPOnb5SnN6wMXulwfEy9DXVkMVUN/8cUlpPDnw==}
+  lint-staged@17.6.2:
+    resolution: {integrity: sha512-c/JaXaXmleubmKUwwp4OAcq55RV9Z3HTUNdqdqPh2srtmP9Of3bcR6o00GoWDUye+9JhMuoYkhYqAVPIOZKcsw==}
     engines: {node: '>=22.22.1'}
     hasBin: true
 
@@ -19887,7 +19887,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  lint-staged@17.6.1:
+  lint-staged@17.6.2:
     dependencies:
       picomatch: 4.0.7
       string-argv: 0.4.0
