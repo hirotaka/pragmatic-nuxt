@@ -83,7 +83,7 @@
     "express": "^5.1.0",
     "jsdom": "^29.0.0",
     "lint-staged": "^17.0.0",
-    "msw": "^2.11.5",
+    "msw": "^3.0.0",
     "npm-run-all2": "^8.0.0",
     "pino-http": "^11.0.0",
     "pino-pretty": "^13.1.2",
