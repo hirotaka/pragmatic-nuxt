@@ -10,7 +10,7 @@ overrides:
   prisma: npm:empty-npm-package@1.0.0
   '@prisma/client': npm:empty-npm-package@1.0.0
   basic-ftp: ^6.0.0
-  editorconfig: ^3.0.0
+  editorconfig: ^4.0.0
   dompurify: 3.5.0
   defu: 6.1.7
   fast-uri: 3.1.9
@@ -3237,8 +3237,8 @@ packages:
       zod:
         optional: true
 
-  '@one-ini/wasm@0.2.1':
-    resolution: {integrity: sha512-TUqERXGNTifZ9y2g3wPxQrw3HpHv/02DsW3D90T9x0hhonrL1ZqpSmNrU2XkoIq0fP1N6gZfVQzy2Fw1ZvGBNg==}
+  '@one-ini/wasm@0.2.3':
+    resolution: {integrity: sha512-IGdUwmS5uJy9w+OSXIYtmZf6yMtYz18NZ4bm2Rg2oTCt/Cvp24VhpjhtaGG+bwwDs61T4rwAZAnxIOChy9AFiA==}
 
   '@open-draft/deferred-promise@2.2.0':
     resolution: {integrity: sha512-CecwLWx3rhxVQF6V4bAgPS5t+So2sTbPgAzafKkVizyi7tlwpcFpdFqq+wqF2OwNBmqFuu6tOyouTuxgpMfzmA==}
@@ -6202,9 +6202,9 @@ packages:
   comma-separated-tokens@2.0.3:
     resolution: {integrity: sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==}
 
-  commander@14.0.3:
-    resolution: {integrity: sha512-H+y0Jo/T1RZ9qPP4Eh1pkcQcLRglraJaSLoyOtHxu6AapkjWVCy2Sit1QQ4x3Dng8qDlSsZEet7g5Pq06MvTgw==}
-    engines: {node: '>=20'}
+  commander@15.1.0:
+    resolution: {integrity: sha512-cgnQ88TRrWcC7pVq46RzJVRMktu3W2RcbnoidnfBsl1bmDCBwJS/udcIZpKoCrbAYYaCqsz1yZCVIgbIaU3ddQ==}
+    engines: {node: '>=22.12.0'}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -6726,9 +6726,9 @@ packages:
   duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
 
-  editorconfig@3.0.2:
-    resolution: {integrity: sha512-T0ix8GhtxyKVfUFEcvdNDt3YGqlwkFHbD4/5bgFUDgFmxhI/cSRAeJ87/Sz//Cq8Eam6JX/e23RkoFO71P7aAA==}
-    engines: {node: '>=20'}
+  editorconfig@4.0.1:
+    resolution: {integrity: sha512-Eq8Kxnr5Ce8bhT0Ugct7XqjPhLQaoUGEXTop6XWhcguwzlaFkAhTVwCUlGSOcXsiFoBEknlhyzGsmHlesi5eGg==}
+    engines: {node: '>=22'}
     hasBin: true
 
   ee-first@1.1.1:
@@ -14605,7 +14605,7 @@ snapshots:
       - unplugin
       - vue
 
-  '@one-ini/wasm@0.2.1': {}
+  '@one-ini/wasm@0.2.3': {}
 
   '@open-draft/deferred-promise@2.2.0': {}
 
@@ -17759,7 +17759,7 @@ snapshots:
 
   comma-separated-tokens@2.0.3: {}
 
-  commander@14.0.3: {}
+  commander@15.1.0: {}
 
   commander@2.20.3: {}
 
@@ -18113,11 +18113,11 @@ snapshots:
 
   duplexer@0.1.2: {}
 
-  editorconfig@3.0.2:
+  editorconfig@4.0.1:
     dependencies:
-      '@one-ini/wasm': 0.2.1
-      commander: 14.0.3
-      minimatch: 11.0.5
+      '@one-ini/wasm': 0.2.3
+      commander: 15.1.0
+      minimatch: 11.0.9
       semver: 7.8.6
 
   ee-first@1.1.1: {}
@@ -19702,7 +19702,7 @@ snapshots:
   js-beautify@2.0.3:
     dependencies:
       config-chain: 1.1.13
-      editorconfig: 3.0.2
+      editorconfig: 4.0.1
       glob: 14.0.6
       js-cookie: 3.0.8
       nopt: 10.0.1
