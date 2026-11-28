@@ -92,7 +92,7 @@ importers:
         version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
       '@regle/schemas':
         specifier: ^1.13.0
-        version: 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
       '@vueuse/core':
         specifier: ^15.0.0
         version: 15.0.0(vue@3.5.46(typescript@6.0.3))
@@ -497,7 +497,7 @@ importers:
         version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
       '@regle/schemas':
         specifier: ^1.13.0
-        version: 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -678,7 +678,7 @@ importers:
         version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
       '@regle/schemas':
         specifier: ^1.13.0
-        version: 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -1007,7 +1007,7 @@ importers:
         version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
       '@regle/schemas':
         specifier: ^1.13.0
-        version: 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
+        version: 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)
       '@tanstack/vue-query':
         specifier: 5.108.4
         version: 5.108.4(vue@3.5.46(typescript@6.0.3))
@@ -3786,15 +3786,6 @@ packages:
   '@quansync/fs@1.0.0':
     resolution: {integrity: sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ==}
 
-  '@regle/core@1.30.0':
-    resolution: {integrity: sha512-pKJE+5k0x0gsmnAKWJwxUtsPhkLiW2WJSKZJBQYkeT1KkGwwptuRL89D4N9/T9Z72LqPyFxKET6EX/7DzvvRvg==}
-    peerDependencies:
-      pinia: '>=2.2.5'
-      vue: 3.5.46
-    peerDependenciesMeta:
-      pinia:
-        optional: true
-
   '@regle/core@1.30.1':
     resolution: {integrity: sha512-48Ns5OWWkLV6wh9w5B+szAQU5cXsSC5hXdcm6zKQhyAFW5ILsQIAhGuPmREBZy2NfVT3711xXytVeFwYB9XdkA==}
     peerDependencies:
@@ -3808,25 +3799,8 @@ packages:
     resolution: {integrity: sha512-gmLuxeBCs/4zbJi8gqkUey9HmDPk5G1CErLQzJrznyoISznr7mzwJ55tbuVhobmqdJNplVDE+ASPl/p8OU4NYg==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@regle/rules@1.30.0':
-    resolution: {integrity: sha512-amRwmzBWmkJxOLMbFWBX+pXoXUwVF0jlzaI+S+FXqy1/S+mLJvNIcRaHQCGLGfxlIuTO8B9sA0ABSpGUqw0LEA==}
-
   '@regle/rules@1.30.1':
     resolution: {integrity: sha512-TlQXpx2owE+AMzu8NOiNptDH4/EgKCpBJCx9YkwXYkYFSS1g6h6gDG5JCCz4+0trvzW+KziWvW/3Iu/bryvbRg==}
-
-  '@regle/schemas@1.30.0':
-    resolution: {integrity: sha512-DQd+3B4PCCPncZhjAu0ihz7Paprmx4kKvmluJ59bCayEx9pxu7iQfr+ObzfgwQl14nadkMF7G97Qfq/gG5cRlg==}
-    peerDependencies:
-      arktype: ^2.1.0
-      valibot: ^1.4.2
-      zod: ^3.24.0 || ^4.0.0
-    peerDependenciesMeta:
-      arktype:
-        optional: true
-      valibot:
-        optional: true
-      zod:
-        optional: true
 
   '@regle/schemas@1.30.1':
     resolution: {integrity: sha512-rUmvTD0/gI8p+0V2jrU56zzOejClprSFAveDEUkic/yh/qf6oYiXz1iKtJ1OOY4ytIynAYGY4OBMqXpwhObhmQ==}
@@ -15004,15 +14978,6 @@ snapshots:
     dependencies:
       quansync: 1.0.0
 
-  '@regle/core@1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))':
-    dependencies:
-      '@standard-schema/spec': 1.1.0
-      '@vue/devtools-api': 8.2.1
-      type-fest: 5.10.0
-      vue: 3.5.46(typescript@6.0.3)
-    optionalDependencies:
-      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3))
-
   '@regle/core@1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))':
     dependencies:
       '@standard-schema/spec': 1.1.0
@@ -15044,30 +15009,10 @@ snapshots:
       - vue
       - zod
 
-  '@regle/rules@1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))':
-    dependencies:
-      '@regle/core': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
-      type-fest: 5.10.0
-    transitivePeerDependencies:
-      - pinia
-      - vue
-
   '@regle/rules@1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))':
     dependencies:
       '@regle/core': 1.30.1(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
       type-fest: 5.10.0
-    transitivePeerDependencies:
-      - pinia
-      - vue
-
-  '@regle/schemas@1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))(zod@4.6.7)':
-    dependencies:
-      '@regle/core': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
-      '@regle/rules': 1.30.0(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3)))(vue@3.5.46(typescript@6.0.3))
-      '@standard-schema/spec': 1.1.0
-      type-fest: 5.10.0
-    optionalDependencies:
-      zod: 4.6.7
     transitivePeerDependencies:
       - pinia
       - vue
@@ -15083,7 +15028,6 @@ snapshots:
     transitivePeerDependencies:
       - pinia
       - vue
-    optional: true
 
   '@rolldown/binding-android-arm-eabi@1.2.19':
     optional: true
